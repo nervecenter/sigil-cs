@@ -40,3 +40,4 @@ D:\Profiles\Documents\sigil\Sigil.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.
 D:\Profiles\Documents\sigil\Sigil.Tests\obj\Debug\Sigil.Tests.csprojResolveAssemblyReference.cache
 D:\Profiles\Documents\sigil\Sigil.Tests\obj\Debug\Sigil.Tests.dll
 D:\Profiles\Documents\sigil\Sigil.Tests\obj\Debug\Sigil.Tests.pdb
+D:\Profiles\Documents\sigil\Sigil.Tests\bin\Debug\DotNet.Highcharts.dll

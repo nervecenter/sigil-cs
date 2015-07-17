@@ -7,9 +7,10 @@
       <Column Name="UserID" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="viewCount" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="lastView" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
       <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
       <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
+      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
+      <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
     </Type>
   </Table>
   <Table Name="dbo.AspNetUserRoles" Member="AspNetUserRoles">
@@ -17,25 +18,6 @@
       <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="RoleId" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="AspNetUserRole_AspNetUser" Member="AspNetUsers" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Issues" Member="Issues">
-    <Type Name="Issue">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="editTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="text" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="responded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="officialComment" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="votes" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="lastVoted" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
-      <Association Name="Issue_Vote" Member="Votes1" ThisKey="Id" OtherKey="IssueId" Type="Vote" />
-      <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
-      <Association Name="AspNetUser_Issue" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Comments" Member="Comments">
@@ -48,8 +30,8 @@
       <Column Name="issueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="votes" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="lastVoted" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Issue_Comment" Member="Issue" ThisKey="issueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
       <Association Name="AspNetUser_Comment" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="Issue_Comment" Member="Issue" ThisKey="issueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.AspNetUsers" Member="AspNetUsers">
@@ -68,9 +50,9 @@
       <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="orgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="subscriptions" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
-      <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions1" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
+      <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Vote" Member="Votes" ThisKey="Id" OtherKey="UserID" Type="Vote" />
       <Association Name="AspNetUserRole_AspNetUser" Member="AspNetUserRole" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" IsForeignKey="true" />
       <Association Name="Org_AspNetUser" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
@@ -85,11 +67,44 @@
       <Association Name="Org_Subscription" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Issues" Member="Issues">
+    <Type Name="Issue">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="editTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="responded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="officialComment" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="votes" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="lastVoted" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="viewCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
+      <Association Name="Issue_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="IssueId" Type="ViewCount" />
+      <Association Name="Issue_Vote" Member="Votes1" ThisKey="Id" OtherKey="IssueId" Type="Vote" />
+      <Association Name="AspNetUser_Issue" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ViewCounts" Member="ViewCounts">
+    <Type Name="ViewCount">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="datetime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Issue_ViewCount" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
+      <Association Name="Org_ViewCount" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.Votes" Member="Votes">
     <Type Name="Vote">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UserID" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="voteDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="AspNetUser_Vote" Member="AspNetUser" ThisKey="UserID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
       <Association Name="Issue_Vote" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
     </Type>

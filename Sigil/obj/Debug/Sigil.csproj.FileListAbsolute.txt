@@ -53,3 +53,4 @@ D:\Profiles\Documents\sigil\Sigil\bin\System.Web.WebPages.Razor.xml
 D:\Profiles\Documents\sigil\Sigil\bin\System.Web.Optimization.xml
 D:\Profiles\Documents\sigil\Sigil\obj\Debug\Sigil.dll
 D:\Profiles\Documents\sigil\Sigil\obj\Debug\Sigil.pdb
+D:\Profiles\Documents\sigil\Sigil\bin\DotNet.Highcharts.dll

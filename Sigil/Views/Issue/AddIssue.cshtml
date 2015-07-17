@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div id="sub-header"><h1>@ViewBag.thisOrg.title</h1></div>
+<div id="content">
+    <div id="main">
+        <h1>Add an issue for @ViewBag.thisOrg.title</h1>
+        <form method="post">
+            <fieldset>
+                <legend>Issue Information</legend>
+                <p>
+                    <label for="text">Title:</label>
+                    <input type="text" name="title" value="@Request.Form["title"]" />
+                    <label for="text">Text:</label>
+                    <input type="text" name="text" value="@Request.Form[ "text" ]" />
+                    @Html.ValidationMessage("text")
+                </p>
+                <p><input type="submit" name="buttonSubmit" value="Add Issue" /></p>
+            </fieldset>
+        </form>
+
+    </div>
+    <div id="rightbar">Right bar</div>
+</div>
