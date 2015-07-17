@@ -3,17 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
+using Sigil.Models;
+using System.Security.Claims;
+using Microsoft.AspNet.Identity;
+
+
 
 namespace Sigil.Controllers {
     public class HomeController : Controller {
+        private SigilDBDataContext dc;
+        public HomeController()
+        {
+            dc = new SigilDBDataContext();
+        }
+
+
         public ActionResult Index() {
+            var userID = User.Identity.GetUserId();
 
-            if(User.Identity.IsAuthenticated)
+            if (userID != null)
             {
-                
-            }
+                IQueryable<Subscription> userSubs = from Subs in dc.Subscriptions
+                                                    where Subs.UserId == userID
+                                                    select Subs;
 
-            return View();
+                IQueryable<Issue> userIssues = from issue in dc.Issues
+                                               where userSubs.Any(s => s.OrgId == issue.OrgId)
+                                               orderby issue.votes descending
+                                               select issue;
+                //userIssues.OrderBy(i => i.votes).ThenBy(i => i.createTime);
+
+                IQueryable<Vote> userVotes = from vote in dc.Votes
+                                             where vote.UserID == userID
+                                             select vote;
+
+                Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(userIssues, userVotes);
+
+
+                return View(issuesANDvotes);
+            }
+            else
+            {
+                IQueryable<Issue> allIssues = from iss in dc.Issues
+                                              select iss;
+                allIssues.OrderBy(i => i.lastVoted).ThenByDescending(i => i.votes);
+
+                Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(allIssues, null);
+                return View(issuesANDvotes);
+            }
+            
         }
 
         public ActionResult About() {

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="SigilDB">
+  <DataContextMoniker Name="/SigilDBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="3f6fe959-ef8a-48b1-aacc-45f5fd1dc16b" absoluteBounds="0.5, 4, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/SigilDBDataContext/Org" />
+      <nestedChildShapes>
+        <elementListCompartment Id="08c225c9-81a7-4713-b374-ec8cfd22ff71" absoluteBounds="0.51500000000000012, 4.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="96ba0dbc-4650-4ab1-974a-c4bb05cfb9a8" absoluteBounds="0.5, 1, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/SigilDBDataContext/AspNetUserRole" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4ed76330-b7a5-446f-896d-8efab79785e4" absoluteBounds="0.51500000000000012, 1.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="375f7b30-1bc1-4566-9453-18a831c308e5" absoluteBounds="6.25, 0.875, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/SigilDBDataContext/Issue" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ec2a848e-72ee-4386-9371-7d5b92cdfcc3" absoluteBounds="6.265, 1.335, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.5 : 4.62120458919271); (3.85416666666667 : 4.6212045891927 : JumpStart); (4.02083333333333 : 4.62120458919271 : JumpEnd); (4.41666666666667 : 4.6212045891927 : JumpStart); (4.58333333333333 : 4.62120458919271 : JumpEnd); (5.66126155533854 : 4.6212045891927 : JumpStart); (5.82792822200521 : 4.62120458919271 : JumpEnd); (7.09375 : 4.62120458919271); (7.09375 : 3.79970540364583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SigilDBDataContext/Org/Org_Issue" />
+      <nodes>
+        <classShapeMoniker Id="3f6fe959-ef8a-48b1-aacc-45f5fd1dc16b" />
+        <classShapeMoniker Id="375f7b30-1bc1-4566-9453-18a831c308e5" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="b5e14e81-fd54-44aa-a6e8-f40f1514cd75" absoluteBounds="8.75, 1.375, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/SigilDBDataContext/Comment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fbbc1893-f14b-4f90-80af-3d0c21af7831" absoluteBounds="8.765, 1.835, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(8.25 : 2.54890055338542); (8.75 : 2.54890055338542)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SigilDBDataContext/Issue/Issue_Comment" />
+      <nodes>
+        <classShapeMoniker Id="375f7b30-1bc1-4566-9453-18a831c308e5" />
+        <classShapeMoniker Id="b5e14e81-fd54-44aa-a6e8-f40f1514cd75" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" absoluteBounds="3.5, 0.875, 2, 3.5016097005208326">
+      <DataClassMoniker Name="/SigilDBDataContext/AspNetUser" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5bed9cc7-32da-40cd-822d-9746fb85b031" absoluteBounds="3.5149999999999997, 1.335, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.5 : 1.59699625651042); (3.5 : 1.59699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SigilDBDataContext/AspNetUserRole/AspNetUserRole_AspNetUser" />
+      <nodes>
+        <classShapeMoniker Id="96ba0dbc-4650-4ab1-974a-c4bb05cfb9a8" />
+        <classShapeMoniker Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 2.33735270182292); (6.25 : 2.33735270182292)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SigilDBDataContext/AspNetUser/AspNetUser_Issue" />
+      <nodes>
+        <classShapeMoniker Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" />
+        <classShapeMoniker Id="375f7b30-1bc1-4566-9453-18a831c308e5" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 4.11940755208333); (7.01041666666667 : 4.11940755208333 : JumpStart); (7.17708333333333 : 4.11940755208333 : JumpEnd); (7.61979416666667 : 4.11940755208333 : JumpStart); (7.78646083333333 : 4.11940755208333 : JumpEnd); (9.75 : 4.11940755208333); (9.75 : 3.72280110677083)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SigilDBDataContext/AspNetUser/AspNetUser_Comment" />
+      <nodes>
+        <classShapeMoniker Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" />
+        <classShapeMoniker Id="b5e14e81-fd54-44aa-a6e8-f40f1514cd75" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.5 : 4.86580447786458); (3.85416666666667 : 4.86580447786458 : JumpStart); (4.02083333333333 : 4.86580447786458 : JumpEnd); (4.5 : 4.86580447786458); (4.5 : 4.37660970052083)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SigilDBDataContext/Org/Org_AspNetUser" />
+      <nodes>
+        <classShapeMoniker Id="3f6fe959-ef8a-48b1-aacc-45f5fd1dc16b" />
+        <classShapeMoniker Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="8adad749-442b-4e85-bcbe-c3854e815022" absoluteBounds="8.75, 5.5, 2, 1.3862939453125">
+      <DataClassMoniker Name="/SigilDBDataContext/Subscription" />
+      <nestedChildShapes>
+        <elementListCompartment Id="72f898e6-ca47-4bfc-91b2-1a5674dfba46" absoluteBounds="8.765, 5.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 4.37660970052083); (5.875 : 4.75160970052083); (5.875 : 6.19314697265625); (7.61979416666667 : 6.19314697265625 : JumpStart); (7.78646083333333 : 6.19314697265625 : JumpEnd); (8.75 : 6.19314697265625)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SigilDBDataContext/AspNetUser/AspNetUser_Subscription" />
+      <nodes>
+        <classShapeMoniker Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" />
+        <classShapeMoniker Id="8adad749-442b-4e85-bcbe-c3854e815022" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.5 : 5.21415423893229); (3.85416666666667 : 5.21415423893229 : JumpStart); (4.02083333333333 : 5.21415423893229 : JumpEnd); (5.79166666666667 : 5.21415423893229 : JumpStart); (5.95833333333333 : 5.21415423893229 : JumpEnd); (7.61979416666667 : 5.21415423893229 : JumpStart); (7.78646083333333 : 5.21415423893229 : JumpEnd); (9.25 : 5.21415423893229); (9.25 : 5.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SigilDBDataContext/Org/Org_Subscription" />
+      <nodes>
+        <classShapeMoniker Id="3f6fe959-ef8a-48b1-aacc-45f5fd1dc16b" />
+        <classShapeMoniker Id="8adad749-442b-4e85-bcbe-c3854e815022" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="6325d0cb-1862-4e4e-a20b-c9a30a7d08e1" absoluteBounds="3.5, 6.25, 2, 1.3862939453125">
+      <DataClassMoniker Name="/SigilDBDataContext/Vote" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d0fcd7f3-05be-4a00-a1a7-589c6a64b01e" absoluteBounds="3.515, 6.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.9375 : 4.37660970052083); (3.9375 : 6.25)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SigilDBDataContext/AspNetUser/AspNetUser_Vote" />
+      <nodes>
+        <classShapeMoniker Id="582d45ae-4a2e-43e8-9321-ea8e90c27c8c" />
+        <classShapeMoniker Id="6325d0cb-1862-4e4e-a20b-c9a30a7d08e1" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(7.7031275 : 3.79970540364583); (7.7031275 : 6.94314697265625); (5.5 : 6.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SigilDBDataContext/Issue/Issue_Vote" />
+      <nodes>
+        <classShapeMoniker Id="375f7b30-1bc1-4566-9453-18a831c308e5" />
+        <classShapeMoniker Id="6325d0cb-1862-4e4e-a20b-c9a30a7d08e1" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

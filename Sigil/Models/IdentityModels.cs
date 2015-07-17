@@ -30,6 +30,5 @@ namespace Sigil.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<Sigil.Models.IssueModels> IssueModels { get; set; }
     }
 }
