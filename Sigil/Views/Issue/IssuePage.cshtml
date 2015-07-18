@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@using Microsoft.AspNet.Identity
 @using Sigil.Models
 @model Tuple<Org, Issue, IQueryable<Comment>>
 
@@ -26,14 +26,18 @@
             </ul>
         </div>
         <div class="issue-vote">
+
             @{
-                if (userVote != default(Vote))
-                { // User has voted on issue
-                    <img class="vote-button" id="vote_@thisIssue.Id" onclick="unvoteup('@thisIssue.Id')" src="~/Content/Images/voteup-clicked.png">
-                }
-                else
-                { // User hasn't voted on issue
-                    <img class="vote-button" id="vote_@thisIssue.Id" onclick="voteup('@thisIssue.Id')" src="~/Content/Images/voteup.png">
+                if(Request.IsAuthenticated)
+                { 
+                    if (userVote != default(Vote))
+                    { // User has voted on issue
+                        <img class="vote-button" id="vote_@thisIssue.Id" onclick="unvoteup('@thisIssue.Id')" src="~/Content/Images/voteup-clicked.png">
+                    }
+                    else
+                    { // User hasn't voted on issue
+                        <img class="vote-button" id="vote_@thisIssue.Id" onclick="voteup('@thisIssue.Id')" src="~/Content/Images/voteup.png">
+                    }
                 }
             }
             <span id="votecount_@thisIssue.Id">@(thisIssue.votes)</span>

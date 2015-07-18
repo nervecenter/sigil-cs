@@ -10,52 +10,53 @@ namespace Sigil {
         public static void RegisterRoutes(RouteCollection routes) {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
 
             routes.MapRoute(
              name: "Org",
-             url: "{orghandle}/",
+             url: "{orgName}/",
              defaults: new { controller = "Org", action = "OrgPage" }
             );
 
             routes.MapRoute(
                 name: "VoteUp",
-                url: "voteup/{issueID}/{userhandle}",
+                url: "voteup/{IssueId}/{UserName}",
                 defaults: new { controller = "Issue", action = "VoteUp" }
             );
 
             routes.MapRoute(
                 name: "UnVoteUp",
-                url: "unvoteup/{issueID}/{userhandle}",
+                url: "unvoteup/{IssueId}/{UserName}",
                 defaults: new { controller = "Issue", action = "UnVoteUp" }
             );
 
             routes.MapRoute(
                 name: "AddIssue",
-                url: "{orghandle}/addissue",
+                url: "{orgName}/addissue",
                 defaults: new { controller = "Issue", action = "AddIssue" }
             );
 
             routes.MapRoute(
                 name: "OrgData",
-                url: "{orghandle}/data",
+                url: "{orgName}/data",
                 defaults: new { controller = "Org", action = "OrgData" }
             );
 
             routes.MapRoute(
                 name: "Issue",
-                url: "{orghandle}/{issueID}",
+                url: "{orgName}/{IssueId}",
                 defaults: new { controller = "Issue", action = "IssuePage" }
             );
 
             routes.MapRoute(
                 name: "IssueData",
-                url: "{orghandle}/{issueID}/data",
+                url: "{orgName}/{IssueId}/data",
                 defaults: new { controller = "Issue", action = "IssueData" }
+            );
+
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
         }

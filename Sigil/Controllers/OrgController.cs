@@ -3,197 +3,125 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using DotNet.Highcharts;
 using DotNet.Highcharts.Options;
 using DotNet.Highcharts.Helpers;
-
+using Sigil.Models;
 
 namespace Sigil.Controllers
 {
-    public class IssueController : Controller
+    public class OrgController : Controller
     {
-        // GET: Issue
-               private SigilDBDataContext dc;
+        private SigilDBDataContext dc;
 
         /* 
         ==================== 
-        IssueController
+        OrgController
   
-            Constructor for our Issue controller; creates our persistent data context object 
+            Constructor for our Org controller; creates our persistent data context object 
         ==================== 
         */
 
-        public IssueController() {
+        public OrgController()
+        {
             dc = new SigilDBDataContext();
         }
 
         /* 
         ==================== 
-        IssuePage
+        OrgPage
   
-            The main page for an issue in any org. Contains vote buttons, issue text, responses, comment section. 
+            Returns a page listing the latest issues specific to an org 
         ==================== 
         */
 
-        public ActionResult IssuePage( string orgName, long issueID ) {
-            // Grab the issue's org
-            Org thisOrg = dc.Orgs.SingleOrDefault<Org>(o => o.orgName == orgName);
+        public ActionResult OrgPage(string orgName)
+        {
+            // Get the org
+            Org thisOrg = dc.Orgs.FirstOrDefault(o => o.orgName == orgName);
 
-            // Grab the issue for the page
-            Issue thisIssue = (from issue in dc.Issues
-                               where issue.Id == issueID
-                               select issue).SingleOrDefault();
-
-            // If neither are valid, redirect to 404 page
-            if ( thisOrg == default(Org) || thisIssue == default(Issue) ) {
+            // If the org doesn't exist, redirect to 404
+            if (thisOrg == default(Org))
+            {
                 Response.Redirect("~/404");
             }
 
             // Get the user and their subscriptions
-            var userID = User.Identity.GetUserId();
-            if (userID != null)
+            var userId = User.Identity.GetUserId();
+
+            if (userId != null)
             {
 
-                // If the page is in POST, we're posting a comment; get form data and POST it
-                if (Request.HttpMethod == "POST")
-                {
-                    // Create a new issue
-                    Comment newComment = new Comment();
-
-                    // Increment Id, drop in current user and date, set default weight, drop in the form text
-                    newComment.Id = dc.Comments.Max<Comment>(c => c.Id) + 1;
-                    newComment.issueId = thisIssue.Id;
-                    newComment.UserId = userID;
-                    newComment.postDate = DateTime.UtcNow;
-                    newComment.text = Request.Form["text"];
-
-                    // Try to submit the issue and go to the issue page; otherwise, write an error
-                    try
-                    {
-                        dc.Comments.InsertOnSubmit(newComment);
-
-                        dc.SubmitChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Could not write comment from %s to database:\n%s", newComment.UserId, e.Message);
-                    }
-                }
-
-
-                // Get the user's vote on this issues if it exists
-                Vote userVote = (from vote in dc.Votes
-                                 where vote.UserID == userID && vote.IssueId == thisIssue.Id
-                                 select vote).SingleOrDefault<Vote>();
-                // Grab the issue's comments sorted by date
-
-                ViewBag.userVote = userVote;
+                // Get the user's votes on this org
+                IQueryable<Vote> userVotes = from vote in dc.Votes
+                                             where vote.UserID == userId && vote.Issue.OrgId == thisOrg.Id
+                                             select vote;
+                ViewBag.userVotes = userVotes;
             }
-            //// Get today's issue viewcount and increment it; if there is none for today, create a new table entry for it
-            ViewCount vc = dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id && v.datetime.Date == DateTime.Today.Date);
-            if (vc == default(ViewCount))
-            {
-                try
-                {
-                    vc = new ViewCount();
-                    vc.Id = dc.ViewCounts.Max<ViewCount>(v => v.Id) + 1;
-                    vc.datetime = DateTime.UtcNow;
-                    vc.OrgId = thisOrg.Id;
-                    vc.IssueId = thisIssue.Id;
-                    vc.count = 1;
-                    dc.ViewCounts.InsertOnSubmit(vc);
-                    dc.SubmitChanges();
-                }
-                catch
-                {
-                    Console.WriteLine("Could not add new view count object issue %d.", thisIssue.Id);
-                }
-            }
-            else
-            {
-                try
-                {
-                    vc.count++;
-                    dc.SubmitChanges();
-                }
-                catch
-                {
-                    Console.WriteLine("Could not update view count on issue %d.", thisIssue.Id);
-                }
-            }
+            // Get the issues of the org
+            // TODO: Grab issues chosen by an algorithm based on age and weight
+            IQueryable<Issue> issueList = from issue in dc.Issues
+                                          where issue.OrgId == thisOrg.Id
+                                          orderby issue.votes descending
+                                          select issue;
 
-            IQueryable<Comment> issueComments = from comment in dc.Comments
-                                where comment.issueId == thisIssue.Id
-                                orderby comment.postDate descending
-                                select comment;
+            // MODEL: Put the org and the list of issues into a tuple as our page model
+            Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>(thisOrg, issueList);
 
-            // MODEL: A tuple of the org and the issue are the model for the IssuePage
-            Tuple<Org, Issue, IQueryable<Comment>> orgIssueComments = new Tuple<Org,Issue, IQueryable<Comment>>( thisOrg, thisIssue, issueComments );
+            // Add the user and their votes on the org to the ViewBag
+            
 
-            // Add the user and their vote (or lack of vote) to the ViewBag
-
-
-
-            // Pass the org and issue as the model to the view
-            return View( orgIssueComments );
+            // Pass our org and issues to the view as the model
+            return View(orgAndIssues);
         }
-
 
         /* 
         ==================== 
-        IssueData
+        OrgData
   
-            Data page for an issue, showing views/votes this week/month 
+            Data page for an Org, showing views/votes this week/month, responsiveness, and top issues  
         ==================== 
         */
 
-        public ActionResult IssueData( string orghandle, long issueID ) {
-            // Get the issue
-            Issue thisIssue = (from issue in dc.Issues
-                               where issue.Id == issueID
-                               select issue).SingleOrDefault();
-
+        public ActionResult OrgData(string orgName)
+        {
             // Get the org
-            Org thisOrg = thisIssue.Org;
+            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgName == orgName);
 
-            // If neither are valid, redirect to 404 page
-            if ( thisOrg == default(Org) || thisIssue == default(Issue) ) {
-                Response.Redirect("~/404");
-            }
-
-            // MODEL: List of charts we'll be displaying in sequence
+            // MODEL: List of Highcharts to display is out page model
             List<Highcharts> listOfCharts = new List<Highcharts>();
+
+            // TODO: Log Org views on Org page
 
             /*
              *  WEEKLY Traffic Data
              */
 
-            // TODO: Dynamically fill in holes properly where no votes or views have happened, rather than appending zeros to the end
-
-            // For each day in the week, get that day's views on the issue, group them into a week of integers of views
+            // For each day in the week, get that day's views on all issues in the org, group them into a week of integers of views
             List<int> weekOfViews = (from vc in dc.ViewCounts
-                                     where vc.IssueId == thisIssue.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-6.0)
-                                     orderby vc.datetime descending
-                                     select vc.count).ToList<int>();
+                                     where vc.Issue.OrgId == thisOrg.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-6.0)
+                                     group vc by vc.datetime.Date into day
+                                     select day.Sum<ViewCount>(v => v.count)).ToList<int>();
 
             // If there were days without entries (no views), append zeros to the beginning
             // TODO: Fix this such that it inserts zeros into the days with no views
-            while ( weekOfViews.Count < 7 ) {
+            while (weekOfViews.Count < 7)
+            {
                 weekOfViews.Add(0);
             }
 
-            // For each day in the week, get that day's votes on the issue in the org, group them into a week of integers of votes
+            // For each day in the week, get that day's votes on all issues in the org, group them into a week of integers of votes
             List<int> weekOfVotes = (from vote in dc.Votes
-                                     where vote.IssueId == thisIssue.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-6.0)
+                                     where vote.Issue.OrgId == thisOrg.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-6.0)
                                      group vote by vote.voteDate.Date into day
                                      select day.Count()).ToList<int>();
 
             // If there were days without entries (no votes), append zeros to the beginning
             // TODO: Fix this such that it inserts zeros into the days with no votes
-            while ( weekOfVotes.Count < 7 ) {
+            while (weekOfVotes.Count < 7)
+            {
                 weekOfVotes.Add(0);
             }
 
@@ -201,9 +129,9 @@ namespace Sigil.Controllers
 
             // Create a Highchart with X-axis for days of the week, and Y-axis series logging views and votes
             Highcharts weekChart = new DotNet.Highcharts.Highcharts("weekChart")
-                .SetXAxis(new XAxis 
-                            {
-                                Categories = new[] { DateTime.Today.Date.AddDays(-6.0).ToShortDateString(), 
+                .SetXAxis(new XAxis
+                {
+                    Categories = new[] { DateTime.Today.Date.AddDays(-6.0).ToShortDateString(), 
                                                      DateTime.Today.Date.AddDays(-5.0).ToShortDateString(), 
                                                      DateTime.Today.Date.AddDays(-4.0).ToShortDateString(), 
                                                      DateTime.Today.Date.AddDays(-3.0).ToShortDateString(), 
@@ -232,7 +160,7 @@ namespace Sigil.Controllers
                                 Name = "Votes"
                             }
                 })
-                .SetTitle(new Title{ Text = "Traffic on Issue " + thisIssue.Id + " This Week" });
+                .SetTitle(new Title { Text = "Traffic on " + thisOrg.orgName+ " This Month" });
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
             listOfCharts.Add(weekChart);
@@ -240,34 +168,35 @@ namespace Sigil.Controllers
             int weekVoteCount = weekOfVotes.Sum();
             ViewBag.weekViewCount = weekViewCount;
             ViewBag.weekVoteCount = weekVoteCount;
-            ViewBag.weekRatio = ( (double)weekVoteCount / (double)weekViewCount ) * 100.0f;
-
+            ViewBag.weekRatio = ((double)weekVoteCount / (double)weekViewCount) * 100.0f;
 
             /*
              *  MONTHLY Traffic Data
              */
 
-            // For each day in the month, get that day's views on the issue, group them into a month of integers of views
+            // For each day in the month, get that day's views on all issues in the org, group them into a month of integers of views
             List<int> monthOfViews = (from vc in dc.ViewCounts
-                                      where vc.IssueId == thisIssue.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-29.0)
-                                      orderby vc.datetime descending
-                                      select vc.count).ToList<int>();
+                                      where vc.Issue.OrgId == thisOrg.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-29.0)
+                                      group vc by vc.datetime.Date into day
+                                      select day.Sum<ViewCount>(v => v.count)).ToList<int>();
 
             // If there were days without entires (no views), append zeros to the beginning
             // TODO: Fix this such that it inserts zeros into the days with no views
-            while ( monthOfViews.Count < 30 ) {
+            while (monthOfViews.Count < 30)
+            {
                 monthOfViews.Add(0);
             }
 
-            // For each day in the month, get that day's votes on the issue, group them into a month of integers of votes
+            // For each day in the month, get that day's votes on all issues in the org, group them into a month of integers of votes
             List<int> monthOfVotes = (from vote in dc.Votes
-                                      where vote.IssueId == thisIssue.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-29.0)
+                                      where vote.Issue.OrgId == thisOrg.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-29.0)
                                       group vote by vote.voteDate.Date into day
                                       select day.Count()).ToList<int>();
 
             // If there were days without entires (no votes), append zeros to the beginning
             // TODO: Fix this such that it inserts zeros into the days with no votes
-            while ( monthOfVotes.Count < 30 ) {
+            while (monthOfVotes.Count < 30)
+            {
                 monthOfVotes.Add(0);
             }
 
@@ -275,9 +204,9 @@ namespace Sigil.Controllers
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
             Highcharts monthChart = new DotNet.Highcharts.Highcharts("monthChart")
-                .SetXAxis(new XAxis 
-                            {
-                                Categories = new[] { DateTime.Today.Date.AddDays(-29.0).ToShortDateString(),
+                .SetXAxis(new XAxis
+                {
+                    Categories = new[] { DateTime.Today.Date.AddDays(-29.0).ToShortDateString(),
                                                      DateTime.Today.Date.AddDays(-28.0).ToShortDateString(),
                                                      DateTime.Today.Date.AddDays(-27.0).ToShortDateString(), 
                                                      DateTime.Today.Date.AddDays(-26.0).ToShortDateString(), 
@@ -307,9 +236,10 @@ namespace Sigil.Controllers
                                                      DateTime.Today.Date.AddDays(-2.0).ToShortDateString(), 
                                                      DateTime.Today.Date.AddDays(-1.0).ToShortDateString(), 
                                                      DateTime.Today.Date.ToShortDateString() },
-                                Labels = new XAxisLabels {
-                                    Rotation = -45
-                                }
+                    Labels = new XAxisLabels
+                    {
+                        Rotation = -45
+                    }
                 })
                 .SetSeries(new Series[] {
                             new Series {
@@ -378,7 +308,7 @@ namespace Sigil.Controllers
                                 Name = "Votes"
                             }
                 })
-                .SetTitle(new Title{ Text = "Traffic on Issue " + thisIssue.Id + " This Month" });
+                .SetTitle(new Title { Text = "Traffic on " + thisOrg.orgName + " This Month" });
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
             listOfCharts.Add(monthChart);
@@ -386,121 +316,18 @@ namespace Sigil.Controllers
             int monthVoteCount = monthOfVotes.Sum();
             ViewBag.monthViewCount = monthViewCount;
             ViewBag.monthVoteCount = monthVoteCount;
-            ViewBag.monthRatio = ( (double)monthVoteCount / (double)monthViewCount ) * 100.0f;
+            ViewBag.monthRatio = ((double)monthVoteCount / (double)monthViewCount) * 100.0f;
 
 
             /*
              * VIEWBAG
              */
 
-            // Add the issue and org to the ViewBag
-            ViewBag.thisIssue = thisIssue;
+            // Add the org to the ViewBag
             ViewBag.thisOrg = thisOrg;
 
             // Pass our model list of charts as the model of the view
             return View(listOfCharts);
-        }
-
-        /* 
-        ==================== 
-        AddIssue
-  
-            Form for adding an issue. Linked on org page. Adds issue to current org. 
-        ==================== 
-        */
-        [Authorize]
-        [HttpPost]
-        public ActionResult AddIssue( int orghandle ) {
-            // Get the org for the issue we're adding
-            Org thisOrg = dc.Orgs.First<Org>(o => o.Id == orghandle);
-
-            // Get the user
-            var userId = User.Identity.GetUserId();
-
-            // If the page is in POST, get the issue form data and POST it
-            if ( Request.HttpMethod == "POST" ) {
-                // Create a new issue
-                Issue newissue = new Issue();
-
-                // Increment Id, drop in current user and date, set default weight, drop in the form text
-                newissue.Org = thisOrg;
-                newissue.OrgId = thisOrg.Id;
-                newissue.UserId = userId;
-                newissue.createTime = DateTime.UtcNow;
-                newissue.votes = 1;
-                newissue.title = Request.Form["title"];
-                newissue.text = Request.Form[ "text" ];
-                // Try to submit the issue and go to the issue page; otherwise, write an error
-                try {
-                    dc.Issues.InsertOnSubmit( newissue );
-                    dc.SubmitChanges();
-                    Response.Redirect( "~/" + thisOrg.orgName + "/" + newissue.Id );
-                } catch ( Exception e ) {
-                    Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue.text, e.Message );
-                }
-            }
-
-            // Add the org to the ViewBag
-            ViewBag.thisOrg = thisOrg;
-
-            return View();
-        }
-
-        /* 
-        ==================== 
-        VoteUp
-  
-            Action called by AJAX on click of a vote up button. Does not create a page, only increments vote counter and adds vote table entry. 
-        ==================== 
-        */
-        [Authorize]
-        public ActionResult VoteUp( int issueID) {
-            // Find our issue object and create a new vote
-            Issue thisIssue = dc.Issues.First<Issue>( i => i.Id == issueID );
-            Vote thisVote = new Vote();
-            var userId = User.Identity.GetUserId();
-            // Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
-            try {
-                thisIssue.votes++;
-
-                
-                thisVote.voteDate = DateTime.UtcNow;
-                thisVote.IssueId = thisIssue.Id;
-                thisVote.UserID = userId;
-                
-                dc.Votes.InsertOnSubmit( thisVote );
-                dc.SubmitChanges();
-            } catch ( Exception e ) {
-                Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
-            }
-            return new EmptyResult();
-        }
-
-        /* 
-        ==================== 
-        UnVoteUp
-  
-            Action called by AJAX on click of a unvote up button. Does not create a page, only decrements vote counter and deletes vote table entry. 
-        ==================== 
-        */
-        [Authorize]
-        public ActionResult UnVoteUp( int issueID) {
-            // Find our issue object and vote object
-            Issue thisIssue = dc.Issues.First<Issue>(i => i.Id == issueID);
-            var userId = User.Identity.GetUserId();
-
-            Vote thisVote = dc.Votes.First<Vote>( v => v.UserID == userId && v.IssueId == thisIssue.Id );
-
-            // Decrement vote counter for issue, delete vote entry, POST changes to server; otherwise, log an error
-            try {
-                thisIssue.votes--;
-
-                dc.Votes.DeleteOnSubmit( thisVote );
-                dc.SubmitChanges();
-            } catch ( Exception e ) {
-                Console.WriteLine( "Could not unvote on issue %s:\n%s", thisIssue.Id, e.Message );
-            }
-            return new EmptyResult();
         }
     }
 }

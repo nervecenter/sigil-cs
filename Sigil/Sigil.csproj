@@ -164,6 +164,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrgController.cs" />
     <Compile Include="Controllers\SubscriptionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -304,6 +305,8 @@
     <Content Include="Views\Issue\AddIssue.cshtml" />
     <Content Include="Views\Issue\IssueData.cshtml" />
     <Content Include="Views\Issue\IssuePage.cshtml" />
+    <Content Include="Views\Org\OrgData.cshtml" />
+    <Content Include="Views\Org\OrgPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Subscriptions\" />
