@@ -1,7 +1,7 @@
 ﻿function voteup(issueid, userhandle) {
     $.ajax({
         type: "POST",
-        url: '/voteup/' + issueid + '/' + userhandle,
+        url: '/voteup/' + issueid + '/',
         success: function () {
             // Get the element
             var elementID = "vote_" + issueid;
@@ -14,8 +14,9 @@
             document.getElementById("votecount_" + issueid).innerHTML = voteCount + 1;
             //alert('Voted up');
         },
-        error: function () {
-            alert('Could not vote up.');
+        error: function (ts) {
+            //alert('Could not vote up.');
+            alert(ts.responseText);
         }
     });
 }
@@ -23,7 +24,7 @@
 function unvoteup(issueid, userhandle) {
     $.ajax({
         type: "POST",
-        url: '/unvoteup/' + issueid + '/' + userhandle,
+        url: '/unvoteup/' + issueid + '/',
         success: function () {
             // Get the element
             var elementID = "vote_" + issueid;
@@ -36,8 +37,9 @@ function unvoteup(issueid, userhandle) {
             document.getElementById("votecount_" + issueid).innerHTML = voteCount - 1;
             //alert('Unvoted up');
         },
-        error: function () {
+        error: function (ts) {
             alert('Could not unvote up.');
+            alert(ts.responseText);
         }
     });
 }

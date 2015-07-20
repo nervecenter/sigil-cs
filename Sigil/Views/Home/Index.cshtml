@@ -28,7 +28,7 @@
             <div class="col-md-12">
                 <h5>@issue.title</h5>
                 <p>
-                    <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                    <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
                                                                                                  { <b>Official Response!</b> } }
                     @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
                     <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>

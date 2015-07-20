@@ -64,12 +64,16 @@ namespace Sigil.Controllers
                     Comment newComment = new Comment();
 
                     // Increment Id, drop in current user and date, set default weight, drop in the form text
-                    newComment.Id = dc.Comments.Max<Comment>(c => c.Id) + 1;
+                    //newComment.Id = dc.Comments.Max<Comment>(c => c.Id) + 1;
                     newComment.issueId = thisIssue.Id;
                     newComment.UserId = userID;
                     newComment.postDate = DateTime.UtcNow;
-                    newComment.text = Request.Form["text"];
+                    newComment.editTime = DateTime.UtcNow;
+                    newComment.lastVoted = DateTime.UtcNow;
+                    newComment.votes = 1;
 
+                    newComment.text = Request.Form["text"];
+                    
                     // Try to submit the issue and go to the issue page; otherwise, write an error
                     try
                     {
@@ -409,10 +413,9 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        [HttpPost]
-        public ActionResult AddIssue( int orghandle ) {
+        public ActionResult AddIssue( string orgName ) {
             // Get the org for the issue we're adding
-            Org thisOrg = dc.Orgs.First<Org>(o => o.Id == orghandle);
+            Org thisOrg = dc.Orgs.First<Org>(o => o.orgName == orgName);
 
             // Get the user
             var userId = User.Identity.GetUserId();
@@ -421,20 +424,25 @@ namespace Sigil.Controllers
             if ( Request.HttpMethod == "POST" ) {
                 // Create a new issue
                 Issue newissue = new Issue();
-
+                
                 // Increment Id, drop in current user and date, set default weight, drop in the form text
+
                 newissue.Org = thisOrg;
                 newissue.OrgId = thisOrg.Id;
                 newissue.UserId = userId;
                 newissue.createTime = DateTime.UtcNow;
+                newissue.editTime = DateTime.UtcNow;
+                newissue.lastVoted = DateTime.UtcNow;
                 newissue.votes = 1;
+                newissue.viewCount = 1;
                 newissue.title = Request.Form["title"];
                 newissue.text = Request.Form[ "text" ];
                 // Try to submit the issue and go to the issue page; otherwise, write an error
                 try {
                     dc.Issues.InsertOnSubmit( newissue );
                     dc.SubmitChanges();
-                    Response.Redirect( "~/" + thisOrg.orgName + "/" + newissue.Id );
+                    var lastId = dc.Issues.Max<Issue>(i => i.Id);
+                    Response.Redirect( "~/" + thisOrg.orgName + "/" + lastId );
                 } catch ( Exception e ) {
                     Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue.text, e.Message );
                 }
