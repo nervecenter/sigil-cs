@@ -1,0 +1,241 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	/*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
+}
+
+.page {
+	background-color: #E5E5E5;
+}
+
+.page-container {
+	min-height: 56em;
+}
+
+.page-header {
+	background: #494949 none repeat scroll 0% 0%;
+	background-clip: border-box;
+	background-origin: padding-box;
+	background-size: auto auto;
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	height: 4em;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 1000000;
+}
+
+.logo {
+	line-height: 5.8em;
+	margin-left: 2.2em;
+}
+
+.header-link-container {
+	float: right;
+	line-height: 3.8em;
+	padding-right: 1.5em;
+	display: block;
+}
+
+.header-link {
+	font-family: sans-serif;
+	color: #FFF;
+	padding-left: 0.5em;
+	text-decoration: none;
+}
+
+.main {
+	max-width: 65em;
+	min-height: 62em;
+	display: block;
+	padding-top: 5em;
+	position: relative;
+	box-sizing: border-box;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.first-column {
+	width: 50em;
+	float: left;
+}
+
+.org-header {
+	display: block;
+	width: 50em;
+	height: 15em;
+	border: 1px solid #CCC;
+	background-image: url("../Content/Images/orgheaders/microsoft.png");
+	background-size: 50em auto;
+	margin-bottom: 1.5em;
+}
+
+.issue-box {
+	display: block;
+	width: 50em;
+	height: 6em;
+	border: 1px solid #CCC;
+	background-color: #FFF;
+	margin-bottom: 1.5em;
+}
+
+.issue-vote-area {
+	height: 5em;
+	width: 3em;
+	margin: 0.5em 1em 0.5em 1em;
+	text-align: center;
+	float: left;
+}
+
+.issue-vote-amount {
+	font-size: 1.3em;
+	width: 3em;
+	line-height: 1.5em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.issue-vote-button {
+	margin: 0.4em auto auto auto;
+}
+
+.issue-main-area {
+	float: right;
+	width: 45em;
+	height: 6em;
+	position: relative;
+}
+
+.issue-text-area {
+	position: absolute;
+	top: 0.7em;
+	margin-right: 1em;
+	width: 44em;
+	height: 3em;
+}
+
+.issue-text {
+	text-decoration: none;
+	color: #2E95A5;
+	font-size: 1.1em;
+	font-weight: 600;
+}
+
+.issue-info-area {
+	position: absolute;
+	bottom: 1em;
+	margin-right: 1em;
+	width: 44em;
+	height: 1em;
+}
+
+.issue-date {
+	font-size: 0.8em;
+	float: left;
+}
+
+.issue-user-icon {
+	margin-right: 0.4em;
+}
+
+.issue-user {
+	font-size: 0.97em;
+	float: right;
+	margin-right: 1em;
+}
+
+.second-column {
+	width: 15em;
+	float: right;
+}
+
+.sub-list {
+	margin-left: 1.5em;
+	margin-bottom: 1em;
+	width: 14em;
+	line-height: 1.6em;
+}
+
+.sub {
+	color: #2E95A5;
+	font-size: 1.1em;
+	text-decoration: none;
+}
+
+.sub-org-icon {
+	margin-top: 0.2em;
+	margin-right: 0.4em;
+}
+
+.placeholder {
+	border: 1px solid #CCC;
+	background-color: #FFF;
+	margin-left: 1em;
+	width: 14em;
+	min-height: 30em;
+}
+
+.footer-container {
+	background:  #494949 none repeat scroll 0% 0%;
+	display: block;
+	box-sizing: border-box;
+	height: 15em;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	bottom: 0px;
+}
+
+.page-footer {
+	max-width: 65em;
+	height: 100%;
+	padding-top: 2em;
+	margin-left: auto;
+	margin-right: auto;
+	float: none;
+	box-sizing: border-box;
+	bottom: 0;
+	background: transparent none no-repeat scroll right bottom;
+}
+
+.footer-column {
+	width: 33%;
+	float: left;
+	margin: 0;
+	height: 100%;
+	box-sizing: border-box;
+	color: #FFF;
+}
+
+.tagline {
+	color: #FFF;
+	text-decoration: none;
+	font-size: 0.8em;
+}
+
+.address {
+	margin-top: 1.8em;
+	line-height: 0.8em;
+	font-size: 0.9em;
+}
+
+.footer-list {
+	list-style: outside none none;
+	line-height: 1.5em;
+}
+
+.footer-list-item {
+	font-size: 0.9em;
+	text-decoration: none;
+	color: #FFF;
+}
+
+.aspnet {
+	font-size: 0.9em;
+	text-decoration: none;
+	color: #FFF;
+}
