@@ -161,6 +161,46 @@ html, body {
 	margin-right: 1em;
 }
 
+.comments-area {
+	display: block;
+	width: 50em;
+	border: 1px solid #CCC;
+	background-color: #FFF;
+}
+
+.comments-header {
+	display: block;
+	font-size: 0.8em;
+	font-weight: 600;
+	margin-left: 2em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.comment {
+	min-height: 8em;
+	display: block;
+}
+
+.comment-user-area {
+	float: left;
+	width: 8em;
+	text-align: center;
+}
+
+.comment-user-icon {
+	width: 4em;
+	margin: 1em 2em 0em 2em;
+}
+
+.comment-text {
+	float: right;
+	width: 41em;
+	margin-right: 1em;
+	margin-bottom: 1em;
+	height: 100%;
+}
+
 .second-column {
 	width: 15em;
 	float: right;
