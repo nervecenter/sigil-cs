@@ -245,6 +245,8 @@ html, body {
 .comment-separator {
 	width: 90%;
 	margin-bottom: 1.3em;
+	color: #CCC;
+	background-color: #CCC;
 }
 
 .second-column {
