@@ -48,6 +48,31 @@ html, body {
 	text-decoration: none;
 }
 
+.search-box-form {
+	float: left;
+}
+
+.search-box {
+	
+}
+
+.search-submit-button {
+	content: url("../Content/Images/search-icon-small.png");
+	background-image: url("../Content/Images/search-icon-small.png");
+	background-repeat: no-repeat;
+	background-color: transparent;
+	border: 0;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+}
+
+.search-query {
+	padding: 0.8em 1em 0.8em 3em;
+	width: 25em;
+	border-radius: 1.5em;
+}
+
 .main {
 	max-width: 65em;
 	min-height: 62em;
@@ -86,7 +111,7 @@ html, body {
 }
 
 .issue-text {
-	margin: 7em 2em 1em 2em;
+	margin: 6.3em 2em 1em 2em;
 }
 
 .issue-box, .issue-body {
