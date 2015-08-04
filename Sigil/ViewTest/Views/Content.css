@@ -50,10 +50,9 @@ html, body {
 
 .search-box-form {
 	float: left;
-}
-
-.search-box {
-	
+	margin-right: 2em;
+	width: 23em;
+	position: relative;
 }
 
 .search-submit-button {
@@ -65,12 +64,18 @@ html, body {
 	width: 25px;
 	height: 25px;
 	cursor: pointer;
+	margin: auto;
+	overflow: visible;
+	position: absolute;
+	top: 1.5em;
+	left: 0.8em;
 }
 
 .search-query {
 	padding: 0.8em 1em 0.8em 3em;
 	width: 25em;
 	border-radius: 1.5em;
+	border-color: transparent;
 }
 
 .main {
