@@ -15,7 +15,7 @@ function vote(votebutton, issueID) {
 	}
 }
 
-function hover(votebutton) {
+function votehover(votebutton) {
 	if (votebutton.classList.contains('unchecked')) {
 		votebutton.src = "../Content/Images/vote_circle_hover_small.png";		
 	} else if (votebutton.classList.contains('checked')) {
@@ -23,10 +23,18 @@ function hover(votebutton) {
 	}
 }
 
-function unhover(votebutton) {
+function voteunhover(votebutton) {
 	if (votebutton.classList.contains('unchecked')) {
 		votebutton.src = "../Content/Images/vote_circle_small.png";
 	} else if (votebutton.classList.contains('checked')) {
 		votebutton.src = "../Content/Images/check_mark_small.png";
 	}
+}
+
+function votehelpful(hbutton, responseID) {
+	
+}
+
+function voteunhelpful(uhbutton, responseID) {
+	
 }
