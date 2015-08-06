@@ -56,19 +56,22 @@ html, body {
 }
 
 .search-submit-button {
-	content: url("../Content/Images/search-icon-small.png");
+	/*content: url("../Content/Images/search-icon-small.png");
 	background-image: url("../Content/Images/search-icon-small.png");
-	background-repeat: no-repeat;
+	background-repeat: no-repeat;*/
 	background-color: transparent;
 	border: 0;
-	width: 25px;
-	height: 25px;
 	cursor: pointer;
 	margin: auto;
 	overflow: visible;
 	position: absolute;
 	top: 1.5em;
 	left: 0.8em;
+}
+
+.search-submit-button-icon {
+	height: 1em;
+	width: auto;
 }
 
 .search-query {
