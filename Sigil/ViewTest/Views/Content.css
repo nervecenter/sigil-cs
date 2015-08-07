@@ -180,8 +180,8 @@ html, body {
 	height: 1em;
 }
 
-.issue-date {
-	font-size: 0.8em;
+.issue-org-cat-topic {
+	font-size: 0.9em;
 	float: left;
 }
 
@@ -189,8 +189,8 @@ html, body {
 	margin-right: 0.4em;
 }
 
-.issue-user {
-	font-size: 0.97em;
+.issue-user-date {
+	font-size: 0.9em;
 	float: right;
 	margin-right: 1em;
 }
