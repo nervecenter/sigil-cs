@@ -48,6 +48,14 @@ html, body {
 	text-decoration: none;
 }
 
+.header-user-icon {
+	height: 2.5em;
+	vertical-align: middle;
+	border: 0.1em #FFF solid;
+	margin-right: 0.5em;
+	margin-left: 1em;
+}
+
 .search-box-form {
 	float: left;
 	margin-right: 2em;
