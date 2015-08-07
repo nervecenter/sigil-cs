@@ -154,15 +154,21 @@ html, body {
 	float: right;
 	width: 45em;
 	height: 6em;
-	position: relative;
+	display: table;
+}
+
+.issue-main-cell {
+	display: table-cell;
+	vertical-align: middle;
 }
 
 .issue-title-area {
-	position: absolute;
-	top: 0.7em;
 	margin-right: 1em;
 	width: 44em;
-	height: 3em;
+	height: auto;
+	display: block;
+	margin-bottom: 0.6em;
+	margin-top: -0.5em;
 }
 
 .issue-title {
@@ -170,14 +176,15 @@ html, body {
 	color: #2E95A5;
 	font-size: 1.1em;
 	font-weight: 600;
+	vertical-align: middle;
+	line-height: normal;
 }
 
 .issue-info-area {
-	position: absolute;
-	bottom: 1em;
 	margin-right: 1em;
 	width: 44em;
 	height: 1em;
+	display: block;
 }
 
 .issue-org-cat-topic {
@@ -185,8 +192,9 @@ html, body {
 	float: left;
 }
 
-.issue-user-icon {
-	margin-right: 0.4em;
+.issue-info-icon {
+	margin-right: 0.3em;
+	vertical-align: -0.3em;
 }
 
 .issue-user-date {
@@ -293,8 +301,8 @@ html, body {
 }
 
 .sub-org-icon {
-	margin-top: 0.2em;
-	margin-right: 0.4em;
+	vertical-align: -0.05em;
+	margin-right: 0.3em;
 }
 
 .placeholder {
