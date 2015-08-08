@@ -73,8 +73,10 @@ html, body {
 	margin: auto;
 	overflow: visible;
 	position: absolute;
-	top: 1.5em;
-	left: 0.8em;
+	top: 1.4em;
+	left: 0.2em;
+	width: auto;
+	height: auto;
 }
 
 .search-submit-button-icon {
@@ -295,11 +297,26 @@ html, body {
 	float: right;
 }
 
-.sub-list {
-	margin-left: 1.5em;
+.sub-list-box {
+	margin-left: 1em;
 	margin-bottom: 1em;
 	width: 14em;
 	line-height: 1.6em;
+	border: 1px solid #CCC;
+	background-color: #FFF;
+}
+
+.subs-header {
+	display: block;
+	font-size: 0.6em;
+	font-weight: 600;
+	margin-left: 1em;
+	margin-top: 0.5em;
+	margin-bottom: 0em;
+}
+
+.sub-list {
+	margin: 0em 0.7em 0.5em 0.7em;
 }
 
 .sub {

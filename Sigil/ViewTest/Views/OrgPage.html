@@ -11,7 +11,7 @@
 			<a href="FrontPage.html" class="logo"><img src="../Content/Images/logo-small.png"></img></a>
 			<nav class="header-link-container">
 				<form class="search-box-form">
-					<button class="search-submit-button" type="submit"><img class="search-submit-button-icon" src="../Content/Images/search-icon-small.png"></img></button>
+					<button class="search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></img></button>
 					<input class="search-query" type="text" placeholder="Search for a company, organization, or person"></input>
 				</form>
 				<a href="FrontPage.html" class="header-link">Log In</a>
@@ -27,11 +27,16 @@
 						<img class="issue-vote-button unchecked" id="button-1" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 1)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
 					</div>
 					<div class="issue-main-area">
-						<div class="issue-title-area"><a href="IssuePage.html" class="issue-title">The process involved in upgrading is the most frustrating thing ever, please give more thorough direction regarding blah blah blah.</a></div>
-						<div class="issue-info-area">
-							<span class="issue-date">Posted July 30, 2015</span>
-							<div class="issue-user">
-								<img class="issue-user-icon" src="../Content/Images/usericons/nervecenter_20.png"></img><span class="issue-user">Nerve</span>
+						<div class="issue-main-cell">
+							<div class="issue-title-area"><a href="IssuePage.html" class="issue-title">The process involved in upgrading is the most frustrating thing ever, please give more thorough direction regarding blah blah blah.</a></div>
+							<div class="issue-info-area">
+								<span class="issue-org-cat-topic">
+									<img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
+									in Operating Systems
+								</span>
+								<span class="issue-user-date">3 days ago by 
+									<img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
+								</span>
 							</div>
 						</div>
 					</div>
@@ -42,22 +47,31 @@
 						<img class="issue-vote-button unchecked" id="button-2" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 2)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
 					</div>
 					<div class="issue-main-area">
-						<div class="issue-title-area"><a href="FrontPage.html" class="issue-title">Yo, that Surface is really cool, but it'd be better if it could run Crysis.</a></div>
-						<div class="issue-info-area">
-							<span class="issue-date">Posted July 31, 2015</span>
-							<div class="issue-user">
-								<img class="issue-user-icon" src="../Content/Images/usericons/mcdiddles69_20.png"></img><span class="issue-user">mcdiddles69</span>
+						<div class="issue-main-cell">
+							<div class="issue-title-area"><a href="IssuePage.html" class="issue-title">Yo, that Surface is really cool, but it'd be better if it could run Crysis.</a></div>
+							<div class="issue-info-area">
+								<span class="issue-org-cat-topic"> 
+									<img class="issue-info-icon" src="../Content/Images/caticons/surface_20.png"></img>Surface 
+									in Consumer Electronics
+								</span>
+								<span class="issue-user-date">4 days ago by 
+									<img class="issue-info-icon" src="../Content/Images/usericons/mcdiddles69_20.png"></img>mcdiddles69
+								</span>
 							</div>
 						</div>
 					</div>
 				</article>
 			</div>
 			<div class="second-column">
-				<div class="sub-list">
-					<a href="OrgPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png"></img>Microsoft</a><br>
-					<a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/apple_15.png"></img>Apple</a><br>
-					<a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/google_15.png"></img>Google</a><br>
-					
+				<div class="sub-list-box">
+					<span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span>
+					<div class="sub-list">
+						<a href="OrgPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png"></img>Microsoft</a><br>
+						<a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/windows_15.png">Windows</a><br>
+						<a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/surface_15.png">Surface</a><br>
+						<a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/apple_15.png"></img>Apple</a><br>
+						<a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/google_15.png"></img>Google</a><br>
+					</div>
 				</div>
 				<div class="placeholder">
 					Ads go here.
