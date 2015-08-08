@@ -108,7 +108,14 @@ html, body {
 	display: block;
 }
 
-.org-header {
+.feed-intent {
+	font-size: 1.5em;
+	font-weight: 600;
+	margin: -0.3em 0em 0.5em 1em;
+	display: block;
+}
+
+.feed-header {
 	display: block;
 	width: 50em;
 	height: 15em;
