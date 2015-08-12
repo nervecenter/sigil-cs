@@ -290,6 +290,8 @@ html, body {
 
 .clear {
 	clear: both;
+	height: 0em;
+	display: block;
 }
 
 .comment-separator {
@@ -304,7 +306,7 @@ html, body {
 	float: right;
 }
 
-.sub-list-box {
+.sub-list-box, .user-page-databox {
 	margin-left: 1em;
 	margin-bottom: 1em;
 	width: 14em;
@@ -313,13 +315,35 @@ html, body {
 	background-color: #FFF;
 }
 
-.subs-header {
+.subs-header, .user-databox-header {
 	display: block;
 	font-size: 0.6em;
 	font-weight: 600;
 	margin-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0em;
+}
+
+.user-databox-icon {
+	width: 3em;
+	height: auto;
+	margin: 0.3em 0.3em 0em 0.6em;
+	float: left;
+}
+
+.user-databox-data {
+	width: auto;
+}
+
+.user-databox-memberdate {
+	font-size: 0.75em;
+}
+
+.user-actions {
+	width: auto;
+	margin-top: 0.4em;
+	margin-left: 0.7em;
+	margin-bottom: 0.6em;
 }
 
 .sub-list {
