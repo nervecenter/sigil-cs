@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="aspnet-Sigil-20150716011718" Class="SigilDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-Sigil-20150716011718.mdf;Initial Catalog=aspnet-Sigil-20150716011718;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-Sigil-20150716011718.mdf;Initial Catalog=aspnet-Sigil-20150716011718;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Orgs" Member="Orgs">
     <Type Name="Org">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -107,6 +107,15 @@
       <Column Name="voteDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="AspNetUser_Vote" Member="AspNetUser" ThisKey="UserID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
       <Association Name="Issue_Vote" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Notifications" Member="Notifications">
+    <Type Name="Notification">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="From_UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="To_UserId" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="To_OrgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>
