@@ -113,10 +113,10 @@ html, body {
 }
 
 .sale-point-area {
-	width: 40em;
+	width: 52em;
 	position: relative;
 	color: white;
-	margin-top: -8em;
+	margin-top: -12em;
 	margin-left: auto;
 	margin-right: auto;
 	white-space: nowrap;
@@ -124,7 +124,7 @@ html, body {
 
 .sale-point {
 	width: 15em;
-	height: 15em;
+	height: 8em;
 	display: inline-block;
 	margin-left: 3em;
 }
@@ -133,9 +133,21 @@ html, body {
 	margin-left: 0em;
 }
 
+.sale-image {
+	width: 4em;
+	height: 4em;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	display: block;
+}
+
 .sale-text {
 	display: block;
 	text-align: center;
+	height: 100%;
+	white-space: normal;
+	word-break: normal;
 }
 
 .main {
