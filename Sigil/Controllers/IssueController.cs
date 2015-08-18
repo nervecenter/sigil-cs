@@ -541,8 +541,9 @@ namespace Sigil.Controllers
                 try
                 {
                     note.From_UserId = user;
-                    note.To_UserId = to_user_id.ToString();
-                    note.To_OrgId = Convert.ToInt32(to_org_id.ToString());
+                    note.To_UserId = to_user_id.Cast<string>().First();
+                    //note.To_OrgId = Convert.ToInt32(to_org_id.ToString());
+                    note.createTime = DateTime.UtcNow;
                     dc.Notifications.InsertOnSubmit(note);
                     dc.SubmitChanges();
                 }

@@ -17,6 +17,12 @@ namespace Sigil {
                 );
 
             routes.MapRoute(
+                name: "Register",
+                url: "Account/Register/",
+                defaults: new { controller = "Account", action = "Register" }
+                );
+
+            routes.MapRoute(
                 name: "Home",
                 url: "Home/Index/",
                 defaults: new { controller = "Home", action = "Index" }
