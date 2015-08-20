@@ -302,6 +302,10 @@ html, body {
 	display: table;
 }
 
+.issue-main-issue-page {
+	height: 6em;
+}
+
 .issue-main-area-small {
 	width: 20em;
 }
