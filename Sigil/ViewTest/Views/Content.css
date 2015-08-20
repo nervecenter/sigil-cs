@@ -136,8 +136,11 @@ html, body {
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 0em -18.5em;
-	background-clip: content-box;
-	background-origin: content-box;
+}
+
+.sale-back-img {
+	width: 100%;
+	z-index: 0;
 }
 
 .sale-logo {
@@ -269,7 +272,7 @@ html, body {
 .issue-box-small {
 	width: 25em;
 	min-height: 11em;
-	height: 11em;
+	height: 12em;
 }
 
 .issue-vote-area {
