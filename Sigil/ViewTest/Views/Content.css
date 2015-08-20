@@ -29,6 +29,11 @@ html, body {
 	z-index: 1000000;
 }
 
+.page-header-landing {
+	background-color: rgba(255, 255, 255, 0.0);
+	position: relative;
+}
+
 .logo {
 	line-height: 5.8em;
 	margin-left: 2.2em;
@@ -39,6 +44,11 @@ html, body {
 	line-height: 3.8em;
 	padding-right: 1.5em;
 	display: block;
+}
+
+.landing-header-link-container {
+	position: relative;
+	margin-top: -3.2em;
 }
 
 .header-link {
@@ -63,6 +73,13 @@ html, body {
 	position: relative;
 }
 
+.landing-search-form {
+	margin: 1em auto auto auto;
+	float: none;
+	display: normal;
+	width: 50%;
+}
+
 .search-submit-button {
 	/*content: url("../Content/Images/search-icon-small.png");
 	background-image: url("../Content/Images/search-icon-small.png");
@@ -79,6 +96,10 @@ html, body {
 	height: auto;
 }
 
+.landing-search-submit-button {
+	top: 0.6em;
+}
+
 .search-submit-button-icon {
 	height: 1em;
 	width: auto;
@@ -91,9 +112,14 @@ html, body {
 	border-color: transparent;
 }
 
+.landing-search-query {
+	width: 91%;
+}
+
 .sale {
-	height: 25em;
+	height: 30em;
 	position: relative;
+	margin-top: -5em;
 }
 
 .sale-back-darken {
@@ -110,13 +136,24 @@ html, body {
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-position: 0em -18.5em;
+	background-clip: content-box;
+	background-origin: content-box;
+}
+
+.sale-logo {
+	width: 20em;
+	margin-top: -24.5em;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
 }
 
 .sale-point-area {
 	width: 52em;
 	position: relative;
 	color: white;
-	margin-top: -12em;
+	margin-top: 2.5em;
 	margin-left: auto;
 	margin-right: auto;
 	white-space: nowrap;
@@ -161,6 +198,21 @@ html, body {
 	margin-right: auto;
 }
 
+.landing-main {
+	padding-top: 1em;
+	max-width: 80em;
+}
+
+.landing-column {
+	width: 25em;
+	display: block;
+	float: left;
+}
+
+.landing-second-col, .landing-third-col {
+	margin-left: 2.5em;
+}
+
 .first-column {
 	width: 50em;
 	float: left;
@@ -190,6 +242,14 @@ html, body {
 	margin-bottom: 1.5em;
 }
 
+.landing-topic-header {
+	text-decoration: none;
+	color: #267C89;
+	margin-left: 1em;
+	line-height: 3em;
+	font-size: 1.2em;
+}
+
 .issue-box {
 	height: 6em;
 }
@@ -204,6 +264,12 @@ html, body {
 	border: 1px solid #CCC;
 	background-color: #FFF;
 	margin-bottom: 1.5em;
+}
+
+.issue-box-small {
+	width: 25em;
+	min-height: 11em;
+	height: 11em;
 }
 
 .issue-vote-area {
@@ -229,8 +295,12 @@ html, body {
 .issue-main-area {
 	float: right;
 	width: 45em;
-	height: 6em;
+	height: 100%;
 	display: table;
+}
+
+.issue-main-area-small {
+	width: 20em;
 }
 
 .issue-main-cell {
@@ -239,10 +309,7 @@ html, body {
 }
 
 .issue-title-area {
-	margin-right: 1em;
-	width: 44em;
 	height: auto;
-	display: block;
 	margin-bottom: 0.6em;
 	margin-top: -0.5em;
 }
@@ -257,10 +324,17 @@ html, body {
 }
 
 .issue-info-area {
+	height: 1em;
+}
+
+.issue-main-sub-areas {
 	margin-right: 1em;
 	width: 44em;
-	height: 1em;
 	display: block;
+}
+
+.issue-main-sub-areas-small {
+	width: 19em;
 }
 
 .issue-org-cat-topic {
@@ -277,6 +351,11 @@ html, body {
 	font-size: 0.9em;
 	float: right;
 	margin-right: 1em;
+}
+
+.issue-user-date-small {
+	float: left;
+	line-height: 2em;
 }
 
 .comments-area, .response-box {
@@ -361,12 +440,12 @@ html, body {
 }
 
 .second-column {
-	width: 15em;
+	width: 14em;
 	float: right;
+	margin-left: 1em;
 }
 
 .sub-list-box, .user-page-databox {
-	margin-left: 1em;
 	margin-bottom: 1em;
 	width: 14em;
 	line-height: 1.6em;
@@ -423,7 +502,6 @@ html, body {
 .placeholder {
 	border: 1px solid #CCC;
 	background-color: #FFF;
-	margin-left: 1em;
 	width: 14em;
 	min-height: 30em;
 }

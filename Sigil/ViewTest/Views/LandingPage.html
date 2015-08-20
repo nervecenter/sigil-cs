@@ -7,13 +7,12 @@
 </head>
 <body class="page">
 	<div class="page-container">
-		<section class="page-header">
-			<a href="FrontPage.html" class="logo"><img src="../Content/Images/logo-small.png"></img></a>
-			<nav class="header-link-container">
-				<form class="search-box-form">
-					<button class="search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></img></button>
-					<input class="search-query" type="text" placeholder="Search for a company, organization, or person"></input>
-				</form>
+		<section class="page-header page-header-landing">
+			<form class="search-box-form landing-search-form">
+					<button class="search-submit-button landing-search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></img></button>
+					<input class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person"></input>
+			</form>
+			<nav class="header-link-container landing-header-link-container">
 				<a href="FrontPage.html" class="header-link">Log In</a>
 				<a href="FrontPage.html" class="header-link">Create Account</a>
 			</nav>
@@ -21,6 +20,7 @@
 		<section class="sale">
 			<div class="sale-back-darken"></div>
 			<div class="sale-back"></div>
+			<img class="sale-logo" src="../Content/Images/logo-600.png"></img>
 			<div class="sale-point-area">
 				<div class="sale-point sale-point-first">
 					<img class="sale-image" src="../Content/Images/earth_white.png"></img>
@@ -36,49 +36,57 @@
 				</div>
 			</div>
 		</section>
-		<section class="main">
-			<article class="issue-box">
-				<div class="issue-vote-area">
-					<span class="issue-vote-amount" id="count-1">40</span>
-					<img class="issue-vote-button unchecked" id="button-1" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 1)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
-				</div>
-				<div class="issue-main-area">
-					<div class="issue-main-cell">
-						<div class="issue-title-area"><a href="IssuePage.html" class="issue-title">The process involved in upgrading is the most frustrating thing ever, please give more thorough direction regarding blah blah blah.</a></div>
-						<div class="issue-info-area">
-							<span class="issue-org-cat-topic">
-								<img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft : 
-								<img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
-								in Operating Systems
-							</span>
-							<span class="issue-user-date">3 days ago by 
-								<img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
-							</span>
+		<section class="main landing-main">
+			<div class="landing-column landing-first-col">
+				<a href="TopicPage.html" class="landing-topic-header">In Operating Systems >></a>
+				<article class="issue-box issue-box-small">
+					<div class="issue-vote-area">
+						<span class="issue-vote-amount" id="count-1">40</span>
+						<img class="issue-vote-button unchecked" id="button-1" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 1)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+					</div>
+					<div class="issue-main-area issue-main-area-small">
+						<div class="issue-main-cell">
+							<div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">The process involved in upgrading is the most frustrating thing ever, please give more thorough direction regarding blah blah blah.</a></div>
+							<div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
+								<span class="issue-org-cat-topic">
+									<img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft : 
+									<img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
+								</span>
+								<br>
+								<span class="issue-user-date issue-user-date-small">3 days ago by 
+									<img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
-			<article class="issue-box">
-				<div class="issue-vote-area">
-					<span class="issue-vote-amount" id="count-2">27</span>
-					<img class="issue-vote-button unchecked" id="button-2" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 2)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
-				</div>
-				<div class="issue-main-area">
-					<div class="issue-main-cell">
-						<div class="issue-title-area"><a href="IssuePage.html" class="issue-title">Yo, that Surface is really cool, but it'd be better if it could run Crysis.</a></div>
-						<div class="issue-info-area">
-							<span class="issue-org-cat-topic">
-								<img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft : 
-								<img class="issue-info-icon" src="../Content/Images/caticons/surface_20.png"></img>Surface 
-								in Consumer Electronics
-							</span>
-							<span class="issue-user-date">4 days ago by 
-								<img class="issue-info-icon" src="../Content/Images/usericons/mcdiddles69_20.png"></img>mcdiddles69
-							</span>
+				</article>
+			</div>
+			<div class="landing-column landing-second-col">
+				<a href="TopicPage.html" class="landing-topic-header">In Consumer Electronics >></a>
+				<article class="issue-box issue-box-small">
+					<div class="issue-vote-area">
+						<span class="issue-vote-amount" id="count-2">27</span>
+						<img class="issue-vote-button unchecked" id="button-2" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 2)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+					</div>
+					<div class="issue-main-area issue-main-area-small">
+						<div class="issue-main-cell">
+							<div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">Yo, that Surface is really cool, but it'd be better if it could run Crysis.</a></div>
+							<div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
+								<span class="issue-org-cat-topic">
+									<img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft : 
+									<img class="issue-info-icon" src="../Content/Images/caticons/surface_20.png"></img>Surface
+								</span>
+								<br>
+								<span class="issue-user-date issue-user-date-small">4 days ago by 
+									<img class="issue-info-icon" src="../Content/Images/usericons/mcdiddles69_20.png"></img>mcdiddles69
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
+				</article>
+			</div>
+			<div class="landing-column landing-third-col">
+			</div>
 		</section>
 	</div>
 	<div class="footer-container">
