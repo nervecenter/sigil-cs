@@ -6,6 +6,11 @@ html, body {
 	/*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
 }
 
+a {
+	text-decoration: none;
+	color: #267C89;
+}
+
 .page {
 	background-color: #E5E5E5;
 }
@@ -261,7 +266,7 @@ html, body {
 	margin: 0.5em 2em 1em 2em;
 }
 
-.issue-box, .issue-body, .issue-submit-body, .issue-data-body, .org-data-body {
+.issue-box, .issue-body, .issue-submit-body, .issue-data-body, .org-data-body, .legal-body {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;
