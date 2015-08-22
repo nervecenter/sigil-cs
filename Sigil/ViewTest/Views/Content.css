@@ -261,7 +261,7 @@ html, body {
 	margin: 0.5em 2em 1em 2em;
 }
 
-.issue-box, .issue-body {
+.issue-box, .issue-body, .issue-submit-body {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;
@@ -363,6 +363,38 @@ html, body {
 .issue-user-date-small {
 	float: left;
 	line-height: 2em;
+}
+
+.issue-submit-header {
+	margin: 1em 0em 1em 1em;
+	line-height: 2.5em;
+	font-size: 1.5em;
+}
+
+.issue-search-form {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	display: block;
+	margin-bottom: 1em;
+	height: 2em;
+}
+
+.issue-search-submit-button {
+	position: absolute;
+	margin-left: 0.4em;
+	background-color: transparent;
+	border: 0;
+	z-index: 10000;
+}
+
+.issue-search-query {
+	padding: 0.5em 1em 0.5em 3em;
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
 }
 
 .comments-area, .response-box {
