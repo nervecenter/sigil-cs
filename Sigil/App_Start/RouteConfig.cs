@@ -29,6 +29,12 @@ namespace Sigil {
                 );
 
             routes.MapRoute(
+                name: "Landing",
+                url: "Home/",
+                defaults: new { controller = "Home", action = "LandingPage" }
+                );
+
+            routes.MapRoute(
                 name: "VoteUp",
                 url: "voteup/{IssueId}/",
                 defaults: new { controller = "Issue", action = "VoteUp" }

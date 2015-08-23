@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -12,18 +14,30 @@
 </head>
 <body class="page">
     <div class="page-container">
-        @Html.Partial("_header")
+
+        @if (Request.IsAuthenticated)
+        {
+            @Html.Partial("_header")
+            @Html.Partial("_sideBar")
+        }
+        else
+        {
+            @Html.Partial("_landingHeader")
+        }
+
+        <section class="main">
+            @RenderBody()
+            <hr />
+
+            <footer>
+                <div class="footer-container">
+                    @Html.Partial("_footer")
+                </div>
+            </footer>
+        </section>
     </div>
-    <section class="main">
-        @RenderBody()
-        <hr />
-        @Html.Partial("_sideBar")
-        <footer>
-           <div class="footer-container">
-               @Html.Partial("_footer")
-           </div>
-        </footer>
-    </section>
+    
+    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
