@@ -1,0 +1,82 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Sigil.Models
+@using Microsoft.AspNet.Identity
+@model Tuple<Org, IQueryable<Issue>>
+@{
+    IQueryable<Vote> userVotes = ViewBag.userVotes;
+}
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="~/Scripts/voting.js"></script>
+
+<div Id="sub-header">
+    <h1><a href="/@Model.Item1.orgName">@Model.Item1.orgName</a></h1>
+    <a Id="samplelink" href="~/">Sample Link</a><p style="text-align:right"><a href=@(Model.Item1.orgName + "/addissue")>Add issue</a></p>
+</div>
+<div Id="content">
+    <div Id="main">
+        <div class="issue-options">
+            <ul class="issue-options-list">
+                <li class="issue-option">Org Page</li>
+                <li class="issue-option"><a href="@Url.Action("OrgData", "Org", new { orgName = Model.Item1.orgName })">Data</a></li>
+            </ul>
+        </div>
+        @{if(Request.IsAuthenticated)
+          { 
+             foreach (Issue issue in Model.Item2)
+             {
+                <div class="issue">
+                    <div class="issue-vote">
+                        @{if (userVotes.Any(v => v.IssueId == issue.Id))
+                        { // User has voted on issue
+                            <img class="vote-button" Id="vote_@issue.Id" onclick="unvoteup('@issue.Id', '@User.Identity.GetUserId()')" src="~/Content/Images/voteup-clicked.png">
+                        }
+                        else
+                        { // User hasn't voted on issue
+                            <img class="vote-button" Id="vote_@issue.Id" onclick="voteup('@issue.Id', '@User.Identity.GetUserId()')" src="~/Content/Images/voteup.png">
+                        }
+                        }
+                        <span Id="votecount_@issue.Id">@(issue.votes)</span>
+                    </div>
+                    <div class="issue-main">
+                        <div class="issue-text-area">
+                            <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                             { <b>Official Response!</b> } }
+                            @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orgName == issue.orgName)*/;}
+                        </div>
+                        <div class="issue-options">
+                            <ul class="issue-options-list">
+                                <li class="issue-option">Watch</li>
+                                <li class="issue-option">Report</li>
+                                <li class="issue-option">Share</li>
+                            </ul>
+                        </div>
+                        <div class="issue-user">@issue.AspNetUser.UserName</div>
+                    </div>
+                </div>
+             }
+          }
+          else
+          {
+              foreach (Issue issue in Model.Item2)
+              {
+            <div class="issue">
+                <div class="issue-vote">
+                    <span id="votecount_@issue.Id">@(issue.votes)</span>
+                </div>
+                <div class="issue-main">
+                    <div class="issue-text-area">
+                        <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                         { <b>Official Response!</b> } }
+                        @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orgName == issue.orgName)*/;}
+                    </div>
+                </div>
+            </div>
+             }
+          }
+}
+    </div>
+    <div Id="rightbar">Right bar</div>
+</div>

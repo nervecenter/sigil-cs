@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@using Sigil.Models
+
+<script type="text/javascript" src="~/Scripts/voting.js"></script>
+
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    @model Tuple<IQueryable<Issue>, IQueryable<Vote>>
+    foreach (Issue issue in Model.Item1)
+       { 
+        <div class="row">
+            <div class="col-sm-2">
+                @{if (Model.Item2.Any(v => v.IssueId == issue.Id))
+                  {
+                    <img class="vote-button" id="vote_@issue.Id" onclick="unvoteup('@issue.Id', '@User.Identity.GetUserName()')" src="~/Content/Images/voteup-clicked.png">
+                  }
+                  else
+                  {
+                    <img class="vote-button" id="vote_@issue.Id" onclick="voteup('@issue.Id', '@User.Identity.GetUserName()')" src="~/Content/Images/voteup.png">
+                  }
+                  }
+                  <span id="votecount_@issue.Id">@(issue.votes)</span>
+            </div>
+                
+            <div class="col-md-12">
+                <h5>@issue.title</h5>
+                <p>
+                    <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                                                                                                 { <b>Official Response!</b> } }
+                    @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
+                    <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
+                </p>
+                <div class="issue-options">
+                    <ul class="issue-options-list">
+                        <li class="issue-option">Watch</li>
+                        <li class="issue-option">Report</li>
+                        <li class="issue-option">Share</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+  
+    
+       
+}
+}
+else
+{
+
+       foreach (Issue issue in Model.Item1)
+       {
+        <div class="row">
+            <div class="col-sm-2">
+                <span id="votecount_@issue.Id">@(issue.votes)</span>
+            </div>
+
+            <div class="col-md-12">
+                <h5>@issue.title</h5>
+                <p>
+                    <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                                                                                                 { <b>Official Response!</b> } }
+                    @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
+                    <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
+                </p>
+                <div class="issue-options">
+                    <ul class="issue-options-list">
+                        <li class="issue-option">Watch</li>
+                        <li class="issue-option">Report</li>
+                        <li class="issue-option">Share</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        }
+}

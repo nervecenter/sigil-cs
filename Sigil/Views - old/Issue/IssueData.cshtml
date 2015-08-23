@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using DotNet.Highcharts
+@using Sigil.Models
+@model List<Highcharts>
+
+@{
+    Org thisOrg = ViewBag.thisOrg;
+    Issue thisIssue = ViewBag.thisIssue;
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/Content.css">
+<link rel="stylesheet" type="text/css" href="~/Content/SubHeader.css">
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="~/Scripts/Highcharts-4.0.1/js/highcharts.js"></script>
+
+<div id="sub-header"><h1>@thisOrg.orgName</h1></div>
+<div id="content">
+    <div id="main">
+        <div class="issue-options">
+            <ul class="issue-options-list">
+                <li class="issue-option"><a href="@Url.Action("IssuePage", "Issue", new { orghandle = thisOrg.orgName, issueID = thisIssue.Id})">Issue Page</a></li>
+                <li class="issue-option">Data</li>
+            </ul>
+        </div>
+        <h1>Data for @thisOrg.orgName issue @thisIssue.Id</h1>
+        <p>@thisIssue.text</p>
+        @(Model[0])
+        <p>
+            Views this week: @ViewBag.weekViewCount<br />
+            Votes this week: @ViewBag.weekVoteCount<br />
+            Conversion rate: @ViewBag.weekRatio%
+        </p>
+        @(Model[1])
+        <p>
+            Views this month: @ViewBag.monthViewCount<br />
+            Votes this month: @ViewBag.monthVoteCount<br />
+            Conversion rate: @ViewBag.monthRatio%
+        </p>
+    </div>
+    <div id="rightbar">Right bar</div>
+</div>

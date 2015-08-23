@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNet.Identity
+@using Sigil.Models
+@model Tuple<Org, Issue, IQueryable<Comment>>
+
+@{
+    Org thisOrg = Model.Item1;
+    Issue thisIssue = Model.Item2;
+    IQueryable<Comment> issueComments = Model.Item3;
+
+    Vote userVote = ViewBag.userVote;
+}
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="~/Scripts/voting.js"></script>
+<div id="sub-header"><h1><a href="/@thisOrg.orgName">@thisOrg.orgName</a></h1></div>
+<div id="content">
+    <div id="main">
+        <div class="issue-options">
+            <ul class="issue-options-list">
+                <li class="issue-option">Issue Page</li>
+                <li class="issue-option"><a href="@Url.Action("IssueData", "Issue", new { orghandle = thisOrg.orgName, issueID = thisIssue.Id})">Data</a></li>
+            </ul>
+        </div>
+        <div class="issue-vote">
+
+            @{
+                if(Request.IsAuthenticated)
+                { 
+                    if (userVote != default(Vote))
+                    { // User has voted on issue
+                        <img class="vote-button" id="vote_@thisIssue.Id" onclick="unvoteup('@thisIssue.Id')" src="~/Content/Images/voteup-clicked.png">
+                    }
+                    else
+                    { // User hasn't voted on issue
+                        <img class="vote-button" id="vote_@thisIssue.Id" onclick="voteup('@thisIssue.Id')" src="~/Content/Images/voteup.png">
+                    }
+                }
+            }
+            <span id="votecount_@thisIssue.Id">@(thisIssue.votes)</span>
+        </div>
+        <h2>@thisIssue.title</h2>
+        <p>@thisIssue.text</p>
+        @{
+            if (thisIssue.responded)
+            {
+                <h3>Official Response:</h3>
+                <p>@thisIssue.officialComment</p>
+            }
+        }
+        <div class="issue-comments-section">
+            @{
+                foreach (Comment comm in issueComments)
+                {
+                    <hr />
+                    <div class="issue-comment">
+                        @comm.AspNetUser.UserName says:
+                        <p>@comm.text</p>
+                    </div>
+                }
+            }
+            <form method="post">
+                <fieldset>
+                    <legend>Add a comment:</legend>
+                    <p>
+                        <input type="text" name="text" />
+                        @Html.ValidationMessage("text")
+                    </p>
+                    <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div id="rightbar">Right bar</div>
+</div>
