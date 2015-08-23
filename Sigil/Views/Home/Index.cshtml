@@ -49,7 +49,7 @@
         }
     </div>
                                 }
-else
+                                else
                                 {
                                     <div class="first-column">
                                         <span class="feed-intent"> Latest Issues</span>
@@ -64,7 +64,8 @@ else
                                                         <div class="issue-title-area"><a href="/@issue.Org.orgName/@issue.Id" class="issue-title">@issue.title</a></div>
                                                         <div class="issue-info-area">
                                                             <span class="issue-org-cat-topic">
-                                                                <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                                                                <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a>
+                                                                @{ if (issue.responded)
                                                                     { <b>Official Response!</b> } }
                                                                 @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
                                                                 <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
@@ -72,7 +73,8 @@ else
                                                         </div>
                                                     </div>
                                                 </div>
-                                                </article>
-                                                    </div>
-                                                }
-                                                }
+                                            </article>
+
+                                                                    }
+                                    </div>
+                                  }
