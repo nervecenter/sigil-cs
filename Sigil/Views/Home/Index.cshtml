@@ -40,13 +40,6 @@
                             <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
                         </span>
                     </div>
-                    <div class="issue-options">
-                        <ul class="issue-options-list">
-                            <li class="issue-option">Watch</li>
-                            <li class="issue-option">Report</li>
-                            <li class="issue-option">Share</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </article>
@@ -56,33 +49,30 @@
         }
     </div>
                                 }
-                                else
+else
                                 {
-
-                                    foreach (Issue issue in Model.Item1)
-                                    {
-        <div class="row">
-            <div class="col-sm-2">
-                <span id="votecount_@issue.Id">@(issue.votes)</span>
-            </div>
-
-            <div class="col-md-12">
-                <h5>@issue.title</h5>
-                <p>
-                    <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
-                                                                                                 { <b>Official Response!</b> } }
-                    @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
-                    <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
-                </p>
-                <div class="issue-options">
-                    <ul class="issue-options-list">
-                        <li class="issue-option">Watch</li>
-                        <li class="issue-option">Report</li>
-                        <li class="issue-option">Share</li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-        }
-}
+                                    <div class="first-column">
+                                        <span class="feed-intent"> Latest Issues</span>
+                                        @foreach (Issue issue in Model.Item1)
+                                        {
+                                            <article class="issue-box">
+                                                <div class="issue-vote-area">
+                                                    <span class="issue-vote-amount" id="votecount_@issue.Id">@(issue.votes)</span>
+                                                </div>
+                                                <div class="issue-main-area">
+                                                    <div class="issue-main-cell">
+                                                        <div class="issue-title-area"><a href="/@issue.Org.orgName/@issue.Id" class="issue-title">@issue.title</a></div>
+                                                        <div class="issue-info-area">
+                                                            <span class="issue-org-cat-topic">
+                                                                <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
+                                                                    { <b>Official Response!</b> } }
+                                                                @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
+                                                                <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </article>
+                                                    </div>
+                                                }
+                                                }

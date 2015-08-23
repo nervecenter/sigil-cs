@@ -17,14 +17,3 @@ function checkSearchChanged() {
     }
 }
 
-
-function submitSearch(qVal) {
-    $.ajax({
-        type: "POST",
-        url: '/search/' + qVal + '/',
-        success: function () {
-
-            //parse the search results
-        }
-    })
-}

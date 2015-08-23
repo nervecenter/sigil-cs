@@ -339,6 +339,8 @@
     <Content Include="Views\Org\OrgData.cshtml" />
     <Content Include="Views\Org\OrgPage.cshtml" />
     <Content Include="Views\Shared\_header.cshtml" />
+    <Content Include="Views\Shared\_footer.cshtml" />
+    <Content Include="Views\Shared\_sideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Subscriptions\" />

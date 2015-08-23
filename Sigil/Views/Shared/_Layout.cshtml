@@ -17,8 +17,11 @@
     <section class="main">
         @RenderBody()
         <hr />
+        @Html.Partial("_sideBar")
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+           <div class="footer-container">
+               @Html.Partial("_footer")
+           </div>
         </footer>
     </section>
 
