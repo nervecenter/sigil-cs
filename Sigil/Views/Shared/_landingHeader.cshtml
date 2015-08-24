@@ -4,8 +4,8 @@
         <input class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person"></input>
     </form>
     <nav class="header-link-container landing-header-link-container">
-        <a href="FrontPage.html" class="header-link">Log In</a>
-        <a href="FrontPage.html" class="header-link">Create Account</a>
+        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
     </nav>
 </section>
 <section class="sale">
