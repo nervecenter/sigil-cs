@@ -13,5 +13,6 @@
 @using (Html.BeginForm())
 {
     <button class="search-submit-button type=" submit" value="Search"><img src="../Content/Images/search-icon-small.png"></button>
+    
     @Html.TextBox("searchBox", null, new { id = "searchBox", placeholder = "Search for a company, organization, or person", @class = "search-query"})
 }

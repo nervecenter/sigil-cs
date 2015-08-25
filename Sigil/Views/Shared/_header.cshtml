@@ -1,10 +1,10 @@
 ﻿
 <section class="page-header">
-    <a href="FrontPage.html" class="logo"><img src="../Content/Images/logo-small.png"></img></a>
+    <a href="@Url.Action("Index", "Home")" class="logo"><img src="../Content/Images/logo-small.png"></img></a>
     <nav class="header-link-container">
-    <div class="search-box-form">
+
         @Html.Partial("_search")
-    </div>
+
         @Html.Partial("_LoginPartial")
     </nav>
 </section>

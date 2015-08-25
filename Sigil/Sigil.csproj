@@ -348,9 +348,10 @@
     <Content Include="Views\Home\LandingPage.cshtml" />
     <Content Include="Views\Shared\_landingHeader.cshtml" />
     <Content Include="Views\Shared\_search.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Home\Legal.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Search\" />
     <Folder Include="Views\Subscriptions\" />
   </ItemGroup>
   <ItemGroup>

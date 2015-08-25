@@ -61,6 +61,11 @@ namespace Sigil.Controllers {
             return View();
         }
 
+        public ActionResult Legal()
+        {
+            return View();
+        }
+
         public ActionResult About() {
             ViewBag.Message = "Your application description page.";
 
@@ -73,23 +78,5 @@ namespace Sigil.Controllers {
             return View();
         }
 
-
-        public JsonResult Search(string term)
-        {
-            List<string> issue_list;
-            if (string.IsNullOrEmpty(term))
-            {
-                issue_list = dc.Issues.Select(i => i.title).ToList();
-            }
-            else
-            {
-               var issue_qu = from iss in dc.Issues
-                             where iss.title.StartsWith(term)
-                             select iss;
-                issue_list = issue_qu.Select(i => i.title).ToList();
-            }
-
-            return Json(issue_list, JsonRequestBehavior.AllowGet);
-        }
     }
 }
