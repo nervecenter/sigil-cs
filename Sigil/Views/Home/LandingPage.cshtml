@@ -1,93 +1,79 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"></meta>
-    <link rel="stylesheet" type="text/css" href="Content.css"></link>
-    <script type="text/javascript" src="Voting.js"></script>
-</head>
-<body class="page">
-    <div class="page-container">
-        <section class="main landing-main">
-            <div class="landing-column landing-first-col">
-                <a href="TopicPage.html" class="landing-topic-header">In Operating Systems >></a>
-                <article class="issue-box issue-box-small">
-                    <div class="issue-vote-area">
-                        <span class="issue-vote-amount" id="count-1">40</span>
-                        <img class="issue-vote-button unchecked" id="button-1" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 1)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
-                    </div>
-                    <div class="issue-main-area issue-main-area-small">
-                        <div class="issue-main-cell">
-                            <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">The process involved in upgrading is the most frustrating thing ever, please give more thorough direction regarding blah blah blah.</a></div>
-                            <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
-                                <span class="issue-org-cat-topic">
-                                    <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft :
-                                    <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
-                                </span>
-                                <br>
-                                <span class="issue-user-date issue-user-date-small">
-                                    3 days ago by
-                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+<section class="main landing-main">
+    <div class="landing-column landing-first-col">
+        <a href="TopicPage.html" class="landing-topic-header">In Operating Systems >></a>
+        <article class="issue-box issue-box-small">
+            <div class="issue-vote-area">
+                <span class="issue-vote-amount" id="count-1">40</span>
+                <img class="issue-vote-button unchecked" id="button-1" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 1)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
             </div>
-            <div class="landing-column landing-second-col">
-                <a href="TopicPage.html" class="landing-topic-header">In Consumer Electronics >></a>
-                <article class="issue-box issue-box-small">
-                    <div class="issue-vote-area">
-                        <span class="issue-vote-amount" id="count-2">27</span>
-                        <img class="issue-vote-button unchecked" id="button-2" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 2)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+            <div class="issue-main-area issue-main-area-small">
+                <div class="issue-main-cell">
+                    <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">The process involved in upgrading is the most frustrating thing ever, please give more thorough direction regarding blah blah blah.</a></div>
+                    <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
+                        <span class="issue-org-cat-topic">
+                            <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft :
+                            <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
+                        </span>
+                        <br>
+                        <span class="issue-user-date issue-user-date-small">
+                            3 days ago by
+                            <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
+                        </span>
                     </div>
-                    <div class="issue-main-area issue-main-area-small">
-                        <div class="issue-main-cell">
-                            <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">Yo, that Surface is really cool, but it'd be better if it could run Crysis.</a></div>
-                            <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
-                                <span class="issue-org-cat-topic">
-                                    <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft :
-                                    <img class="issue-info-icon" src="../Content/Images/caticons/surface_20.png"></img>Surface
-                                </span>
-                                <br>
-                                <span class="issue-user-date issue-user-date-small">
-                                    4 days ago by
-                                    <img class="issue-info-icon" src="../Content/Images/usericons/mcdiddles69_20.png"></img>mcdiddles69
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+                </div>
             </div>
-            <div class="landing-column landing-third-col">
-                <a href="TopicPage.html" class="landing-topic-header">In Shooting Sports >></a>
-                <article class="issue-box issue-box-small">
-                    <div class="issue-vote-area">
-                        <span class="issue-vote-amount" id="count-3">243</span>
-                        <img class="issue-vote-button unchecked" id="button-3" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 3)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
-                    </div>
-                    <div class="issue-main-area issue-main-area-small">
-                        <div class="issue-main-cell">
-                            <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">Please manufacture an authentic, high-quality, SG 550-series semi-auto rifle here in the United States. </a></div>
-                            <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
-                                <span class="issue-org-cat-topic">
-                                    <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png"></img>SIG Sauer
-                                </span>
-                                <br>
-                                <span class="issue-user-date issue-user-date-small">
-                                    20 days ago by
-                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </section>
+        </article>
     </div>
-</body>
-</html>
+    <div class="landing-column landing-second-col">
+        <a href="TopicPage.html" class="landing-topic-header">In Consumer Electronics >></a>
+        <article class="issue-box issue-box-small">
+            <div class="issue-vote-area">
+                <span class="issue-vote-amount" id="count-2">27</span>
+                <img class="issue-vote-button unchecked" id="button-2" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 2)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+            </div>
+            <div class="issue-main-area issue-main-area-small">
+                <div class="issue-main-cell">
+                    <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">Yo, that Surface is really cool, but it'd be better if it could run Crysis.</a></div>
+                    <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
+                        <span class="issue-org-cat-topic">
+                            <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>Microsoft :
+                            <img class="issue-info-icon" src="../Content/Images/caticons/surface_20.png"></img>Surface
+                        </span>
+                        <br>
+                        <span class="issue-user-date issue-user-date-small">
+                            4 days ago by
+                            <img class="issue-info-icon" src="../Content/Images/usericons/mcdiddles69_20.png"></img>mcdiddles69
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="landing-column landing-third-col">
+        <a href="TopicPage.html" class="landing-topic-header">In Shooting Sports >></a>
+        <article class="issue-box issue-box-small">
+            <div class="issue-vote-area">
+                <span class="issue-vote-amount" id="count-3">243</span>
+                <img class="issue-vote-button unchecked" id="button-3" src="../Content/Images/vote_circle_small.png" onclick="vote(this, 3)" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+            </div>
+            <div class="issue-main-area issue-main-area-small">
+                <div class="issue-main-cell">
+                    <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="IssuePage.html" class="issue-title">Please manufacture an authentic, high-quality, SG 550-series semi-auto rifle here in the United States. </a></div>
+                    <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
+                        <span class="issue-org-cat-topic">
+                            <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png"></img>SIG Sauer
+                        </span>
+                        <br>
+                        <span class="issue-user-date issue-user-date-small">
+                            20 days ago by
+                            <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>Nerve
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>

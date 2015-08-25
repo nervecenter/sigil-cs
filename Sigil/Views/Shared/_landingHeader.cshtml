@@ -1,8 +1,7 @@
 ﻿<section class="page-header page-header-landing">
-    <form class="search-box-form landing-search-form">
-        <button class="search-submit-button landing-search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></img></button>
-        <input class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person"></input>
-    </form>
+    <div class="search-box-form landing-search-form">
+        @Html.Partial("_search")
+    </div>
     <nav class="header-link-container landing-header-link-container">
         @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
         @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })

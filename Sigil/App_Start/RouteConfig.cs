@@ -36,8 +36,14 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "Landing",
-                url: "Home/",
+                url: "Home/LandingPage/",
                 defaults: new { controller = "Home", action = "LandingPage" }
+                );
+
+            routes.MapRoute(
+                name: "Search",
+                url: "Home/Search/",
+                defaults: new { controller = "Home", action = "Search" }
                 );
 
             routes.MapRoute(

@@ -1,19 +1,15 @@
 ﻿
-var searchV = $('#Search').val();
+
 $(function () {
-    setTimeout(checkSearchChanged, 0.1);
+    $('#searchBox').autocomplete({
+        source: '@Url.Action("Search","Home")'
+
+
+    });
 });
 
-function checkSearchChanged() {
-    var curr_Value = $('#Search').val();
-    if ((curr_Value) && curr_Value != searchV && curr_Value != '')
-    {
-        searchV = $('#Search').val();
-        $('#submit').click();
-    }
-    else
-    {
-        setTimeout(checkSearchChanged, 0.1);
-    }
-}
 
+$(document).ready(
+$('#searchBox').autocomplete({
+    source: '@Url.Action("Search","Home")'
+}));

@@ -184,6 +184,7 @@
     <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrgController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SubscriptionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -233,6 +234,7 @@
     <Content Include="Content\Images\voteup.png" />
     <Content Include="Content\Images\vote_circle_hover_small.png" />
     <Content Include="Content\Images\vote_circle_small.png" />
+    <Content Include="Content\jquery-ui-1.9.2.custom.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -284,9 +286,11 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.custom.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -343,8 +347,10 @@
     <Content Include="Views\Shared\_sideBar.cshtml" />
     <Content Include="Views\Home\LandingPage.cshtml" />
     <Content Include="Views\Shared\_landingHeader.cshtml" />
+    <Content Include="Views\Shared\_search.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Search\" />
     <Folder Include="Views\Subscriptions\" />
   </ItemGroup>
   <ItemGroup>

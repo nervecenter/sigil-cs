@@ -1,0 +1,19 @@
+﻿<script src="~/Scripts/jquery-1.8.3.js"></script>
+<script src="~/Scripts/jquery-ui-1.9.2.custom.min.js" type="text/javascript"></script>
+<link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $(function () {
+        $('#searchBox').autocomplete({
+            source: '@Url.Action("Search","Home")'
+        });
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    <b>Search:</b>
+    @Html.TextBox("searchBox", null, new { id = "searchBox" })
+    <input type="submit" value="Search" />
+
+}

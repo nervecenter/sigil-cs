@@ -45,18 +45,19 @@ namespace Sigil.Controllers {
             }
             else
             {
-                IQueryable<Issue> allIssues = from iss in dc.Issues
-                                              select iss;
-                allIssues.OrderBy(i => i.lastVoted).ThenByDescending(i => i.votes);
+                //IQueryable<Issue> allIssues = from iss in dc.Issues
+                //                              select iss;
+                //allIssues.OrderBy(i => i.lastVoted).ThenByDescending(i => i.votes);
 
-                Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(allIssues, null);
-                return View(issuesANDvotes);
+                //Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(allIssues, null);
+                return RedirectToAction("LandingPage");
             }
             
         }
 
         public ActionResult LandingPage()
         {
+
             return View();
         }
 
@@ -70,6 +71,25 @@ namespace Sigil.Controllers {
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+
+        public JsonResult Search(string term)
+        {
+            List<string> issue_list;
+           if (string.IsNullOrEmpty(term))
+            {
+                issue_list = dc.Issues.Select(i => i.title).ToList();
+            }
+            else
+            {
+               var issue_qu = from iss in dc.Issues
+                             where iss.title.StartsWith(term)
+                             select iss;
+                issue_list = issue_qu.Select(i => i.title).ToList();
+            }
+
+            return Json(issue_list, JsonRequestBehavior.AllowGet);
         }
     }
 }
