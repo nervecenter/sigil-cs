@@ -77,7 +77,7 @@ namespace Sigil.Controllers {
         public JsonResult Search(string term)
         {
             List<string> issue_list;
-           if (string.IsNullOrEmpty(term))
+            if (string.IsNullOrEmpty(term))
             {
                 issue_list = dc.Issues.Select(i => i.title).ToList();
             }

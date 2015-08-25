@@ -3,17 +3,15 @@
 <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
 
 <script type="text/javascript">
-    $(function () {
+    $(function () { 
         $('#searchBox').autocomplete({
-            source: '@Url.Action("Search","Home")'
+            source: '@Url.Action("search_db","Search")'
         });
     });
 </script>
 
 @using (Html.BeginForm())
 {
-    <b>Search:</b>
-    @Html.TextBox("searchBox", null, new { id = "searchBox" })
-    <input type="submit" value="Search" />
-
+    <button class="search-submit-button type=" submit" value="Search"><img src="../Content/Images/search-icon-small.png"></button>
+    @Html.TextBox("searchBox", null, new { id = "searchBox", placeholder = "Search for a company, organization, or person", @class = "search-query"})
 }
