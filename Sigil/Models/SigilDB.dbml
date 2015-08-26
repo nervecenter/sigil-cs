@@ -1,18 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="aspnet-Sigil-20150716011718" Class="SigilDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-Sigil-20150716011718.mdf;Initial Catalog=aspnet-Sigil-20150716011718;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Orgs" Member="Orgs">
-    <Type Name="Org">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="orgName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="UserID" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="viewCount" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="lastView" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
-      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
-      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
-      <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
-    </Type>
-  </Table>
   <Table Name="dbo.AspNetUserRoles" Member="AspNetUserRoles">
     <Type Name="AspNetUserRole">
       <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -116,6 +103,20 @@
       <Column Name="To_UserId" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Column Name="To_OrgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orgs" Member="Orgs">
+    <Type Name="Org">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="orgName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="viewCount" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="lastView" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="orgURL" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
+      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
+      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
+      <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
     </Type>
   </Table>
 </Database>

@@ -23,12 +23,12 @@
 
         @if (Request.IsAuthenticated)
         {
-            @Html.Partial("_header")
-            @Html.Partial("_sideBar")
+            @Html.Partial("_Header")
+            @Html.Partial("_SideBar")
         }
         else
         {
-            @Html.Partial("_landingHeader")
+            @Html.Partial("_LandingHeader")
         }
 
         <section class="main">
@@ -37,7 +37,7 @@
 
             <footer>
                 <div class="footer-container">
-                    @Html.Partial("_footer")
+                    @Html.Partial("_Footer")
                 </div>
             </footer>
         </section>

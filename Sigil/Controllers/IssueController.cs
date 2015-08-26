@@ -38,9 +38,9 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult IssuePage( string orgName, long issueID ) {
+        public ActionResult IssuePage( string orgURL, long issueID ) {
             // Grab the issue's org
-            Org thisOrg = dc.Orgs.SingleOrDefault<Org>(o => o.orgName == orgName);
+            Org thisOrg = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
 
             // Grab the issue for the page
             Issue thisIssue = (from issue in dc.Issues
@@ -414,9 +414,9 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        public ActionResult AddIssue( string orgName ) {
+        public ActionResult AddIssue( string orgURL ) {
             // Get the org for the issue we're adding
-            Org thisOrg = dc.Orgs.First<Org>(o => o.orgName == orgName);
+            Org thisOrg = dc.Orgs.First<Org>(o => o.orgURL == orgURL);
 
             // Get the user
             var userId = User.Identity.GetUserId();
@@ -443,7 +443,7 @@ namespace Sigil.Controllers
                     dc.Issues.InsertOnSubmit( newissue );
                     dc.SubmitChanges();
                     var lastId = dc.Issues.Max<Issue>(i => i.Id);
-                    Response.Redirect( "~/" + thisOrg.orgName + "/" + lastId );
+                    Response.Redirect( "~/" + thisOrg.orgURL + "/" + lastId );
                 } catch ( Exception e ) {
                     Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue.text, e.Message );
                 }
@@ -534,7 +534,7 @@ namespace Sigil.Controllers
                                  select users.Id;
 
                 var to_org_id = from org in dc.Orgs
-                                where org.orgName == to_org
+                                where org.orgURL == to_org
                                 select org.Id;
 
                 Notification note = new Notification();

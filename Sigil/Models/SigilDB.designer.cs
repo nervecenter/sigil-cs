@@ -30,9 +30,6 @@ namespace Sigil.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertOrg(Org instance);
-    partial void UpdateOrg(Org instance);
-    partial void DeleteOrg(Org instance);
     partial void InsertAspNetUserRole(AspNetUserRole instance);
     partial void UpdateAspNetUserRole(AspNetUserRole instance);
     partial void DeleteAspNetUserRole(AspNetUserRole instance);
@@ -57,6 +54,9 @@ namespace Sigil.Models
     partial void InsertNotification(Notification instance);
     partial void UpdateNotification(Notification instance);
     partial void DeleteNotification(Notification instance);
+    partial void InsertOrg(Org instance);
+    partial void UpdateOrg(Org instance);
+    partial void DeleteOrg(Org instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -87,14 +87,6 @@ namespace Sigil.Models
 				base(connection, mappingSource)
 		{
 			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<Org> Orgs
-		{
-			get
-			{
-				return this.GetTable<Org>();
-			}
 		}
 		
 		public System.Data.Linq.Table<AspNetUserRole> AspNetUserRoles
@@ -160,275 +152,13 @@ namespace Sigil.Models
 				return this.GetTable<Notification>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Orgs")]
-	public partial class Org : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _orgName;
-		
-		private System.Xml.Linq.XElement _UserID;
-		
-		private long _viewCount;
-		
-		private System.DateTime _lastView;
-		
-		private EntitySet<AspNetUser> _AspNetUsers;
-		
-		private EntitySet<Subscription> _Subscriptions;
-		
-		private EntitySet<Issue> _Issues;
-		
-		private EntitySet<ViewCount> _ViewCounts;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnorgNameChanging(string value);
-    partial void OnorgNameChanged();
-    partial void OnUserIDChanging(System.Xml.Linq.XElement value);
-    partial void OnUserIDChanged();
-    partial void OnviewCountChanging(long value);
-    partial void OnviewCountChanged();
-    partial void OnlastViewChanging(System.DateTime value);
-    partial void OnlastViewChanged();
-    #endregion
-		
-		public Org()
-		{
-			this._AspNetUsers = new EntitySet<AspNetUser>(new Action<AspNetUser>(this.attach_AspNetUsers), new Action<AspNetUser>(this.detach_AspNetUsers));
-			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
-			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int Id
+		public System.Data.Linq.Table<Org> Orgs
 		{
 			get
 			{
-				return this._Id;
+				return this.GetTable<Org>();
 			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orgName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string orgName
-		{
-			get
-			{
-				return this._orgName;
-			}
-			set
-			{
-				if ((this._orgName != value))
-				{
-					this.OnorgNameChanging(value);
-					this.SendPropertyChanging();
-					this._orgName = value;
-					this.SendPropertyChanged("orgName");
-					this.OnorgNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
-		public System.Xml.Linq.XElement UserID
-		{
-			get
-			{
-				return this._UserID;
-			}
-			set
-			{
-				if ((this._UserID != value))
-				{
-					this.OnUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._UserID = value;
-					this.SendPropertyChanged("UserID");
-					this.OnUserIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_viewCount", DbType="BigInt NOT NULL")]
-		public long viewCount
-		{
-			get
-			{
-				return this._viewCount;
-			}
-			set
-			{
-				if ((this._viewCount != value))
-				{
-					this.OnviewCountChanging(value);
-					this.SendPropertyChanging();
-					this._viewCount = value;
-					this.SendPropertyChanged("viewCount");
-					this.OnviewCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastView", DbType="DateTime NOT NULL")]
-		public System.DateTime lastView
-		{
-			get
-			{
-				return this._lastView;
-			}
-			set
-			{
-				if ((this._lastView != value))
-				{
-					this.OnlastViewChanging(value);
-					this.SendPropertyChanging();
-					this._lastView = value;
-					this.SendPropertyChanged("lastView");
-					this.OnlastViewChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_AspNetUser", Storage="_AspNetUsers", ThisKey="Id", OtherKey="orgId")]
-		public EntitySet<AspNetUser> AspNetUsers
-		{
-			get
-			{
-				return this._AspNetUsers;
-			}
-			set
-			{
-				this._AspNetUsers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Subscription", Storage="_Subscriptions", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<Subscription> Subscriptions
-		{
-			get
-			{
-				return this._Subscriptions;
-			}
-			set
-			{
-				this._Subscriptions.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Issues", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<Issue> Issues
-		{
-			get
-			{
-				return this._Issues;
-			}
-			set
-			{
-				this._Issues.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<ViewCount> ViewCounts
-		{
-			get
-			{
-				return this._ViewCounts;
-			}
-			set
-			{
-				this._ViewCounts.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_AspNetUsers(AspNetUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_AspNetUsers(AspNetUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
-		
-		private void attach_Subscriptions(Subscription entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_Subscriptions(Subscription entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
-		
-		private void attach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
-		
-		private void attach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
 		}
 	}
 	
@@ -2721,6 +2451,300 @@ namespace Sigil.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Orgs")]
+	public partial class Org : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _orgName;
+		
+		private System.Xml.Linq.XElement _UserID;
+		
+		private long _viewCount;
+		
+		private System.DateTime _lastView;
+		
+		private string _orgURL;
+		
+		private EntitySet<AspNetUser> _AspNetUsers;
+		
+		private EntitySet<Subscription> _Subscriptions;
+		
+		private EntitySet<Issue> _Issues;
+		
+		private EntitySet<ViewCount> _ViewCounts;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnorgNameChanging(string value);
+    partial void OnorgNameChanged();
+    partial void OnUserIDChanging(System.Xml.Linq.XElement value);
+    partial void OnUserIDChanged();
+    partial void OnviewCountChanging(long value);
+    partial void OnviewCountChanged();
+    partial void OnlastViewChanging(System.DateTime value);
+    partial void OnlastViewChanged();
+    partial void OnorgURLChanging(string value);
+    partial void OnorgURLChanged();
+    #endregion
+		
+		public Org()
+		{
+			this._AspNetUsers = new EntitySet<AspNetUser>(new Action<AspNetUser>(this.attach_AspNetUsers), new Action<AspNetUser>(this.detach_AspNetUsers));
+			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orgName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string orgName
+		{
+			get
+			{
+				return this._orgName;
+			}
+			set
+			{
+				if ((this._orgName != value))
+				{
+					this.OnorgNameChanging(value);
+					this.SendPropertyChanging();
+					this._orgName = value;
+					this.SendPropertyChanged("orgName");
+					this.OnorgNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
+		public System.Xml.Linq.XElement UserID
+		{
+			get
+			{
+				return this._UserID;
+			}
+			set
+			{
+				if ((this._UserID != value))
+				{
+					this.OnUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._UserID = value;
+					this.SendPropertyChanged("UserID");
+					this.OnUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_viewCount", DbType="BigInt NOT NULL")]
+		public long viewCount
+		{
+			get
+			{
+				return this._viewCount;
+			}
+			set
+			{
+				if ((this._viewCount != value))
+				{
+					this.OnviewCountChanging(value);
+					this.SendPropertyChanging();
+					this._viewCount = value;
+					this.SendPropertyChanged("viewCount");
+					this.OnviewCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastView", DbType="DateTime NOT NULL")]
+		public System.DateTime lastView
+		{
+			get
+			{
+				return this._lastView;
+			}
+			set
+			{
+				if ((this._lastView != value))
+				{
+					this.OnlastViewChanging(value);
+					this.SendPropertyChanging();
+					this._lastView = value;
+					this.SendPropertyChanged("lastView");
+					this.OnlastViewChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orgURL", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string orgURL
+		{
+			get
+			{
+				return this._orgURL;
+			}
+			set
+			{
+				if ((this._orgURL != value))
+				{
+					this.OnorgURLChanging(value);
+					this.SendPropertyChanging();
+					this._orgURL = value;
+					this.SendPropertyChanged("orgURL");
+					this.OnorgURLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_AspNetUser", Storage="_AspNetUsers", ThisKey="Id", OtherKey="orgId")]
+		public EntitySet<AspNetUser> AspNetUsers
+		{
+			get
+			{
+				return this._AspNetUsers;
+			}
+			set
+			{
+				this._AspNetUsers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Subscription", Storage="_Subscriptions", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<Subscription> Subscriptions
+		{
+			get
+			{
+				return this._Subscriptions;
+			}
+			set
+			{
+				this._Subscriptions.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Issues", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<ViewCount> ViewCounts
+		{
+			get
+			{
+				return this._ViewCounts;
+			}
+			set
+			{
+				this._ViewCounts.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_AspNetUsers(AspNetUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_AspNetUsers(AspNetUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
 		}
 	}
 }

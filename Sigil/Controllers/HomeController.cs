@@ -50,7 +50,7 @@ namespace Sigil.Controllers {
                 //allIssues.OrderBy(i => i.lastVoted).ThenByDescending(i => i.votes);
 
                 //Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(allIssues, null);
-                return RedirectToAction("LandingPage");
+                return RedirectToAction("LandingPage", "Home");
             }
             
         }

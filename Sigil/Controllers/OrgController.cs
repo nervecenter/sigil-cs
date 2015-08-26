@@ -37,10 +37,10 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult OrgPage(string orgName)
+        public ActionResult OrgPage(string orgURL)
         {
             // Get the org
-            Org thisOrg = dc.Orgs.FirstOrDefault(o => o.orgName == orgName);
+            Org thisOrg = dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
             // If the org doesn't exist, redirect to 404
             if (thisOrg == default(Org))
@@ -85,10 +85,10 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult OrgData(string orgName)
+        public ActionResult OrgData(string orgURL)
         {
             // Get the org
-            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgName == orgName);
+            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
             // MODEL: List of Highcharts to display is out page model
             List<Highcharts> listOfCharts = new List<Highcharts>();
@@ -160,7 +160,7 @@ namespace Sigil.Controllers
                                 Name = "Votes"
                             }
                 })
-                .SetTitle(new Title { Text = "Traffic on " + thisOrg.orgName+ " This Month" });
+                .SetTitle(new Title { Text = "Traffic on " + thisOrg.orgURL+ " This Month" });
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
             listOfCharts.Add(weekChart);
@@ -308,7 +308,7 @@ namespace Sigil.Controllers
                                 Name = "Votes"
                             }
                 })
-                .SetTitle(new Title { Text = "Traffic on " + thisOrg.orgName + " This Month" });
+                .SetTitle(new Title { Text = "Traffic on " + thisOrg.orgURL + " This Month" });
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
             listOfCharts.Add(monthChart);

@@ -342,12 +342,12 @@
     <Content Include="Views\Issue\IssuePage.cshtml" />
     <Content Include="Views\Org\OrgData.cshtml" />
     <Content Include="Views\Org\OrgPage.cshtml" />
-    <Content Include="Views\Shared\_header.cshtml" />
-    <Content Include="Views\Shared\_footer.cshtml" />
-    <Content Include="Views\Shared\_sideBar.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_SideBar.cshtml" />
     <Content Include="Views\Home\LandingPage.cshtml" />
-    <Content Include="Views\Shared\_landingHeader.cshtml" />
-    <Content Include="Views\Shared\_search.cshtml" />
+    <Content Include="Views\Shared\_LandingHeader.cshtml" />
+    <Content Include="Views\Shared\_Search.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Home\Legal.cshtml" />
   </ItemGroup>

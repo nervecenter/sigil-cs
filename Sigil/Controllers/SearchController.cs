@@ -24,7 +24,7 @@ namespace Sigil.Controllers
             return View();
         }
 
-        public JsonResult search_db(string term)
+        public JsonResult SearchDB(string term)
         {
             List<string> search_list = new List<string>();
             if(!string.IsNullOrEmpty(term))

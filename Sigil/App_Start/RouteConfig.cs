@@ -11,28 +11,30 @@ namespace Sigil {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Home",
+                url: "",
+                defaults: new { controller = "Home", action = "Index" }
+                );
+
+            routes.MapRoute(
                 name:"Login",
-                url: "Account/Login/",
+                url: "login/",
                 defaults: new { controller = "Account", action="Login"}
                 );
 
             routes.MapRoute(
                 name: "Logout",
-                url: "Account/Logout/",
+                url: "logout/",
                 defaults: new { controller = "Account", action = "LogOff" }
                 );
 
             routes.MapRoute(
                 name: "Register",
-                url: "Account/Register/",
+                url: "register/",
                 defaults: new { controller = "Account", action = "Register" }
                 );
 
-            routes.MapRoute(
-                name: "Home",
-                url: "Home/Index/",
-                defaults: new { controller = "Home", action = "Index" }
-                );
+            // Only redirected to LandingPage if not logged in
 
             routes.MapRoute(
                 name: "Landing",
@@ -42,14 +44,14 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "Legal",
-                url: "Home/Legal/",
+                url: "legal/",
                 defaults: new { controller = "Home", action = "Legal" }
                 );
 
             routes.MapRoute(
                 name: "Search",
-                url: "Search/",
-                defaults: new { controller = "Search", action = "search_db" }
+                url: "search/",
+                defaults: new { controller = "Search", action = "SearchDB" }
                 );
 
             routes.MapRoute(
@@ -66,31 +68,31 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "AddIssue",
-                url: "{orgName}/addissue/",
+                url: "{orgURL}/addissue/",
                 defaults: new { controller = "Issue", action = "AddIssue" }
             );
 
             routes.MapRoute(
                 name: "OrgData",
-                url: "{orgName}/data/",
+                url: "{orgURL}/data/",
                 defaults: new { controller = "Org", action = "OrgData" }
             );
 
             routes.MapRoute(
                 name: "Issue",
-                url: "{orgName}/{IssueId}/",
+                url: "{orgURL}/{IssueId}/",
                 defaults: new { controller = "Issue", action = "IssuePage" }
             );
 
             routes.MapRoute(
                 name: "IssueData",
-                url: "{orgName}/{IssueId}/data/",
+                url: "{orgURL}/{IssueId}/data/",
                 defaults: new { controller = "Issue", action = "IssueData" }
             );
 
             routes.MapRoute(
               name: "Org",
-              url: "{orgName}/",
+              url: "{orgURL}/",
               defaults: new { controller = "Org", action = "OrgPage" }
              );
 
