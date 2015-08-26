@@ -13,66 +13,103 @@
 
     Vote userVote = ViewBag.userVote;
 }
-
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script type="text/javascript" src="~/Scripts/voting.js"></script>
-<div id="sub-header"><h1><a href="/@thisOrg.orgName">@thisOrg.orgName</a></h1></div>
-<div id="content">
-    <div id="main">
-        <div class="issue-options">
-            <ul class="issue-options-list">
-                <li class="issue-option">Issue Page</li>
-                <li class="issue-option"><a href="@Url.Action("IssueData", "Issue", new { orghandle = thisOrg.orgName, issueID = thisIssue.Id})">Data</a></li>
-            </ul>
-        </div>
-        <div class="issue-vote">
-
-            @{
-                if(Request.IsAuthenticated)
-                { 
-                    if (userVote != default(Vote))
-                    { // User has voted on issue
-                        <img class="vote-button" id="vote_@thisIssue.Id" onclick="unvoteup('@thisIssue.Id')" src="~/Content/Images/voteup-clicked.png">
-                    }
-                    else
-                    { // User hasn't voted on issue
-                        <img class="vote-button" id="vote_@thisIssue.Id" onclick="voteup('@thisIssue.Id')" src="~/Content/Images/voteup.png">
-                    }
-                }
-            }
-            <span id="votecount_@thisIssue.Id">@(thisIssue.votes)</span>
-        </div>
-        <h2>@thisIssue.title</h2>
-        <p>@thisIssue.text</p>
+<div class="first-column">
+    <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png"></img>
+    <div id="sub-header"><h1><a href="/@thisOrg.orgName">@thisOrg.orgName</a></h1></div>
+    <div class="issue-options">
+        <ul class="issue-options-list">
+            <li class="issue-option">Issue Page</li>
+            <li class="issue-option"><a href="@Url.Action("IssueData", "Issue", new { orghandle = thisOrg.orgName, issueID = thisIssue.Id})">Data</a></li>
+        </ul>
+    </div>
+    <div class="issue-vote-area">
         @{
-            if (thisIssue.responded)
-            {
-                <h3>Official Response:</h3>
-                <p>@thisIssue.officialComment</p>
+            if (userVote != default(Vote))
+            { // User has voted on issue
+                <img class="issue-vote-button checked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+            }
+            else
+            { // User hasn't voted on issue
+                <img class="issue-vote-button unchecked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
             }
         }
-        <div class="issue-comments-section">
-            @{
-                foreach (Comment comm in issueComments)
-                {
-                    <hr />
-                    <div class="issue-comment">
-                        @comm.AspNetUser.UserName says:
-                        <p>@comm.text</p>
-                    </div>
-                }
-            }
-            <form method="post">
-                <fieldset>
-                    <legend>Add a comment:</legend>
-                    <p>
-                        <input type="text" name="text" />
-                        @Html.ValidationMessage("text")
-                    </p>
-                    <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
-                </fieldset>
-            </form>
-        </div>
+
+        <span class="issue-vote-amount" id="votecount_@thisIssue.Id">@(thisIssue.votes)</span>
     </div>
-    <div id="rightbar">Right bar</div>
-</div>
+    <div class="issue-main-area issue-main-issue-page">
+        <div class="issue-main-cell">
+            <div class="issue-title-area issue-main-sub-areas">
+                <span class="issue-title">@thisIssue.title</span>
+                <span class="issue-org-cat-topic">
+                    <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>@thisIssue.Org.orgName :
+                    <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
+                    in Operating Systems
+                </span>
+                <span class="issue-user-date">
+                    @thisIssue.createTime
+                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>@thisIssue.AspNetUser.UserName
+                </span>
+                <p class="issue-text">@thisIssue.text</p>
+                @{
+                    @if (thisIssue.responded)
+                    {
+
+                        <div class="response-box">
+					        <article class="response">
+						        <span class="response-header">O F F I C I A L&emsp;R E S P O N S E</span>
+                                <div class="response-user-area">
+                                    <img class="response-user-icon" src="../Content/Images/usericons/ms-mike_100.png"></img>
+                                    <br>
+                                    MS-Mike
+                                    <br>
+                                    <span class="response-time">2 days ago</span>
+                                    <br>
+                                    <br>
+                                    <img class="icon-helpful" src="../Content/Images/helpful.png"></img>
+                                    <br>
+                                    <span class="text-helpful">Helpful</span>
+                                    <br>
+                                    <span class="text-rate">Rate this reponse</span>
+                                    <br>
+                                    <span class="text-unhelpful">Unhelpful</span>
+                                    <br>
+                                    <img class="icon-unhelpful" src="../Content/Images/unhelpful.png"></img>
+                                </div>
+                                <div class="response-text">@thisIssue.officialComment</div>
+                            </article>
+                    }
+                }
+                <div class="comments-area">
+                    <span class="comments-header">C O M M E N T S</span>
+                    
+                    @{
+                        foreach (Comment comm in issueComments)
+                        {
+                            <article class="comment">
+                                <div class="comment-user-area">
+                                    <img class="comment-user-icon" src="../Content/Images/usericons/nervecenter_large.png"></img>
+                                    @comm.AspNetUser.UserName
+                                    <br />
+                                    <span class="comment-time">@comm.postDate</span>
+                                    </div>
+
+                                    <div class="comment-text">@comm.text</div>
+                                <br class="clear" />
+                            </article>
+                            <hr class="comment-separator" />
+                        }
+                    }
+                    <form method="post">
+                        <fieldset>
+                            <legend>Add a comment:</legend>
+                            <p>
+                                <input type="text" name="text" />
+                                @Html.ValidationMessage("text")
+                            </p>
+                            <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div id="rightbar">Right bar</div>
+        </div>
