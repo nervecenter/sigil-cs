@@ -42,9 +42,6 @@ namespace Sigil.Models
     partial void InsertSubscription(Subscription instance);
     partial void UpdateSubscription(Subscription instance);
     partial void DeleteSubscription(Subscription instance);
-    partial void InsertIssue(Issue instance);
-    partial void UpdateIssue(Issue instance);
-    partial void DeleteIssue(Issue instance);
     partial void InsertViewCount(ViewCount instance);
     partial void UpdateViewCount(ViewCount instance);
     partial void DeleteViewCount(ViewCount instance);
@@ -57,6 +54,18 @@ namespace Sigil.Models
     partial void InsertOrg(Org instance);
     partial void UpdateOrg(Org instance);
     partial void DeleteOrg(Org instance);
+    partial void InsertTopic(Topic instance);
+    partial void UpdateTopic(Topic instance);
+    partial void DeleteTopic(Topic instance);
+    partial void InsertCategory(Category instance);
+    partial void UpdateCategory(Category instance);
+    partial void DeleteCategory(Category instance);
+    partial void InsertOfficialResponse(OfficialResponse instance);
+    partial void UpdateOfficialResponse(OfficialResponse instance);
+    partial void DeleteOfficialResponse(OfficialResponse instance);
+    partial void InsertIssue(Issue instance);
+    partial void UpdateIssue(Issue instance);
+    partial void DeleteIssue(Issue instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -121,14 +130,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Issue> Issues
-		{
-			get
-			{
-				return this.GetTable<Issue>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ViewCount> ViewCounts
 		{
 			get
@@ -158,6 +159,38 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<Org>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Topic> Topics
+		{
+			get
+			{
+				return this.GetTable<Topic>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Category> Categories
+		{
+			get
+			{
+				return this.GetTable<Category>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OfficialResponse> OfficialResponses
+		{
+			get
+			{
+				return this.GetTable<OfficialResponse>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Issue> Issues
+		{
+			get
+			{
+				return this.GetTable<Issue>();
 			}
 		}
 	}
@@ -626,9 +659,11 @@ namespace Sigil.Models
 		
 		private EntitySet<Subscription> _Subscriptions1;
 		
+		private EntitySet<Vote> _Votes;
+		
 		private EntitySet<Issue> _Issues;
 		
-		private EntitySet<Vote> _Votes;
+		private EntitySet<OfficialResponse> _OfficialResponses;
 		
 		private EntityRef<AspNetUserRole> _AspNetUserRole;
 		
@@ -672,8 +707,9 @@ namespace Sigil.Models
 		{
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
 			this._Subscriptions1 = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions1), new Action<Subscription>(this.detach_Subscriptions1));
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._Votes = new EntitySet<Vote>(new Action<Vote>(this.attach_Votes), new Action<Vote>(this.detach_Votes));
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._AspNetUserRole = default(EntityRef<AspNetUserRole>);
 			this._Org = default(EntityRef<Org>);
 			OnCreated();
@@ -993,6 +1029,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Vote", Storage="_Votes", ThisKey="Id", OtherKey="UserID")]
+		public EntitySet<Vote> Votes
+		{
+			get
+			{
+				return this._Votes;
+			}
+			set
+			{
+				this._Votes.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Issue", Storage="_Issues", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<Issue> Issues
 		{
@@ -1006,16 +1055,16 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Vote", Storage="_Votes", ThisKey="Id", OtherKey="UserID")]
-		public EntitySet<Vote> Votes
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<OfficialResponse> OfficialResponses
 		{
 			get
 			{
-				return this._Votes;
+				return this._OfficialResponses;
 			}
 			set
 			{
-				this._Votes.Assign(value);
+				this._OfficialResponses.Assign(value);
 			}
 		}
 		
@@ -1131,6 +1180,18 @@ namespace Sigil.Models
 			entity.AspNetUser = null;
 		}
 		
+		private void attach_Votes(Vote entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_Votes(Vote entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
+		}
+		
 		private void attach_Issues(Issue entity)
 		{
 			this.SendPropertyChanging();
@@ -1143,13 +1204,13 @@ namespace Sigil.Models
 			entity.AspNetUser = null;
 		}
 		
-		private void attach_Votes(Vote entity)
+		private void attach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = this;
 		}
 		
-		private void detach_Votes(Vote entity)
+		private void detach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
@@ -1348,498 +1409,6 @@ namespace Sigil.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Issues")]
-	public partial class Issue : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _OrgId;
-		
-		private string _UserId;
-		
-		private System.DateTime _createTime;
-		
-		private System.DateTime _editTime;
-		
-		private string _title;
-		
-		private string _text;
-		
-		private bool _responded;
-		
-		private System.Nullable<int> _officialComment;
-		
-		private int _votes;
-		
-		private System.DateTime _lastVoted;
-		
-		private System.Nullable<int> _viewCount;
-		
-		private EntitySet<Comment> _Comments;
-		
-		private EntitySet<ViewCount> _ViewCounts;
-		
-		private EntitySet<Vote> _Votes1;
-		
-		private EntityRef<AspNetUser> _AspNetUser;
-		
-		private EntityRef<Org> _Org;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnOrgIdChanging(int value);
-    partial void OnOrgIdChanged();
-    partial void OnUserIdChanging(string value);
-    partial void OnUserIdChanged();
-    partial void OncreateTimeChanging(System.DateTime value);
-    partial void OncreateTimeChanged();
-    partial void OneditTimeChanging(System.DateTime value);
-    partial void OneditTimeChanged();
-    partial void OntitleChanging(string value);
-    partial void OntitleChanged();
-    partial void OntextChanging(string value);
-    partial void OntextChanged();
-    partial void OnrespondedChanging(bool value);
-    partial void OnrespondedChanged();
-    partial void OnofficialCommentChanging(System.Nullable<int> value);
-    partial void OnofficialCommentChanged();
-    partial void OnvotesChanging(int value);
-    partial void OnvotesChanged();
-    partial void OnlastVotedChanging(System.DateTime value);
-    partial void OnlastVotedChanged();
-    partial void OnviewCountChanging(System.Nullable<int> value);
-    partial void OnviewCountChanged();
-    #endregion
-		
-		public Issue()
-		{
-			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
-			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
-			this._Votes1 = new EntitySet<Vote>(new Action<Vote>(this.attach_Votes1), new Action<Vote>(this.detach_Votes1));
-			this._AspNetUser = default(EntityRef<AspNetUser>);
-			this._Org = default(EntityRef<Org>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
-		public int OrgId
-		{
-			get
-			{
-				return this._OrgId;
-			}
-			set
-			{
-				if ((this._OrgId != value))
-				{
-					if (this._Org.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrgIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrgId = value;
-					this.SendPropertyChanged("OrgId");
-					this.OnOrgIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._AspNetUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_createTime", DbType="DateTime NOT NULL")]
-		public System.DateTime createTime
-		{
-			get
-			{
-				return this._createTime;
-			}
-			set
-			{
-				if ((this._createTime != value))
-				{
-					this.OncreateTimeChanging(value);
-					this.SendPropertyChanging();
-					this._createTime = value;
-					this.SendPropertyChanged("createTime");
-					this.OncreateTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_editTime", DbType="DateTime NOT NULL")]
-		public System.DateTime editTime
-		{
-			get
-			{
-				return this._editTime;
-			}
-			set
-			{
-				if ((this._editTime != value))
-				{
-					this.OneditTimeChanging(value);
-					this.SendPropertyChanging();
-					this._editTime = value;
-					this.SendPropertyChanged("editTime");
-					this.OneditTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_title", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string title
-		{
-			get
-			{
-				return this._title;
-			}
-			set
-			{
-				if ((this._title != value))
-				{
-					this.OntitleChanging(value);
-					this.SendPropertyChanging();
-					this._title = value;
-					this.SendPropertyChanged("title");
-					this.OntitleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(MAX)")]
-		public string text
-		{
-			get
-			{
-				return this._text;
-			}
-			set
-			{
-				if ((this._text != value))
-				{
-					this.OntextChanging(value);
-					this.SendPropertyChanging();
-					this._text = value;
-					this.SendPropertyChanged("text");
-					this.OntextChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_responded", DbType="Bit NOT NULL")]
-		public bool responded
-		{
-			get
-			{
-				return this._responded;
-			}
-			set
-			{
-				if ((this._responded != value))
-				{
-					this.OnrespondedChanging(value);
-					this.SendPropertyChanging();
-					this._responded = value;
-					this.SendPropertyChanged("responded");
-					this.OnrespondedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_officialComment", DbType="Int")]
-		public System.Nullable<int> officialComment
-		{
-			get
-			{
-				return this._officialComment;
-			}
-			set
-			{
-				if ((this._officialComment != value))
-				{
-					this.OnofficialCommentChanging(value);
-					this.SendPropertyChanging();
-					this._officialComment = value;
-					this.SendPropertyChanged("officialComment");
-					this.OnofficialCommentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_votes", DbType="Int NOT NULL")]
-		public int votes
-		{
-			get
-			{
-				return this._votes;
-			}
-			set
-			{
-				if ((this._votes != value))
-				{
-					this.OnvotesChanging(value);
-					this.SendPropertyChanging();
-					this._votes = value;
-					this.SendPropertyChanged("votes");
-					this.OnvotesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastVoted", DbType="DateTime NOT NULL")]
-		public System.DateTime lastVoted
-		{
-			get
-			{
-				return this._lastVoted;
-			}
-			set
-			{
-				if ((this._lastVoted != value))
-				{
-					this.OnlastVotedChanging(value);
-					this.SendPropertyChanging();
-					this._lastVoted = value;
-					this.SendPropertyChanged("lastVoted");
-					this.OnlastVotedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_viewCount", DbType="Int")]
-		public System.Nullable<int> viewCount
-		{
-			get
-			{
-				return this._viewCount;
-			}
-			set
-			{
-				if ((this._viewCount != value))
-				{
-					this.OnviewCountChanging(value);
-					this.SendPropertyChanging();
-					this._viewCount = value;
-					this.SendPropertyChanged("viewCount");
-					this.OnviewCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Comment", Storage="_Comments", ThisKey="Id", OtherKey="issueId")]
-		public EntitySet<Comment> Comments
-		{
-			get
-			{
-				return this._Comments;
-			}
-			set
-			{
-				this._Comments.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="IssueId")]
-		public EntitySet<ViewCount> ViewCounts
-		{
-			get
-			{
-				return this._ViewCounts;
-			}
-			set
-			{
-				this._ViewCounts.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Vote", Storage="_Votes1", ThisKey="Id", OtherKey="IssueId")]
-		public EntitySet<Vote> Votes1
-		{
-			get
-			{
-				return this._Votes1;
-			}
-			set
-			{
-				this._Votes1.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Issue", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
-		public AspNetUser AspNetUser
-		{
-			get
-			{
-				return this._AspNetUser.Entity;
-			}
-			set
-			{
-				AspNetUser previousValue = this._AspNetUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetUser.Entity = null;
-						previousValue.Issues.Remove(this);
-					}
-					this._AspNetUser.Entity = value;
-					if ((value != null))
-					{
-						value.Issues.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(string);
-					}
-					this.SendPropertyChanged("AspNetUser");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
-		public Org Org
-		{
-			get
-			{
-				return this._Org.Entity;
-			}
-			set
-			{
-				Org previousValue = this._Org.Entity;
-				if (((previousValue != value) 
-							|| (this._Org.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Org.Entity = null;
-						previousValue.Issues.Remove(this);
-					}
-					this._Org.Entity = value;
-					if ((value != null))
-					{
-						value.Issues.Add(this);
-						this._OrgId = value.Id;
-					}
-					else
-					{
-						this._OrgId = default(int);
-					}
-					this.SendPropertyChanged("Org");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Comments(Comment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = this;
-		}
-		
-		private void detach_Comments(Comment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = null;
-		}
-		
-		private void attach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = this;
-		}
-		
-		private void detach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = null;
-		}
-		
-		private void attach_Votes1(Vote entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = this;
-		}
-		
-		private void detach_Votes1(Vote entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ViewCounts")]
 	public partial class ViewCount : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1856,9 +1425,9 @@ namespace Sigil.Models
 		
 		private int _count;
 		
-		private EntityRef<Issue> _Issue;
-		
 		private EntityRef<Org> _Org;
+		
+		private EntityRef<Issue> _Issue;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1878,8 +1447,8 @@ namespace Sigil.Models
 		
 		public ViewCount()
 		{
-			this._Issue = default(EntityRef<Issue>);
 			this._Org = default(EntityRef<Org>);
+			this._Issue = default(EntityRef<Issue>);
 			OnCreated();
 		}
 		
@@ -1991,40 +1560,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_ViewCount", Storage="_Issue", ThisKey="IssueId", OtherKey="Id", IsForeignKey=true)]
-		public Issue Issue
-		{
-			get
-			{
-				return this._Issue.Entity;
-			}
-			set
-			{
-				Issue previousValue = this._Issue.Entity;
-				if (((previousValue != value) 
-							|| (this._Issue.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Issue.Entity = null;
-						previousValue.ViewCounts.Remove(this);
-					}
-					this._Issue.Entity = value;
-					if ((value != null))
-					{
-						value.ViewCounts.Add(this);
-						this._IssueId = value.Id;
-					}
-					else
-					{
-						this._IssueId = default(int);
-					}
-					this.SendPropertyChanged("Issue");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_ViewCount", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
 		public Org Org
 		{
@@ -2055,6 +1590,40 @@ namespace Sigil.Models
 						this._OrgId = default(int);
 					}
 					this.SendPropertyChanged("Org");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_ViewCount", Storage="_Issue", ThisKey="IssueId", OtherKey="Id", IsForeignKey=true)]
+		public Issue Issue
+		{
+			get
+			{
+				return this._Issue.Entity;
+			}
+			set
+			{
+				Issue previousValue = this._Issue.Entity;
+				if (((previousValue != value) 
+							|| (this._Issue.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Issue.Entity = null;
+						previousValue.ViewCounts.Remove(this);
+					}
+					this._Issue.Entity = value;
+					if ((value != null))
+					{
+						value.ViewCounts.Add(this);
+						this._IssueId = value.Id;
+					}
+					else
+					{
+						this._IssueId = default(int);
+					}
+					this.SendPropertyChanged("Issue");
 				}
 			}
 		}
@@ -2476,9 +2045,13 @@ namespace Sigil.Models
 		
 		private EntitySet<Subscription> _Subscriptions;
 		
+		private EntitySet<ViewCount> _ViewCounts;
+		
+		private EntitySet<Category> _Categories;
+		
 		private EntitySet<Issue> _Issues;
 		
-		private EntitySet<ViewCount> _ViewCounts;
+		private EntitySet<OfficialResponse> _OfficialResponses;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2502,8 +2075,10 @@ namespace Sigil.Models
 		{
 			this._AspNetUsers = new EntitySet<AspNetUser>(new Action<AspNetUser>(this.attach_AspNetUsers), new Action<AspNetUser>(this.detach_AspNetUsers));
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
+			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			OnCreated();
 		}
 		
@@ -2653,6 +2228,32 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<ViewCount> ViewCounts
+		{
+			get
+			{
+				return this._ViewCounts;
+			}
+			set
+			{
+				this._ViewCounts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Categories", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<Category> Categories
+		{
+			get
+			{
+				return this._Categories;
+			}
+			set
+			{
+				this._Categories.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Issues", ThisKey="Id", OtherKey="OrgId")]
 		public EntitySet<Issue> Issues
 		{
@@ -2666,16 +2267,16 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<ViewCount> ViewCounts
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<OfficialResponse> OfficialResponses
 		{
 			get
 			{
-				return this._ViewCounts;
+				return this._OfficialResponses;
 			}
 			set
 			{
-				this._ViewCounts.Assign(value);
+				this._OfficialResponses.Assign(value);
 			}
 		}
 		
@@ -2723,6 +2324,30 @@ namespace Sigil.Models
 			entity.Org = null;
 		}
 		
+		private void attach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_Categories(Category entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_Categories(Category entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
 		private void attach_Issues(Issue entity)
 		{
 			this.SendPropertyChanging();
@@ -2735,16 +2360,1360 @@ namespace Sigil.Models
 			entity.Org = null;
 		}
 		
-		private void attach_ViewCounts(ViewCount entity)
+		private void attach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
 			entity.Org = this;
 		}
 		
-		private void detach_ViewCounts(ViewCount entity)
+		private void detach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
 			entity.Org = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Topic")]
+	public partial class Topic : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _topicName;
+		
+		private string _topicURL;
+		
+		private EntitySet<Issue> _Issues;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OntopicNameChanging(string value);
+    partial void OntopicNameChanged();
+    partial void OntopicURLChanging(string value);
+    partial void OntopicURLChanged();
+    #endregion
+		
+		public Topic()
+		{
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_topicName", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string topicName
+		{
+			get
+			{
+				return this._topicName;
+			}
+			set
+			{
+				if ((this._topicName != value))
+				{
+					this.OntopicNameChanging(value);
+					this.SendPropertyChanging();
+					this._topicName = value;
+					this.SendPropertyChanged("topicName");
+					this.OntopicNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_topicURL", DbType="NVarChar(30)")]
+		public string topicURL
+		{
+			get
+			{
+				return this._topicURL;
+			}
+			set
+			{
+				if ((this._topicURL != value))
+				{
+					this.OntopicURLChanging(value);
+					this.SendPropertyChanging();
+					this._topicURL = value;
+					this.SendPropertyChanged("topicURL");
+					this.OntopicURLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Issues", ThisKey="Id", OtherKey="TopicId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Topic = this;
+		}
+		
+		private void detach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Topic = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Categories")]
+	public partial class Category : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _catName;
+		
+		private int _OrgId;
+		
+		private string _catURL;
+		
+		private EntitySet<Issue> _Issues;
+		
+		private EntityRef<Org> _Org;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OncatNameChanging(string value);
+    partial void OncatNameChanged();
+    partial void OnOrgIdChanging(int value);
+    partial void OnOrgIdChanged();
+    partial void OncatURLChanging(string value);
+    partial void OncatURLChanged();
+    #endregion
+		
+		public Category()
+		{
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._Org = default(EntityRef<Org>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_catName", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string catName
+		{
+			get
+			{
+				return this._catName;
+			}
+			set
+			{
+				if ((this._catName != value))
+				{
+					this.OncatNameChanging(value);
+					this.SendPropertyChanging();
+					this._catName = value;
+					this.SendPropertyChanged("catName");
+					this.OncatNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
+		public int OrgId
+		{
+			get
+			{
+				return this._OrgId;
+			}
+			set
+			{
+				if ((this._OrgId != value))
+				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOrgIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrgId = value;
+					this.SendPropertyChanged("OrgId");
+					this.OnOrgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_catURL", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string catURL
+		{
+			get
+			{
+				return this._catURL;
+			}
+			set
+			{
+				if ((this._catURL != value))
+				{
+					this.OncatURLChanging(value);
+					this.SendPropertyChanging();
+					this._catURL = value;
+					this.SendPropertyChanged("catURL");
+					this.OncatURLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Issue", Storage="_Issues", ThisKey="Id", OtherKey="CatId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.Categories.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.Categories.Add(this);
+						this._OrgId = value.Id;
+					}
+					else
+					{
+						this._OrgId = default(int);
+					}
+					this.SendPropertyChanged("Org");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = this;
+		}
+		
+		private void detach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OfficialResponse")]
+	public partial class OfficialResponse : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _upVotes;
+		
+		private int _downVotes;
+		
+		private int _OrgId;
+		
+		private string _UserId;
+		
+		private System.DateTime _createTime;
+		
+		private string _text;
+		
+		private int _issueId;
+		
+		private EntityRef<Issue> _Issue;
+		
+		private EntityRef<Org> _Org;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnupVotesChanging(int value);
+    partial void OnupVotesChanged();
+    partial void OndownVotesChanging(int value);
+    partial void OndownVotesChanged();
+    partial void OnOrgIdChanging(int value);
+    partial void OnOrgIdChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
+    partial void OncreateTimeChanging(System.DateTime value);
+    partial void OncreateTimeChanged();
+    partial void OntextChanging(string value);
+    partial void OntextChanged();
+    partial void OnissueIdChanging(int value);
+    partial void OnissueIdChanged();
+    #endregion
+		
+		public OfficialResponse()
+		{
+			this._Issue = default(EntityRef<Issue>);
+			this._Org = default(EntityRef<Org>);
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_upVotes", DbType="Int NOT NULL")]
+		public int upVotes
+		{
+			get
+			{
+				return this._upVotes;
+			}
+			set
+			{
+				if ((this._upVotes != value))
+				{
+					this.OnupVotesChanging(value);
+					this.SendPropertyChanging();
+					this._upVotes = value;
+					this.SendPropertyChanged("upVotes");
+					this.OnupVotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_downVotes", DbType="Int NOT NULL")]
+		public int downVotes
+		{
+			get
+			{
+				return this._downVotes;
+			}
+			set
+			{
+				if ((this._downVotes != value))
+				{
+					this.OndownVotesChanging(value);
+					this.SendPropertyChanging();
+					this._downVotes = value;
+					this.SendPropertyChanged("downVotes");
+					this.OndownVotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
+		public int OrgId
+		{
+			get
+			{
+				return this._OrgId;
+			}
+			set
+			{
+				if ((this._OrgId != value))
+				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOrgIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrgId = value;
+					this.SendPropertyChanged("OrgId");
+					this.OnOrgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_createTime", DbType="DateTime NOT NULL")]
+		public System.DateTime createTime
+		{
+			get
+			{
+				return this._createTime;
+			}
+			set
+			{
+				if ((this._createTime != value))
+				{
+					this.OncreateTimeChanging(value);
+					this.SendPropertyChanging();
+					this._createTime = value;
+					this.SendPropertyChanged("createTime");
+					this.OncreateTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string text
+		{
+			get
+			{
+				return this._text;
+			}
+			set
+			{
+				if ((this._text != value))
+				{
+					this.OntextChanging(value);
+					this.SendPropertyChanging();
+					this._text = value;
+					this.SendPropertyChanged("text");
+					this.OntextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_issueId", DbType="Int NOT NULL")]
+		public int issueId
+		{
+			get
+			{
+				return this._issueId;
+			}
+			set
+			{
+				if ((this._issueId != value))
+				{
+					if (this._Issue.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnissueIdChanging(value);
+					this.SendPropertyChanging();
+					this._issueId = value;
+					this.SendPropertyChanged("issueId");
+					this.OnissueIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_OfficialResponse", Storage="_Issue", ThisKey="issueId", OtherKey="Id", IsForeignKey=true)]
+		public Issue Issue
+		{
+			get
+			{
+				return this._Issue.Entity;
+			}
+			set
+			{
+				Issue previousValue = this._Issue.Entity;
+				if (((previousValue != value) 
+							|| (this._Issue.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Issue.Entity = null;
+						previousValue.OfficialResponses.Remove(this);
+					}
+					this._Issue.Entity = value;
+					if ((value != null))
+					{
+						value.OfficialResponses.Add(this);
+						this._issueId = value.Id;
+					}
+					else
+					{
+						this._issueId = default(int);
+					}
+					this.SendPropertyChanged("Issue");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.OfficialResponses.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.OfficialResponses.Add(this);
+						this._OrgId = value.Id;
+					}
+					else
+					{
+						this._OrgId = default(int);
+					}
+					this.SendPropertyChanged("Org");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_OfficialResponse", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.OfficialResponses.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.OfficialResponses.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Issues")]
+	public partial class Issue : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _OrgId;
+		
+		private string _UserId;
+		
+		private System.DateTime _createTime;
+		
+		private System.DateTime _editTime;
+		
+		private string _title;
+		
+		private string _text;
+		
+		private bool _responded;
+		
+		private System.Nullable<int> _officialComment;
+		
+		private int _votes;
+		
+		private System.DateTime _lastVoted;
+		
+		private System.Nullable<int> _viewCount;
+		
+		private System.Nullable<int> _CatId;
+		
+		private System.Nullable<int> _TopicId;
+		
+		private EntitySet<Comment> _Comments;
+		
+		private EntitySet<Vote> _Votes1;
+		
+		private EntitySet<OfficialResponse> _OfficialResponses;
+		
+		private EntitySet<ViewCount> _ViewCounts;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+		private EntityRef<Org> _Org;
+		
+		private EntityRef<Topic> _Topic;
+		
+		private EntityRef<Category> _Category;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnOrgIdChanging(int value);
+    partial void OnOrgIdChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
+    partial void OncreateTimeChanging(System.DateTime value);
+    partial void OncreateTimeChanged();
+    partial void OneditTimeChanging(System.DateTime value);
+    partial void OneditTimeChanged();
+    partial void OntitleChanging(string value);
+    partial void OntitleChanged();
+    partial void OntextChanging(string value);
+    partial void OntextChanged();
+    partial void OnrespondedChanging(bool value);
+    partial void OnrespondedChanged();
+    partial void OnofficialCommentChanging(System.Nullable<int> value);
+    partial void OnofficialCommentChanged();
+    partial void OnvotesChanging(int value);
+    partial void OnvotesChanged();
+    partial void OnlastVotedChanging(System.DateTime value);
+    partial void OnlastVotedChanged();
+    partial void OnviewCountChanging(System.Nullable<int> value);
+    partial void OnviewCountChanged();
+    partial void OnCatIdChanging(System.Nullable<int> value);
+    partial void OnCatIdChanged();
+    partial void OnTopicIdChanging(System.Nullable<int> value);
+    partial void OnTopicIdChanged();
+    #endregion
+		
+		public Issue()
+		{
+			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._Votes1 = new EntitySet<Vote>(new Action<Vote>(this.attach_Votes1), new Action<Vote>(this.detach_Votes1));
+			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
+			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			this._Org = default(EntityRef<Org>);
+			this._Topic = default(EntityRef<Topic>);
+			this._Category = default(EntityRef<Category>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
+		public int OrgId
+		{
+			get
+			{
+				return this._OrgId;
+			}
+			set
+			{
+				if ((this._OrgId != value))
+				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOrgIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrgId = value;
+					this.SendPropertyChanged("OrgId");
+					this.OnOrgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_createTime", DbType="DateTime NOT NULL")]
+		public System.DateTime createTime
+		{
+			get
+			{
+				return this._createTime;
+			}
+			set
+			{
+				if ((this._createTime != value))
+				{
+					this.OncreateTimeChanging(value);
+					this.SendPropertyChanging();
+					this._createTime = value;
+					this.SendPropertyChanged("createTime");
+					this.OncreateTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_editTime", DbType="DateTime NOT NULL")]
+		public System.DateTime editTime
+		{
+			get
+			{
+				return this._editTime;
+			}
+			set
+			{
+				if ((this._editTime != value))
+				{
+					this.OneditTimeChanging(value);
+					this.SendPropertyChanging();
+					this._editTime = value;
+					this.SendPropertyChanged("editTime");
+					this.OneditTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_title", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string title
+		{
+			get
+			{
+				return this._title;
+			}
+			set
+			{
+				if ((this._title != value))
+				{
+					this.OntitleChanging(value);
+					this.SendPropertyChanging();
+					this._title = value;
+					this.SendPropertyChanged("title");
+					this.OntitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(MAX)")]
+		public string text
+		{
+			get
+			{
+				return this._text;
+			}
+			set
+			{
+				if ((this._text != value))
+				{
+					this.OntextChanging(value);
+					this.SendPropertyChanging();
+					this._text = value;
+					this.SendPropertyChanged("text");
+					this.OntextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_responded", DbType="Bit NOT NULL")]
+		public bool responded
+		{
+			get
+			{
+				return this._responded;
+			}
+			set
+			{
+				if ((this._responded != value))
+				{
+					this.OnrespondedChanging(value);
+					this.SendPropertyChanging();
+					this._responded = value;
+					this.SendPropertyChanged("responded");
+					this.OnrespondedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_officialComment", DbType="Int")]
+		public System.Nullable<int> officialComment
+		{
+			get
+			{
+				return this._officialComment;
+			}
+			set
+			{
+				if ((this._officialComment != value))
+				{
+					this.OnofficialCommentChanging(value);
+					this.SendPropertyChanging();
+					this._officialComment = value;
+					this.SendPropertyChanged("officialComment");
+					this.OnofficialCommentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_votes", DbType="Int NOT NULL")]
+		public int votes
+		{
+			get
+			{
+				return this._votes;
+			}
+			set
+			{
+				if ((this._votes != value))
+				{
+					this.OnvotesChanging(value);
+					this.SendPropertyChanging();
+					this._votes = value;
+					this.SendPropertyChanged("votes");
+					this.OnvotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastVoted", DbType="DateTime NOT NULL")]
+		public System.DateTime lastVoted
+		{
+			get
+			{
+				return this._lastVoted;
+			}
+			set
+			{
+				if ((this._lastVoted != value))
+				{
+					this.OnlastVotedChanging(value);
+					this.SendPropertyChanging();
+					this._lastVoted = value;
+					this.SendPropertyChanged("lastVoted");
+					this.OnlastVotedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_viewCount", DbType="Int")]
+		public System.Nullable<int> viewCount
+		{
+			get
+			{
+				return this._viewCount;
+			}
+			set
+			{
+				if ((this._viewCount != value))
+				{
+					this.OnviewCountChanging(value);
+					this.SendPropertyChanging();
+					this._viewCount = value;
+					this.SendPropertyChanged("viewCount");
+					this.OnviewCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CatId", DbType="Int")]
+		public System.Nullable<int> CatId
+		{
+			get
+			{
+				return this._CatId;
+			}
+			set
+			{
+				if ((this._CatId != value))
+				{
+					if (this._Category.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCatIdChanging(value);
+					this.SendPropertyChanging();
+					this._CatId = value;
+					this.SendPropertyChanged("CatId");
+					this.OnCatIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TopicId", DbType="Int")]
+		public System.Nullable<int> TopicId
+		{
+			get
+			{
+				return this._TopicId;
+			}
+			set
+			{
+				if ((this._TopicId != value))
+				{
+					if (this._Topic.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTopicIdChanging(value);
+					this.SendPropertyChanging();
+					this._TopicId = value;
+					this.SendPropertyChanged("TopicId");
+					this.OnTopicIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Comment", Storage="_Comments", ThisKey="Id", OtherKey="issueId")]
+		public EntitySet<Comment> Comments
+		{
+			get
+			{
+				return this._Comments;
+			}
+			set
+			{
+				this._Comments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Vote", Storage="_Votes1", ThisKey="Id", OtherKey="IssueId")]
+		public EntitySet<Vote> Votes1
+		{
+			get
+			{
+				return this._Votes1;
+			}
+			set
+			{
+				this._Votes1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="issueId")]
+		public EntitySet<OfficialResponse> OfficialResponses
+		{
+			get
+			{
+				return this._OfficialResponses;
+			}
+			set
+			{
+				this._OfficialResponses.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="IssueId")]
+		public EntitySet<ViewCount> ViewCounts
+		{
+			get
+			{
+				return this._ViewCounts;
+			}
+			set
+			{
+				this._ViewCounts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Issue", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.Issues.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.Issues.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.Issues.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.Issues.Add(this);
+						this._OrgId = value.Id;
+					}
+					else
+					{
+						this._OrgId = default(int);
+					}
+					this.SendPropertyChanged("Org");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
+		public Topic Topic
+		{
+			get
+			{
+				return this._Topic.Entity;
+			}
+			set
+			{
+				Topic previousValue = this._Topic.Entity;
+				if (((previousValue != value) 
+							|| (this._Topic.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Topic.Entity = null;
+						previousValue.Issues.Remove(this);
+					}
+					this._Topic.Entity = value;
+					if ((value != null))
+					{
+						value.Issues.Add(this);
+						this._TopicId = value.Id;
+					}
+					else
+					{
+						this._TopicId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Topic");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Issue", Storage="_Category", ThisKey="CatId", OtherKey="Id", IsForeignKey=true)]
+		public Category Category
+		{
+			get
+			{
+				return this._Category.Entity;
+			}
+			set
+			{
+				Category previousValue = this._Category.Entity;
+				if (((previousValue != value) 
+							|| (this._Category.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Category.Entity = null;
+						previousValue.Issues.Remove(this);
+					}
+					this._Category.Entity = value;
+					if ((value != null))
+					{
+						value.Issues.Add(this);
+						this._CatId = value.Id;
+					}
+					else
+					{
+						this._CatId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Category");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = this;
+		}
+		
+		private void detach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = null;
+		}
+		
+		private void attach_Votes1(Vote entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = this;
+		}
+		
+		private void detach_Votes1(Vote entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = null;
+		}
+		
+		private void attach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = this;
+		}
+		
+		private void detach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = null;
+		}
+		
+		private void attach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = this;
+		}
+		
+		private void detach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = null;
 		}
 	}
 }
