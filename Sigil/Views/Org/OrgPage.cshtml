@@ -8,75 +8,48 @@
     IQueryable<Vote> userVotes = ViewBag.userVotes;
 }
 
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script type="text/javascript" src="~/Scripts/voting.js"></script>
 
-<div Id="sub-header">
-    <h1><a href="/@Model.Item1.orgName">@Model.Item1.orgName</a></h1>
-    <a Id="samplelink" href="~/">Sample Link</a><p style="text-align:right"><a href=@(Model.Item1.orgName + "/addissue")>Add issue</a></p>
-</div>
-<div Id="content">
-    <div Id="main">
-        <div class="issue-options">
-            <ul class="issue-options-list">
-                <li class="issue-option">Org Page</li>
-                <li class="issue-option"><a href="@Url.Action("OrgData", "Org", new { orgName = Model.Item1.orgName })">Data</a></li>
-            </ul>
-        </div>
-        @{if(Request.IsAuthenticated)
-          { 
-             foreach (Issue issue in Model.Item2)
-             {
-                <div class="issue">
-                    <div class="issue-vote">
-                        @{if (userVotes.Any(v => v.IssueId == issue.Id))
-                        { // User has voted on issue
-                            <img class="vote-button" Id="vote_@issue.Id" onclick="unvoteup('@issue.Id', '@User.Identity.GetUserId()')" src="~/Content/Images/voteup-clicked.png">
-                        }
-                        else
-                        { // User hasn't voted on issue
-                            <img class="vote-button" Id="vote_@issue.Id" onclick="voteup('@issue.Id', '@User.Identity.GetUserId()')" src="~/Content/Images/voteup.png">
-                        }
-                        }
-                        <span Id="votecount_@issue.Id">@(issue.votes)</span>
-                    </div>
-                    <div class="issue-main">
-                        <div class="issue-text-area">
-                            <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
-                             { <b>Official Response!</b> } }
-                            @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orgName == issue.orgName)*/;}
-                        </div>
-                        <div class="issue-options">
-                            <ul class="issue-options-list">
-                                <li class="issue-option">Watch</li>
-                                <li class="issue-option">Report</li>
-                                <li class="issue-option">Share</li>
-                            </ul>
-                        </div>
-                        <div class="issue-user">@issue.AspNetUser.UserName</div>
-                    </div>
-                </div>
-             }
-          }
-          else
-          {
-              foreach (Issue issue in Model.Item2)
-              {
-            <div class="issue">
-                <div class="issue-vote">
-                    <span id="votecount_@issue.Id">@(issue.votes)</span>
-                </div>
-                <div class="issue-main">
-                    <div class="issue-text-area">
-                        <a href="@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @{ if (issue.responded)
-                         { <b>Official Response!</b> } }
-                        @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orgName == issue.orgName)*/;}
-                    </div>
-                </div>
-            </div>
-             }
-          }
-}
+
+<div class="first-column">
+    <img class="feed-header" src="../Content/Images/orgheaders/microsoft.png"></img>
+    <div class="issue-options">
+        <ul class="issue-options-list">
+            <li class="issue-option">Org Page</li>
+            <li class="issue-option"><a href="@Url.Action("OrgData", "Org", new { orgName = Model.Item1.orgName })">Data</a></li>
+        </ul>
     </div>
-    <div Id="rightbar">Right bar</div>
-</div>
+    @{if (Request.IsAuthenticated)
+        {
+            foreach (Issue issue in Model.Item2)
+            {
+                <article class="issue-box">
+                    <div class="issue-vote-area">
+                        <<span class="issue-vote-amount" Id="votecount_@issue.Id">@(issue.votes)</span>
+                        @{if (userVotes.Any(v => v.IssueId == issue.Id))
+                            { // User has voted on issue
+                                <img class="issue-vote-button checked" id="vote_@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@issue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+                            }
+                            else
+                            { // User hasn't voted on issue
+                                <img class="issue-vote-button unchecked" id="vote_@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@issue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+                            }
+                        }
+                    </div>
+                    <div class="issue-main-area">
+                        <div class="issue-main-cell">
+                            <div class="issue-title-area"><span class="issue-title">@issue.title</span></div>
+                            <div class="issue-info-area">
+                                <span class="issue-org-cat-topic">
+                                    <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
+                                    in Operating Systems
+                                </span>
+                                <span class="issue-user-date">
+                                    @issue.createTime
+                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png"></img>@issue.AspNetUser.UserName
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+              }
+     }
