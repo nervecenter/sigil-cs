@@ -12,7 +12,6 @@
 
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
 
-
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/Site.css")
   
@@ -23,14 +22,14 @@
         @if ( this.Context.Request.RequestContext.RouteData.Values["action"].ToString() != "LandingPage" ) {
             // If we're not on the landing page
             @Html.Partial("_Header")
-            @Html.Partial("_SideBar")
         } else {
             // If we're on the landing page
             @Html.Partial("_LandingHeader")
         }
         @RenderBody()
-        @Html.Partial( "_Footer" )
+        
     </div>
+    @Html.Partial( "_Footer" )
     @RenderSection("scripts", required: false)
 </body>
 </html>
