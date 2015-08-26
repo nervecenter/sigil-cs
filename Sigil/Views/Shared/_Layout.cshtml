@@ -14,37 +14,23 @@
 
 
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Site.css")
   
 
 </head>
 <body class="page">
     <div class="page-container">
-
-        @if (Request.IsAuthenticated)
-        {
+        @if ( this.Context.Request.RequestContext.RouteData.Values["action"].ToString() != "LandingPage" ) {
+            // If we're not on the landing page
             @Html.Partial("_Header")
             @Html.Partial("_SideBar")
-        }
-        else
-        {
+        } else {
+            // If we're on the landing page
             @Html.Partial("_LandingHeader")
         }
-
-        <section class="main">
-            @RenderBody()
-            <hr />
-
-            <footer>
-                <div class="footer-container">
-                    @Html.Partial("_Footer")
-                </div>
-            </footer>
-        </section>
+        @RenderBody()
+        @Html.Partial( "_Footer" )
     </div>
-    
-    
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,10 +1,8 @@
 ﻿<section class="page-header page-header-landing">
-    <div class="search-box-form landing-search-form">
-        @Html.Partial("_Search")
-    </div>
+    @Html.Partial("_Search")
     <nav class="header-link-container landing-header-link-container">
-        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" })
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" })
     </nav>
 </section>
 <section class="sale">
