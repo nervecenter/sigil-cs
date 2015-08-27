@@ -661,9 +661,9 @@ namespace Sigil.Models
 		
 		private EntitySet<Vote> _Votes;
 		
-		private EntitySet<Issue> _Issues;
-		
 		private EntitySet<OfficialResponse> _OfficialResponses;
+		
+		private EntitySet<Issue> _Issues;
 		
 		private EntityRef<AspNetUserRole> _AspNetUserRole;
 		
@@ -708,8 +708,8 @@ namespace Sigil.Models
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
 			this._Subscriptions1 = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions1), new Action<Subscription>(this.detach_Subscriptions1));
 			this._Votes = new EntitySet<Vote>(new Action<Vote>(this.attach_Votes), new Action<Vote>(this.detach_Votes));
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._AspNetUserRole = default(EntityRef<AspNetUserRole>);
 			this._Org = default(EntityRef<Org>);
 			OnCreated();
@@ -1042,19 +1042,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Issue", Storage="_Issues", ThisKey="Id", OtherKey="UserId")]
-		public EntitySet<Issue> Issues
-		{
-			get
-			{
-				return this._Issues;
-			}
-			set
-			{
-				this._Issues.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<OfficialResponse> OfficialResponses
 		{
@@ -1065,6 +1052,19 @@ namespace Sigil.Models
 			set
 			{
 				this._OfficialResponses.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Issue", Storage="_Issues", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
 			}
 		}
 		
@@ -1192,18 +1192,6 @@ namespace Sigil.Models
 			entity.AspNetUser = null;
 		}
 		
-		private void attach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = this;
-		}
-		
-		private void detach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = null;
-		}
-		
 		private void attach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
@@ -1211,6 +1199,18 @@ namespace Sigil.Models
 		}
 		
 		private void detach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_Issues(Issue entity)
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
@@ -1252,7 +1252,7 @@ namespace Sigil.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int Id
 		{
 			get
@@ -2049,9 +2049,9 @@ namespace Sigil.Models
 		
 		private EntitySet<Category> _Categories;
 		
-		private EntitySet<Issue> _Issues;
-		
 		private EntitySet<OfficialResponse> _OfficialResponses;
+		
+		private EntitySet<Issue> _Issues;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2077,8 +2077,8 @@ namespace Sigil.Models
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
 			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			OnCreated();
 		}
 		
@@ -2254,19 +2254,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Issues", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<Issue> Issues
-		{
-			get
-			{
-				return this._Issues;
-			}
-			set
-			{
-				this._Issues.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="OrgId")]
 		public EntitySet<OfficialResponse> OfficialResponses
 		{
@@ -2277,6 +2264,19 @@ namespace Sigil.Models
 			set
 			{
 				this._OfficialResponses.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Issues", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
 			}
 		}
 		
@@ -2348,18 +2348,6 @@ namespace Sigil.Models
 			entity.Org = null;
 		}
 		
-		private void attach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
-		
 		private void attach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
@@ -2367,6 +2355,18 @@ namespace Sigil.Models
 		}
 		
 		private void detach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_Issues(Issue entity)
 		{
 			this.SendPropertyChanging();
 			entity.Org = null;
@@ -3103,11 +3103,11 @@ namespace Sigil.Models
 		
 		private EntitySet<Comment> _Comments;
 		
+		private EntitySet<ViewCount> _ViewCounts;
+		
 		private EntitySet<Vote> _Votes1;
 		
 		private EntitySet<OfficialResponse> _OfficialResponses;
-		
-		private EntitySet<ViewCount> _ViewCounts;
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
@@ -3154,9 +3154,9 @@ namespace Sigil.Models
 		public Issue()
 		{
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
 			this._Votes1 = new EntitySet<Vote>(new Action<Vote>(this.attach_Votes1), new Action<Vote>(this.detach_Votes1));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
-			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
 			this._AspNetUser = default(EntityRef<AspNetUser>);
 			this._Org = default(EntityRef<Org>);
 			this._Topic = default(EntityRef<Topic>);
@@ -3473,6 +3473,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="IssueId")]
+		public EntitySet<ViewCount> ViewCounts
+		{
+			get
+			{
+				return this._ViewCounts;
+			}
+			set
+			{
+				this._ViewCounts.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Vote", Storage="_Votes1", ThisKey="Id", OtherKey="IssueId")]
 		public EntitySet<Vote> Votes1
 		{
@@ -3496,19 +3509,6 @@ namespace Sigil.Models
 			set
 			{
 				this._OfficialResponses.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="IssueId")]
-		public EntitySet<ViewCount> ViewCounts
-		{
-			get
-			{
-				return this._ViewCounts;
-			}
-			set
-			{
-				this._ViewCounts.Assign(value);
 			}
 		}
 		
@@ -3680,6 +3680,18 @@ namespace Sigil.Models
 			entity.Issue = null;
 		}
 		
+		private void attach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = this;
+		}
+		
+		private void detach_ViewCounts(ViewCount entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = null;
+		}
+		
 		private void attach_Votes1(Vote entity)
 		{
 			this.SendPropertyChanging();
@@ -3699,18 +3711,6 @@ namespace Sigil.Models
 		}
 		
 		private void detach_OfficialResponses(OfficialResponse entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = null;
-		}
-		
-		private void attach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = this;
-		}
-		
-		private void detach_ViewCounts(ViewCount entity)
 		{
 			this.SendPropertyChanging();
 			entity.Issue = null;

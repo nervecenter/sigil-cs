@@ -301,6 +301,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\search.js" />
+    <Content Include="Scripts\subscriptions.js" />
     <Content Include="Scripts\voting.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -350,10 +351,9 @@
     <Content Include="Views\Shared\_Search.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Home\Legal.cshtml" />
+    <Content Include="Views\Subscriptions\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Subscriptions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

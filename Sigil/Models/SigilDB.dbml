@@ -40,15 +40,15 @@
       <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions1" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
       <Association Name="AspNetUser_Vote" Member="Votes" ThisKey="Id" OtherKey="UserID" Type="Vote" />
-      <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="UserId" Type="OfficialResponse" />
+      <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUserRole_AspNetUser" Member="AspNetUserRole" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" IsForeignKey="true" />
       <Association Name="Org_AspNetUser" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Subscriptions" Member="Subscriptions">
     <Type Name="Subscription">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
       <Association Name="AspNetUser_Subscription" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
@@ -97,8 +97,8 @@
       <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
       <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
       <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="OrgId" Type="Category" />
-      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
       <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
+      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
     </Type>
   </Table>
   <Table Name="dbo.Topic" Member="Topics">
@@ -151,9 +151,9 @@
       <Column Name="CatId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TopicId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
+      <Association Name="Issue_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="IssueId" Type="ViewCount" />
       <Association Name="Issue_Vote" Member="Votes1" ThisKey="Id" OtherKey="IssueId" Type="Vote" />
       <Association Name="Issue_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="issueId" Type="OfficialResponse" />
-      <Association Name="Issue_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="IssueId" Type="ViewCount" />
       <Association Name="AspNetUser_Issue" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
       <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
       <Association Name="Topic_Issue" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />

@@ -13,6 +13,7 @@
 @if ( !Request.IsAuthenticated) { 
     //&& this.Context.Request.RequestContext.RouteData.Values[ "action" ].ToString() != "Login" ) {
     // If we're at the landing page
+    //DONT CHANGE THIS USING!!
     using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @class = "search-box-form landing-search-form" }))
     {
         <button class="search-submit-button " type="submit"><img src="../Content/Images/search-icon-small.png"></button>
@@ -22,6 +23,7 @@
 else
 {
     // If we're not going to the landing page but still in header
+    //DONT CHANGE THIS USING!!
     using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @class = "search-box-form" }))
     {
         <button class="search-submit-button " type="submit" ><img src="../Content/Images/search-icon-small.png"></button>
