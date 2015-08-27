@@ -1,15 +1,5 @@
-﻿
-
-$(function () {
-    $('#searchBox').autocomplete({
-        source: '@Url.Action("Search","Home")'
-
-
-    });
-});
-
-
-$(document).ready(
-$('#searchBox').autocomplete({
-    source: '@Url.Action("Search","Home")'
-}));
+﻿$(document).on(function () {
+    $('searchBox').live("focus", "searchBox" ,autocomplete({
+        source: '/Search/SearchDB'
+    })
+    )});

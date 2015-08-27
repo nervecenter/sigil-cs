@@ -47,6 +47,27 @@ namespace Sigil.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult addSubscription(string orgURL)
+        {
+            var userid = User.Identity.GetUserId();
+
+            Subscription new_sub = new Subscription();
+            new_sub.OrgId = Convert.ToInt32(Request.Form["org_id"]);
+            new_sub.UserId = userid;
+
+            try
+            {
+                dc.Subscriptions.InsertOnSubmit(new_sub);
+                dc.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not write issue \"%s\" to database:\n%s", new_sub.OrgId, e.Message);
+            }
+            return View();
+        }
 
         // GET: Subscriptions/Delete/5
         public ActionResult Delete(int id)

@@ -413,23 +413,26 @@ namespace Sigil.Controllers
             Form for adding an issue. Linked on org page. Adds issue to current org. 
         ==================== 
         */
-        [Authorize]
-        public ActionResult AddIssue( string orgURL ) {
-            // Get the org for the issue we're adding
-            Org thisOrg = dc.Orgs.First<Org>(o => o.orgURL == orgURL);
 
-            // Get the user
-            var userId = User.Identity.GetUserId();
+
+        public ActionResult AddIssue() {
+            // Get the org for the issue we're adding
+  
 
             // If the page is in POST, get the issue form data and POST it
             if ( Request.HttpMethod == "POST" ) {
+
+                // Get the user
+                var userId = User.Identity.GetUserId();
+
+                var org = dc.Orgs.Where(o => o.orgName == Request.Form["orgName"]).Single();
+
                 // Create a new issue
                 Issue newissue = new Issue();
-                
-                // Increment Id, drop in current user and date, set default weight, drop in the form text
 
-                newissue.Org = thisOrg;
-                newissue.OrgId = thisOrg.Id;
+                // Increment Id, drop in current user and date, set default weight, drop in the form text
+                newissue.Org = org;
+                newissue.OrgId = org.Id;
                 newissue.UserId = userId;
                 newissue.createTime = DateTime.UtcNow;
                 newissue.editTime = DateTime.UtcNow;
@@ -443,14 +446,11 @@ namespace Sigil.Controllers
                     dc.Issues.InsertOnSubmit( newissue );
                     dc.SubmitChanges();
                     var lastId = dc.Issues.Max<Issue>(i => i.Id);
-                    Response.Redirect( "~/" + thisOrg.orgURL + "/" + lastId );
+                    return Redirect( "~/" + org.orgURL + "/" + lastId );
                 } catch ( Exception e ) {
                     Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue.text, e.Message );
                 }
             }
-
-            // Add the org to the ViewBag
-            ViewBag.thisOrg = thisOrg;
 
             return View();
         }

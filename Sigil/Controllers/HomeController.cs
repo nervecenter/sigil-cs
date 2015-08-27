@@ -32,7 +32,7 @@ namespace Sigil.Controllers {
                                                where userSubs.Any(s => s.OrgId == issue.OrgId)
                                                orderby issue.votes descending
                                                select issue;
-                //userIssues.OrderBy(i => i.votes).ThenBy(i => i.createTime);
+
               
                 IQueryable<Vote> userVotes = from vote in dc.Votes
                                              where vote.UserID == userID
@@ -42,13 +42,8 @@ namespace Sigil.Controllers {
 
                 return View(issuesANDvotes);
             }
-            else
+            else //assume the user is not logged in
             {
-                //IQueryable<Issue> allIssues = from iss in dc.Issues
-                //                              select iss;
-                //allIssues.OrderBy(i => i.lastVoted).ThenByDescending(i => i.votes);
-
-                //Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(allIssues, null);
                 return RedirectToAction("LandingPage", "Home");
             }
             

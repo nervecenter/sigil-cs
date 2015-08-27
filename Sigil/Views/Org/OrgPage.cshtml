@@ -18,14 +18,14 @@
             <li class="issue-option"><a href="@Url.Action("OrgData", "Org", new { orgName = Model.Item1.orgName })">Data</a></li>
         </ul>
     </div>
-    @{if (Request.IsAuthenticated)
+    @if (Request.IsAuthenticated)
         {
             foreach (Issue issue in Model.Item2)
             {
                 <article class="issue-box">
                     <div class="issue-vote-area">
                         <<span class="issue-vote-amount" Id="votecount_@issue.Id">@(issue.votes)</span>
-                        @{if (userVotes.Any(v => v.IssueId == issue.Id))
+                        @if (userVotes.Any(v => v.IssueId == issue.Id))
                             { // User has voted on issue
                                 <img class="issue-vote-button checked" id="vote_@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@issue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
                             }
@@ -33,7 +33,7 @@
                             { // User hasn't voted on issue
                                 <img class="issue-vote-button unchecked" id="vote_@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@issue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
                             }
-                        }
+                        
                     </div>
                     <div class="issue-main-area">
                         <div class="issue-main-cell">

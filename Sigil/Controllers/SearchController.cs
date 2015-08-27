@@ -37,56 +37,53 @@ namespace Sigil.Controllers
             return Json(search_list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SearchOrgs(string term)
+        {
+            List<string> search_list = new List<string>();
+            if (!string.IsNullOrEmpty(term))
+            {
+                search_list.AddRange(search_orgs(term));
+            }
+            return Json(search_list, JsonRequestBehavior.AllowGet);
+        }
+
+        /* 
+        =============================================================================================================================================
+        Helper functions for various searches
+        =============================================================================================================================================
+        */
+
         private List<string> search_users(string term)
         {
 
-            var user_qu = from user in dc.AspNetUsers
+            var qu = from user in dc.AspNetUsers
                           where user.UserName.StartsWith(term)
                           select user;
 
-            return user_qu.Select(u => u.UserName).ToList();
+            return qu.Select(u => u.UserName).ToList();
 
         }
 
         private List<string> search_orgs(string term)
         {
 
-            var user_qu = from org in dc.Orgs
+            var qu = from org in dc.Orgs
                           where org.orgName.StartsWith(term)
                           select org;
 
-            return user_qu.Select(o => o.orgName).ToList();
+            return qu.Select(o => o.orgName).ToList();
 
         }
 
         private List<string> search_issues(string term)
         {
 
-            var user_qu = from iss in dc.Issues
+            var qu = from iss in dc.Issues
                           where iss.title.StartsWith(term)
                           select iss;
 
-            return user_qu.Select(i => i.title).ToList();
+            return qu.Select(i => i.title).ToList();
 
         }
-
-        public JsonResult Search(string term)
-        {
-            List<string> issue_list;
-            if (string.IsNullOrEmpty(term))
-            {
-                issue_list = dc.Issues.Select(i => i.title).ToList();
-            }
-            else
-            {
-                var issue_qu = from iss in dc.Issues
-                               where iss.title.StartsWith(term)
-                               select iss;
-                issue_list = issue_qu.Select(i => i.title).ToList();
-            }
-
-            return Json(issue_list, JsonRequestBehavior.AllowGet);
-        }
-
     }
 }

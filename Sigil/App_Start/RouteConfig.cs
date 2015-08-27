@@ -55,6 +55,12 @@ namespace Sigil {
                 );
 
             routes.MapRoute(
+                name: "Search Orgs",
+                url: "search/",
+                defaults: new { controller = "Search", action = "SearchOrgs" }
+                );
+
+            routes.MapRoute(
                 name: "VoteUp",
                 url: "voteup/{IssueId}/",
                 defaults: new { controller = "Issue", action = "VoteUp" }
@@ -68,7 +74,7 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "AddIssue",
-                url: "{orgURL}/addissue/",
+                url: "create_issue/",
                 defaults: new { controller = "Issue", action = "AddIssue" }
             );
 

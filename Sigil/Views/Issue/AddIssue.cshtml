@@ -2,14 +2,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script type="text/javascript">
+    $(function () {
+        $('#orgBox').autocomplete({
+            source: '@Url.Action("SearchOrgs","Search")'
+        });
+    });
+</script>
 
-<div id="sub-header"><h1>@ViewBag.thisOrg.orgName</h1></div>
-<div id="content">
-    <div id="main">
-        <h1>Add an issue for @ViewBag.thisOrg.orgName</h1>
+
+<div class="main">
+    <div class="first-column">
         <form method="post">
             <fieldset>
                 <legend>Issue Information</legend>
+                 <p>
+                     <label for="text">Orginization:</label>
+                     <input id ="orgBox" type="text" name="orgName" value="@Request.Form["orgName"]" />
+                 </p>   
                 <p>
                     <label for="text">Title:</label>
                     <input type="text" name="title" value="@Request.Form["title"]" />
@@ -24,5 +34,4 @@
         </form>
 
     </div>
-    <div id="rightbar">Right bar</div>
 </div>
