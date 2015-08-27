@@ -33,12 +33,11 @@ namespace Sigil.Controllers {
                                                orderby issue.votes descending
                                                select issue;
                 //userIssues.OrderBy(i => i.votes).ThenBy(i => i.createTime);
-
+              
                 IQueryable<Vote> userVotes = from vote in dc.Votes
                                              where vote.UserID == userID
                                              select vote;
-
-                Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(userIssues, userVotes);
+                Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues.ToList(), userVotes.ToList());
 
 
                 return View(issuesANDvotes);
