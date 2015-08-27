@@ -10,20 +10,21 @@
     });
 </script>
 
-@{
-    if ( this.Context.Request.RequestContext.RouteData.Values[ "action" ].ToString() == "LandingPage" ) {
-        // If we're at the landing page
-        <form class="search-box-form landing-search-form">
-            <button class="search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></button>
-            <input id ="searchBox" class="search-query" type="text" placeholder="Search for a company, organization, or person">
-        </form>
-    }
-    else
+@if ( !Request.IsAuthenticated) { 
+    //&& this.Context.Request.RequestContext.RouteData.Values[ "action" ].ToString() != "Login" ) {
+    // If we're at the landing page
+    using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @class = "search-box-form landing-search-form" }))
     {
-        // If we're not going to the landing page but still in header
-        <form class="search-box-form ">
-            <button class="search-submit-button landing-search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></button>
-            <input id ="searchBox" class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person">
-        </form>
+        <button class="search-submit-button " type="submit"><img src="../Content/Images/search-icon-small.png"></button>
+        <input id="searchBox" name="term" class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person">
+    }
+}
+else
+{
+    // If we're not going to the landing page but still in header
+    using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @class = "search-box-form" }))
+    {
+        <button class="search-submit-button " type="submit" ><img src="../Content/Images/search-icon-small.png"></button>
+        <input id = "searchBox" name="term" class="search-query" type="text" placeholder="Search for a company, organization, or person" >
     }
 }

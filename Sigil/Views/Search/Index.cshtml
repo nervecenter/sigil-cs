@@ -2,4 +2,56 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@using Sigil.Models
+@model Tuple<List<AspNetUser>, List<Org>, List<Issue>>
+@using Microsoft.AspNet.Identity
+<div class="main">
+    <div class="first-column">
+        @if (Model.Item1.Count != 0)
+        {
+            <h3>Users</h3>
+            <ul>
 
+                @foreach (AspNetUser us in Model.Item1)
+                {
+                    <li>@us.UserName</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <h3>No Users matching your query.</h3>
+        }
+        @if (Model.Item2.Count != 0)
+        {
+            <h3>Orgs</h3>
+            <ul>
+
+                @foreach (Org org in Model.Item2)
+                {
+                    <li><a href="@Url.Action("OrgPage","Org" ,@org.orgURL)">@org.orgName</a></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <h3>No Orgs matching your query.</h3>
+        }
+        @if (Model.Item3.Count != 0)
+        {
+            <h3>Issues</h3>
+            <ul>
+
+                @foreach (Issue issue in Model.Item3)
+                {
+
+                    <li><a href="@Html.Raw(@Url.Action("IssuePage","Issue",new { @orgURL = issue.Org.orgURL, @IssueId = issue.Id }))">@issue.title</a></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <h3>No Issues matching your query.</h3>
+        }
+    </div>
+</div>

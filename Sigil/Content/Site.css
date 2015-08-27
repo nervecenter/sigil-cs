@@ -94,7 +94,7 @@ a {
 	cursor: pointer;
 	margin: auto;
 	overflow: visible;
-	position: absolute;
+	position: relative;
 	top: 1.4em;
 	left: 0.2em;
 	width: auto;

@@ -18,12 +18,12 @@
 </head>
 <body class="page">
     <div class="page-container">
-        @if ( this.Context.Request.RequestContext.RouteData.Values["action"].ToString() != "LandingPage" ) {
-            // If we're not on the landing page
-            @Html.Partial("_Header")
+        @if (!Request.IsAuthenticated) {
+
+            @Html.Partial("_LandingHeader")
         } else {
             // If we're on the landing page
-            @Html.Partial("_LandingHeader")
+            @Html.Partial("_Header")
         }
         @RenderBody()
         

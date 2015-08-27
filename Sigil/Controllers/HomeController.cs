@@ -44,9 +44,15 @@ namespace Sigil.Controllers {
             }
             else //assume the user is not logged in
             {
-                return RedirectToAction("LandingPage", "Home");
+                return View("LandingPage");//RedirectToAction("LandingPage", "Home");
             }
             
+        }
+
+        [HttpPost]
+        public ActionResult Index(string term)
+        {
+            return View();
         }
 
         public ActionResult LandingPage()

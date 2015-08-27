@@ -19,9 +19,16 @@ namespace Sigil.Controllers
             dc = new SigilDBDataContext();
         }
         // GET: Search
-        public ActionResult Index()
+        public ActionResult Index(string term)
         {
-            return View();
+
+            var quUsers = dc.AspNetUsers.Where(u => u.UserName.StartsWith(term)).ToList();
+            var quOrgs = dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();
+            var quIssues = dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
+
+            Tuple<List<AspNetUser>, List<Org>, List<Issue>> search_list = new Tuple<List<AspNetUser>, List<Org>, List<Issue>>(quUsers, quOrgs, quIssues);
+            return View(search_list);
+
         }
 
         public JsonResult SearchDB(string term)
