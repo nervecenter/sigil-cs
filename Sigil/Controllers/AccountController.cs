@@ -482,16 +482,16 @@ namespace Sigil.Controllers
         }
         #endregion
 
-        public static AspNetUser GetLoggedInUser( System.Security.Principal.IPrincipal user ) {
-            string id = user.Identity.GetUserId();
+        //public static AspNetUser GetLoggedInUser( System.Security.Principal.IPrincipal user ) {
+        //    string id = user.Identity.GetUserId();
             
-            if ( id == null ) {
-                return default( AspNetUser );
-            } else {
-                using ( SigilDBDataContext dc = new SigilDBDataContext() &&  ) {
-                    return dc.AspNetUsers.SingleOrDefault<AspNetUser>( u => u.Id == int.Parse( id ) );
-                }
-            }
-        }
+        //    if ( id == null ) {
+        //        return default( AspNetUser );
+        //    } else {
+        //        using ( SigilDBDataContext dc = new SigilDBDataContext() &&  ) {
+        //            return dc.AspNetUsers.SingleOrDefault<AspNetUser>( u => u.Id == int.Parse( id ) );
+        //        }
+        //    }
+        //}
     }
 }

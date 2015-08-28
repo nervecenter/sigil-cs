@@ -18,7 +18,8 @@
 </head>
 <body class="page">
     <div class="page-container">
-        @if ( this.Context.Request.RequestContext.RouteData.Values[ "action" ].ToString() == "LandingPage" ) {
+        @if (!Request.IsAuthenticated){ 
+            //this.Context.Request.RequestContext.RouteData.Values[ "action" ].ToString() == "LandingPage" ) <--------- This wont work anymore since the action is index. 
             // If we're on the landing page, load the landing header
             @Html.Partial( "_LandingHeader" )
         } else {

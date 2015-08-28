@@ -46,22 +46,31 @@ namespace Sigil.Controllers {
             else 
             {
                 // If the user is not logged in, load the landing page
-                return LandingPage();
+                return View(LandingPage());
             }
             
         }
 
-        [HttpPost]
-        public ActionResult Index(string term)
-        {
-            return View();
-        }
-
         public ActionResult LandingPage()
         {
+            var trending_topics = Get_Trending_Topics();
+
+            var trending_issues = Get_Trending_Issues(trending_topics);
 
             return View();
         }
+
+        private object Get_Trending_Issues(IQueryable<Topic> trending_topics)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IQueryable<Topic> Get_Trending_Topics()
+        {
+
+
+        }
+
 
         public ActionResult Legal()
         {

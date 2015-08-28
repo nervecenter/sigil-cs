@@ -96,27 +96,9 @@
       <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
       <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
       <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
-      <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="OrgId" Type="Category" />
       <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
       <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Topic" Member="Topics">
-    <Type Name="Topic">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="topicName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="topicURL" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Association Name="Topic_Issue" Member="Issues" ThisKey="Id" OtherKey="TopicId" Type="Issue" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Categories" Member="Categories">
-    <Type Name="Category">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="catName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="catURL" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
-      <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
-      <Association Name="Org_Category" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+      <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
     </Type>
   </Table>
   <Table Name="dbo.OfficialResponse" Member="OfficialResponses">
@@ -156,8 +138,28 @@
       <Association Name="Issue_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="issueId" Type="OfficialResponse" />
       <Association Name="AspNetUser_Issue" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
       <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
-      <Association Name="Topic_Issue" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
       <Association Name="Category_Issue" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
+      <Association Name="Topic_Issue" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Category" Member="Categories">
+    <Type Name="Category">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="catName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="catURL" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="orgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
+      <Association Name="Org_Category" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Topics" Member="Topics">
+    <Type Name="Topic">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="topicName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="topicURL" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="lastAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="views" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="Topic_Issue" Member="Issues" ThisKey="Id" OtherKey="TopicId" Type="Issue" />
     </Type>
   </Table>
 </Database>

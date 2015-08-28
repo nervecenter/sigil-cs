@@ -54,18 +54,18 @@ namespace Sigil.Models
     partial void InsertOrg(Org instance);
     partial void UpdateOrg(Org instance);
     partial void DeleteOrg(Org instance);
-    partial void InsertTopic(Topic instance);
-    partial void UpdateTopic(Topic instance);
-    partial void DeleteTopic(Topic instance);
-    partial void InsertCategory(Category instance);
-    partial void UpdateCategory(Category instance);
-    partial void DeleteCategory(Category instance);
     partial void InsertOfficialResponse(OfficialResponse instance);
     partial void UpdateOfficialResponse(OfficialResponse instance);
     partial void DeleteOfficialResponse(OfficialResponse instance);
     partial void InsertIssue(Issue instance);
     partial void UpdateIssue(Issue instance);
     partial void DeleteIssue(Issue instance);
+    partial void InsertCategory(Category instance);
+    partial void UpdateCategory(Category instance);
+    partial void DeleteCategory(Category instance);
+    partial void InsertTopic(Topic instance);
+    partial void UpdateTopic(Topic instance);
+    partial void DeleteTopic(Topic instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -162,22 +162,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Topic> Topics
-		{
-			get
-			{
-				return this.GetTable<Topic>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Category> Categories
-		{
-			get
-			{
-				return this.GetTable<Category>();
-			}
-		}
-		
 		public System.Data.Linq.Table<OfficialResponse> OfficialResponses
 		{
 			get
@@ -191,6 +175,22 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<Issue>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Category> Categories
+		{
+			get
+			{
+				return this.GetTable<Category>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Topic> Topics
+		{
+			get
+			{
+				return this.GetTable<Topic>();
 			}
 		}
 	}
@@ -2047,11 +2047,11 @@ namespace Sigil.Models
 		
 		private EntitySet<ViewCount> _ViewCounts;
 		
-		private EntitySet<Category> _Categories;
-		
 		private EntitySet<OfficialResponse> _OfficialResponses;
 		
 		private EntitySet<Issue> _Issues;
+		
+		private EntitySet<Category> _Categories;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2076,9 +2076,9 @@ namespace Sigil.Models
 			this._AspNetUsers = new EntitySet<AspNetUser>(new Action<AspNetUser>(this.attach_AspNetUsers), new Action<AspNetUser>(this.detach_AspNetUsers));
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
-			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
 			OnCreated();
 		}
 		
@@ -2241,19 +2241,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Categories", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<Category> Categories
-		{
-			get
-			{
-				return this._Categories;
-			}
-			set
-			{
-				this._Categories.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="OrgId")]
 		public EntitySet<OfficialResponse> OfficialResponses
 		{
@@ -2277,6 +2264,19 @@ namespace Sigil.Models
 			set
 			{
 				this._Issues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Categories", ThisKey="Id", OtherKey="orgId")]
+		public EntitySet<Category> Categories
+		{
+			get
+			{
+				return this._Categories;
+			}
+			set
+			{
+				this._Categories.Assign(value);
 			}
 		}
 		
@@ -2336,18 +2336,6 @@ namespace Sigil.Models
 			entity.Org = null;
 		}
 		
-		private void attach_Categories(Category entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_Categories(Category entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
-		
 		private void attach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
@@ -2371,346 +2359,17 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.Org = null;
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Topic")]
-	public partial class Topic : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _topicName;
-		
-		private string _topicURL;
-		
-		private EntitySet<Issue> _Issues;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OntopicNameChanging(string value);
-    partial void OntopicNameChanged();
-    partial void OntopicURLChanging(string value);
-    partial void OntopicURLChanged();
-    #endregion
-		
-		public Topic()
-		{
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_topicName", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string topicName
-		{
-			get
-			{
-				return this._topicName;
-			}
-			set
-			{
-				if ((this._topicName != value))
-				{
-					this.OntopicNameChanging(value);
-					this.SendPropertyChanging();
-					this._topicName = value;
-					this.SendPropertyChanged("topicName");
-					this.OntopicNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_topicURL", DbType="NVarChar(30)")]
-		public string topicURL
-		{
-			get
-			{
-				return this._topicURL;
-			}
-			set
-			{
-				if ((this._topicURL != value))
-				{
-					this.OntopicURLChanging(value);
-					this.SendPropertyChanging();
-					this._topicURL = value;
-					this.SendPropertyChanged("topicURL");
-					this.OntopicURLChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Issues", ThisKey="Id", OtherKey="TopicId")]
-		public EntitySet<Issue> Issues
-		{
-			get
-			{
-				return this._Issues;
-			}
-			set
-			{
-				this._Issues.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Issues(Issue entity)
+		private void attach_Categories(Category entity)
 		{
 			this.SendPropertyChanging();
-			entity.Topic = this;
+			entity.Org = this;
 		}
 		
-		private void detach_Issues(Issue entity)
+		private void detach_Categories(Category entity)
 		{
 			this.SendPropertyChanging();
-			entity.Topic = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Categories")]
-	public partial class Category : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _catName;
-		
-		private int _OrgId;
-		
-		private string _catURL;
-		
-		private EntitySet<Issue> _Issues;
-		
-		private EntityRef<Org> _Org;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OncatNameChanging(string value);
-    partial void OncatNameChanged();
-    partial void OnOrgIdChanging(int value);
-    partial void OnOrgIdChanged();
-    partial void OncatURLChanging(string value);
-    partial void OncatURLChanged();
-    #endregion
-		
-		public Category()
-		{
-			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
-			this._Org = default(EntityRef<Org>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_catName", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string catName
-		{
-			get
-			{
-				return this._catName;
-			}
-			set
-			{
-				if ((this._catName != value))
-				{
-					this.OncatNameChanging(value);
-					this.SendPropertyChanging();
-					this._catName = value;
-					this.SendPropertyChanged("catName");
-					this.OncatNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
-		public int OrgId
-		{
-			get
-			{
-				return this._OrgId;
-			}
-			set
-			{
-				if ((this._OrgId != value))
-				{
-					if (this._Org.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrgIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrgId = value;
-					this.SendPropertyChanged("OrgId");
-					this.OnOrgIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_catURL", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
-		public string catURL
-		{
-			get
-			{
-				return this._catURL;
-			}
-			set
-			{
-				if ((this._catURL != value))
-				{
-					this.OncatURLChanging(value);
-					this.SendPropertyChanging();
-					this._catURL = value;
-					this.SendPropertyChanged("catURL");
-					this.OncatURLChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Issue", Storage="_Issues", ThisKey="Id", OtherKey="CatId")]
-		public EntitySet<Issue> Issues
-		{
-			get
-			{
-				return this._Issues;
-			}
-			set
-			{
-				this._Issues.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
-		public Org Org
-		{
-			get
-			{
-				return this._Org.Entity;
-			}
-			set
-			{
-				Org previousValue = this._Org.Entity;
-				if (((previousValue != value) 
-							|| (this._Org.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Org.Entity = null;
-						previousValue.Categories.Remove(this);
-					}
-					this._Org.Entity = value;
-					if ((value != null))
-					{
-						value.Categories.Add(this);
-						this._OrgId = value.Id;
-					}
-					else
-					{
-						this._OrgId = default(int);
-					}
-					this.SendPropertyChanged("Org");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = this;
-		}
-		
-		private void detach_Issues(Issue entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = null;
+			entity.Org = null;
 		}
 	}
 	
@@ -3113,9 +2772,9 @@ namespace Sigil.Models
 		
 		private EntityRef<Org> _Org;
 		
-		private EntityRef<Topic> _Topic;
-		
 		private EntityRef<Category> _Category;
+		
+		private EntityRef<Topic> _Topic;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3159,8 +2818,8 @@ namespace Sigil.Models
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._AspNetUser = default(EntityRef<AspNetUser>);
 			this._Org = default(EntityRef<Org>);
-			this._Topic = default(EntityRef<Topic>);
 			this._Category = default(EntityRef<Category>);
+			this._Topic = default(EntityRef<Topic>);
 			OnCreated();
 		}
 		
@@ -3580,40 +3239,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
-		public Topic Topic
-		{
-			get
-			{
-				return this._Topic.Entity;
-			}
-			set
-			{
-				Topic previousValue = this._Topic.Entity;
-				if (((previousValue != value) 
-							|| (this._Topic.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Topic.Entity = null;
-						previousValue.Issues.Remove(this);
-					}
-					this._Topic.Entity = value;
-					if ((value != null))
-					{
-						value.Issues.Add(this);
-						this._TopicId = value.Id;
-					}
-					else
-					{
-						this._TopicId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Topic");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Issue", Storage="_Category", ThisKey="CatId", OtherKey="Id", IsForeignKey=true)]
 		public Category Category
 		{
@@ -3644,6 +3269,40 @@ namespace Sigil.Models
 						this._CatId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Category");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
+		public Topic Topic
+		{
+			get
+			{
+				return this._Topic.Entity;
+			}
+			set
+			{
+				Topic previousValue = this._Topic.Entity;
+				if (((previousValue != value) 
+							|| (this._Topic.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Topic.Entity = null;
+						previousValue.Issues.Remove(this);
+					}
+					this._Topic.Entity = value;
+					if ((value != null))
+					{
+						value.Issues.Add(this);
+						this._TopicId = value.Id;
+					}
+					else
+					{
+						this._TopicId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Topic");
 				}
 			}
 		}
@@ -3714,6 +3373,395 @@ namespace Sigil.Models
 		{
 			this.SendPropertyChanging();
 			entity.Issue = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Category")]
+	public partial class Category : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _catName;
+		
+		private string _catURL;
+		
+		private int _orgId;
+		
+		private EntitySet<Issue> _Issues;
+		
+		private EntityRef<Org> _Org;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OncatNameChanging(string value);
+    partial void OncatNameChanged();
+    partial void OncatURLChanging(string value);
+    partial void OncatURLChanged();
+    partial void OnorgIdChanging(int value);
+    partial void OnorgIdChanged();
+    #endregion
+		
+		public Category()
+		{
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._Org = default(EntityRef<Org>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_catName", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string catName
+		{
+			get
+			{
+				return this._catName;
+			}
+			set
+			{
+				if ((this._catName != value))
+				{
+					this.OncatNameChanging(value);
+					this.SendPropertyChanging();
+					this._catName = value;
+					this.SendPropertyChanged("catName");
+					this.OncatNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_catURL", DbType="NChar(30) NOT NULL", CanBeNull=false)]
+		public string catURL
+		{
+			get
+			{
+				return this._catURL;
+			}
+			set
+			{
+				if ((this._catURL != value))
+				{
+					this.OncatURLChanging(value);
+					this.SendPropertyChanging();
+					this._catURL = value;
+					this.SendPropertyChanged("catURL");
+					this.OncatURLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orgId", DbType="Int NOT NULL")]
+		public int orgId
+		{
+			get
+			{
+				return this._orgId;
+			}
+			set
+			{
+				if ((this._orgId != value))
+				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnorgIdChanging(value);
+					this.SendPropertyChanging();
+					this._orgId = value;
+					this.SendPropertyChanged("orgId");
+					this.OnorgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Issue", Storage="_Issues", ThisKey="Id", OtherKey="CatId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Org", ThisKey="orgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.Categories.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.Categories.Add(this);
+						this._orgId = value.Id;
+					}
+					else
+					{
+						this._orgId = default(int);
+					}
+					this.SendPropertyChanged("Org");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = this;
+		}
+		
+		private void detach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Topics")]
+	public partial class Topic : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _topicName;
+		
+		private string _topicURL;
+		
+		private System.DateTime _lastAdded;
+		
+		private long _views;
+		
+		private EntitySet<Issue> _Issues;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OntopicNameChanging(string value);
+    partial void OntopicNameChanged();
+    partial void OntopicURLChanging(string value);
+    partial void OntopicURLChanged();
+    partial void OnlastAddedChanging(System.DateTime value);
+    partial void OnlastAddedChanged();
+    partial void OnviewsChanging(long value);
+    partial void OnviewsChanged();
+    #endregion
+		
+		public Topic()
+		{
+			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_topicName", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string topicName
+		{
+			get
+			{
+				return this._topicName;
+			}
+			set
+			{
+				if ((this._topicName != value))
+				{
+					this.OntopicNameChanging(value);
+					this.SendPropertyChanging();
+					this._topicName = value;
+					this.SendPropertyChanged("topicName");
+					this.OntopicNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_topicURL", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string topicURL
+		{
+			get
+			{
+				return this._topicURL;
+			}
+			set
+			{
+				if ((this._topicURL != value))
+				{
+					this.OntopicURLChanging(value);
+					this.SendPropertyChanging();
+					this._topicURL = value;
+					this.SendPropertyChanged("topicURL");
+					this.OntopicURLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastAdded", DbType="DateTime NOT NULL")]
+		public System.DateTime lastAdded
+		{
+			get
+			{
+				return this._lastAdded;
+			}
+			set
+			{
+				if ((this._lastAdded != value))
+				{
+					this.OnlastAddedChanging(value);
+					this.SendPropertyChanging();
+					this._lastAdded = value;
+					this.SendPropertyChanged("lastAdded");
+					this.OnlastAddedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_views", DbType="BigInt NOT NULL")]
+		public long views
+		{
+			get
+			{
+				return this._views;
+			}
+			set
+			{
+				if ((this._views != value))
+				{
+					this.OnviewsChanging(value);
+					this.SendPropertyChanging();
+					this._views = value;
+					this.SendPropertyChanged("views");
+					this.OnviewsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Issues", ThisKey="Id", OtherKey="TopicId")]
+		public EntitySet<Issue> Issues
+		{
+			get
+			{
+				return this._Issues;
+			}
+			set
+			{
+				this._Issues.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Topic = this;
+		}
+		
+		private void detach_Issues(Issue entity)
+		{
+			this.SendPropertyChanging();
+			entity.Topic = null;
 		}
 	}
 }
