@@ -2,14 +2,14 @@
     ViewBag.Title = "Home Page";
 }
 @using Sigil.Models
-
 @using Microsoft.AspNet.Identity
+
+@model Tuple<List<Issue>, List<Vote>>
+
 @if (Model.Item1 != null)
 {
-
     <div class="first-column">
         <span class="feed-intent">@User.Identity.GetUserName() feed</span>
-        @model Tuple<List<Issue>, List<Vote>>
         @foreach (Issue issue in Model.Item1)
         {
 

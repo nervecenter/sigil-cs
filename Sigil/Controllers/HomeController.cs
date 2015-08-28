@@ -24,6 +24,7 @@ namespace Sigil.Controllers {
 
             if (userID != null)
             {
+                // User is logged in; load the normal frontpage
                 IQueryable<Subscription> userSubs = from Subs in dc.Subscriptions
                                                     where Subs.UserId == userID
                                                     select Subs;
@@ -41,10 +42,11 @@ namespace Sigil.Controllers {
 
 
                 return View(issuesANDvotes);
-            }
-            else //assume the user is not logged in
+            } 
+            else 
             {
-                return View("LandingPage");//RedirectToAction("LandingPage", "Home");
+                // If the user is not logged in, load the landing page
+                return LandingPage();
             }
             
         }

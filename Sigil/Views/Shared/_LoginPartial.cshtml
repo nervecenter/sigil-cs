@@ -3,16 +3,13 @@
 @if ( Request.IsAuthenticated ) {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
         @Html.AntiForgeryToken()
-
         <nav class="header-link-container">
             //Need to add user icon
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
             <a href="javascript:document.getElementById('logoutForm').submit()" class="header-link">Log off</a>
         </nav>
     }
-}
-else
-{
+} else {
     <nav class="header-link-container">
         @Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
         @Html.ActionLink( "Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )

@@ -103,6 +103,7 @@ a {
 
 .landing-search-submit-button {
 	top: 0.6em;
+    position: absolute;
 }
 
 .search-submit-button-icon {

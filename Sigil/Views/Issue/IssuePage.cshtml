@@ -20,9 +20,9 @@
             <div class="issue-vote-area">
                 @{
                     if ( userVote != default( Vote ) ) { // User has voted on issue
-                        <img class="issue-vote-button checked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+                        <img class="issue-vote-button checked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                     } else { // User hasn't voted on issue
-                        <img class="issue-vote-button unchecked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, vote_@thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)"></img>
+                        <img class="issue-vote-button unchecked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                     }
                 }
 
