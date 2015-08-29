@@ -1,16 +1,20 @@
-﻿
+﻿@using Sigil.Models
+
+@model List<Subscription>
+
 <div class="second-column">
     <div class="sub-list-box">
-        <span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span>
-        <div class="sub-list">
-            <a href="OrgPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png"></img>Microsoft</a><br>
-            <a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/windows_15.png">Windows</a><br>
-            <a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/surface_15.png">Surface</a><br>
-            <a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/apple_15.png"></img>Apple</a><br>
-            <a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/google_15.png"></img>Google</a><br>
-            <a href="FrontPage.html" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/sigsauer_15.png"></img>SIG Sauer</a><br>
-        </div>
+        <a href="@Url.Action("AddIssue", "Issue")">Add a new Issue</a>
     </div>
+    <div class="sub-list-box">
+        <a href="@Url.Action("Index", "Subscriptions")"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
+            <div class="sub-list">
+                @foreach ( Subscription sub in Model ) {
+                    <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
+                }
+                <!--<a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/surface_15.png">Surface</a><br>-->
+            </div>
+        </div>
     <div class="placeholder">
         Ads go here.
     </div>

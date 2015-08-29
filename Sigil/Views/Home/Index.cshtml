@@ -1,54 +1,71 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-@using Sigil.Models
+﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 
 @model Tuple<List<Issue>, List<Vote>>
 
-@if (Model.Item1 != null)
-{
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home Page";
+    List<Issue> issueList = Model.Item1;
+    List<Vote> voteList = Model.Item2;
+    List<Subscription> userSubs = (List<Subscription>)ViewBag.userSubs;
+}
+
+<section class="main">
     <div class="first-column">
-        <span class="feed-intent">@User.Identity.GetUserName() feed</span>
-        @foreach (Issue issue in Model.Item1) {
-
-            <article class="issue-box">
-                <div class="issue-vote-area">
-
-                    @if (Model.Item2.Any(v => v.IssueId == issue.Id)) {
-                        <img class="issue-vote-button checked" id="vote_@issue.Id" onclick="vote('@issue.Id', '@User.Identity.GetUserName()')" src="~/Content/Images/check_mark_hover_small.png" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                    } else {
-                        <img class="issue-vote-button unchecked" id="vote_@issue.Id" onclick="vote('@issue.Id', '@User.Identity.GetUserName()')" src="~/Content/Images/vote_circle_small.png" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                    }
-
-                    <span class="issue-vote-amount" id="votecount_@issue.Id">@issue.votes</span>
-                </div>
-
-                <div class="issue-main-area">
-                    <div class="issue-main-cell">
-                        <div class="issue-title-area"><a href="/@issue.Org.orgName/@issue.Id" class="issue-title">@issue.title</a>
-                        </div>
-                        <div class="issue-info-area">
-                            <span class="issue-org-cat-topic">
-                                <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> 
-                                @if (issue.responded) { <b>Official Response!</b> }
-                                @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
-                                <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
-                            </span>
+        <span class="feed-intent">@User.Identity.GetUserName()'s feed</span>
+        @if ( issueList.Count > 0 ) {
+            foreach ( Issue issue in issueList ) {
+                <article class="issue-box">
+                    <div class="issue-vote-area">
+                        <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
+                        @if ( voteList.Exists( v => v.IssueId == issue.Id ) ) {
+                            // Issue has been voted on, get the checked button and checked class
+                            <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                        } else {
+                            // Issue hasn't been voted on, get the opposite
+                            <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                        }
+                    </div>
+                    <div class="issue-main-area">
+                        <div class="issue-main-cell">
+                            <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
+                            <div class="issue-info-area">
+                                <span class="issue-org-cat-topic">
+                                    <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Org.orgName
+                                    @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
+                                </span>
+                                <span class="issue-user-date">
+                                    @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
+                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@User.Identity.GetUserName()
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </article>
+                </article>
+            }
+        } else {
+            <h3>Nothing here. :( Search for a company, person, or topic to subscribe to!</h3>
         }
     </div>
-}
-else
-{
-    <div class="first-column">
-        <span class="feed-intent">@User.Identity.GetUserName() feed</span>
-        <article class="issue-box">
-            You have no subscriptions.
-        </article>
+    <div class="second-column">
+        <div class="sub-list-box">
+            <a href="@Url.Action("AddIssue", "Issue")">Add a new Issue</a>
+        </div>
+        <div class="sub-list-box">
+            <a href="@Url.Action("Index", "Subscriptions")"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
+            <div class="sub-list">
+                @foreach ( Subscription sub in userSubs ) {
+                    <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
+                }
+                <!--<a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/surface_15.png">Surface</a><br>-->
+            </div>
+        </div>
+        <div class="placeholder">
+            Ads go here.
+        </div>
     </div>
-
-}
+    @{ 
+        //@Html.Partial( "../Shared/_SideBar", ViewBag.userSubs )
+    }
+</section>

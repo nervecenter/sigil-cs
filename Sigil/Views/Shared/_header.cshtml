@@ -1,10 +1,7 @@
 ﻿
 <header class="page-header">
-    <a href="@Url.Action("Index", "Home")" class="logo"><img src="../Content/Images/logo-small.png"></img></a>
+    <a href="@Url.Action("Index", "Home")" class="logo"><img src="../Content/Images/logo-small.png"></a>
     <nav class="header-link-container">
-        <a href="@Url.Action("AddIssue", "Issue")">Add a new Issue</a>
-        <a href="@Url.Action("Index", "Subscriptions")">Subscriptions</a>
-        <a href="@Url.Action("addSubscrition", "Subscriptions")">Follow a new Orginization</a>
         @using ( Html.BeginForm( "Index", "Search", FormMethod.Post, new { @class = "search-box-form" } ) ) {
             <button class="search-submit-button " type="submit"><img src="../Content/Images/search-icon-small.png"></button>
             <input id="searchBox" name="term" class="search-query" type="text" placeholder="Search for a company, organization, or person">

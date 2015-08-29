@@ -4,9 +4,9 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
         @Html.AntiForgeryToken()
         <nav class="header-link-container">
-            //Need to add user icon
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-            <a href="javascript:document.getElementById('logoutForm').submit()" class="header-link">Log off</a>
+            <a href="FrontPage.html" class="header-link"><img class="header-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
+            @Html.ActionLink( User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )</a>
+            <a href="javascript:document.getElementById('logoutForm').submit()" class="header-link">Log Out</a>
         </nav>
     }
 } else {

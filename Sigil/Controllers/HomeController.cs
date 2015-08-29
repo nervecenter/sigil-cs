@@ -28,6 +28,8 @@ namespace Sigil.Controllers {
             if (userID != null)
             {
                 // User is logged in; load the normal frontpage
+                AspNetUser user = dc.AspNetUsers.Single<AspNetUser>( u => u.Id == userID );
+
                 IQueryable<Subscription> userSubs = from Subs in dc.Subscriptions
                                                     where Subs.UserId == userID
                                                     select Subs;
@@ -43,6 +45,8 @@ namespace Sigil.Controllers {
                                              select vote;
 
                 Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues.ToList(), userVotes.ToList());
+
+                ViewBag.userSubs = userSubs.ToList();
 
                 return View( issuesANDvotes );
             } 
