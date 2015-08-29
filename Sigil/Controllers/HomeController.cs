@@ -46,8 +46,6 @@ namespace Sigil.Controllers {
 
                 Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues.ToList(), userVotes.ToList());
 
-                ViewBag.userSubs = userSubs.ToList();
-
                 return View( issuesANDvotes );
             } 
             else 

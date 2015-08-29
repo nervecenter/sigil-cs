@@ -141,7 +141,6 @@ namespace Sigil.Controllers
             // Add the user and their vote (or lack of vote) to the ViewBag
 
 
-
             // Pass the org and issue as the model to the view
             return View( orgIssueComments );
         }

@@ -493,5 +493,23 @@ namespace Sigil.Controllers
                 }
             }
         }
+
+        public static System.Collections.Generic.List<Subscription> userSubs( AspNetUser user ) {
+            System.Collections.Generic.List<Subscription> subs;
+            SigilDBDataContext dc = new SigilDBDataContext();
+            subs = ( from Subs in dc.Subscriptions
+                     where Subs.UserId == user.Id
+                     select Subs ).ToList();
+            return subs;
+        }
+
+        public static System.Collections.Generic.List<Subscription> userSubs( System.Security.Principal.IPrincipal user ) {
+            System.Collections.Generic.List<Subscription> subs;
+            SigilDBDataContext dc = new SigilDBDataContext();
+            subs = ( from Subs in dc.Subscriptions
+                     where Subs.UserId == user.Identity.GetUserId()
+                     select Subs ).ToList();
+            return subs;
+        }
     }
 }
