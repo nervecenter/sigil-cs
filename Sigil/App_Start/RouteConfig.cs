@@ -16,6 +16,13 @@ namespace Sigil {
                 defaults: new { controller = "Home", action = "Index" }
                 );
 
+            // Only redirected to LandingPage if not logged in
+            //routes.MapRoute(
+            //    name: "Landing",
+            //    url: "",
+            //    defaults: new { controller = "Home", action = "LandingPage" }
+            //    );
+
             routes.MapRoute(
                 name:"Login",
                 url: "login/",
@@ -32,14 +39,6 @@ namespace Sigil {
                 name: "Register",
                 url: "register/",
                 defaults: new { controller = "Account", action = "Register" }
-                );
-
-            // Only redirected to LandingPage if not logged in
-
-            routes.MapRoute(
-                name: "Landing",
-                url: "",
-                defaults: new { controller = "Home", action = "LandingPage" }
                 );
 
             routes.MapRoute(

@@ -11,8 +11,11 @@ using Microsoft.AspNet.Identity;
 
 
 namespace Sigil.Controllers {
+
     public class HomeController : Controller {
+
         private SigilDBDataContext dc;
+
         public HomeController()
         {
             dc = new SigilDBDataContext();
@@ -38,24 +41,22 @@ namespace Sigil.Controllers {
                 IQueryable<Vote> userVotes = from vote in dc.Votes
                                              where vote.UserID == userID
                                              select vote;
+
                 Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues.ToList(), userVotes.ToList());
 
-
-                return View(issuesANDvotes);
+                return View( issuesANDvotes );
             } 
             else 
             {
-                // If the user is not logged in, load the landing page
-                return View(LandingPage());
+                return View( "LandingPage" );
             }
-            
         }
 
         public ActionResult LandingPage()
         {
-            var trending_topics = Get_Trending_Topics();
+            /*var trending_topics = Get_Trending_Topics();
 
-            var trending_issues = Get_Trending_Issues(trending_topics);
+            var trending_issues = Get_Trending_Issues(trending_topics);*/
 
             return View();
         }
@@ -65,11 +66,11 @@ namespace Sigil.Controllers {
             throw new NotImplementedException();
         }
 
-        private IQueryable<Topic> Get_Trending_Topics()
+        /*private IQueryable<Topic> Get_Trending_Topics()
         {
 
 
-        }
+        }*/
 
 
         public ActionResult Legal()
