@@ -51,6 +51,11 @@ a {
 	display: block;
 }
 
+.header-nav-logged-in {
+    padding-right: 0em;
+    margin-left: 0.5em;
+}
+
 .landing-header-link-container {
 	position: relative;
 	margin-top: -3.2em;
@@ -67,8 +72,8 @@ a {
 	height: 2.5em;
 	vertical-align: middle;
 	border: 0.1em #FFF solid;
-	margin-right: 0.5em;
-	margin-left: 1em;
+	margin-right: -0.3em;
+	/*margin-left: 1em;*/
 }
 
 .search-box-form {
@@ -94,7 +99,7 @@ a {
 	cursor: pointer;
 	margin: auto;
 	overflow: visible;
-	position: relative;
+	position: absolute;
 	top: 1.4em;
 	left: 0.2em;
 	width: auto;

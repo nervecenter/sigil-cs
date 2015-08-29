@@ -1,14 +1,14 @@
 ﻿@using Microsoft.AspNet.Identity
 
 @if ( Request.IsAuthenticated ) {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
-        @Html.AntiForgeryToken()
-        <nav class="header-link-container">
-            <a href="FrontPage.html" class="header-link"><img class="header-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
-            @Html.ActionLink( User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )</a>
+    <nav class="header-link-container header-nav-logged-in">
+        <img class="header-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
+        @Html.ActionLink( User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )
+        @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = /*"navbar-right*/ "header-link-container header-nav-logged-in" } ) ) {
+            @Html.AntiForgeryToken()
             <a href="javascript:document.getElementById('logoutForm').submit()" class="header-link">Log Out</a>
-        </nav>
-    }
+        }
+    </nav>
 } else {
     <nav class="header-link-container">
         @Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
