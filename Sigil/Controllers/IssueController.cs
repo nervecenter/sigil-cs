@@ -567,10 +567,10 @@ namespace Sigil.Controllers
             TimeSpan since = now - datePosted;
 
             if ( since >= TimeSpan.FromDays( 365.0 ) ) {
-                int years = since.Days % 365;
+                int years = since.Days / 365;
                 return ( years > 1 ) ? years.ToString() + " years ago" : "1 year ago";
             } else if ( since >= TimeSpan.FromDays( 30.0 ) ) {
-                int months = since.Days % 30;
+                int months = since.Days / 30;
                 return ( months > 1 ) ? months.ToString() + " months ago" : "1 month ago";
             } else if ( since >= TimeSpan.FromDays( 1.0 ) ) {
                 return ( since.Days > 1 ) ? since.Days.ToString() + " days ago" : "1 day ago";
