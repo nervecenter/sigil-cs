@@ -10,42 +10,35 @@
 {
     <div class="first-column">
         <span class="feed-intent">@User.Identity.GetUserName() feed</span>
-        @foreach (Issue issue in Model.Item1)
-        {
+        @foreach (Issue issue in Model.Item1) {
 
-        <article class="issue-box">
-            <div class="issue-vote-area">
+            <article class="issue-box">
+                <div class="issue-vote-area">
 
-                @if (Model.Item2.Any(v => v.IssueId == issue.Id))
-                    {
+                    @if (Model.Item2.Any(v => v.IssueId == issue.Id)) {
                         <img class="issue-vote-button checked" id="vote_@issue.Id" onclick="vote('@issue.Id', '@User.Identity.GetUserName()')" src="~/Content/Images/check_mark_hover_small.png" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                    }
-                    else
-                    {
+                    } else {
                         <img class="issue-vote-button unchecked" id="vote_@issue.Id" onclick="vote('@issue.Id', '@User.Identity.GetUserName()')" src="~/Content/Images/vote_circle_small.png" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                     }
-                
-                <span class="issue-vote-amount" id="votecount_@issue.Id">@issue.votes</span>
-            </div>
 
-            <div class="issue-main-area">
-                <div class="issue-main-cell">
-                    <div class="issue-title-area"><a href="/@issue.Org.orgName/@issue.Id" class="issue-title">@issue.title</a>
-                    </div>
-                    <div class="issue-info-area">
-                        <span class="issue-org-cat-topic">
-                            <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> @if (issue.responded)
-                                { <b>Official Response!</b> }
-                            @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
-                            <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
-                        </span>
+                    <span class="issue-vote-amount" id="votecount_@issue.Id">@issue.votes</span>
+                </div>
+
+                <div class="issue-main-area">
+                    <div class="issue-main-cell">
+                        <div class="issue-title-area"><a href="/@issue.Org.orgName/@issue.Id" class="issue-title">@issue.title</a>
+                        </div>
+                        <div class="issue-info-area">
+                            <span class="issue-org-cat-topic">
+                                <a href="/@issue.Org.orgName/@issue.Id" class="issue-text">@issue.text</a> 
+                                @if (issue.responded) { <b>Official Response!</b> }
+                                @{var thisorg = issue.Org /*subbedorgs.FirstOrDefault(o => o.orghandle == issue.orghandle)*/;}
+                                <b style="float:right;"><a href="/@thisorg.orgName">@thisorg.orgName</a></b>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </article>
-
-
-
+            </article>
         }
     </div>
 }

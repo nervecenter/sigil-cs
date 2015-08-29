@@ -10,24 +10,22 @@
     <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
     <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
 
+    <script type="text/javascript">
+    $(function () {
+        $('#searchBox').autocomplete({
+            source: '@Url.Action("SearchDB","Search")'
+        });
+    });
+    </script>
+
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/Site.css")
-  
-
 </head>
 <body class="page">
     <div class="page-container">
-        @if (!Request.IsAuthenticated){ 
-            //this.Context.Request.RequestContext.RouteData.Values[ "action" ].ToString() == "LandingPage" ) <--------- This wont work anymore since the action is index. 
-            // If we're on the landing page, load the landing header
-            @Html.Partial( "_LandingHeader" )
-        } else {
-            // If we're on any other page, load the normal header; it will check if we're authenticated or not
-            @Html.Partial("_Header")
-        }
+        @Html.Partial("_Header")
         @RenderBody()
-
     </div>
     @Html.Partial( "_Footer" )
     @RenderSection("scripts", required: false)
