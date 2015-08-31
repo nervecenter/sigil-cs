@@ -1,24 +1,24 @@
 ﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 
-@model Tuple<List<Issue>, List<Vote>>
+@model Tuple<IQueryable<Issue>, IQueryable<Vote>>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Home Page";
-    List<Issue> issueList = Model.Item1;
-    List<Vote> voteList = Model.Item2;
+    IQueryable<Issue> issueList = Model.Item1;
+    IQueryable<Vote> voteList = Model.Item2;
 }
 
 <section class="main">
     <div class="first-column">
         <span class="feed-intent">@User.Identity.GetUserName()'s feed</span>
-        @if ( issueList.Count > 0 ) {
+        @if ( issueList.Count<Issue>() > 0 ) {
             foreach ( Issue issue in issueList ) {
                 <article class="issue-box">
                     <div class="issue-vote-area">
                         <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                        @if ( voteList.Exists( v => v.IssueId == issue.Id ) ) {
+                        @if ( voteList.Any( v => v.IssueId == issue.Id ) ) {
                             // Issue has been voted on, get the checked button and checked class
                             <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                         } else {

@@ -71,15 +71,17 @@ namespace Sigil.Models
 
         [Required]
         [EmailAddress]
-        [Display(Name = "Email_Confirm")]
+        [Display(Name = "Email Confirm")]
+        [Compare("Email", ErrorMessage = "The Email and confirmation email do not match.")]
         public string Email_confirm { get; set; }
 
         [Required]
+        [StringLength(16, ErrorMessage ="The {0} must be at least {2} characters long.", MinimumLength = 5)]
         [Display(Name = "Username")]
         public string UserName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

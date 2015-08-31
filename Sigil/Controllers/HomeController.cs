@@ -44,7 +44,7 @@ namespace Sigil.Controllers {
                                              where vote.UserID == userID
                                              select vote;
 
-                Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues.ToList(), userVotes.ToList());
+                Tuple<IQueryable<Issue>, IQueryable<Vote>> issuesANDvotes = new Tuple<IQueryable<Issue>, IQueryable<Vote>>(userIssues, userVotes);
 
                 return View( issuesANDvotes );
             } 
