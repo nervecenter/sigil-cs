@@ -10,26 +10,72 @@
     });
 </script>
 
+<script type="text/javascript">
+    function appendAddTextButton() {
+        // Get the fieldset we'll be adding to
+        var fieldset = document.getElementById("add-issue-fieldset");
+        // Create a paragraph container for our button to confirm a new submission
+        var newsubmissionp = document.createElement("p");
+        newsubmissionp.id = "new-sub-p";
+        // Append it
+        fieldset.appendChild(newsubmissionp);
+        // Create our button
+        var newsubmissionbutton = document.createElement("input");
+        newsubmissionbutton.id = "new-submission-button";
+        newsubmissionbutton.type = "button";
+        newsubmissionbutton.name = "newsubmissionbutton";
+        newsubmissionbutton.value = "Add this as a new submission";
+        newsubmissionbutton.onclick = function () { confirmNewSubmission() };
+        // Get the paragraph we made earlier and append the button
+        document.getElementById("new-sub-p").appendChild(newsubmissionbutton);
+        document.getElementById("title-input").removeAttribute("oninput");
+    }
+
+    function confirmNewSubmission() {
+        // Get the fieldset we'll be adding to
+        var fieldset = document.getElementById("add-issue-fieldset");
+        // Remove the old button confirming a new submission
+        document.getElementById("new-sub-p").remove();
+        // Add our text field
+        var textp = document.createElement("p");
+        textp.id = "text-p";
+        fieldset.appendChild(textp);
+        var textlabel = document.createElement("label");
+        textlabel.id = "text-label";
+        textlabel.for = "text";
+        textp.appendChild(textlabel);
+        textlabel.innerHTML = "Explain your idea in-depth:";
+        var textinput = document.createElement("input");
+        textinput.type = "text";
+        textinput.name = "text";
+        textinput.placeholder = "Explain your idea in-depth"
+        textp.appendChild(textinput);
+        // Add our submit button
+        var submitp = document.createElement("p");
+        submitp.id = "submit-p";
+        fieldset.appendChild(submitp);
+        var submitbutton = document.createElement("input");
+        submitbutton.type = "submit";
+        submitbutton.name = "buttonSubmit";
+        submitbutton.value = "Add Issue";
+        submitp.appendChild(submitbutton);
+    }
+</script>
+
 
 <div class="main">
     <div class="first-column">
         <form method="post">
-            <fieldset>
+            <fieldset id="add-issue-fieldset">
                 <legend>Issue Information</legend>
-                 <p>
-                     <label for="text">Orginization:</label>
-                     <input id ="orgBox" type="text" name="orgName" value="@Request.Form["orgName"]" />
-                 </p>   
                 <p>
-                    <label for="text">Title:</label>
-                    <input type="text" name="title" value="@Request.Form["title"]" />
-                </p>
+                    <label for="text">Company, person, or product:</label>
+                    <input id ="orgBox" type="text" name="orgName" value="@Request.Form["orgName"]" placeholder="Enter a company, person, or product" />
+                </p>   
                 <p>
-                    <label for="text">Text:</label>
-                    <input type="text" name="text" value="@Request.Form[ "text" ]" />
-                    @Html.ValidationMessage("text")
+                    <label for="text">Summary:</label>
+                    <input id="title-input" type="text" name="title" value="@Request.Form["title"]" oninput="appendAddTextButton()" placeholder="Search to see if your suggestion, idea, or issue has already been posted" />
                 </p>
-                <p><input type="submit" name="buttonSubmit" value="Add Issue" /></p>
             </fieldset>
         </form>
 
