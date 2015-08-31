@@ -81,15 +81,16 @@ namespace Sigil {
                url: "subscriptions/",
                defaults: new { controller = "Subscriptions", action = "Index" }
            );
+
             routes.MapRoute(
                 name: "Subscribe",
-                url: "subscribe/{orgURL}/",
+                url: "{orgURL}/subscribe/",
                 defaults: new { controller = "Subscriptions", action = "AddSubscription" }
             );
 
             routes.MapRoute(
                 name: "UnSubscribe",
-                url: "unsubscribe/{orgURL}/",
+                url: "{orgURL}/unsubscribe/",
                 defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
 

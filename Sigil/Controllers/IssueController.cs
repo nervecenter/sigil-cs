@@ -471,11 +471,11 @@ namespace Sigil.Controllers
             try {
                 thisIssue.votes++;
 
-                
+
                 thisVote.voteDate = DateTime.UtcNow;
                 thisVote.IssueId = thisIssue.Id;
                 thisVote.UserID = userId;
-                
+
                 dc.Votes.InsertOnSubmit( thisVote );
                 dc.SubmitChanges();
             } catch ( Exception e ) {

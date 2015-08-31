@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Home Page";
     List<Issue> issueList = Model.Item1;
-    List<Vote> voteList = Model.Item2;
+    List<Vote> userVotes = Model.Item2;
 }
 
 <section class="main">
@@ -18,7 +18,7 @@
                 <article class="issue-box">
                     <div class="issue-vote-area">
                         <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                        @if ( voteList.Exists( v => v.IssueId == issue.Id ) ) {
+                        @if ( userVotes.Exists( v => v.IssueId == issue.Id ) ) {
                             // Issue has been voted on, get the checked button and checked class
                             <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                         } else {
