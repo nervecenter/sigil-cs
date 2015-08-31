@@ -31,27 +31,27 @@ function set_sub(subbutton, orgURL) {
         subscribe(orgURL);
         votebutton.classList.remove('unsubscribed');
         votebutton.classList.add('subscribed');
-        votebutton.innerHTML = "Unsubscribe";
+        votebutton.src = "../Content/Images/unsubscribe_hover.png";
     } else if (subbutton.classList.contains('subscribed')) {
         unsubscribe(orgURL)
         votebutton.classList.remove('subscribed');
         votebutton.classList.add('unsubscribed');
-        votebutton.innerHTML = "Subscribe";
+        votebutton.src = "../Content/Images/subscribe_hover.png";
     }
 }
 
 function subhover(votebutton) {
-    if (votebutton.classList.contains('unchecked')) {
-        votebutton.src = "../Content/Images/vote_circle_hover_small.png";
-    } else if (votebutton.classList.contains('checked')) {
-        votebutton.src = "../Content/Images/check_mark_hover_small.png";
+    if (votebutton.classList.contains('unsubscribed')) {
+        votebutton.src = "../Content/Images/subscribe_hover.png";
+    } else if (votebutton.classList.contains('subscribed')) {
+        votebutton.src = "../Content/Images/unsubscribe_hover.png";
     }
 }
 
 function subunhover(votebutton) {
-    if (votebutton.classList.contains('unchecked')) {
-        votebutton.src = "../Content/Images/vote_circle_small.png";
-    } else if (votebutton.classList.contains('checked')) {
-        votebutton.src = "../Content/Images/check_mark_small.png";
+    if (votebutton.classList.contains('unsubscribed')) {
+        votebutton.src = "../Content/Images/subscribe.png";
+    } else if (votebutton.classList.contains('subscribed')) {
+        votebutton.src = "../Content/Images/unsubscribe.png";
     }
 }

@@ -3,7 +3,7 @@
         type: "POST",
         url: '/voteup/' + issueid + '/',
         success: function () {
-            // Get the element
+            /*// Get the element
             var elementID = "vote_" + issueid;
             var thisElement = document.getElementById(elementID);
             // Change its picture to voted on, function to unvoteup()
@@ -12,7 +12,7 @@
             // Update the count displayed beneath it
             var voteCount = parseInt(document.getElementById("votecount_" + issueid).innerHTML, 10);
             document.getElementById("votecount_" + issueid).innerHTML = voteCount + 1;
-            //alert('Voted up');
+            //alert('Voted up');*/
         },
         error: function (ts) {
             //alert('Could not vote up.');
@@ -26,7 +26,7 @@ function unvoteup(issueid, userhandle) {
         type: "POST",
         url: '/unvoteup/' + issueid + '/',
         success: function () {
-            // Get the element
+            /*// Get the element
             var elementID = "vote_" + issueid;
             var thisElement = document.getElementById(elementID);
             // Change its picture to not voted on, function to voteup()
@@ -35,7 +35,7 @@ function unvoteup(issueid, userhandle) {
             // Update the count displayed beneath it
             var voteCount = parseInt(document.getElementById("votecount_" + issueid).innerHTML, 10);
             document.getElementById("votecount_" + issueid).innerHTML = voteCount - 1;
-            //alert('Unvoted up');
+            //alert('Unvoted up');*/
         },
         error: function (ts) {
             alert('Could not unvote up.');

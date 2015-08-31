@@ -70,7 +70,7 @@ namespace Sigil.Controllers
             // MODEL: Put the org and the list of issues into a tuple as our page model
             Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>(thisOrg, issueList);
 
-            ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId );
+            ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
 
             // Pass our org and issues to the view as the model
             return View(orgAndIssues);

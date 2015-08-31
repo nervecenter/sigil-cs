@@ -223,8 +223,10 @@
     <Content Include="Content\Images\search-icon-small.png" />
     <Content Include="Content\Images\speakerphone_white.png" />
     <Content Include="Content\Images\speedometer_white.png" />
-    <Content Include="Content\Images\sub-button-hover.png" />
-    <Content Include="Content\Images\sub-button.png" />
+    <Content Include="Content\Images\subscribe.png" />
+    <Content Include="Content\Images\subscribe_hover.png" />
+    <Content Include="Content\Images\unsubscribe.png" />
+    <Content Include="Content\Images\unsubscribe_hover.png" />
     <Content Include="Content\Images\unhelpful.png" />
     <Content Include="Content\Images\votedown-clicked.png" />
     <Content Include="Content\Images\votedown-hover.png" />
