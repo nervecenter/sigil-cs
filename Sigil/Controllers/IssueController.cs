@@ -118,11 +118,12 @@ namespace Sigil.Controllers
                 try
                 {
                     vc = new ViewCount();
-                    vc.Id = dc.ViewCounts.Max<ViewCount>(v => v.Id) + 1;
+                    //vc.Id = dc.ViewCounts.Max<ViewCount>(v => v.Id) + 1;
                     vc.datetime = DateTime.UtcNow;
                     vc.OrgId = thisOrg.Id;
                     vc.IssueId = thisIssue.Id;
                     vc.count = 1;
+
                     dc.ViewCounts.InsertOnSubmit(vc);
                     dc.SubmitChanges();
                 }
