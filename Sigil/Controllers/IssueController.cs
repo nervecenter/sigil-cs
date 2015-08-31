@@ -98,7 +98,7 @@ namespace Sigil.Controllers
                 try
                 {
                     vc = new ViewCount();
-                    //vc.datetime = DateTime.UtcNow;
+                    vc.datetime = DateTime.UtcNow;
                     vc.OrgId = thisOrg.Id;
                     vc.IssueId = thisIssue.Id;
                     vc.count = 1;
@@ -443,6 +443,11 @@ namespace Sigil.Controllers
             Form for adding an issue. Linked on org page. Adds issue to current org. 
         ==================== 
         */
+        public ActionResult CreateIssue()
+        {
+            return View("Addissue");
+        }
+
 
         [HttpPost]
         public ActionResult AddIssue() {
@@ -451,7 +456,18 @@ namespace Sigil.Controllers
             // Get the user
             var userId = User.Identity.GetUserId();
 
-            var org = dc.Orgs.Where(o => o.orgName == Request.Form["orgName"]).Single();
+            string orgName = Request.Form["orgName"];
+            string category = null;
+            if(orgName.Contains("-"))
+            {
+                var temp = orgName.Split('-');
+                orgName = temp[0];
+                category = temp[1];
+            }
+
+            var org = dc.Orgs.Where(o => o.orgName == orgName).Single();
+            var catid = dc.Categories.SingleOrDefault(c => c.catName == category && c.orgId == org.Id);
+
 
             // Create a new issue
             Issue newissue = new Issue();
@@ -467,6 +483,8 @@ namespace Sigil.Controllers
             newissue.viewCount = 1;
             newissue.title = Request.Form["title"];
             newissue.text = Request.Form[ "text" ];
+            if(catid != null)
+                newissue.CatId = catid.Id;
             // Try to submit the issue and go to the issue page; otherwise, write an error
             try {
                 dc.Issues.InsertOnSubmit( newissue );

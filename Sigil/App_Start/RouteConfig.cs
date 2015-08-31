@@ -48,21 +48,27 @@ namespace Sigil {
                 );
 
             routes.MapRoute(
-                name: "Search for Dropdown",
+                name: "Search for Header Dropdown",
                 url: "search/",
                 defaults: new { controller = "Search", action = "SearchDB" }
                 );
 
             routes.MapRoute(
-                name: "Search Page",
-                url: "search/{term}",
-                defaults: new { controller = "Search", action = "Index" }
+                name: "Search Orgs",
+                url: "search/Orgs/",
+                defaults: new { controller = "Search", action = "SearchOrgs" }
                 );
 
             routes.MapRoute(
-                name: "Search Orgs",
-                url: "search/",
-                defaults: new { controller = "Search", action = "SearchOrgs" }
+                name: "Search Orgs and Categories",
+                url: "search/Orgs_Cats/",
+                defaults: new { controller = "Search", action = "SearchOrgs_Cats" }
+                );
+
+            routes.MapRoute(
+                name: "Search Page",
+                url: "search/all/{term}",
+                defaults: new { controller = "Search", action = "Index" }
                 );
 
             routes.MapRoute(
@@ -94,8 +100,14 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-                name: "AddIssue",
+                name: "Create Issue",
                 url: "create_issue/",
+                defaults: new { controller = "Issue", action = "CreateIssue" }
+            );
+
+            routes.MapRoute(
+                name: "Add Issue",
+                url: "add_issue/",
                 defaults: new { controller = "Issue", action = "AddIssue" }
             );
 
