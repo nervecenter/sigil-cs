@@ -18,15 +18,14 @@
         <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png">
         <article class="issue-body">
             <div class="issue-vote-area">
-                @{
-                    if ( userVote != default( Vote ) ) { // User has voted on issue
-                        <img class="issue-vote-button checked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                    } else { // User hasn't voted on issue
-                        <img class="issue-vote-button unchecked" id="vote_@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id, @User.Identity.GetUserName())" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                    }
+                <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
+                @if ( userVote != default( Vote ) ) {
+                    // Issue has been voted on, get the checked button and checked class
+                    <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                } else {
+                    // Issue hasn't been voted on, get the opposite
+                    <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 }
-
-                <span class="issue-vote-amount" id="votecount_@thisIssue.Id">@(thisIssue.votes)</span>
             </div>
             <div class="issue-main-area issue-main-issue-page">
                 <div class="issue-main-cell">
@@ -104,5 +103,5 @@
             </form>
         </div>
     </div>
-    @Html.Partial( "_SideBar" )
+    @Html.Partial( "_SideBar", Sigil.Controllers.AccountController.userSubs(User) )
 </section>

@@ -8,7 +8,6 @@
     ViewBag.Title = "Home Page";
     List<Issue> issueList = Model.Item1;
     List<Vote> voteList = Model.Item2;
-    List<Subscription> userSubs = (List<Subscription>)ViewBag.userSubs;
 }
 
 <section class="main">
@@ -48,24 +47,5 @@
             <h3>Nothing here. :( Search for a company, person, or topic to subscribe to!</h3>
         }
     </div>
-    <div class="second-column">
-        <div class="sub-list-box">
-            <a href="@Url.Action("AddIssue", "Issue")">Add a new Issue</a>
-        </div>
-        <div class="sub-list-box">
-            <a href="@Url.Action("Index", "Subscriptions")"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
-            <div class="sub-list">
-                @foreach ( Subscription sub in userSubs ) {
-                    <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
-                }
-                <!--<a href="OrgPage.html" class="sub">&emsp;&emsp;<img class="sub-org-icon" src="../Content/Images/caticons/surface_15.png">Surface</a><br>-->
-            </div>
-        </div>
-        <div class="placeholder">
-            Ads go here.
-        </div>
-    </div>
-    @{ 
-        //@Html.Partial( "../Shared/_SideBar", ViewBag.userSubs )
-    }
+    @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs(User) )
 </section>
