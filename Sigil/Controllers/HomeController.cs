@@ -28,7 +28,7 @@ namespace Sigil.Controllers {
             if (userID != null)
             {
                 // User is logged in; load the normal frontpage
-                AspNetUser user = dc.AspNetUsers.Single<AspNetUser>( u => u.Id == userID );
+                //AspNetUser user = dc.AspNetUsers.Single<AspNetUser>( u => u.Id == userID );
 
                 IQueryable<Subscription> userSubs = from Subs in dc.Subscriptions
                                                     where Subs.UserId == userID
@@ -52,29 +52,46 @@ namespace Sigil.Controllers {
             } 
             else 
             {
+                //return View(LandingPage());
                 return View( "LandingPage" );
             }
         }
 
         public ActionResult LandingPage()
         {
-            /*var trending_topics = Get_Trending_Topics();
+            //var trending_topics = Get_Trending_Topics();
 
-            var trending_issues = Get_Trending_Issues(trending_topics);*/
+            //var trending_issues = Get_Trending_Issues(trending_topics);
 
             return View();
         }
 
-        private object Get_Trending_Issues(IQueryable<Topic> trending_topics)
-        {
-            throw new NotImplementedException();
-        }
+        //private IQueryable<Issue> Get_Trending_Issues(IQueryable<Topic> trending_topics)
+        //{
+        //    var pre_issue = dc.Issues.OrderBy(i => i.votes).ThenBy(i => i.viewCount).ThenByDescending(i => i.createTime);
 
-        /*private IQueryable<Topic> Get_Trending_Topics()
-        {
+            
+        //    foreach (Topic t in trending_topics)
+        //    {
 
+        //    }
 
-        }*/
+                              
+        //    return trend_issue;
+                              
+                               
+                                
+        //}
+
+        //private IQueryable<Issue> Get_Trending_Topics()
+        //{
+        //    //var trending = dc.Topics.OrderBy(t => t.lastAdded).ThenBy(t => t.views).Take(3);
+        //    var pretrending = dc.Issues.Where(i => i.TopicId != null).OrderBy(i => i.lastVoted).ThenBy(i => i.votes);
+
+        //    var trending = pretrending.GroupBy(i => i.TopicId).Select(grp => grp.First()).Take(3);
+
+        //    return trending;
+        //}
 
 
         public ActionResult Legal()

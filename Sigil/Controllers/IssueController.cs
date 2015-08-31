@@ -52,7 +52,21 @@ namespace Sigil.Controllers
                 Response.Redirect("~/404");
             }
 
-            // Get the user and their subscriptions
+            //update the viewcount of the issue
+            try
+            {
+                thisIssue.viewCount++;
+                dc.SubmitChanges();
+
+            }
+            catch (Exception e)
+            {
+                    Console.WriteLine("Could not write comment from %s to database:\n%s", thisIssue, e.Message);
+            }
+
+
+
+            // Get the user
             var userID = User.Identity.GetUserId();
             if (userID != null)
             {
@@ -112,9 +126,9 @@ namespace Sigil.Controllers
                     dc.ViewCounts.InsertOnSubmit(vc);
                     dc.SubmitChanges();
                 }
-                catch
+                catch(Exception e)
                 {
-                    Console.WriteLine("Could not add new view count object issue %d.", thisIssue.Id);
+                    Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
                 }
             }
             else
@@ -471,7 +485,7 @@ namespace Sigil.Controllers
             // Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
             try {
                 thisIssue.votes++;
-
+                thisIssue.lastVoted = DateTime.UtcNow;
                 
                 thisVote.voteDate = DateTime.UtcNow;
                 thisVote.IssueId = thisIssue.Id;
@@ -503,7 +517,7 @@ namespace Sigil.Controllers
             // Decrement vote counter for issue, delete vote entry, POST changes to server; otherwise, log an error
             try {
                 thisIssue.votes--;
-
+                thisIssue.lastVoted = DateTime.UtcNow;
                 dc.Votes.DeleteOnSubmit( thisVote );
                 dc.SubmitChanges();
             } catch ( Exception e ) {
