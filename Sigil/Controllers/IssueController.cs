@@ -38,7 +38,8 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult IssuePage( string orgURL, long issueID ) {
+        public ActionResult IssuePage( string orgURL, long issueID )
+        {
             // Grab the issue's org
             Org thisOrg = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
 
@@ -48,78 +49,56 @@ namespace Sigil.Controllers
                                select issue).SingleOrDefault();
 
             // If neither are valid, redirect to 404 page
-            if ( thisOrg == default(Org) || thisIssue == default(Issue) ) {
+            if (thisOrg == default(Org) || thisIssue == default(Issue))
+            {
                 Response.Redirect("~/404");
             }
 
             //update the viewcount of the issue
-            try
-            {
-                thisIssue.viewCount++;
-                dc.SubmitChanges();
-
-            }
-            catch (Exception e)
-            {
-                    Console.WriteLine("Could not write comment from %s to database:\n%s", thisIssue, e.Message);
-            }
-
-
+            Update_View_Count(thisIssue);
 
             // Get the user
             var userID = User.Identity.GetUserId();
-            if (userID != null)
+
+            // If the page is in POST, we're posting a comment; get form data and POST it
+            if (Request.HttpMethod == "POST")
             {
-
-                // If the page is in POST, we're posting a comment; get form data and POST it
-                if (Request.HttpMethod == "POST")
-                {
-                    // Create a new issue
-                    Comment newComment = new Comment();
-
-                    // Increment Id, drop in current user and date, set default weight, drop in the form text
-                    //newComment.Id = dc.Comments.Max<Comment>(c => c.Id) + 1;
-                    newComment.issueId = thisIssue.Id;
-                    newComment.UserId = userID;
-                    newComment.postDate = DateTime.UtcNow;
-                    newComment.editTime = DateTime.UtcNow;
-                    newComment.lastVoted = DateTime.UtcNow;
-                    newComment.votes = 1;
-
-                    newComment.text = Request.Form["text"];
-                    Notification_Check(newComment.text, userID);
-                    
-                    // Try to submit the issue and go to the issue page; otherwise, write an error
-                    try
-                    {
-                        dc.Comments.InsertOnSubmit(newComment);
-
-                        dc.SubmitChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Could not write comment from %s to database:\n%s", newComment.UserId, e.Message);
-                    }
-                }
-
-
-                // Get the user's vote on this issues if it exists
-                Vote userVote = (from vote in dc.Votes
-                                 where vote.UserID == userID && vote.IssueId == thisIssue.Id
-                                 select vote).SingleOrDefault<Vote>();
-                // Grab the issue's comments sorted by date
-
-                ViewBag.userVote = userVote;
+                // Create a new issue
+                Create_New_Comment(thisIssue, userID);
             }
+
+
+            // Get the user's vote on this issues if it exists
+            Vote userVote = (from vote in dc.Votes
+                             where vote.UserID == userID && vote.IssueId == thisIssue.Id
+                             select vote).SingleOrDefault<Vote>();
+
+            ViewBag.userVote = userVote;
+
             //// Get today's issue viewcount and increment it; if there is none for today, create a new table entry for it
+            ViewCount_Routine(thisOrg, thisIssue);
+
+            IQueryable<Comment> issueComments = from comment in dc.Comments
+                                                where comment.issueId == thisIssue.Id
+                                                orderby comment.postDate descending
+                                                select comment;
+
+            // MODEL: A tuple of the org and the issue are the model for the IssuePage
+            Tuple<Org, Issue, IQueryable<Comment>> orgIssueComments = new Tuple<Org, Issue, IQueryable<Comment>>(thisOrg, thisIssue, issueComments);
+
+            // Pass the org and issue as the model to the view
+            return View(orgIssueComments);
+        }
+
+        private void ViewCount_Routine(Org thisOrg, Issue thisIssue)
+        {
             ViewCount vc = dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id && v.datetime.Date == DateTime.Today.Date);
             if (vc == default(ViewCount))
             {
                 try
                 {
                     vc = new ViewCount();
-                    //vc.Id = dc.ViewCounts.Max<ViewCount>(v => v.Id) + 1;
-                    vc.datetime = DateTime.UtcNow;
+                    //vc.datetime = DateTime.UtcNow;
                     vc.OrgId = thisOrg.Id;
                     vc.IssueId = thisIssue.Id;
                     vc.count = 1;
@@ -127,9 +106,11 @@ namespace Sigil.Controllers
                     dc.ViewCounts.InsertOnSubmit(vc);
                     dc.SubmitChanges();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
+                    //WRITE TO ERROR FILE
+                    ErrorHandler.Log_Error(vc, e);
+                    //Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
                 }
             }
             else
@@ -139,27 +120,62 @@ namespace Sigil.Controllers
                     vc.count++;
                     dc.SubmitChanges();
                 }
-                catch
+                catch(Exception e)
                 {
-                    Console.WriteLine("Could not update view count on issue %d.", thisIssue.Id);
+                    //WRITE TO ERROR FILE
+                    ErrorHandler.Log_Error(thisIssue, e);
+                    //Console.WriteLine("Could not update view count on issue %d.", vc, e.Message);
                 }
             }
-
-            IQueryable<Comment> issueComments = from comment in dc.Comments
-                                where comment.issueId == thisIssue.Id
-                                orderby comment.postDate descending
-                                select comment;
-
-            // MODEL: A tuple of the org and the issue are the model for the IssuePage
-            Tuple<Org, Issue, IQueryable<Comment>> orgIssueComments = new Tuple<Org,Issue, IQueryable<Comment>>( thisOrg, thisIssue, issueComments );
-
-            // Add the user and their vote (or lack of vote) to the ViewBag
-
-
-            // Pass the org and issue as the model to the view
-            return View( orgIssueComments );
         }
 
+        private void Create_New_Comment(Issue thisIssue, string userID)
+        {
+            Comment newComment = new Comment();
+            
+            // Increment Id, drop in current user and date, set default weight, drop in the form text
+            //newComment.Id = dc.Comments.Max<Comment>(c => c.Id) + 1;
+            newComment.issueId = thisIssue.Id;
+            newComment.UserId = userID;
+            newComment.postDate = DateTime.UtcNow;
+            newComment.editTime = DateTime.UtcNow;
+            newComment.lastVoted = DateTime.UtcNow;
+            newComment.votes = 1;
+
+            newComment.text = Request.Form["text"];
+            Notification_Check(newComment.text, userID);
+
+            // Try to submit the issue and go to the issue page; otherwise, write an error
+            try
+            {
+                dc.Comments.InsertOnSubmit(newComment);
+
+                dc.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                //WRITE TO ERROR FILE
+                ErrorHandler.Log_Error(newComment, e);
+                //Console.WriteLine("Could not write comment from %s to database:\n%s", newComment.UserId, e.Message);
+            }
+        }
+
+        private void Update_View_Count(Issue issue)
+        {
+            try
+            {
+                issue.viewCount++;
+                dc.SubmitChanges();
+
+            }
+            catch (Exception e)
+            {
+                //WILL WRITE TO ERROR FILE
+                ErrorHandler.Log_Error(issue, e);
+                //Console.WriteLine("Could not write comment from %s to database:\n%s", issue, e.Message);
+            }
+
+        }
 
         /* 
         ==================== 
@@ -428,45 +444,58 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-
+        [HttpPost]
         public ActionResult AddIssue() {
             // Get the org for the issue we're adding
-  
 
-            // If the page is in POST, get the issue form data and POST it
-            if ( Request.HttpMethod == "POST" ) {
+            // Get the user
+            var userId = User.Identity.GetUserId();
 
-                // Get the user
-                var userId = User.Identity.GetUserId();
+            var org = dc.Orgs.Where(o => o.orgName == Request.Form["orgName"]).Single();
 
-                var org = dc.Orgs.Where(o => o.orgName == Request.Form["orgName"]).Single();
-
-                // Create a new issue
-                Issue newissue = new Issue();
-
-                // Increment Id, drop in current user and date, set default weight, drop in the form text
-                newissue.Org = org;
-                newissue.OrgId = org.Id;
-                newissue.UserId = userId;
-                newissue.createTime = DateTime.UtcNow;
-                newissue.editTime = DateTime.UtcNow;
-                newissue.lastVoted = DateTime.UtcNow;
-                newissue.votes = 1;
-                newissue.viewCount = 1;
-                newissue.title = Request.Form["title"];
-                newissue.text = Request.Form[ "text" ];
-                // Try to submit the issue and go to the issue page; otherwise, write an error
-                try {
-                    dc.Issues.InsertOnSubmit( newissue );
-                    dc.SubmitChanges();
-                    var lastId = dc.Issues.Max<Issue>(i => i.Id);
-                    return Redirect( "~/" + org.orgURL + "/" + lastId );
-                } catch ( Exception e ) {
-                    Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue.text, e.Message );
-                }
+            // Create a new issue
+            Issue newissue = new Issue();
+            
+            // Increment Id, drop in current user and date, set default weight, drop in the form text
+            newissue.Org = org;
+            newissue.OrgId = org.Id;
+            newissue.UserId = userId;
+            newissue.createTime = DateTime.UtcNow;
+            newissue.editTime = DateTime.UtcNow;
+            newissue.lastVoted = DateTime.UtcNow;
+            newissue.votes = 1;
+            newissue.viewCount = 1;
+            newissue.title = Request.Form["title"];
+            newissue.text = Request.Form[ "text" ];
+            // Try to submit the issue and go to the issue page; otherwise, write an error
+            try {
+                dc.Issues.InsertOnSubmit( newissue );
+                dc.SubmitChanges();
+                
+            } catch ( Exception e ) {
+                ErrorHandler.Log_Error(newissue, e);
+                //Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue, e.Message );
             }
 
-            return View();
+            var lastId = dc.Issues.Max<Issue>(i => i.Id);// <--------------------- this probably wont work once we have multiple people submitting issues at the same time. Will probably have to do a look up using data from created issue.
+            Vote newVote = new Vote();
+            newVote.IssueId = lastId;
+            newVote.UserID = userId;
+            newVote.voteDate = DateTime.UtcNow;
+            try
+            {
+                dc.Votes.InsertOnSubmit(newVote);
+                dc.SubmitChanges();
+
+            }
+            catch (Exception e)
+            {
+                ErrorHandler.Log_Error(newVote, e);
+                //Console.WriteLine("Could not write vote \"%s\" to database:\n%s", newVote, e.Message);
+            }
+
+            return Redirect("~/" + org.orgURL + "/" + lastId);
+
         }
 
         /* 
@@ -493,8 +522,11 @@ namespace Sigil.Controllers
                 
                 dc.Votes.InsertOnSubmit( thisVote );
                 dc.SubmitChanges();
-            } catch ( Exception e ) {
-                Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
+            }
+            catch ( Exception e )
+            {
+                ErrorHandler.Log_Error(thisIssue, e);
+                //Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
             }
             return new EmptyResult();
         }
@@ -520,8 +552,11 @@ namespace Sigil.Controllers
                 thisIssue.lastVoted = DateTime.UtcNow;
                 dc.Votes.DeleteOnSubmit( thisVote );
                 dc.SubmitChanges();
-            } catch ( Exception e ) {
-                Console.WriteLine( "Could not unvote on issue %s:\n%s", thisIssue.Id, e.Message );
+            }
+            catch ( Exception e )
+            {
+                ErrorHandler.Log_Error(thisIssue, e);
+                //Console.WriteLine( "Could not unvote on issue %s:\n%s", thisIssue.Id, e.Message );
             }
             return new EmptyResult();
         }
@@ -563,7 +598,8 @@ namespace Sigil.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Could not unvote on issue %s:\n%s", note.Id, e.Message);
+                    ErrorHandler.Log_Error(note, e);
+                    //Console.WriteLine("Could not unvote on issue %s:\n%s", note.Id, e.Message);
                 }
             }
         }
