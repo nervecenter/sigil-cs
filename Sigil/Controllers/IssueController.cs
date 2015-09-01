@@ -184,7 +184,7 @@ namespace Sigil.Controllers
             Data page for an issue, showing views/votes this week/month 
         ==================== 
         */
-
+        [Authorize]
         public ActionResult IssueData( string orghandle, long issueID ) {
             // Get the issue
             Issue thisIssue = (from issue in dc.Issues

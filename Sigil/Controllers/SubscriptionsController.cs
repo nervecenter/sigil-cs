@@ -17,6 +17,7 @@ namespace Sigil.Controllers
             dc = new SigilDBDataContext();
         }
         // GET: Subscriptions
+        [Authorize]
         public ActionResult Index()
         {
             var userid = User.Identity.GetUserId();

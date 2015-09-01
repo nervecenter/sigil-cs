@@ -1,19 +1,19 @@
 ﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 
-@model Tuple<IQueryable<Issue>, IQueryable<Vote>>
+@model Tuple<List<Issue>, List<Vote>>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Home Page";
-    IQueryable<Issue> issueList = Model.Item1;
-    IQueryable<Vote> voteList = Model.Item2;
+    List<Issue> issueList = Model.Item1;
+    List<Vote> voteList = Model.Item2;
 }
 
 <section class="main">
     <div class="first-column">
         <span class="feed-intent">@User.Identity.GetUserName()'s feed</span>
-        @if ( issueList.Count<Issue>() > 0 ) {
+        @if ( issueList.Count > 0 ) {
             foreach ( Issue issue in issueList ) {
                 <article class="issue-box">
                     <div class="issue-vote-area">

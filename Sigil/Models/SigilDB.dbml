@@ -89,6 +89,7 @@
       <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
       <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
       <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
+      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
     </Type>
   </Table>
   <Table Name="dbo.OfficialResponse" Member="OfficialResponses">
@@ -139,6 +140,7 @@
       <Column Name="catURL" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="orgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
+      <Association Name="Category_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="CatId" Type="Subscription" />
       <Association Name="Org_Category" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
@@ -150,6 +152,7 @@
       <Column Name="lastAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="views" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Association Name="Topic_Issue" Member="Issues" ThisKey="Id" OtherKey="TopicId" Type="Issue" />
+      <Association Name="Topic_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="TopicId" Type="Subscription" />
     </Type>
   </Table>
   <Table Name="dbo.Subscriptions" Member="Subscriptions">
@@ -160,6 +163,9 @@
       <Column Name="TopicId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CatId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="AspNetUser_Subscription" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="Category_Subscription" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
+      <Association Name="Topic_Subscription" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
+      <Association Name="Org_Subscription" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

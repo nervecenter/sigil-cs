@@ -1859,6 +1859,8 @@ namespace Sigil.Models
 		
 		private EntitySet<Category> _Categories;
 		
+		private EntitySet<Subscription> _Subscriptions;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1884,6 +1886,7 @@ namespace Sigil.Models
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
+			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			OnCreated();
 		}
 		
@@ -2072,6 +2075,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Subscription", Storage="_Subscriptions", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<Subscription> Subscriptions
+		{
+			get
+			{
+				return this._Subscriptions;
+			}
+			set
+			{
+				this._Subscriptions.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2147,6 +2163,18 @@ namespace Sigil.Models
 		}
 		
 		private void detach_Categories(Category entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_Subscriptions(Subscription entity)
 		{
 			this.SendPropertyChanging();
 			entity.Org = null;
@@ -3172,6 +3200,8 @@ namespace Sigil.Models
 		
 		private EntitySet<Issue> _Issues;
 		
+		private EntitySet<Subscription> _Subscriptions;
+		
 		private EntityRef<Org> _Org;
 		
     #region Extensibility Method Definitions
@@ -3191,6 +3221,7 @@ namespace Sigil.Models
 		public Category()
 		{
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._Org = default(EntityRef<Org>);
 			OnCreated();
 		}
@@ -3292,6 +3323,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Subscription", Storage="_Subscriptions", ThisKey="Id", OtherKey="CatId")]
+		public EntitySet<Subscription> Subscriptions
+		{
+			get
+			{
+				return this._Subscriptions;
+			}
+			set
+			{
+				this._Subscriptions.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Org", ThisKey="orgId", OtherKey="Id", IsForeignKey=true)]
 		public Org Org
 		{
@@ -3357,6 +3401,18 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.Category = null;
 		}
+		
+		private void attach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = this;
+		}
+		
+		private void detach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Topics")]
@@ -3377,6 +3433,8 @@ namespace Sigil.Models
 		
 		private EntitySet<Issue> _Issues;
 		
+		private EntitySet<Subscription> _Subscriptions;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3396,6 +3454,7 @@ namespace Sigil.Models
 		public Topic()
 		{
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			OnCreated();
 		}
 		
@@ -3512,6 +3571,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Subscription", Storage="_Subscriptions", ThisKey="Id", OtherKey="TopicId")]
+		public EntitySet<Subscription> Subscriptions
+		{
+			get
+			{
+				return this._Subscriptions;
+			}
+			set
+			{
+				this._Subscriptions.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3543,6 +3615,18 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.Topic = null;
 		}
+		
+		private void attach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Topic = this;
+		}
+		
+		private void detach_Subscriptions(Subscription entity)
+		{
+			this.SendPropertyChanging();
+			entity.Topic = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Subscriptions")]
@@ -3563,6 +3647,12 @@ namespace Sigil.Models
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
+		private EntityRef<Category> _Category;
+		
+		private EntityRef<Topic> _Topic;
+		
+		private EntityRef<Org> _Org;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3582,6 +3672,9 @@ namespace Sigil.Models
 		public Subscription()
 		{
 			this._AspNetUser = default(EntityRef<AspNetUser>);
+			this._Category = default(EntityRef<Category>);
+			this._Topic = default(EntityRef<Topic>);
+			this._Org = default(EntityRef<Org>);
 			OnCreated();
 		}
 		
@@ -3616,6 +3709,10 @@ namespace Sigil.Models
 			{
 				if ((this._OrgId != value))
 				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnOrgIdChanging(value);
 					this.SendPropertyChanging();
 					this._OrgId = value;
@@ -3660,6 +3757,10 @@ namespace Sigil.Models
 			{
 				if ((this._TopicId != value))
 				{
+					if (this._Topic.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnTopicIdChanging(value);
 					this.SendPropertyChanging();
 					this._TopicId = value;
@@ -3680,6 +3781,10 @@ namespace Sigil.Models
 			{
 				if ((this._CatId != value))
 				{
+					if (this._Category.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnCatIdChanging(value);
 					this.SendPropertyChanging();
 					this._CatId = value;
@@ -3719,6 +3824,108 @@ namespace Sigil.Models
 						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Subscription", Storage="_Category", ThisKey="CatId", OtherKey="Id", IsForeignKey=true)]
+		public Category Category
+		{
+			get
+			{
+				return this._Category.Entity;
+			}
+			set
+			{
+				Category previousValue = this._Category.Entity;
+				if (((previousValue != value) 
+							|| (this._Category.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Category.Entity = null;
+						previousValue.Subscriptions.Remove(this);
+					}
+					this._Category.Entity = value;
+					if ((value != null))
+					{
+						value.Subscriptions.Add(this);
+						this._CatId = value.Id;
+					}
+					else
+					{
+						this._CatId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Category");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Subscription", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
+		public Topic Topic
+		{
+			get
+			{
+				return this._Topic.Entity;
+			}
+			set
+			{
+				Topic previousValue = this._Topic.Entity;
+				if (((previousValue != value) 
+							|| (this._Topic.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Topic.Entity = null;
+						previousValue.Subscriptions.Remove(this);
+					}
+					this._Topic.Entity = value;
+					if ((value != null))
+					{
+						value.Subscriptions.Add(this);
+						this._TopicId = value.Id;
+					}
+					else
+					{
+						this._TopicId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Topic");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Subscription", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.Subscriptions.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.Subscriptions.Add(this);
+						this._OrgId = value.Id;
+					}
+					else
+					{
+						this._OrgId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Org");
 				}
 			}
 		}
