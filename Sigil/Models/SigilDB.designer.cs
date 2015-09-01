@@ -39,9 +39,6 @@ namespace Sigil.Models
     partial void InsertAspNetUser(AspNetUser instance);
     partial void UpdateAspNetUser(AspNetUser instance);
     partial void DeleteAspNetUser(AspNetUser instance);
-    partial void InsertSubscription(Subscription instance);
-    partial void UpdateSubscription(Subscription instance);
-    partial void DeleteSubscription(Subscription instance);
     partial void InsertViewCount(ViewCount instance);
     partial void UpdateViewCount(ViewCount instance);
     partial void DeleteViewCount(ViewCount instance);
@@ -66,6 +63,9 @@ namespace Sigil.Models
     partial void InsertTopic(Topic instance);
     partial void UpdateTopic(Topic instance);
     partial void DeleteTopic(Topic instance);
+    partial void InsertSubscription(Subscription instance);
+    partial void UpdateSubscription(Subscription instance);
+    partial void DeleteSubscription(Subscription instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -119,14 +119,6 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<AspNetUser>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Subscription> Subscriptions
-		{
-			get
-			{
-				return this.GetTable<Subscription>();
 			}
 		}
 		
@@ -191,6 +183,14 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<Topic>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Subscription> Subscriptions
+		{
+			get
+			{
+				return this.GetTable<Subscription>();
 			}
 		}
 	}
@@ -657,13 +657,13 @@ namespace Sigil.Models
 		
 		private EntitySet<Comment> _Comments;
 		
-		private EntitySet<Subscription> _Subscriptions1;
-		
 		private EntitySet<Vote> _Votes;
 		
 		private EntitySet<OfficialResponse> _OfficialResponses;
 		
 		private EntitySet<Issue> _Issues;
+		
+		private EntitySet<Subscription> _Subscriptions1;
 		
 		private EntityRef<AspNetUserRole> _AspNetUserRole;
 		
@@ -706,10 +706,10 @@ namespace Sigil.Models
 		public AspNetUser()
 		{
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
-			this._Subscriptions1 = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions1), new Action<Subscription>(this.detach_Subscriptions1));
 			this._Votes = new EntitySet<Vote>(new Action<Vote>(this.attach_Votes), new Action<Vote>(this.detach_Votes));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
+			this._Subscriptions1 = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions1), new Action<Subscription>(this.detach_Subscriptions1));
 			this._AspNetUserRole = default(EntityRef<AspNetUserRole>);
 			this._Org = default(EntityRef<Org>);
 			OnCreated();
@@ -1016,19 +1016,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Subscription", Storage="_Subscriptions1", ThisKey="Id", OtherKey="UserId")]
-		public EntitySet<Subscription> Subscriptions1
-		{
-			get
-			{
-				return this._Subscriptions1;
-			}
-			set
-			{
-				this._Subscriptions1.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Vote", Storage="_Votes", ThisKey="Id", OtherKey="UserID")]
 		public EntitySet<Vote> Votes
 		{
@@ -1065,6 +1052,19 @@ namespace Sigil.Models
 			set
 			{
 				this._Issues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Subscription", Storage="_Subscriptions1", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<Subscription> Subscriptions1
+		{
+			get
+			{
+				return this._Subscriptions1;
+			}
+			set
+			{
+				this._Subscriptions1.Assign(value);
 			}
 		}
 		
@@ -1168,18 +1168,6 @@ namespace Sigil.Models
 			entity.AspNetUser = null;
 		}
 		
-		private void attach_Subscriptions1(Subscription entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = this;
-		}
-		
-		private void detach_Subscriptions1(Subscription entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = null;
-		}
-		
 		private void attach_Votes(Vote entity)
 		{
 			this.SendPropertyChanging();
@@ -1215,197 +1203,17 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Subscriptions")]
-	public partial class Subscription : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _OrgId;
-		
-		private string _UserId;
-		
-		private EntityRef<AspNetUser> _AspNetUser;
-		
-		private EntityRef<Org> _Org;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnOrgIdChanging(int value);
-    partial void OnOrgIdChanged();
-    partial void OnUserIdChanging(string value);
-    partial void OnUserIdChanged();
-    #endregion
-		
-		public Subscription()
+		private void attach_Subscriptions1(Subscription entity)
 		{
-			this._AspNetUser = default(EntityRef<AspNetUser>);
-			this._Org = default(EntityRef<Org>);
-			OnCreated();
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
+		private void detach_Subscriptions1(Subscription entity)
 		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
-		public int OrgId
-		{
-			get
-			{
-				return this._OrgId;
-			}
-			set
-			{
-				if ((this._OrgId != value))
-				{
-					if (this._Org.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrgIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrgId = value;
-					this.SendPropertyChanged("OrgId");
-					this.OnOrgIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._AspNetUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Subscription", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
-		public AspNetUser AspNetUser
-		{
-			get
-			{
-				return this._AspNetUser.Entity;
-			}
-			set
-			{
-				AspNetUser previousValue = this._AspNetUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetUser.Entity = null;
-						previousValue.Subscriptions1.Remove(this);
-					}
-					this._AspNetUser.Entity = value;
-					if ((value != null))
-					{
-						value.Subscriptions1.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(string);
-					}
-					this.SendPropertyChanged("AspNetUser");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Subscription", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
-		public Org Org
-		{
-			get
-			{
-				return this._Org.Entity;
-			}
-			set
-			{
-				Org previousValue = this._Org.Entity;
-				if (((previousValue != value) 
-							|| (this._Org.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Org.Entity = null;
-						previousValue.Subscriptions.Remove(this);
-					}
-					this._Org.Entity = value;
-					if ((value != null))
-					{
-						value.Subscriptions.Add(this);
-						this._OrgId = value.Id;
-					}
-					else
-					{
-						this._OrgId = default(int);
-					}
-					this.SendPropertyChanged("Org");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
 		}
 	}
 	
@@ -2043,8 +1851,6 @@ namespace Sigil.Models
 		
 		private EntitySet<AspNetUser> _AspNetUsers;
 		
-		private EntitySet<Subscription> _Subscriptions;
-		
 		private EntitySet<ViewCount> _ViewCounts;
 		
 		private EntitySet<OfficialResponse> _OfficialResponses;
@@ -2074,7 +1880,6 @@ namespace Sigil.Models
 		public Org()
 		{
 			this._AspNetUsers = new EntitySet<AspNetUser>(new Action<AspNetUser>(this.attach_AspNetUsers), new Action<AspNetUser>(this.detach_AspNetUsers));
-			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
@@ -2215,19 +2020,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Subscription", Storage="_Subscriptions", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<Subscription> Subscriptions
-		{
-			get
-			{
-				return this._Subscriptions;
-			}
-			set
-			{
-				this._Subscriptions.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_ViewCount", Storage="_ViewCounts", ThisKey="Id", OtherKey="OrgId")]
 		public EntitySet<ViewCount> ViewCounts
 		{
@@ -2307,18 +2099,6 @@ namespace Sigil.Models
 		}
 		
 		private void detach_AspNetUsers(AspNetUser entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
-		
-		private void attach_Subscriptions(Subscription entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_Subscriptions(Subscription entity)
 		{
 			this.SendPropertyChanging();
 			entity.Org = null;
@@ -3762,6 +3542,205 @@ namespace Sigil.Models
 		{
 			this.SendPropertyChanging();
 			entity.Topic = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Subscriptions")]
+	public partial class Subscription : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.Nullable<int> _OrgId;
+		
+		private string _UserId;
+		
+		private System.Nullable<int> _TopicId;
+		
+		private System.Nullable<int> _CatId;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnOrgIdChanging(System.Nullable<int> value);
+    partial void OnOrgIdChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
+    partial void OnTopicIdChanging(System.Nullable<int> value);
+    partial void OnTopicIdChanged();
+    partial void OnCatIdChanging(System.Nullable<int> value);
+    partial void OnCatIdChanged();
+    #endregion
+		
+		public Subscription()
+		{
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int")]
+		public System.Nullable<int> OrgId
+		{
+			get
+			{
+				return this._OrgId;
+			}
+			set
+			{
+				if ((this._OrgId != value))
+				{
+					this.OnOrgIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrgId = value;
+					this.SendPropertyChanged("OrgId");
+					this.OnOrgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TopicId", DbType="Int")]
+		public System.Nullable<int> TopicId
+		{
+			get
+			{
+				return this._TopicId;
+			}
+			set
+			{
+				if ((this._TopicId != value))
+				{
+					this.OnTopicIdChanging(value);
+					this.SendPropertyChanging();
+					this._TopicId = value;
+					this.SendPropertyChanged("TopicId");
+					this.OnTopicIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CatId", DbType="Int")]
+		public System.Nullable<int> CatId
+		{
+			get
+			{
+				return this._CatId;
+			}
+			set
+			{
+				if ((this._CatId != value))
+				{
+					this.OnCatIdChanging(value);
+					this.SendPropertyChanging();
+					this._CatId = value;
+					this.SendPropertyChanged("CatId");
+					this.OnCatIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Subscription", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.Subscriptions1.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.Subscriptions1.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }
