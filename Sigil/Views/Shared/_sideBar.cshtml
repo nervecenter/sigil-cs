@@ -10,7 +10,7 @@
         <a href="@Url.Action("Index", "Subscriptions")"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
         <div class="sub-list">
             @foreach ( Subscription sub in Model ) {
-                if (sub.OrgId != 0)
+                if (sub.OrgId != 0 && sub.CatId == 0)
                 {
                     <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
                 }

@@ -30,20 +30,19 @@ namespace Sigil.Controllers {
 
             if (userID != null)
             {
+                //Get the users subscriptions
+                IQueryable<Subscription> userSubs = dc.Subscriptions.Where(s => s.UserId == userID);
 
-                IQueryable<Subscription> userSubs = from Subs in dc.Subscriptions
-                                                    where Subs.UserId == userID
-                                                    select Subs;
-
+                //get all the users issues based on their subscriptions
                 var userIssues = Get_User_Issues(userID, userSubs).ToList();
 
+                //sort the users issues by issue rank
                 userIssues.Sort(Rank);
-                
-                IQueryable<Vote> userVotes = from vote in dc.Votes
-                                             where vote.UserID == userID
-                                             select vote;
 
-                Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues, userVotes.ToList());
+                //gather all the votes the user made 
+                var userVotes = dc.Votes.Where(v => v.UserID == userID).ToList();
+
+                Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues, userVotes);
 
                 return View(issuesANDvotes);
             }
@@ -56,8 +55,7 @@ namespace Sigil.Controllers {
 
         public ActionResult LandingPage()
         {
-            var trending_topics = Get_Trending_Issues();
-
+            var trending_topics = Get_Trending_Issues_With_Topics();
 
             return View("LandingPage", trending_topics);
         }
@@ -82,6 +80,9 @@ namespace Sigil.Controllers {
             return View();
         }
 
+
+
+
         //==================================================================== Helper Functions =========================================================================================
 
         /// <summary>
@@ -95,51 +96,48 @@ namespace Sigil.Controllers {
             return dc.Issues.Where(i => userSubs.Any(s => s.OrgId == i.OrgId || (s.TopicId != 0 && s.TopicId == i.TopicId) || i.UserId == userID || (s.CatId != 0 && s.CatId == i.CatId)));
         }
 
+
         /// <summary>
         /// Gets the Top 3 trending issues site wide. FOR THE LANDING PAGE ONLY
         /// </summary>
         /// <returns></returns>
-        private List<Issue> Get_Trending_Issues()
+        private List<Issue> Get_Trending_Issues_With_Topics()
         {
-            var pretrending = from iss in dc.Issues
+            var pretrending = (from iss in dc.Issues
                               where iss.TopicId != 0
-                              select iss;
+                              select iss).ToList();
 
-            List < Tuple<Issue,double> > issue_ranks = new List<Tuple<Issue,double>>();
-            foreach(Issue i in pretrending)
-            {
-                
-                issue_ranks.Add(new Tuple<Issue, double>(i, Calculate_Rank(i)));
-            }
+            pretrending.Sort(Rank);
 
-            issue_ranks.Sort(delegate (Tuple<Issue, double> x, Tuple<Issue, double> y)
-            {
-                return x.Item2.CompareTo(y.Item2);
-            });
-
-            var trending = issue_ranks.OrderByDescending(i => i.Item2).Select(i => i.Item1).Take(3).ToList();
+            var trending = pretrending.Take(3).ToList();
 
             return trending;
         }
 
 
-        static DateTime test_date = new DateTime(2015, 7, 17, 13, 33, 57);
+
+
+        static DateTime test_date = new DateTime(2015, 7, 17, 13, 33, 57); //<------------ This will be changed once we go live.
         /// <summary>
-        /// Calculates and returns the passed in issues rank. Based off the Reddit trending formula.
+        /// Calculates and returns the passed in issues rank. Based off the Reddit trending formula. 
         /// </summary>
         /// <param name="issue">Issue you want the rank of.</param>
-        /// <returns></returns>
+        /// <returns>A double value with 7 decimal places</returns>
         private static double Calculate_Rank(Issue issue)
         {
             //Date of oldest submission as of right now ---> 7 / 17 / 2015 13:33:57
-            TimeSpan secs = issue.createTime - test_date;
-
-            return Math.Round(Math.Log(issue.votes + 1) - Math.Log(Convert.ToDouble(issue.votes + issue.viewCount) + 2) + secs.TotalSeconds / 19543, 7);
+            TimeSpan secs_alive = issue.createTime - test_date;
+            TimeSpan secs_voted = issue.lastVoted - issue.createTime;
+            var r = Math.Round(Math.Log(issue.votes + 1) - Math.Log(Convert.ToDouble(issue.votes + issue.viewCount) + 2) + (secs_alive.TotalSeconds + secs_voted.TotalSeconds) / 19543, 7);
+            return r;
 
         }
 
+
+
+
         /// <summary>
-        /// Comparison function called by the comparison object for sorting lists
+        /// Comparison function called by the comparison object for sorting lists. As of now sorts in decending order.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -152,12 +150,9 @@ namespace Sigil.Controllers {
             if (rank_x == rank_y)
                 return 0;
             else if (rank_x < rank_y)
-                return -1;
-            else
                 return 1;
+            else
+                return -1;
         }
-
-
-
     }
 }
