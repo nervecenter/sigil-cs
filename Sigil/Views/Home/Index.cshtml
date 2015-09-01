@@ -36,7 +36,7 @@
                                 </span>
                                 <span class="issue-user-date">
                                     @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
-                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@User.Identity.GetUserName()
+                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
                                 </span>
                             </div>
                         </div>

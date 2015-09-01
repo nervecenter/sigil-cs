@@ -50,46 +50,54 @@ namespace Sigil.Controllers {
             } 
             else 
             {
-                //return View(LandingPage());
-                return View( "LandingPage" );
+                return LandingPage();
+                
             }
         }
 
         public ActionResult LandingPage()
         {
-            //var trending_topics = Get_Trending_Topics();
+            var trending_topics = Get_Trending_Issues();
+      
 
-            //var trending_issues = Get_Trending_Issues(trending_topics);
-
-            return View();
+            return View("LandingPage", trending_topics);
         }
 
-        //private IQueryable<Issue> Get_Trending_Issues(IQueryable<Topic> trending_topics)
-        //{
-        //    var pre_issue = dc.Issues.OrderBy(i => i.votes).ThenBy(i => i.viewCount).ThenByDescending(i => i.createTime);
 
-            
-        //    foreach (Topic t in trending_topics)
-        //    {
 
-        //    }
+        private List<Issue> Get_Trending_Issues()
+        {
+            var pretrending = from iss in dc.Issues
+                              where iss.TopicId != null
+                              select iss;
 
-                              
-        //    return trend_issue;
-                              
-                               
-                                
-        //}
+            List < Tuple<Issue,double> > issue_ranks = new List<Tuple<Issue,double>>();
+            foreach(Issue i in pretrending)
+            {
+                
+                issue_ranks.Add(new Tuple<Issue, double>(i, Calculate_Rank(i)));
+            }
 
-        //private IQueryable<Issue> Get_Trending_Topics()
-        //{
-        //    //var trending = dc.Topics.OrderBy(t => t.lastAdded).ThenBy(t => t.views).Take(3);
-        //    var pretrending = dc.Issues.Where(i => i.TopicId != null).OrderBy(i => i.lastVoted).ThenBy(i => i.votes);
+            issue_ranks.Sort(delegate (Tuple<Issue, double> x, Tuple<Issue, double> y)
+            {
+                return x.Item2.CompareTo(y.Item2);
+            });
 
-        //    var trending = pretrending.GroupBy(i => i.TopicId).Select(grp => grp.First()).Take(3);
+            var trending = issue_ranks.OrderByDescending(i => i.Item2).Select(i => i.Item1).Take(3).ToList();
 
-        //    return trending;
-        //}
+            return trending;
+        }
+
+        static DateTime test_date = new DateTime(2015, 7, 17, 13, 33, 57);
+
+        private double Calculate_Rank(Issue issue)
+        {
+            //Date of oldest submission as of right now ---> 7 / 17 / 2015 13:33:57
+            TimeSpan secs = issue.createTime - test_date;
+
+            return Math.Round(Math.Log(issue.votes + 1) - Math.Log(Convert.ToDouble(issue.votes + issue.viewCount) + 2) + secs.TotalSeconds / 19543, 7);
+
+        }
 
 
         public ActionResult Legal()

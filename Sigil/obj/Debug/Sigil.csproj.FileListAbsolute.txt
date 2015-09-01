@@ -219,6 +219,6 @@ C:\Sigil\Sigil\bin\System.Web.Razor.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.Deployment.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.Razor.xml
+C:\Sigil\Sigil\obj\Debug\Sigil.csprojResolveAssemblyReference.cache
 C:\Sigil\Sigil\obj\Debug\Sigil.dll
 C:\Sigil\Sigil\obj\Debug\Sigil.pdb
-C:\Sigil\Sigil\obj\Debug\Sigil.csprojResolveAssemblyReference.cache
