@@ -37,7 +37,7 @@ namespace Sigil.Controllers
             The main page for an issue in any org. Contains vote buttons, issue text, responses, comment section. 
         ==================== 
         */
-
+        [Authorize]
         public ActionResult IssuePage( string orgURL, long issueID )
         {
             // Grab the issue's org
@@ -443,6 +443,7 @@ namespace Sigil.Controllers
             Form for adding an issue. Linked on org page. Adds issue to current org. 
         ==================== 
         */
+        [Authorize]
         public ActionResult CreateIssue()
         {
             return View("Addissue");
@@ -450,6 +451,7 @@ namespace Sigil.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public ActionResult AddIssue() {
             // Get the org for the issue we're adding
 
