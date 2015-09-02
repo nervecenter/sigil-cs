@@ -75,6 +75,26 @@ namespace Sigil {
                 defaults: new { controller = "Search", action = "Index" }
             );
 
+            //========================= Subscription Controller ==================================================================
+            routes.MapRoute(
+               name: "Subscriptions",
+               url: "subscriptions/",
+               defaults: new { controller = "Subscriptions", action = "Index" }
+            );
+            routes.MapRoute(
+                name: "Subscribe",
+                url: "subscribe/{orgURL}/",
+                defaults: new { controller = "Subscriptions", action = "AddSubscription" }
+            );
+
+            routes.MapRoute(
+                name: "UnSubscribe",
+                url: "unsubscribe/{orgURL}/",
+                defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
+            );
+
+
+
             //========================= Issue Controller ==================================================================
             routes.MapRoute(
                 name: "VoteUp",
@@ -110,24 +130,6 @@ namespace Sigil {
                 name: "IssueData",
                 url: "{orgURL}/{IssueId}/data/",
                 defaults: new { controller = "Issue", action = "IssueData" }
-            );
-
-            //========================= Subscription Controller ==================================================================
-            routes.MapRoute(
-               name: "Subscriptions",
-               url: "subscriptions/",
-               defaults: new { controller = "Subscriptions", action = "Index" }
-            );
-            routes.MapRoute(
-                name: "Subscribe",
-                url: "subscribe/{orgURL}/",
-                defaults: new { controller = "Subscriptions", action = "AddSubscription" }
-            );
-
-            routes.MapRoute(
-                name: "UnSubscribe",
-                url: "unsubscribe/{orgURL}/",
-                defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
 
 

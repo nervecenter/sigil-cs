@@ -40,6 +40,8 @@ namespace Sigil.Controllers
             Subscription new_sub = new Subscription();
             new_sub.OrgId = orgid.Id;
             new_sub.UserId = userid;
+            new_sub.CatId = 0;
+            new_sub.TopicId = 0;
 
             try
             {
@@ -48,7 +50,8 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine("Could not write new sub \"%s\" to database:\n%s", new_sub, e.Message);
+                ErrorHandler.Log_Error(new_sub, e);
+                //Console.WriteLine("Could not write new sub \"%s\" to database:\n%s", new_sub, e.Message);
             }
             return new EmptyResult();
         }
@@ -68,7 +71,8 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine("Could not delete sub \"%s\" to database:\n%s", sub, e.Message);
+                ErrorHandler.Log_Error(sub, e);
+                //Console.WriteLine("Could not delete sub \"%s\" to database:\n%s", sub, e.Message);
             }
 
 

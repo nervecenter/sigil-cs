@@ -4,3 +4,6 @@
 14:44:45Monday, August 31, 2015-- Error From Sigil.Models.ViewCount--SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.
 
 14:44:50Monday, August 31, 2015-- Error From Sigil.Models.ViewCount--SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.
+
+13:28:59 Wednesday, September 2, 2015 -- Error From Sigil.Models.Subscription -- Cannot insert the value NULL into column 'TopicId', table 'aspnet-Sigil-20150716011718.dbo.Subscriptions'; column does not allow nulls. INSERT fails.
+The statement has been terminated.

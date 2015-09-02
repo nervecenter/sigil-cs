@@ -20,9 +20,9 @@
                 Main Page
                 <a href="/@thisOrg.orgURL/data">Data</a>
                 @if ( userSub == default( Subscription ) ) {
-                    <img id="sub-button" class="unsubscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+                    <img id="sub-button" class="unsubscribed" onclick="set_sub(this, '@thisOrg.orgURL')" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
                 } else {
-                    <img id="sub-button" class="subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+                    <img id="sub-button" class="subscribed" onclick="set_sub(this, '@thisOrg.orgURL')" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
                 }
             </nav>
         </div>

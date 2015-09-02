@@ -1,7 +1,7 @@
 ﻿function subscribe(orgurl) {
     $.ajax({
         type: "POST",
-        url: '/' + orgurl + '/subscribe/',
+        url:  '/subscribe/' + orgurl + '/',
         success: function () {
 
         },
@@ -15,7 +15,7 @@
 function unsubscribe(orgurl) {
     $.ajax({
         type: "POST",
-        url: '/' + orgurl + '/unsubscribe/',
+        url:  '/unsubscribe/' + orgurl + '/',
         success: function () {
         },
         error: function (ts) {
@@ -29,14 +29,14 @@ function unsubscribe(orgurl) {
 function set_sub(subbutton, orgURL) {
     if (subbutton.classList.contains('unsubscribed')) {
         subscribe(orgURL);
-        votebutton.classList.remove('unsubscribed');
-        votebutton.classList.add('subscribed');
-        votebutton.src = "../Content/Images/unsubscribe_hover.png";
+        subbutton.classList.remove('unsubscribed');
+        subbutton.classList.add('subscribed');
+        subbutton.src = "../Content/Images/unsubscribe_hover.png";
     } else if (subbutton.classList.contains('subscribed')) {
         unsubscribe(orgURL)
-        votebutton.classList.remove('subscribed');
-        votebutton.classList.add('unsubscribed');
-        votebutton.src = "../Content/Images/subscribe_hover.png";
+        subbutton.classList.remove('subscribed');
+        subbutton.classList.add('unsubscribed');
+        subbutton.src = "../Content/Images/subscribe_hover.png";
     }
 }
 
