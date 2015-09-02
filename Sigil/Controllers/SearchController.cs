@@ -47,18 +47,42 @@ namespace Sigil.Controllers
         public JsonResult SearchOrgs(string term)
         {
             List<string> search_list = new List<string>();
-            if (!string.IsNullOrEmpty(term))
+            if (!string.IsNullOrEmpty(term) )
             {
                 search_list.AddRange(search_orgs(term));
             }
             return Json(search_list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SearchOrgs_Cats(string term)
+        {
+            List<string> search_list = new List<string>();
+            if(!string.IsNullOrEmpty(term))
+            {
+                search_list.AddRange(search_orgs(term));
+                search_list.AddRange(search_orgs_and_cats(term));          
+            }
+
+            return Json(search_list, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         /* 
         =============================================================================================================================================
         Helper functions for various searches
         =============================================================================================================================================
         */
+
+        private List<string> search_orgs_and_cats(string term)
+        {
+            var qu = from org in dc.Orgs
+                     from cat in dc.Categories
+                     where org.orgName.StartsWith(term)
+                     where cat.orgId == org.Id 
+                     select (org.orgName + "-" + cat.catName);
+            return qu.ToList();
+        }
 
         private List<string> search_users(string term)
         {

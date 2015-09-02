@@ -5,7 +5,7 @@
 <script type="text/javascript">
     $(function () {
         $('#orgBox').autocomplete({
-            source: '@Url.Action("SearchOrgs","Search")'
+            source: '@Url.Action("SearchOrgs_Cats", "Search")'
         });
     });
 </script>
@@ -58,6 +58,7 @@
         submitbutton.type = "submit";
         submitbutton.name = "buttonSubmit";
         submitbutton.value = "Add Issue";
+        submitbutton.formAction = "@Url.Action("AddIssue", "Issue")";
         submitp.appendChild(submitbutton);
     }
 </script>
