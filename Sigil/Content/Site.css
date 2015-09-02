@@ -233,6 +233,12 @@ a {
 	display: block;
 }
 
+.single-column {
+	width: 64em;
+	float: left;
+	display: block;
+}
+
 .feed-intent {
 	font-size: 1.5em;
 	font-weight: 600;
@@ -505,12 +511,21 @@ a {
 	margin-left: 1em;
 }
 
-.sub-list-box, .user-page-databox {
+.second-column-box, .user-page-databox {
 	margin-bottom: 1em;
 	width: 14em;
 	line-height: 1.6em;
 	border: 1px solid #CCC;
 	background-color: #FFF;
+}
+
+.add-issue-box {
+    text-align: center;
+}
+
+.add-issue-box:hover {
+    background-color: #2E95A5;
+    color: #FFF;
 }
 
 .subs-header, .user-databox-header {

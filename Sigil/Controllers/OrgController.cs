@@ -50,14 +50,14 @@ namespace Sigil.Controllers
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
+            IQueryable<Vote> userVotes;
 
             if (userId != null)
             {
-
                 // Get the user's votes on this org
-                IQueryable<Vote> userVotes = from vote in dc.Votes
-                                             where vote.UserID == userId && vote.Issue.OrgId == thisOrg.Id
-                                             select vote;
+                userVotes = from vote in dc.Votes
+                            where vote.UserID == userId && vote.Issue.OrgId == thisOrg.Id
+                            select vote;
                 ViewBag.userVotes = userVotes;
             }
             // Get the issues of the org
@@ -70,12 +70,57 @@ namespace Sigil.Controllers
             // MODEL: Put the org and the list of issues into a tuple as our page model
             Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>(thisOrg, issueList);
 
-            // Add the user and their votes on the org to the ViewBag
-            
+            ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
 
             // Pass our org and issues to the view as the model
             return View(orgAndIssues);
         }
+
+        /* 
+        ==================== 
+        OrgSubscribe
+  
+            Action method to be linked for allowing a user to subscribe to an org  
+        ==================== 
+        
+        [Authorize]
+        public ActionResult OrgSubscribe( string orgUrl ) {
+            Subscription newSub = new Subscription();
+            string userId = User.Identity.GetUserId();
+            Org thisOrg = dc.Orgs.Single( o => o.orgURL == orgUrl );
+
+            try {
+                newSub.UserId = userId;
+                newSub.OrgId = thisOrg.Id;
+
+                dc.Subscriptions.InsertOnSubmit( newSub );
+                dc.SubmitChanges();
+            } catch ( Exception e ) {
+                Console.WriteLine( "Could not subscribe to org: User %s, Org %s\n%s", User.Identity.GetUserName(), thisOrg.orgURL, e.Message );
+            }
+            return new EmptyResult();
+        }
+
+        /* 
+        ==================== 
+        OrgUnSubscribe
+  
+            Action method to be linked for allowing a user to unsubscribe from an org  
+        ==================== 
+        
+        [Authorize]
+        public ActionResult OrgUnSubscribe( string orgUrl ) {
+            string userId = User.Identity.GetUserId();
+            Subscription thisSub = dc.Subscriptions.Single( s => s.UserId == userId );
+
+            try {
+                dc.Subscriptions.DeleteOnSubmit( thisSub );
+                dc.SubmitChanges();
+            } catch ( Exception e ) {
+                Console.WriteLine( "Could not unsubscribe from org: User %s, Org %s\n%s", User.Identity.GetUserName(), thisSub.Org.orgURL, e.Message );
+            }
+            return new EmptyResult();
+        }*/
 
         /* 
         ==================== 

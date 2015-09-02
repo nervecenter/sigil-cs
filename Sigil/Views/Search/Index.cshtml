@@ -29,7 +29,7 @@
 
                 @foreach (Org org in Model.Item2)
                 {
-                    <li><a href="@Url.Action("OrgPage","Org" ,@org.orgURL)">@org.orgName</a></li>
+                    <li><a href="/@org.orgURL">@org.orgName</a></li>
                 }
             </ul>
         }

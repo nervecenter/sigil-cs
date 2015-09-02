@@ -1,7 +1,7 @@
-﻿function subscribe(orgid, userhandle) {
+﻿function subscribe(orgurl) {
     $.ajax({
         type: "POST",
-        url: '/subscribe/' + orgid + '/',
+        url: '/' + orgurl + '/subscribe/',
         success: function () {
 
         },
@@ -12,49 +12,46 @@
     });
 }
 
-function unsubscribe(orgid, userhandle) {
+function unsubscribe(orgurl) {
     $.ajax({
         type: "POST",
-        url: '/unsubscribe/' + orgid + '/',
+        url: '/' + orgurl + '/unsubscribe/',
         success: function () {
         },
         error: function (ts) {
-            alert('Could not unvote up.');
+            //alert('Could not unvote up.');
             alert(ts.responseText);
         }
     });
 }
 
 
-function set_sub(votebutton, orgID, userhandle) {
-    var count = document.getElementById('count-' + issueID);
-    if (votebutton.classList.contains('unchecked')) {
-        subscribe(orgID, userhandle);
-        votebutton.classList.remove('unchecked');
-        votebutton.classList.add('checked');
-        votebutton.src = "../Content/Images/check_mark_hover_small.png";
-        count.innerHTML = parseInt(count.innerHTML, 10) + 1;
-    } else if (votebutton.classList.contains('checked')) {
-        unsubscribe(orgID, userhandle)
-        votebutton.classList.remove('checked');
-        votebutton.classList.add('unchecked');
-        votebutton.src = "../Content/Images/vote_circle_hover_small.png";
-        count.innerHTML = parseInt(count.innerHTML, 10) - 1;
+function set_sub(subbutton, orgURL) {
+    if (subbutton.classList.contains('unsubscribed')) {
+        subscribe(orgURL);
+        votebutton.classList.remove('unsubscribed');
+        votebutton.classList.add('subscribed');
+        votebutton.src = "../Content/Images/unsubscribe_hover.png";
+    } else if (subbutton.classList.contains('subscribed')) {
+        unsubscribe(orgURL)
+        votebutton.classList.remove('subscribed');
+        votebutton.classList.add('unsubscribed');
+        votebutton.src = "../Content/Images/subscribe_hover.png";
     }
 }
 
 function subhover(votebutton) {
-    if (votebutton.classList.contains('unchecked')) {
-        votebutton.src = "../Content/Images/vote_circle_hover_small.png";
-    } else if (votebutton.classList.contains('checked')) {
-        votebutton.src = "../Content/Images/check_mark_hover_small.png";
+    if (votebutton.classList.contains('unsubscribed')) {
+        votebutton.src = "../Content/Images/subscribe_hover.png";
+    } else if (votebutton.classList.contains('subscribed')) {
+        votebutton.src = "../Content/Images/unsubscribe_hover.png";
     }
 }
 
 function subunhover(votebutton) {
-    if (votebutton.classList.contains('unchecked')) {
-        votebutton.src = "../Content/Images/vote_circle_small.png";
-    } else if (votebutton.classList.contains('checked')) {
-        votebutton.src = "../Content/Images/check_mark_small.png";
+    if (votebutton.classList.contains('unsubscribed')) {
+        votebutton.src = "../Content/Images/subscribe.png";
+    } else if (votebutton.classList.contains('subscribed')) {
+        votebutton.src = "../Content/Images/unsubscribe.png";
     }
 }
