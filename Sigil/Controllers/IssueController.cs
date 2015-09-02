@@ -446,7 +446,7 @@ namespace Sigil.Controllers
         [Authorize]
         public ActionResult CreateIssue()
         {
-            return View("Addissue");
+            return View("AddIssue");
         }
 
 

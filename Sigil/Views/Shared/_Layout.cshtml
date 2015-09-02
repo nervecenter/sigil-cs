@@ -26,8 +26,12 @@
 </head>
 <body class="page">
     <div class="page-container">
-        @Html.Partial("_Header")
-        @RenderBody()
+        @Html.Partial( "_Header" )
+        <section class="main">
+            @RenderBody()
+            @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
+            <br class="clear" />
+        </section>
     </div>
     @Html.Partial( "_Footer" )
     @RenderSection("scripts", required: false)

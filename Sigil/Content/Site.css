@@ -420,7 +420,32 @@ a {
 	position: absolute;
 }
 
-.comments-area, .response-box {
+fieldset {
+    border: none;
+}
+
+legend {
+    font-size: 1.4em;
+}
+
+.add-issue-input {
+    height: 2em;
+    padding-left: 1em;
+}
+
+.add-issue-half-width {
+    width: 45%;
+}
+
+.add-issue-full-width {
+    width: 90%;
+}
+
+.add-issue-text-input {
+    height: 20em;
+}
+
+.comments-area, .response-box, .first-column-box {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;

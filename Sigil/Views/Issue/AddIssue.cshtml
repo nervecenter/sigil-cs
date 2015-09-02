@@ -45,10 +45,14 @@
         textlabel.for = "text";
         textp.appendChild(textlabel);
         textlabel.innerHTML = "Explain your idea in-depth:";
+        textp.appendChild(document.createElement("br"));
         var textinput = document.createElement("input");
         textinput.type = "text";
         textinput.name = "text";
-        textinput.placeholder = "Explain your idea in-depth"
+        textinput.classList.add("add-issue-input");
+        textinput.classList.add("add-issue-full-width");
+        textinput.classList.add("add-issue-text-input");
+        textinput.placeholder = "Explain your idea in-depth";
         textp.appendChild(textinput);
         // Add our submit button
         var submitp = document.createElement("p");
@@ -64,21 +68,20 @@
 </script>
 
 
-<div class="main">
-    <div class="single-column">
+<div class="first-column">
+    <div class="first-column-box">
         <form method="post">
             <fieldset id="add-issue-fieldset">
-                <legend>Issue Information</legend>
+                <legend>Post a new idea, suggestion, or issue</legend>
                 <p>
-                    <label for="text">Company, person, or product:</label>
-                    <input id ="orgBox" type="text" name="orgName" value="@Request.Form["orgName"]" placeholder="Enter a company, person, or product" />
-                </p>   
+                    <label for="text">Company, person, or product:</label><br />
+                    <input id="orgBox" class="add-issue-input add-issue-half-width" type="text" name="orgName" value="@Request.Form["orgName"]" placeholder="Enter a company, person, or product" />
+                </p>
                 <p>
-                    <label for="text">Summary:</label>
-                    <input id="title-input" type="text" name="title" value="@Request.Form["title"]" oninput="appendAddTextButton()" placeholder="Search to see if your suggestion, idea, or issue has already been posted" />
+                    <label for="text">Summary:</label><br />
+                    <input id="title-input" class="add-issue-input add-issue-full-width" type="text" name="title" value="@Request.Form["title"]" oninput="appendAddTextButton()" placeholder="Search to see if your suggestion, idea, or issue has already been posted" />
                 </p>
             </fieldset>
         </form>
-
     </div>
 </div>

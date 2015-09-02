@@ -10,42 +10,39 @@
     List<Vote> voteList = Model.Item2;
 }
 
-<section class="main">
-    <div class="first-column">
-        <span class="feed-intent">@User.Identity.GetUserName()'s feed</span>
-        @if ( issueList.Count > 0 ) {
-            foreach ( Issue issue in issueList ) {
-                <article class="issue-box">
-                    <div class="issue-vote-area">
-                        <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                        @if ( voteList.Any( v => v.IssueId == issue.Id ) ) {
-                            // Issue has been voted on, get the checked button and checked class
-                            <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                        } else {
-                            // Issue hasn't been voted on, get the opposite
-                            <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                        }
-                    </div>
-                    <div class="issue-main-area">
-                        <div class="issue-main-cell">
-                            <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
-                            <div class="issue-info-area">
-                                <span class="issue-org-cat-topic">
-                                    <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Org.orgName
-                                    @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
-                                </span>
-                                <span class="issue-user-date">
-                                    @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
-                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
-                                </span>
-                            </div>
+<div class="first-column">
+    <span class="feed-intent">@User.Identity.GetUserName()'s feed</span>
+    @if ( issueList.Count > 0 ) {
+        foreach ( Issue issue in issueList ) {
+            <article class="issue-box">
+                <div class="issue-vote-area">
+                    <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
+                    @if ( voteList.Any( v => v.IssueId == issue.Id ) ) {
+                        // Issue has been voted on, get the checked button and checked class
+                        <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    } else {
+                        // Issue hasn't been voted on, get the opposite
+                        <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    }
+                </div>
+                <div class="issue-main-area">
+                    <div class="issue-main-cell">
+                        <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
+                        <div class="issue-info-area">
+                            <span class="issue-org-cat-topic">
+                                <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Org.orgName
+                                @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
+                            </span>
+                            <span class="issue-user-date">
+                                @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
+                                <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
+                            </span>
                         </div>
                     </div>
-                </article>
-            }
-        } else {
-            <h3>Nothing here. :( Search for a company, person, or topic to subscribe to!</h3>
+                </div>
+            </article>
         }
-    </div>
-    @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs(User) )
-</section>
+    } else {
+        <h3>Nothing here. :( Search for a company, person, or topic to subscribe to!</h3>
+    }
+</div>

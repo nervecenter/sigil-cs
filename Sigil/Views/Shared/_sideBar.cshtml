@@ -3,19 +3,12 @@
 @model List<Subscription>
 
 <div class="second-column">
-<<<<<<< HEAD
-    <a href="@Url.Action("AddIssue", "Issue")">
+    <a href="@Url.Action("CreateIssue", "Issue")">
         <div class="second-column-box add-issue-box">
             Post an idea, suggestion, or issue
         </div>
     </a>
     <div class="second-column-box">
-=======
-    <div class="sub-list-box">
-        <a href="@Url.Action("CreateIssue", "Issue")">Add a new Issue</a>
-    </div>
-    <div class="sub-list-box">
->>>>>>> master
         <a href="@Url.Action("Index", "Subscriptions")"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
         <div class="sub-list">
             @foreach ( Subscription sub in Model ) {

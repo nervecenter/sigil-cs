@@ -13,95 +13,93 @@
 
     Vote userVote = ViewBag.userVote;
 }
-<section class="main">
-    <div class="first-column">
-        <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png">
-        <article class="issue-body">
-            <div class="issue-vote-area">
-                <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
-                @if ( userVote != default( Vote ) ) {
-                    // Issue has been voted on, get the checked button and checked class
-                    <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                } else {
-                    // Issue hasn't been voted on, get the opposite
-                    <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                }
-            </div>
-            <div class="issue-main-area issue-main-issue-page">
-                <div class="issue-main-cell">
-                    <div class="issue-title-area issue-main-sub-areas"><span class="issue-title">@thisIssue.title</span></div>
-                    <div class="issue-info-area issue-main-sub-areas">
-                        <span class="issue-org-cat-topic">
-                            <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png">@thisIssue.Org.orgName :
-                            <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png">Windows
-                            in Operating Systems
-                        </span>
-                        <span class="issue-user-date">
-                            @thisIssue.createTime
-                            <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@thisIssue.AspNetUser.UserName
-                        </span>
-                    </div>
+
+<div class="first-column">
+    <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png">
+    <article class="issue-body">
+        <div class="issue-vote-area">
+            <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
+            @if ( userVote != default( Vote ) ) {
+                // Issue has been voted on, get the checked button and checked class
+                <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+            } else {
+                // Issue hasn't been voted on, get the opposite
+                <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+            }
+        </div>
+        <div class="issue-main-area issue-main-issue-page">
+            <div class="issue-main-cell">
+                <div class="issue-title-area issue-main-sub-areas"><span class="issue-title">@thisIssue.title</span></div>
+                <div class="issue-info-area issue-main-sub-areas">
+                    <span class="issue-org-cat-topic">
+                        <img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png">@thisIssue.Org.orgName :
+                        <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png">Windows
+                        in Operating Systems
+                    </span>
+                    <span class="issue-user-date">
+                        @thisIssue.createTime
+                        <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@thisIssue.AspNetUser.UserName
+                    </span>
                 </div>
             </div>
-            <br class="clear" />
-            <p class="issue-text">@thisIssue.text</p>
-        </article>
-        @{
-            if ( thisIssue.responded ) {
-                <article class="response-box">
-                    <article class="response">
-                        <span class="response-header">O F F I C I A L&emsp;R E S P O N S E</span>
-                        <div class="response-user-area">
-                            <img class="response-user-icon" src="../Content/Images/usericons/ms-mike_100.png">
-                            <br>
-                            MS-Mike
-                            <br>
-                            <span class="response-time">2 days ago</span>
-                            <br>
-                            <br>
-                            <img class="icon-helpful" src="../Content/Images/helpful.png">
-                            <br>
-                            <span class="text-helpful">Helpful</span>
-                            <br>
-                            <span class="text-rate">Rate this reponse</span>
-                            <br>
-                            <span class="text-unhelpful">Unhelpful</span>
-                            <br>
-                            <img class="icon-unhelpful" src="../Content/Images/unhelpful.png">
-                        </div>
-                        <div class="response-text">@thisIssue.officialComment</div>
-                    </article>
+        </div>
+        <br class="clear" />
+        <p class="issue-text">@thisIssue.text</p>
+    </article>
+    @{
+        if ( thisIssue.responded ) {
+            <article class="response-box">
+                <article class="response">
+                    <span class="response-header">O F F I C I A L&emsp;R E S P O N S E</span>
+                    <div class="response-user-area">
+                        <img class="response-user-icon" src="../Content/Images/usericons/ms-mike_100.png">
+                        <br>
+                        MS-Mike
+                        <br>
+                        <span class="response-time">2 days ago</span>
+                        <br>
+                        <br>
+                        <img class="icon-helpful" src="../Content/Images/helpful.png">
+                        <br>
+                        <span class="text-helpful">Helpful</span>
+                        <br>
+                        <span class="text-rate">Rate this reponse</span>
+                        <br>
+                        <span class="text-unhelpful">Unhelpful</span>
+                        <br>
+                        <img class="icon-unhelpful" src="../Content/Images/unhelpful.png">
+                    </div>
+                    <div class="response-text">@thisIssue.officialComment</div>
                 </article>
+            </article>
+        }
+    }
+    <div class="comments-area">
+        <span class="comments-header">C O M M E N T S</span>
+        @{
+            foreach ( Comment comm in issueComments ) {
+                <article class="comment">
+                    <div class="comment-user-area">
+                        <img class="comment-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
+                        @comm.AspNetUser.UserName
+                        <br />
+                        <span class="comment-time">@comm.postDate</span>
+                    </div>
+                    <div class="comment-text">@comm.text</div>
+                    <br class="clear" />
+                </article>
+                <hr class="comment-separator" />
             }
         }
-        <div class="comments-area">
-            <span class="comments-header">C O M M E N T S</span>
-            @{
-                foreach ( Comment comm in issueComments ) {
-                    <article class="comment">
-                        <div class="comment-user-area">
-                            <img class="comment-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
-                            @comm.AspNetUser.UserName
-                            <br />
-                            <span class="comment-time">@comm.postDate</span>
-                        </div>
-                        <div class="comment-text">@comm.text</div>
-                        <br class="clear" />
-                    </article>
-                    <hr class="comment-separator" />
-                }
-            }
-            <form method="post" class="comment-add-form">
-                <fieldset>
-                    <legend>Add a comment:</legend>
-                    <p>
-                        <input type="text" name="text" />
-                        @Html.ValidationMessage( "text" )
-                    </p>
-                    <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
-                </fieldset>
-            </form>
-        </div>
+        <form method="post" class="comment-add-form">
+            <fieldset>
+                <legend>Add a comment:</legend>
+                <p>
+                    <input type="text" name="text" />
+                    @Html.ValidationMessage( "text" )
+                </p>
+                <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
+            </fieldset>
+        </form>
     </div>
-    @Html.Partial( "_SideBar", Sigil.Controllers.AccountController.userSubs(User) )
-</section>
+</div>
