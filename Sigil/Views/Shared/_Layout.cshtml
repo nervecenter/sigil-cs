@@ -1,5 +1,17 @@
 ﻿@using Microsoft.AspNet.Identity
 
+@{ 
+    string actionCalled = ViewContext.RouteData.GetRequiredString( "action" );
+
+    string[] actionsWithoutSidebar = {
+        "Login"
+    };
+
+    string[] actionsWithoutFooter = {
+        "Login"
+    };
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,10 +38,18 @@
 </head>
 <body class="page">
     <div class="page-container">
-        @Html.Partial("_Header")
-        @RenderBody()
+        @Html.Partial( "_Header" )
+        <section class="main">
+            @RenderBody()
+            @if ( !actionsWithoutSidebar.Contains( actionCalled ) ) {
+                @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
+            }
+            <br class="clear" />
+        </section>
     </div>
-    @Html.Partial( "_Footer" )
+    @if ( !actionsWithoutFooter.Contains( actionCalled ) ) {
+        @Html.Partial( "_Footer" )
+    }
     @RenderSection("scripts", required: false)
 </body>
 </html>
