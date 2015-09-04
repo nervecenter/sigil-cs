@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using DotNet.Highcharts;
 using DotNet.Highcharts.Options;
 using DotNet.Highcharts.Helpers;
-
+using System.Data.SqlTypes;
 
 namespace Sigil.Controllers
 {
@@ -90,9 +90,14 @@ namespace Sigil.Controllers
             return View(orgIssueComments);
         }
 
+        /// <summary>
+        /// Increments the issues ViewCount table entry or if not created yet, makes a new viewcount entry for the issue.
+        /// </summary>
+        /// <param name="thisOrg">Org of the passed in issue</param>
+        /// <param name="thisIssue">Issue object from the table</param>
         private void ViewCount_Routine(Org thisOrg, Issue thisIssue)
         {
-            ViewCount vc = dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id && v.datetime.Date == DateTime.Today.Date);
+            ViewCount vc = dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& v.datetime.Date == DateTime.Today.Date);
             if (vc == default(ViewCount))
             {
                 try
@@ -101,8 +106,7 @@ namespace Sigil.Controllers
                     vc.datetime = DateTime.UtcNow;
                     vc.OrgId = thisOrg.Id;
                     vc.IssueId = thisIssue.Id;
-                    vc.count = 1;
-
+                    vc.count = ViewCountXML.CreateNew();
                     dc.ViewCounts.InsertOnSubmit(vc);
                     dc.SubmitChanges();
                 }
@@ -117,7 +121,7 @@ namespace Sigil.Controllers
             {
                 try
                 {
-                    vc.count++;
+                    vc.count = ViewCountXML.UpdateWeekCount(vc.count);
                     dc.SubmitChanges();
                 }
                 catch(Exception e)
@@ -129,6 +133,11 @@ namespace Sigil.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new comment and saves to DB
+        /// </summary>
+        /// <param name="thisIssue">Issue the comment is for</param>
+        /// <param name="userID">Comment creators user ID</param>
         private void Create_New_Comment(Issue thisIssue, string userID)
         {
             Comment newComment = new Comment();
@@ -160,6 +169,10 @@ namespace Sigil.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates the total view count of the passed in issue.
+        /// </summary>
+        /// <param name="issue"></param>
         private void Update_View_Count(Issue issue)
         {
             try
@@ -184,257 +197,257 @@ namespace Sigil.Controllers
             Data page for an issue, showing views/votes this week/month 
         ==================== 
         */
-        [Authorize]
-        public ActionResult IssueData( string orghandle, long issueID ) {
-            // Get the issue
-            Issue thisIssue = (from issue in dc.Issues
-                               where issue.Id == issueID
-                               select issue).SingleOrDefault();
+        //[Authorize]
+        //public ActionResult IssueData( string orghandle, long issueID ) {
+        //    // Get the issue
+        //    Issue thisIssue = (from issue in dc.Issues
+        //                       where issue.Id == issueID
+        //                       select issue).SingleOrDefault();
 
-            // Get the org
-            Org thisOrg = thisIssue.Org;
+        //    // Get the org
+        //    Org thisOrg = thisIssue.Org;
 
-            // If neither are valid, redirect to 404 page
-            if ( thisOrg == default(Org) || thisIssue == default(Issue) ) {
-                Response.Redirect("~/404");
-            }
+        //    // If neither are valid, redirect to 404 page
+        //    if ( thisOrg == default(Org) || thisIssue == default(Issue) ) {
+        //        Response.Redirect("~/404");
+        //    }
 
-            // MODEL: List of charts we'll be displaying in sequence
-            List<Highcharts> listOfCharts = new List<Highcharts>();
+        //    // MODEL: List of charts we'll be displaying in sequence
+        //    List<Highcharts> listOfCharts = new List<Highcharts>();
 
-            /*
-             *  WEEKLY Traffic Data
-             */
+        //    /*
+        //     *  WEEKLY Traffic Data
+        //     */
 
-            // TODO: Dynamically fill in holes properly where no votes or views have happened, rather than appending zeros to the end
+        //    // TODO: Dynamically fill in holes properly where no votes or views have happened, rather than appending zeros to the end
 
-            // For each day in the week, get that day's views on the issue, group them into a week of integers of views
-            List<int> weekOfViews = (from vc in dc.ViewCounts
-                                     where vc.IssueId == thisIssue.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-6.0)
-                                     orderby vc.datetime descending
-                                     select vc.count).ToList<int>();
+        //    // For each day in the week, get that day's views on the issue, group them into a week of integers of views
+        //    List<int> weekOfViews = (from vc in dc.ViewCounts
+        //                             where vc.IssueId == thisIssue.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-6.0)
+        //                             orderby vc.datetime descending
+        //                             select vc.count).ToList<int>();
 
-            // If there were days without entries (no views), append zeros to the beginning
-            // TODO: Fix this such that it inserts zeros into the days with no views
-            while ( weekOfViews.Count < 7 ) {
-                weekOfViews.Add(0);
-            }
+        //    // If there were days without entries (no views), append zeros to the beginning
+        //    // TODO: Fix this such that it inserts zeros into the days with no views
+        //    while ( weekOfViews.Count < 7 ) {
+        //        weekOfViews.Add(0);
+        //    }
 
-            // For each day in the week, get that day's votes on the issue in the org, group them into a week of integers of votes
-            List<int> weekOfVotes = (from vote in dc.Votes
-                                     where vote.IssueId == thisIssue.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-6.0)
-                                     group vote by vote.voteDate.Date into day
-                                     select day.Count()).ToList<int>();
+        //    // For each day in the week, get that day's votes on the issue in the org, group them into a week of integers of votes
+        //    List<int> weekOfVotes = (from vote in dc.Votes
+        //                             where vote.IssueId == thisIssue.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-6.0)
+        //                             group vote by vote.voteDate.Date into day
+        //                             select day.Count()).ToList<int>();
 
-            // If there were days without entries (no votes), append zeros to the beginning
-            // TODO: Fix this such that it inserts zeros into the days with no votes
-            while ( weekOfVotes.Count < 7 ) {
-                weekOfVotes.Add(0);
-            }
+        //    // If there were days without entries (no votes), append zeros to the beginning
+        //    // TODO: Fix this such that it inserts zeros into the days with no votes
+        //    while ( weekOfVotes.Count < 7 ) {
+        //        weekOfVotes.Add(0);
+        //    }
 
-            // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
+        //    // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
 
-            // Create a Highchart with X-axis for days of the week, and Y-axis series logging views and votes
-            Highcharts weekChart = new DotNet.Highcharts.Highcharts("weekChart")
-                .SetXAxis(new XAxis 
-                            {
-                                Categories = new[] { DateTime.Today.Date.AddDays(-6.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-5.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-4.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-3.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-2.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-1.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.ToShortDateString() }
-                })
-                .SetSeries(new Series[] {
-                            new Series {
-                                Data = new Data(new object[] { weekOfViews[6], 
-                                                               weekOfViews[5], 
-                                                               weekOfViews[4], 
-                                                               weekOfViews[3], 
-                                                               weekOfViews[2], 
-                                                               weekOfViews[1], 
-                                                               weekOfViews[0] }),
-                                Name = "Views"
-                            }, new Series {
-                                Data = new Data(new object[] { weekOfVotes[6], 
-                                                               weekOfVotes[5], 
-                                                               weekOfVotes[4], 
-                                                               weekOfVotes[3], 
-                                                               weekOfVotes[2], 
-                                                               weekOfVotes[1], 
-                                                               weekOfVotes[0] }),
-                                Name = "Votes"
-                            }
-                })
-                .SetTitle(new Title{ Text = "Traffic on Issue " + thisIssue.Id + " This Week" });
+        //    // Create a Highchart with X-axis for days of the week, and Y-axis series logging views and votes
+        //    Highcharts weekChart = new DotNet.Highcharts.Highcharts("weekChart")
+        //        .SetXAxis(new XAxis 
+        //                    {
+        //                        Categories = new[] { DateTime.Today.Date.AddDays(-6.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-5.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-4.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-3.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-2.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-1.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.ToShortDateString() }
+        //        })
+        //        .SetSeries(new Series[] {
+        //                    new Series {
+        //                        Data = new Data(new object[] { weekOfViews[6], 
+        //                                                       weekOfViews[5], 
+        //                                                       weekOfViews[4], 
+        //                                                       weekOfViews[3], 
+        //                                                       weekOfViews[2], 
+        //                                                       weekOfViews[1], 
+        //                                                       weekOfViews[0] }),
+        //                        Name = "Views"
+        //                    }, new Series {
+        //                        Data = new Data(new object[] { weekOfVotes[6], 
+        //                                                       weekOfVotes[5], 
+        //                                                       weekOfVotes[4], 
+        //                                                       weekOfVotes[3], 
+        //                                                       weekOfVotes[2], 
+        //                                                       weekOfVotes[1], 
+        //                                                       weekOfVotes[0] }),
+        //                        Name = "Votes"
+        //                    }
+        //        })
+        //        .SetTitle(new Title{ Text = "Traffic on Issue " + thisIssue.Id + " This Week" });
 
-            // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
-            listOfCharts.Add(weekChart);
-            int weekViewCount = weekOfViews.Sum();
-            int weekVoteCount = weekOfVotes.Sum();
-            ViewBag.weekViewCount = weekViewCount;
-            ViewBag.weekVoteCount = weekVoteCount;
-            ViewBag.weekRatio = ( (double)weekVoteCount / (double)weekViewCount ) * 100.0f;
-
-
-            /*
-             *  MONTHLY Traffic Data
-             */
-
-            // For each day in the month, get that day's views on the issue, group them into a month of integers of views
-            List<int> monthOfViews = (from vc in dc.ViewCounts
-                                      where vc.IssueId == thisIssue.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-29.0)
-                                      orderby vc.datetime descending
-                                      select vc.count).ToList<int>();
-
-            // If there were days without entires (no views), append zeros to the beginning
-            // TODO: Fix this such that it inserts zeros into the days with no views
-            while ( monthOfViews.Count < 30 ) {
-                monthOfViews.Add(0);
-            }
-
-            // For each day in the month, get that day's votes on the issue, group them into a month of integers of votes
-            List<int> monthOfVotes = (from vote in dc.Votes
-                                      where vote.IssueId == thisIssue.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-29.0)
-                                      group vote by vote.voteDate.Date into day
-                                      select day.Count()).ToList<int>();
-
-            // If there were days without entires (no votes), append zeros to the beginning
-            // TODO: Fix this such that it inserts zeros into the days with no votes
-            while ( monthOfVotes.Count < 30 ) {
-                monthOfVotes.Add(0);
-            }
-
-            // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
-
-            // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-            Highcharts monthChart = new DotNet.Highcharts.Highcharts("monthChart")
-                .SetXAxis(new XAxis 
-                            {
-                                Categories = new[] { DateTime.Today.Date.AddDays(-29.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-28.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-27.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-26.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-25.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-24.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-23.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-22.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-21.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-20.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-19.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-18.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-17.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-16.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-15.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-14.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-13.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-12.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-11.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-10.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-9.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-8.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-7.0).ToShortDateString(),
-                                                     DateTime.Today.Date.AddDays(-6.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-5.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-4.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-3.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-2.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.AddDays(-1.0).ToShortDateString(), 
-                                                     DateTime.Today.Date.ToShortDateString() },
-                                Labels = new XAxisLabels {
-                                    Rotation = -45
-                                }
-                })
-                .SetSeries(new Series[] {
-                            new Series {
-                                Data = new Data(new object[] { monthOfViews[29], 
-                                                               monthOfViews[28],
-                                                               monthOfViews[27], 
-                                                               monthOfViews[26], 
-                                                               monthOfViews[25], 
-                                                               monthOfViews[24], 
-                                                               monthOfViews[23], 
-                                                               monthOfViews[22], 
-                                                               monthOfViews[21],
-                                                               monthOfViews[20], 
-                                                               monthOfViews[19], 
-                                                               monthOfViews[18], 
-                                                               monthOfViews[17], 
-                                                               monthOfViews[16], 
-                                                               monthOfViews[15], 
-                                                               monthOfViews[14],
-                                                               monthOfViews[13], 
-                                                               monthOfViews[12], 
-                                                               monthOfViews[11], 
-                                                               monthOfViews[10], 
-                                                               monthOfViews[9], 
-                                                               monthOfViews[8], 
-                                                               monthOfViews[7],
-                                                               monthOfViews[6], 
-                                                               monthOfViews[5], 
-                                                               monthOfViews[4], 
-                                                               monthOfViews[3], 
-                                                               monthOfViews[2], 
-                                                               monthOfViews[1], 
-                                                               monthOfViews[0] }),
-                                Name = "Views"
-                            }, new Series {
-                                Data = new Data(new object[] { monthOfVotes[29], 
-                                                               monthOfVotes[28],
-                                                               monthOfVotes[27], 
-                                                               monthOfVotes[26], 
-                                                               monthOfVotes[25], 
-                                                               monthOfVotes[24], 
-                                                               monthOfVotes[23], 
-                                                               monthOfVotes[22], 
-                                                               monthOfVotes[21],
-                                                               monthOfVotes[20], 
-                                                               monthOfVotes[19], 
-                                                               monthOfVotes[18], 
-                                                               monthOfVotes[17], 
-                                                               monthOfVotes[16], 
-                                                               monthOfVotes[15], 
-                                                               monthOfVotes[14],
-                                                               monthOfVotes[13], 
-                                                               monthOfVotes[12], 
-                                                               monthOfVotes[11], 
-                                                               monthOfVotes[10], 
-                                                               monthOfVotes[9], 
-                                                               monthOfVotes[8], 
-                                                               monthOfVotes[7],
-                                                               monthOfVotes[6], 
-                                                               monthOfVotes[5], 
-                                                               monthOfVotes[4], 
-                                                               monthOfVotes[3], 
-                                                               monthOfVotes[2], 
-                                                               monthOfVotes[1], 
-                                                               monthOfVotes[0] }),
-                                Name = "Votes"
-                            }
-                })
-                .SetTitle(new Title{ Text = "Traffic on Issue " + thisIssue.Id + " This Month" });
-
-            // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
-            listOfCharts.Add(monthChart);
-            int monthViewCount = monthOfViews.Sum();
-            int monthVoteCount = monthOfVotes.Sum();
-            ViewBag.monthViewCount = monthViewCount;
-            ViewBag.monthVoteCount = monthVoteCount;
-            ViewBag.monthRatio = ( (double)monthVoteCount / (double)monthViewCount ) * 100.0f;
+        //    // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
+        //    listOfCharts.Add(weekChart);
+        //    int weekViewCount = weekOfViews.Sum();
+        //    int weekVoteCount = weekOfVotes.Sum();
+        //    ViewBag.weekViewCount = weekViewCount;
+        //    ViewBag.weekVoteCount = weekVoteCount;
+        //    ViewBag.weekRatio = ( (double)weekVoteCount / (double)weekViewCount ) * 100.0f;
 
 
-            /*
-             * VIEWBAG
-             */
+        //    /*
+        //     *  MONTHLY Traffic Data
+        //     */
 
-            // Add the issue and org to the ViewBag
-            ViewBag.thisIssue = thisIssue;
-            ViewBag.thisOrg = thisOrg;
+        //    // For each day in the month, get that day's views on the issue, group them into a month of integers of views
+        //    List<int> monthOfViews = (from vc in dc.ViewCounts
+        //                              where vc.IssueId == thisIssue.Id && vc.datetime.Date >= DateTime.Today.Date.AddDays(-29.0)
+        //                              orderby vc.datetime descending
+        //                              select vc.count).ToList<int>();
 
-            // Pass our model list of charts as the model of the view
-            return View(listOfCharts);
-        }
+        //    // If there were days without entires (no views), append zeros to the beginning
+        //    // TODO: Fix this such that it inserts zeros into the days with no views
+        //    while ( monthOfViews.Count < 30 ) {
+        //        monthOfViews.Add(0);
+        //    }
+
+        //    // For each day in the month, get that day's votes on the issue, group them into a month of integers of votes
+        //    List<int> monthOfVotes = (from vote in dc.Votes
+        //                              where vote.IssueId == thisIssue.Id && vote.voteDate.Date >= DateTime.Today.Date.AddDays(-29.0)
+        //                              group vote by vote.voteDate.Date into day
+        //                              select day.Count()).ToList<int>();
+
+        //    // If there were days without entires (no votes), append zeros to the beginning
+        //    // TODO: Fix this such that it inserts zeros into the days with no votes
+        //    while ( monthOfVotes.Count < 30 ) {
+        //        monthOfVotes.Add(0);
+        //    }
+
+        //    // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
+
+        //    // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
+        //    Highcharts monthChart = new DotNet.Highcharts.Highcharts("monthChart")
+        //        .SetXAxis(new XAxis 
+        //                    {
+        //                        Categories = new[] { DateTime.Today.Date.AddDays(-29.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-28.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-27.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-26.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-25.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-24.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-23.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-22.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-21.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-20.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-19.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-18.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-17.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-16.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-15.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-14.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-13.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-12.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-11.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-10.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-9.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-8.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-7.0).ToShortDateString(),
+        //                                             DateTime.Today.Date.AddDays(-6.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-5.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-4.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-3.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-2.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.AddDays(-1.0).ToShortDateString(), 
+        //                                             DateTime.Today.Date.ToShortDateString() },
+        //                        Labels = new XAxisLabels {
+        //                            Rotation = -45
+        //                        }
+        //        })
+        //        .SetSeries(new Series[] {
+        //                    new Series {
+        //                        Data = new Data(new object[] { monthOfViews[29], 
+        //                                                       monthOfViews[28],
+        //                                                       monthOfViews[27], 
+        //                                                       monthOfViews[26], 
+        //                                                       monthOfViews[25], 
+        //                                                       monthOfViews[24], 
+        //                                                       monthOfViews[23], 
+        //                                                       monthOfViews[22], 
+        //                                                       monthOfViews[21],
+        //                                                       monthOfViews[20], 
+        //                                                       monthOfViews[19], 
+        //                                                       monthOfViews[18], 
+        //                                                       monthOfViews[17], 
+        //                                                       monthOfViews[16], 
+        //                                                       monthOfViews[15], 
+        //                                                       monthOfViews[14],
+        //                                                       monthOfViews[13], 
+        //                                                       monthOfViews[12], 
+        //                                                       monthOfViews[11], 
+        //                                                       monthOfViews[10], 
+        //                                                       monthOfViews[9], 
+        //                                                       monthOfViews[8], 
+        //                                                       monthOfViews[7],
+        //                                                       monthOfViews[6], 
+        //                                                       monthOfViews[5], 
+        //                                                       monthOfViews[4], 
+        //                                                       monthOfViews[3], 
+        //                                                       monthOfViews[2], 
+        //                                                       monthOfViews[1], 
+        //                                                       monthOfViews[0] }),
+        //                        Name = "Views"
+        //                    }, new Series {
+        //                        Data = new Data(new object[] { monthOfVotes[29], 
+        //                                                       monthOfVotes[28],
+        //                                                       monthOfVotes[27], 
+        //                                                       monthOfVotes[26], 
+        //                                                       monthOfVotes[25], 
+        //                                                       monthOfVotes[24], 
+        //                                                       monthOfVotes[23], 
+        //                                                       monthOfVotes[22], 
+        //                                                       monthOfVotes[21],
+        //                                                       monthOfVotes[20], 
+        //                                                       monthOfVotes[19], 
+        //                                                       monthOfVotes[18], 
+        //                                                       monthOfVotes[17], 
+        //                                                       monthOfVotes[16], 
+        //                                                       monthOfVotes[15], 
+        //                                                       monthOfVotes[14],
+        //                                                       monthOfVotes[13], 
+        //                                                       monthOfVotes[12], 
+        //                                                       monthOfVotes[11], 
+        //                                                       monthOfVotes[10], 
+        //                                                       monthOfVotes[9], 
+        //                                                       monthOfVotes[8], 
+        //                                                       monthOfVotes[7],
+        //                                                       monthOfVotes[6], 
+        //                                                       monthOfVotes[5], 
+        //                                                       monthOfVotes[4], 
+        //                                                       monthOfVotes[3], 
+        //                                                       monthOfVotes[2], 
+        //                                                       monthOfVotes[1], 
+        //                                                       monthOfVotes[0] }),
+        //                        Name = "Votes"
+        //                    }
+        //        })
+        //        .SetTitle(new Title{ Text = "Traffic on Issue " + thisIssue.Id + " This Month" });
+
+        //    // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
+        //    listOfCharts.Add(monthChart);
+        //    int monthViewCount = monthOfViews.Sum();
+        //    int monthVoteCount = monthOfVotes.Sum();
+        //    ViewBag.monthViewCount = monthViewCount;
+        //    ViewBag.monthVoteCount = monthVoteCount;
+        //    ViewBag.monthRatio = ( (double)monthVoteCount / (double)monthViewCount ) * 100.0f;
+
+
+        //    /*
+        //     * VIEWBAG
+        //     */
+
+        //    // Add the issue and org to the ViewBag
+        //    ViewBag.thisIssue = thisIssue;
+        //    ViewBag.thisOrg = thisOrg;
+
+        //    // Pass our model list of charts as the model of the view
+        //    return View(listOfCharts);
+        //}
 
         /* 
         ==================== 

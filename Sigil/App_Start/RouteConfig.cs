@@ -93,6 +93,24 @@ namespace Sigil {
                 defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
 
+            //========================= Org Controller ==================================================================
+            routes.MapRoute(
+                name: "OrgData",
+                url: "{orgURL}/data/",
+                defaults: new { controller = "Org", action = "OrgData" }
+            );
+
+            routes.MapRoute(
+              name: "Org",
+              url: "{orgURL}/",
+              defaults: new { controller = "Org", action = "OrgPage" }
+            );
+
+            //routes.MapRoute(
+            //    name: "Org Category Page",
+            //    url: "{orgURL}/{catURL}/",
+            //    defaults: new { controller = "Org", action = "CatPage" }
+            //);
 
 
             //========================= Issue Controller ==================================================================
@@ -130,26 +148,6 @@ namespace Sigil {
                 name: "IssueData",
                 url: "{orgURL}/{IssueId}/data/",
                 defaults: new { controller = "Issue", action = "IssueData" }
-            );
-
-
-            //========================= Org Controller ==================================================================
-            routes.MapRoute(
-                name: "OrgData",
-                url: "{orgURL}/data/",
-                defaults: new { controller = "Org", action = "OrgData" }
-            );
-
-            routes.MapRoute(
-              name: "Org",
-              url: "{orgURL}/",
-              defaults: new { controller = "Org", action = "OrgPage" }
-            );
-
-            routes.MapRoute(
-                name: "Org Category Page",
-                url: "{orgURL}/{catURL}/",
-                defaults: new { controller = "Org", action = "CatPage" }
             );
 
             //========================= Default Controller ==================================================================

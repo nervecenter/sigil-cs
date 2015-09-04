@@ -12,28 +12,35 @@
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="~/Scripts/Highcharts-4.0.1/js/highcharts.js"></script>
 
-<div id="sub-header"><h1>@thisOrg.orgName</h1></div>
-<div id="content">
-    <div id="main">
-        <div class="issue-options">
-            <ul class="issue-options-list">
-                <li class="issue-option"><a href="@Url.Action("OrgPage", "Org", new { orgName = thisOrg.orgName })">Org Page</a></li>
-                <li class="issue-option">Data</li>
-            </ul>
-        </div>
-        <h1>Data for @thisOrg.orgName</h1>
+<div class="first-column">
+    <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png"><h1>@thisOrg.orgName</h1>
+    <article class="org-data-body">
+        Views over week/month
         @(Model[0])
         <p>
             Views this week: @ViewBag.weekViewCount<br />
             Votes this week: @ViewBag.weekVoteCount<br />
             Conversion rate: @ViewBag.weekRatio%
         </p>
+        <br />
+        Votes over week/month
         @(Model[1])
         <p>
             Views this month: @ViewBag.monthViewCount<br />
             Votes this month: @ViewBag.monthVoteCount<br />
             Conversion rate: @ViewBag.monthRatio%
         </p>
-    </div>
-    <div id="rightbar">Right bar</div>
+        <br />
+        Conversion rates views->votes over week/month
+        <br />
+        New Subscriptions over week/month
+        <br />
+        Conversion rates votes-> Subscriptions over week/month
+        <br />
+        Top 10 votes issues this week/month
+        <br />
+        Top 10 underdog issues this week/month
+        <br />
+        Company Responsiveness this week/month: Response Rate, average time to respond
+        </article>
 </div>

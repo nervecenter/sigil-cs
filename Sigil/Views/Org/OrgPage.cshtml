@@ -11,20 +11,6 @@
     Subscription userSub = ViewBag.userSub;
 }
 
-<<<<<<< HEAD
-
-<section class="main">
-    <div class="first-column">
-        <img class="feed-header" src="../Content/Images/orgheaders/microsoft.png">
-        <div class="issue-options">
-            <nav class="issue-options-list">
-                Main Page
-                <a href="/@thisOrg.orgURL/data">Data</a>
-                @if ( userSub == default( Subscription ) ) {
-                    <img id="sub-button" class="unsubscribed" onclick="set_sub(this, '@thisOrg.orgURL')" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-                } else {
-                    <img id="sub-button" class="subscribed" onclick="set_sub(this, '@thisOrg.orgURL')" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-=======
 <div class="first-column">
     <img class="feed-header" src="../Content/Images/orgheaders/microsoft.png">
     <div class="issue-options">
@@ -48,7 +34,6 @@
                 } else {
                     // Issue hasn't been voted on, get the opposite
                     <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
->>>>>>> master
                 }
             </div>
             <div class="issue-main-area">
