@@ -303,14 +303,21 @@ a {
 .issue-body, 
 .issue-submit-body, 
 .issue-data-body, 
-.org-data-body, 
-.legal-body, 
+.org-data-body,  
 .user-edit-body {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;
 	background-color: #FFF;
 	margin-bottom: 1.5em;
+}
+
+.first-column-header {
+    margin: 1em 1em 1em 1em;
+}
+
+.first-column-paragraph {
+    margin: 0em 1em 1em 1em;
 }
 
 .issue-box-small {

@@ -8,25 +8,22 @@
             Post an idea, suggestion, or issue
         </div>
     </a>
-    <div class="second-column-box">
-        <a href="@Url.Action("Index", "Subscriptions")"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
-        <div class="sub-list">
-            @foreach ( Subscription sub in Model ) {
-                if (sub.OrgId != 0 && sub.CatId == 0)
-                {
-                    <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
+    @if ( Request.IsAuthenticated ) {
+        <div class="second-column-box">
+            <a href="@Url.Action( "Index", "Subscriptions" )"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
+            <div class="sub-list">
+                @foreach ( Subscription sub in Model ) {
+                    if ( sub.OrgId != 0 && sub.CatId == 0 ) {
+                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
+                    } else if ( sub.CatId != 0 ) {
+                        <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName - @sub.Category.catName</a><br>
+                    } else {
+                        <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Topic.topicURL</a><br>
+                    }
                 }
-                else if (sub.CatId != 0)
-                {
-                    <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName - @sub.Category.catName</a><br>
-                }
-                else
-                {
-                    <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Topic.topicURL</a><br>
-                }
-            }
+            </div>
         </div>
-    </div>
+    }
     <div class="placeholder">
         Ads go here.
     </div>
