@@ -251,7 +251,7 @@ a {
 	width: 50em;
 	height: 15em;
 	border: 1px solid #CCC;
-	margin-bottom: 1.5em;
+	margin-bottom: 1em;
 }
 
 .org-banner {
@@ -322,6 +322,10 @@ a {
 
 .banner-button {
     width: 32%;
+}
+
+.ban-but-marg {
+    margin-right: 1.4%;
 }
 
 .issue-box-small {
