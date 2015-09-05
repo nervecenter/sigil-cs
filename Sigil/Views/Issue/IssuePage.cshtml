@@ -1,17 +1,17 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
 @using Sigil.Models
 @model Tuple<Org, Issue, IQueryable<Comment>>
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     Org thisOrg = Model.Item1;
     Issue thisIssue = Model.Item2;
     IQueryable<Comment> issueComments = Model.Item3;
 
     Vote userVote = ViewBag.userVote;
+
+    ViewBag.Title = "Sigil - " + thisIssue.title;
 }
 
 <div class="first-column">
@@ -60,12 +60,6 @@
                         <br>
                         <br>
                         <img class="icon-helpful" src="../Content/Images/helpful.png">
-                        <br>
-                        <span class="text-helpful">Helpful</span>
-                        <br>
-                        <span class="text-rate">Rate this reponse</span>
-                        <br>
-                        <span class="text-unhelpful">Unhelpful</span>
                         <br>
                         <img class="icon-unhelpful" src="../Content/Images/unhelpful.png">
                     </div>
