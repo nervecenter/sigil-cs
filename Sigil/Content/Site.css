@@ -689,6 +689,10 @@ legend {
 	color: #FFF;
 }
 
+.rights {
+    font-size: 0.75em;
+}
+
 .aspnet {
 	font-size: 0.9em;
 	text-decoration: none;
