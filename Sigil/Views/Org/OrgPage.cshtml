@@ -1,11 +1,12 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@using Sigil.Models
+﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 @model Tuple<Org, IQueryable<Issue>>
+
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     Org thisOrg = Model.Item1;
+    ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
     IQueryable<Vote> userVotes = ViewBag.userVotes;
     Subscription userSub = ViewBag.userSub;
@@ -15,12 +16,12 @@
     <img class="feed-header" src="../Content/Images/orgheaders/microsoft.png">
     <div class="issue-options">
         <nav class="issue-options-list">
-            Main Page
-            <a href="/@thisOrg.orgURL/data">Data</a>
+            <a href="@Url.Action("OrgPage", "Org", thisOrg.orgURL)"><img class="banner-button" style="margin-right:1%;" src="~/Content/Images/data.png" onmouseover="subhover(this)" onmouseout="subunhover(this)"></a>
+            <a href="@Url.Action("OrgData", "Org", thisOrg.orgURL)"><img class="banner-button" src="~/Content/Images/feed.png" onmouseover="subhover(this)" onmouseout="subunhover(this)"></a>
             @if ( userSub == default( Subscription ) ) {
-                <img id="sub-button" class="unsubscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+                <img id="sub-button" class="banner-button unsubscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
             } else {
-                <img id="sub-button" class="subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+                <img id="sub-button" class="banner-button subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
             }
         </nav>
     </div>

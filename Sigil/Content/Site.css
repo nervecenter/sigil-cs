@@ -320,6 +320,10 @@ a {
     margin: 0em 1em 1em 1em;
 }
 
+.banner-button {
+    width: 32%;
+}
+
 .issue-box-small {
 	width: 25em;
 	min-height: 11em;
