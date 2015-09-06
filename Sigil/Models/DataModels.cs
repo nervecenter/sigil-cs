@@ -12,42 +12,20 @@ using System.Xml.Linq;
 namespace Sigil.Models
 {
 
-    public static class ViewCountXML
+    public static class CountXML<T>
     {
-
-        public static XElement CreateNew()
-        {
-            ViewCountCol vcol = new ViewCountCol();
-            vcol.Update();
-            return DATAtoXML(vcol);
-        }
-
         /// <summary>
-        /// Used to update the count of a ViewCount.count data field
+        /// Converts a ____CountCol object which keeps a list of Views per week for an issue into XML format to store in ___Counts.count field
         /// </summary>
-        /// <param name="vcData">XML Data from ViewCount.count field</param>
-        /// <returns></returns>
-        public static XElement UpdateWeekCount(XElement vcData)
-        {
-            ViewCountCol vcol = XMLtoDATA(vcData);
-
-            vcol.Update();
-
-            return DATAtoXML(vcol);
-        }
-
-        /// <summary>
-        /// Converts a ViewCountCol object which keeps a list of Views per week for an issue into XML format to store in Viewcounts.count field
-        /// </summary>
-        /// <param name="vcData">Already Existing ViewCount.count data coverted from XML into ViewCountCol</param>
-        /// <returns></returns>
-        public static XElement DATAtoXML(ViewCountCol vcData)
+        /// <param name="vcData">Already Existing ____Count.count data coverted from XML into ____CountCol</param>
+        /// <returns>XML data to insert into DB field</returns>
+        public static XElement DATAtoXML(T vcData)
         {
             using (var memStream = new MemoryStream())
             {
                 using (TextWriter streamWriter = new StreamWriter(memStream))
                 {
-                    var xmlSerial = new XmlSerializer(typeof(ViewCountCol));
+                    var xmlSerial = new XmlSerializer(typeof(T));
                     xmlSerial.Serialize(streamWriter, vcData);
                     return XElement.Parse(Encoding.ASCII.GetString(memStream.ToArray()));
                 }
@@ -55,30 +33,35 @@ namespace Sigil.Models
         }
 
         /// <summary>
-        /// Used to unserialize Xml data into a ViewCountCol to update a views for a week
+        /// Used to unserialize Xml data into a ____CountCol collection
         /// </summary>
         /// <param name="xmlVC"></param>
-        /// <returns></returns>
-        public static ViewCountCol XMLtoDATA(XElement xmlVC)
+        /// <returns>T data collection so that it can be updated </returns>
+        public static T XMLtoDATA(XElement xmlVC)
         {
-            var xmlSerial = new XmlSerializer(typeof(ViewCountCol));
-            return (ViewCountCol)xmlSerial.Deserialize(xmlVC.CreateReader());
+            var xmlSerial = new XmlSerializer(typeof(T));
+            return (T)xmlSerial.Deserialize(xmlVC.CreateReader());
         }
     }
 
+
+    //================================= ViewCounts helper data structures =========================================================================//
+
+    
     public class ViewCountCol : ICollection
     {
-        private List<ViewCountWeek> vcArray = new List<ViewCountWeek>();
-       
+        private List<ViewCountDay> vcArray = new List<ViewCountDay>();
 
-        public ViewCountWeek this[int index]
+        public ViewCountCol() { Update(); }
+
+        public ViewCountDay this[int index]
         {
-            get { return (ViewCountWeek)vcArray[index]; }
+            get { return (ViewCountDay)vcArray[index]; }
         }
 
         public void CopyTo(Array a, int index)
         {
-            vcArray.CopyTo((ViewCountWeek[])a, index);
+            vcArray.CopyTo((ViewCountDay[])a, index);
         }
 
         public int Count
@@ -101,7 +84,7 @@ namespace Sigil.Models
             return vcArray.GetEnumerator();
         }
 
-        public void Add(ViewCountWeek newVCW)
+        public void Add(ViewCountDay newVCW)
         {
             vcArray.Add(newVCW);
         }
@@ -111,41 +94,41 @@ namespace Sigil.Models
             if (vcArray.Count > 0 && isCurrent())
                 vcArray[vcArray.Count - 1].updateCount();
             else
-                vcArray.Add(new ViewCountWeek(DateTime.UtcNow, 1));
+                vcArray.Add(new ViewCountDay(DateTime.UtcNow, 1));
             
         }
 
         public bool isCurrent()
         {
-            if (WeekCompare.isSame(vcArray[vcArray.Count - 1].weekDate, DateTime.UtcNow))
+            if (vcArray[vcArray.Count - 1].date.Date == DateTime.UtcNow.Date)
                 return true;
             else
                 return false;
         }
-    }
-    
-    public static class WeekCompare
-    {
-        public static Calendar cal = DateTimeFormatInfo.CurrentInfo.Calendar;
 
-        public static bool isSame(DateTime a, DateTime b)
+        public int Get_Views(DateTime day)
         {
-            return (a.Year == b.Year && cal.GetWeekOfYear(a, DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek) == cal.GetWeekOfYear(b, DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek));
+            foreach (ViewCountDay v in vcArray)
+            {
+                if (v.date.Date == day.Date)
+                    return v.count;
+            }
+            return 0;
         }
     }
 
     /// <summary>
     /// Class model Viewccount data for issues and orgs.
     /// </summary>
-    public class ViewCountWeek
+    public class ViewCountDay
     {
         public int count;
-        public DateTime weekDate;
-        public ViewCountWeek() { }
-        public ViewCountWeek(DateTime d, int c)
+        public DateTime date;
+        public ViewCountDay() { }
+        public ViewCountDay(DateTime d, int c)
         {
             count = c;
-            weekDate = d;
+            date = d;
         }
 
         public void updateCount()
@@ -155,4 +138,228 @@ namespace Sigil.Models
         
     }
 
+
+    //================================= VoteCounts helper data structures =========================================================================//
+
+
+    public class VoteCountCol : ICollection
+    {
+        private List<VoteCountDay> vcArray = new List<VoteCountDay>();
+
+        public VoteCountCol() { Update(); }
+
+        public VoteCountDay this[int index]
+        {
+            get { return (VoteCountDay)vcArray[index]; }
+        }
+
+        public void CopyTo(Array a, int index)
+        {
+            vcArray.CopyTo((VoteCountDay[])a, index);
+        }
+
+        public int Count
+        {
+            get { return vcArray.Count; }
+        }
+
+        public object SyncRoot
+        {
+            get { return this; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return vcArray.GetEnumerator();
+        }
+
+        public void Add(VoteCountDay newVCW)
+        {
+            vcArray.Add(newVCW);
+        }
+
+        public void Update()
+        {
+            if (vcArray.Count > 0 && isCurrent())
+                vcArray[vcArray.Count - 1].updateCount();
+            else
+                vcArray.Add(new VoteCountDay(DateTime.UtcNow, 1));
+
+        }
+
+        public bool isCurrent()
+        {
+            if (vcArray[vcArray.Count - 1].date.Date == DateTime.UtcNow.Date)
+                return true;
+            else
+                return false;
+        }
+
+        public int Get_Votes(DateTime day)
+        {
+            foreach(VoteCountDay v in vcArray)
+            {
+                if (v.date.Date == day.Date)
+                    return v.count;
+            }
+            return 0;
+        }
+
+        public void Delete_Vote()
+        {
+            vcArray[vcArray.Count - 1].count--;
+        }        
+    }
+
+    /// <summary>
+    /// Class model Voteccount data for issues and orgs.
+    /// </summary>
+    public class VoteCountDay
+    {
+        public int count;
+        public DateTime date;
+        public VoteCountDay() { }
+        public VoteCountDay(DateTime d, int c)
+        {
+            count = c;
+            date = d;
+        }
+
+        public void updateCount()
+        {
+            count++;
+        }
+
+    }
+
+
+    //================================= UserVotes helper data structures =========================================================================//
+
+
+    public class UserVoteCol : ICollection
+    {
+        private List<UserVote> uvArray = new List<UserVote>();
+
+        UserVoteCol() { }
+        public UserVoteCol(int issueid, int orgid)
+        {
+            Add_Vote(issueid, orgid);
+        }
+
+        public UserVote this[int index]
+        {
+            get { return (UserVote)uvArray[index]; }
+        }
+
+        public void CopyTo(Array a, int index)
+        {
+            uvArray.CopyTo((UserVote[])a, index);
+        }
+
+        public int Count
+        {
+            get { return uvArray.Count; }
+        }
+
+        public object SyncRoot
+        {
+            get { return this; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return uvArray.GetEnumerator();
+        }
+
+        public void Add(UserVote newVCW)
+        {
+            uvArray.Add(newVCW);
+        }
+
+        /// <summary>
+        /// Adds a vote to the List of users votes
+        /// </summary>
+        /// <param name="issueID">Id of the issue that is being voted on.</param>
+        /// <param name="orgID">ID of the Org the issues is associated with.</param>
+        public void Add_Vote(int issueID, int orgID)
+        {
+            uvArray.Add(new UserVote(issueID, orgID));
+        }
+        
+        /// <summary>
+        /// Deletes a vote of the user.
+        /// </summary>
+        /// <param name="issueID">Id f the issue the votes is being deleted from</param>
+        /// <param name="orgID">Id of the org the issue is associated with</param>
+        /// <returns>True if found and deleted, False if not found in list.</returns>
+        public bool Delete_Vote(int issueID, int orgID)
+        {
+            foreach(UserVote uv in uvArray)
+            {
+                if (uv.IssueID == issueID && uv.OrgID == orgID)
+                {
+                    uvArray.Remove(uv);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the users votes
+        /// </summary>
+        /// <returns>A list of UserVote objects.</returns>
+        public List<UserVote> Get_Votes()
+        {
+            return uvArray;
+        }
+
+
+    }
+
+    /// <summary>
+    /// Class model UserVote data for issues and orgs.
+    /// </summary>
+    public class UserVote
+    {
+        public int IssueID;
+        public int OrgID;
+
+        public UserVote() { }
+        public UserVote(int issueID, int orgID)
+        {
+            IssueID = issueID;
+            OrgID = orgID;
+        }
+    }
+
+
+
+
+
+    //============================= HighChart Helper Datastructure ===============================================================================//
+
+    public class GraphData
+    {
+        public DateTime date;
+        public int voteCount;
+        public int viewCount;
+
+        public GraphData(DateTime d, int voteC, int viewC)
+        {
+            date = d;
+            voteCount = voteC;
+            viewCount = viewC;
+        }
+    }
 }

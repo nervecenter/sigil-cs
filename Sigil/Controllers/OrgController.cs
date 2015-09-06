@@ -50,14 +50,12 @@ namespace Sigil.Controllers
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
-            IQueryable<Vote> userVotes;
+            List<UserVote> userVotes;
 
             if (userId != null)
             {
                 // Get the user's votes on this org
-                userVotes = from vote in dc.Votes
-                            where vote.UserID == userId && vote.Issue.OrgId == thisOrg.Id
-                            select vote;
+                userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userId).votes).Get_Votes();
                 ViewBag.userVotes = userVotes;
             }
             // Get the issues of the org

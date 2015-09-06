@@ -40,9 +40,9 @@ namespace Sigil.Controllers {
                 userIssues.Sort(Rank);
 
                 //gather all the votes the user made 
-                var userVotes = dc.Votes.Where(v => v.UserID == userID).ToList();
+                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userID).votes).Get_Votes();
 
-                Tuple<List<Issue>, List<Vote>> issuesANDvotes = new Tuple<List<Issue>, List<Vote>>(userIssues, userVotes);
+                Tuple<List<Issue>, List<UserVote>> issuesANDvotes = new Tuple<List<Issue>, List<UserVote>>(userIssues, userVotes);
 
                 return View(issuesANDvotes);
             }
@@ -83,7 +83,7 @@ namespace Sigil.Controllers {
 
 
 
-        //==================================================================== Helper Functions =========================================================================================
+        //==================================================================== Helper Functions =============================================================
 
         /// <summary>
         /// Returns all issues associated with the users passed in subscriptions.

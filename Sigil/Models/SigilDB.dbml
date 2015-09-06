@@ -36,24 +36,13 @@
       <Column Name="AccessFailedCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="orgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="subscriptions" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="subscriptions" Member="votes" Storage="_subscriptions" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
       <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
-      <Association Name="AspNetUser_Vote" Member="Votes" ThisKey="Id" OtherKey="UserID" Type="Vote" />
       <Association Name="AspNetUser_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="UserId" Type="OfficialResponse" />
       <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions1" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
       <Association Name="AspNetUserRole_AspNetUser" Member="AspNetUserRole" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" IsForeignKey="true" />
       <Association Name="Org_AspNetUser" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Votes" Member="Votes">
-    <Type Name="Vote">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="UserID" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="voteDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="AspNetUser_Vote" Member="AspNetUser" ThisKey="UserID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
-      <Association Name="Issue_Vote" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Notifications" Member="Notifications">
@@ -79,6 +68,7 @@
       <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
       <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
       <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
+      <Association Name="Org_VoteCount" Member="VoteCounts" ThisKey="Id" OtherKey="OrgId" Type="VoteCount" />
     </Type>
   </Table>
   <Table Name="dbo.OfficialResponse" Member="OfficialResponses">
@@ -113,9 +103,9 @@
       <Column Name="CatId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TopicId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
-      <Association Name="Issue_Vote" Member="Votes1" ThisKey="Id" OtherKey="IssueId" Type="Vote" />
       <Association Name="Issue_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="issueId" Type="OfficialResponse" />
       <Association Name="Issue_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="IssueId" Type="ViewCount" />
+      <Association Name="Issue_VoteCount" Member="VoteCounts" ThisKey="Id" OtherKey="IssueId" Type="VoteCount" />
       <Association Name="AspNetUser_Issue" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
       <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
       <Association Name="Category_Issue" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
@@ -166,6 +156,16 @@
       <Column Name="count" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="Issue_ViewCount" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
       <Association Name="Org_ViewCount" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VoteCounts" Member="VoteCounts">
+    <Type Name="VoteCount">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="count" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="Issue_VoteCount" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
+      <Association Name="Org_VoteCount" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
