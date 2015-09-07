@@ -13,7 +13,6 @@
             var voteCount = parseInt(document.getElementById("votecount_" + issueid).innerHTML, 10);
             document.getElementById("votecount_" + issueid).innerHTML = voteCount + 1;
             //alert('Voted up');*/
-            return true;
         },
         error: function (ts) {
             //alert('Could not vote up.');
@@ -51,33 +50,33 @@ function unvoteup(issueid, userhandle) {
 
 function vote(votebutton, issueID, userhandle) {
     var count = document.getElementById('count-' + issueID);
-    if (votebutton.classList.contains('unchecked') && voteup(issueID, userhandle)) {
-        //voteup(issueID, userhandle);
+    if (votebutton.classList.contains('unchecked')) {
+        voteup(issueID, userhandle);
         votebutton.classList.remove('unchecked');
         votebutton.classList.add('checked');
-        votebutton.src = "../Content/Images/check_mark_hover_small.png";
+        votebutton.src = "../Content/Images/checked-hover.png";
         count.innerHTML = parseInt(count.innerHTML, 10) + 1;
-    } else if (votebutton.classList.contains('checked') && unvoteup(issueID, userhandle)) {
-        //unvoteup(issueID, userhandle);
+    } else if (votebutton.classList.contains('checked')) {
+        unvoteup(issueID, userhandle);
         votebutton.classList.remove('checked');
         votebutton.classList.add('unchecked');
-        votebutton.src = "../Content/Images/vote_circle_hover_small.png";
+        votebutton.src = "../Content/Images/unchecked-hover.png";
         count.innerHTML = parseInt(count.innerHTML, 10) - 1;
     }
 }
 
 function votehover(votebutton) {
     if (votebutton.classList.contains('unchecked')) {
-        votebutton.src = "../Content/Images/vote_circle_hover_small.png";
+        votebutton.src = "../Content/Images/unchecked-hover.png";
     } else if (votebutton.classList.contains('checked')) {
-        votebutton.src = "../Content/Images/check_mark_hover_small.png";
+        votebutton.src = "../Content/Images/checked-hover.png";
     }
 }
 
 function voteunhover(votebutton) {
     if (votebutton.classList.contains('unchecked')) {
-        votebutton.src = "../Content/Images/vote_circle_small.png";
+        votebutton.src = "../Content/Images/unchecked.png";
     } else if (votebutton.classList.contains('checked')) {
-        votebutton.src = "../Content/Images/check_mark_small.png";
+        votebutton.src = "../Content/Images/checked.png";
     }
 }
