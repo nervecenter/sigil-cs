@@ -9,7 +9,7 @@
     Issue thisIssue = Model.Item2;
     IQueryable<Comment> issueComments = Model.Item3;
 
-    Vote userVote = ViewBag.userVote;
+    UserVoteCol userVote = ViewBag.userVote;
 
     ViewBag.Title = "Sigil - " + thisIssue.title;
 }
@@ -21,7 +21,7 @@
             <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
             @if ( !Request.IsAuthenticated ) {
                 <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-            } else if ( userVote != default( Vote ) ) {
+            } else if ( userVote.Check_Vote(thisIssue.Id, thisOrg.Id)) {
                 // Issue has been voted on, get the checked button and checked class
                 <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/checked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
             } else {

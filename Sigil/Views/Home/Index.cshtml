@@ -1,13 +1,13 @@
 ﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 
-@model Tuple<List<Issue>, List<Vote>>
+@model Tuple<List<Issue>, List<UserVote>>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Home Page";
     List<Issue> issueList = Model.Item1;
-    List<Vote> voteList = Model.Item2;
+    List<UserVote> voteList = Model.Item2;
 }
 
 <div class="first-column">
@@ -17,7 +17,7 @@
             <article class="issue-box">
                 <div class="issue-vote-area">
                     <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                    @if ( voteList.Any( v => v.IssueId == issue.Id ) ) {
+                    @if ( voteList.Any( v => v.IssueID == issue.Id ) ) {
                         // Issue has been voted on, get the checked button and checked class
                         <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/checked.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                     } else {
@@ -31,7 +31,7 @@
                         <div class="issue-info-area">
                             <span class="issue-org-cat-topic">
                                 <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Org.orgName
-                                @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
+                                @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
                             </span>
                             <span class="issue-user-date">
                                 @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by

@@ -8,7 +8,7 @@
     Org thisOrg = Model.Item1;
     ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
-    IQueryable<Vote> userVotes = ViewBag.userVotes;
+    List<UserVote> userVotes = ViewBag.userVotes;
     Subscription userSub = ViewBag.userSub;
 }
 
@@ -48,7 +48,7 @@
                 <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
                 @if ( !Request.IsAuthenticated ) {
                     <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                } else if ( userVotes != null && userVotes.Any( v => v.IssueId == issue.Id ) ) {
+                } else if ( userVotes != null && userVotes.Any( v => v.IssueID == issue.Id ) ) {
                     // Issue has been voted on, get the checked button and checked class
                     <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/checked.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else {
@@ -61,8 +61,8 @@
                     <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
                     <div class="issue-info-area">
                         <span class="issue-org-cat-topic">
-                            @if ( issue.CatId != null )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
-                            @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
+                            @if ( issue.CatId != 0 )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
+                            @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
                         </span>
                         <span class="issue-user-date">
                             @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
