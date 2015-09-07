@@ -93,6 +93,20 @@ namespace Sigil {
                 defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
 
+
+            routes.MapRoute(
+                name: "Create Issue",
+                url: "create_issue/",
+                defaults: new { controller = "Issue", action = "CreateIssue" }
+            );
+
+            routes.MapRoute(
+                name: "Add Issue",
+                url: "add_issue/",
+                defaults: new { controller = "Issue", action = "AddIssue" }
+            );
+
+
             //========================= Org Controller ==================================================================
             routes.MapRoute(
                 name: "OrgData",
@@ -126,17 +140,6 @@ namespace Sigil {
                 defaults: new { controller = "Issue", action = "UnVoteUp" }
             );
 
-            routes.MapRoute(
-                name: "Create Issue",
-                url: "create_issue/",
-                defaults: new { controller = "Issue", action = "CreateIssue" }
-            );
-
-            routes.MapRoute(
-                name: "Add Issue",
-                url: "add_issue/",
-                defaults: new { controller = "Issue", action = "AddIssue" }
-            );
 
             routes.MapRoute(
                 name: "Issue",

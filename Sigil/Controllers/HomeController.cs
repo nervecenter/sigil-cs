@@ -40,7 +40,14 @@ namespace Sigil.Controllers {
                 userIssues.Sort(Rank);
 
                 //gather all the votes the user made 
-                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userID).votes).Get_Votes();
+                var user = dc.AspNetUsers.Single(u => u.Id == userID);
+
+                //this needs to be created in the user registration !!!!!!
+                if (user.votes == null)
+                    user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
+
+                dc.SubmitChanges();
+                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes).Get_Votes();
 
                 Tuple<List<Issue>, List<UserVote>> issuesANDvotes = new Tuple<List<Issue>, List<UserVote>>(userIssues, userVotes);
 

@@ -11,7 +11,7 @@
     Issue thisIssue = Model.Item2;
     IQueryable<Comment> issueComments = Model.Item3;
 
-    Vote userVote = ViewBag.userVote;
+    UserVoteCol userVote = ViewBag.userVote;
 }
 
 <div class="first-column">
@@ -19,7 +19,7 @@
     <article class="issue-body">
         <div class="issue-vote-area">
             <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
-            @if ( userVote != default( Vote ) ) {
+            @if ( userVote.Check_Vote(thisIssue.Id, thisOrg.Id) ) {
                 // Issue has been voted on, get the checked button and checked class
                 <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
             } else {

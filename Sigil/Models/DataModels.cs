@@ -39,8 +39,10 @@ namespace Sigil.Models
         /// <returns>T data collection so that it can be updated </returns>
         public static T XMLtoDATA(XElement xmlVC)
         {
-            var xmlSerial = new XmlSerializer(typeof(T));
-            return (T)xmlSerial.Deserialize(xmlVC.CreateReader());
+
+                var xmlSerial = new XmlSerializer(typeof(T));
+                return (T)xmlSerial.Deserialize(xmlVC.CreateReader());
+
         }
     }
 
@@ -245,7 +247,11 @@ namespace Sigil.Models
     {
         private List<UserVote> uvArray = new List<UserVote>();
 
-        UserVoteCol() { }
+        public UserVoteCol() { }
+        public UserVoteCol(List<UserVote> usV)
+        {
+            uvArray = usV;
+        }
         public UserVoteCol(int issueid, int orgid)
         {
             Add_Vote(issueid, orgid);
@@ -324,6 +330,17 @@ namespace Sigil.Models
             return uvArray;
         }
 
+        public bool Check_Vote(int issueID, int orgID)
+        {
+            foreach (UserVote uv in uvArray)
+            {
+                if (uv.IssueID == issueID && uv.OrgID == orgID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
 

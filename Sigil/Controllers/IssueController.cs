@@ -69,7 +69,8 @@ namespace Sigil.Controllers
 
 
             // Get the user's vote on this issues if it exists
-            var userVote = CountXML<UserVote>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userID).votes);
+            var user = dc.AspNetUsers.Single(u => u.Id == userID);
+            var userVote = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
 
             ViewBag.userVote = userVote;
 
@@ -101,7 +102,6 @@ namespace Sigil.Controllers
                 try
                 {
                     vc = new ViewCount();
-                    vc.datetime = DateTime.UtcNow;
                     vc.OrgId = thisOrg.Id;
                     vc.IssueId = thisIssue.Id;
                     vc.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
@@ -232,11 +232,12 @@ namespace Sigil.Controllers
             // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
 
             // Create a Highchart with X-axis for days of the week, and Y-axis series logging views and votes
-            Highcharts weekChart = Create_Highchart(thisIssue, issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
+            
+            Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
             listOfCharts.Add(weekChart);
-            var totals = Get_Sum(issueViews, issueVotes, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+            var totals = DataVisualization.Get_Sum(issueViews, issueVotes, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
 
             ViewBag.weekViewCount = totals.Item1;
             ViewBag.weekVoteCount = totals.Item2;
@@ -250,11 +251,11 @@ namespace Sigil.Controllers
             // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-            Highcharts monthChart = Create_Highchart(thisIssue, issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
+            Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
             listOfCharts.Add(monthChart);
-            totals = Get_Sum(issueViews, issueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+            totals = DataVisualization.Get_Sum(issueViews, issueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
 
             ViewBag.monthViewCount = totals.Item1;
             ViewBag.monthVoteCount = totals.Item2;
@@ -273,76 +274,7 @@ namespace Sigil.Controllers
             return View(listOfCharts);
         }
 
-        private static Tuple<int,int> Get_Sum(ViewCountCol views, VoteCountCol votes, DateTime start, DateTime stop)
-        {
-            int total_views = 0;
-            int total_votes = 0;
 
-            TimeSpan duriation = stop.Date - start.Date;
-            for(int i = 0; i < duriation.Days; ++i)
-            {
-                total_views += views.Get_Views(start.AddDays(i));
-                total_votes += votes.Get_Votes(start.AddDays(i));
-            }
-
-            return new Tuple<int, int>(total_views, total_votes);
-        }
-
-        private static Highcharts Create_Highchart(Issue thisIssue, ViewCountCol views, VoteCountCol votes,DateTime start, DateTime stop, string chartName, string chartTitle)
-        {
-            TimeSpan duriation = stop.Date - start.Date;
-            Tuple<List<int>, List<int>> voteViewdata = new Tuple<List<int>, List<int>>(new List<int>(), new List<int>());
-            List<string> xA = new List<string>();
-            for (int i = 0; i < duriation.Days; ++i)
-            {
-                //voteViewdata.Add(new GraphData(start.AddDays(i), votes.Get_Votes(start.AddDays(i)), views.Get_Views(start.AddDays(i))));
-                voteViewdata.Item1.Add(votes.Get_Votes(start.AddDays(i)));
-                voteViewdata.Item2.Add(views.Get_Views(start.AddDays(i)));
-                xA.Add(stop.AddDays(-i).ToShortDateString());
-            }
-
-
-            var HChart = new DotNet.Highcharts.Highcharts(chartName);
-            HChart.SetXAxis(new XAxis { Categories = xA.ToArray() });
-            HChart.SetSeries(new Series[] { new Series { Data = new Data(new object[] { voteViewdata.Item1.ToArray() }), Name = "Views" },
-                                            new Series { Data = new Data(new object[] { voteViewdata.Item2.ToArray() }), Name = "Votes" } });
-            HChart.SetTitle(new Title { Text = chartTitle });
-
-            return HChart;
-            //return new DotNet.Highcharts.Highcharts(chartName)
-            //                .SetXAxis(new XAxis
-            //                {
-            //                    Categories = new[] { DateTime.Today.Date.AddDays(-6.0).ToShortDateString(),
-            //                                         DateTime.Today.Date.AddDays(-5.0).ToShortDateString(),
-            //                                         DateTime.Today.Date.AddDays(-4.0).ToShortDateString(),
-            //                                         DateTime.Today.Date.AddDays(-3.0).ToShortDateString(),
-            //                                         DateTime.Today.Date.AddDays(-2.0).ToShortDateString(),
-            //                                         DateTime.Today.Date.AddDays(-1.0).ToShortDateString(),
-            //                                         DateTime.Today.Date.ToShortDateString() }
-            //                })
-            //                .SetSeries(new Series[] {
-            //                new Series {
-            //                    Data = new Data(new object[] { weekOfViews[6],
-            //                                                   weekOfViews[5],
-            //                                                   weekOfViews[4],
-            //                                                   weekOfViews[3],
-            //                                                   weekOfViews[2],
-            //                                                   weekOfViews[1],
-            //                                                   weekOfViews[0] }),
-            //                    Name = "Views"
-            //                }, new Series {
-            //                    Data = new Data(new object[] { weekOfVotes[6],
-            //                                                   weekOfVotes[5],
-            //                                                   weekOfVotes[4],
-            //                                                   weekOfVotes[3],
-            //                                                   weekOfVotes[2],
-            //                                                   weekOfVotes[1],
-            //                                                   weekOfVotes[0] }),
-            //                    Name = "Votes"
-            //                }
-            //                })
-            //                .SetTitle(new Title { Text = chartTitle });
-        }
 
         /* 
         ==================== 
@@ -393,6 +325,8 @@ namespace Sigil.Controllers
             newissue.viewCount = 1;
             newissue.title = Request.Form["title"];
             newissue.text = Request.Form[ "text" ];
+            newissue.CatId = 0;
+            newissue.TopicId = 0;
             if(catid != null)
                 newissue.CatId = catid.Id;
             // Try to submit the issue and go to the issue page; otherwise, write an error

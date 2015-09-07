@@ -7,7 +7,7 @@
 @{
     Org thisOrg = Model.Item1;
 
-    IQueryable<Vote> userVotes = ViewBag.userVotes;
+    UserVoteCol userVotes = new UserVoteCol(ViewBag.userVotes);
     Subscription userSub = ViewBag.userSub;
 }
 
@@ -28,7 +28,7 @@
         <article class="issue-box">
             <div class="issue-vote-area">
                 <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                @if ( userVotes.Any( v => v.IssueId == issue.Id ) ) {
+                @if ( userVotes.Check_Vote(issue.Id, thisOrg.Id) ) {
                     // Issue has been voted on, get the checked button and checked class
                     <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else {
@@ -41,8 +41,8 @@
                     <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
                     <div class="issue-info-area">
                         <span class="issue-org-cat-topic">
-                            @if ( issue.CatId != null )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
-                            @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
+                            @if ( issue.CatId != 0 )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
+                            @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
                         </span>
                         <span class="issue-user-date">
                             @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
