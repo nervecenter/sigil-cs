@@ -1,17 +1,17 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
 @using Sigil.Models
 @model Tuple<Org, Issue, IQueryable<Comment>>
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     Org thisOrg = Model.Item1;
     Issue thisIssue = Model.Item2;
     IQueryable<Comment> issueComments = Model.Item3;
 
-    UserVoteCol userVote = ViewBag.userVote;
+    Vote userVote = ViewBag.userVote;
+
+    ViewBag.Title = "Sigil - " + thisIssue.title;
 }
 
 <div class="first-column">
@@ -19,12 +19,14 @@
     <article class="issue-body">
         <div class="issue-vote-area">
             <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
-            @if ( userVote.Check_Vote(thisIssue.Id, thisOrg.Id) ) {
+            @if ( !Request.IsAuthenticated ) {
+                <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+            } else if ( userVote != default( Vote ) ) {
                 // Issue has been voted on, get the checked button and checked class
-                <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/checked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
             } else {
                 // Issue hasn't been voted on, get the opposite
-                <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
             }
         </div>
         <div class="issue-main-area issue-main-issue-page">
@@ -37,7 +39,7 @@
                         in Operating Systems
                     </span>
                     <span class="issue-user-date">
-                        @thisIssue.createTime
+                        @Sigil.Controllers.IssueController.TimeSince( thisIssue.createTime ) by
                         <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@thisIssue.AspNetUser.UserName
                     </span>
                 </div>
@@ -61,12 +63,6 @@
                         <br>
                         <img class="icon-helpful" src="../Content/Images/helpful.png">
                         <br>
-                        <span class="text-helpful">Helpful</span>
-                        <br>
-                        <span class="text-rate">Rate this reponse</span>
-                        <br>
-                        <span class="text-unhelpful">Unhelpful</span>
-                        <br>
                         <img class="icon-unhelpful" src="../Content/Images/unhelpful.png">
                     </div>
                     <div class="response-text">@thisIssue.officialComment</div>
@@ -83,7 +79,7 @@
                         <img class="comment-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
                         @comm.AspNetUser.UserName
                         <br />
-                        <span class="comment-time">@comm.postDate</span>
+                        <span class="comment-time">@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )</span>
                     </div>
                     <div class="comment-text">@comm.text</div>
                     <br class="clear" />
@@ -91,15 +87,17 @@
                 <hr class="comment-separator" />
             }
         }
-        <form method="post" class="comment-add-form">
-            <fieldset>
-                <legend>Add a comment:</legend>
-                <p>
-                    <input type="text" name="text" />
-                    @Html.ValidationMessage( "text" )
-                </p>
-                <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
-            </fieldset>
-        </form>
+        @if ( Request.IsAuthenticated ) { 
+            <form method="post" class="comment-add-form">
+                <fieldset>
+                    <legend>Add a comment:</legend>
+                    <p>
+                        <input type="text" name="text" />
+                        @Html.ValidationMessage( "text" )
+                    </p>
+                    <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
+                </fieldset>
+            </form>
+        }
     </div>
 </div>

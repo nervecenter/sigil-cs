@@ -37,7 +37,6 @@ namespace Sigil.Controllers
             The main page for an issue in any org. Contains vote buttons, issue text, responses, comment section. 
         ==================== 
         */
-        [Authorize]
         public ActionResult IssuePage( string orgURL, long issueID )
         {
             // Grab the issue's org

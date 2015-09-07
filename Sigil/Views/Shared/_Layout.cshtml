@@ -4,11 +4,13 @@
     string actionCalled = ViewContext.RouteData.GetRequiredString( "action" );
 
     string[] actionsWithoutSidebar = {
-        "Login"
+        "Login",
+        "Register"
     };
 
     string[] actionsWithoutFooter = {
-        "Login"
+        "Login",
+        "Register"
     };
 }
 
@@ -17,6 +19,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
    
     <script src="~/Scripts/jquery-1.8.3.js"></script>
     <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
@@ -33,7 +37,7 @@
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
     <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
 
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/Site.css")
 </head>
 <body class="page">

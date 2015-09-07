@@ -1,39 +1,59 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@using Sigil.Models
+﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 @model Tuple<Org, IQueryable<Issue>>
-@{
-    Org thisOrg = Model.Item1;
 
-    UserVoteCol userVotes = new UserVoteCol(ViewBag.userVotes);
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Org thisOrg = Model.Item1;
+    ViewBag.Title = "Sigil - " + thisOrg.orgName;
+
+    IQueryable<Vote> userVotes = ViewBag.userVotes;
     Subscription userSub = ViewBag.userSub;
 }
 
+<script>
+    function bannerbuttonhover(element) {
+        if (element.classList.contains("feed-btn")) {
+            element.src = "../Content/Images/feed-hover.png";
+        } else if (element.classList.contains("data-btn")) {
+            element.src = "../Content/Images/data-hover.png";
+        }
+    }
+    function bannerbuttonunhover(element) {
+        if (element.classList.contains("feed-btn")) {
+            element.src = "../Content/Images/feed.png";
+        } else if (element.classList.contains("data-btn")) {
+            element.src = "../Content/Images/data.png";
+        }
+    }
+</script>
+
 <div class="first-column">
     <img class="feed-header" src="../Content/Images/orgheaders/microsoft.png">
-    <div class="issue-options">
-        <nav class="issue-options-list">
-            Main Page
-            <a href="/@thisOrg.orgURL/data">Data</a>
-            @if ( userSub == default( Subscription ) ) {
-                <img id="sub-button" class="unsubscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-            } else {
-                <img id="sub-button" class="subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-            }
-        </nav>
-    </div>
+    <nav class="centered" style="margin-bottom:0.7em;">
+        <img class="banner-button ban-but-marg feed-btn" src="~/Content/Images/feed.png">
+        <a href="/@(thisOrg.orgURL)/data"><img class="banner-button ban-but-marg data-btn" src="~/Content/Images/data.png" onmouseover="bannerbuttonhover(this)" onmouseout="bannerbuttonunhover(this)"></a>
+        @if ( !Request.IsAuthenticated ) {
+            <img id="sub-button" class="banner-button unsubscribed" onclick="redirectToLogin()" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+        } else if ( userSub == default( Subscription ) ) {
+            <img id="sub-button" class="banner-button unsubscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+        } else {
+            <img id="sub-button" class="banner-button subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+        }
+    </nav>
     @foreach ( Issue issue in Model.Item2 ) {
         <article class="issue-box">
             <div class="issue-vote-area">
                 <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                @if ( userVotes.Check_Vote(issue.Id, thisOrg.Id) ) {
+                @if ( !Request.IsAuthenticated ) {
+                    <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                } else if ( userVotes != null && userVotes.Any( v => v.IssueId == issue.Id ) ) {
                     // Issue has been voted on, get the checked button and checked class
-                    <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/check_mark_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/checked.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else {
                     // Issue hasn't been voted on, get the opposite
-                    <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/vote_circle_small.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/unchecked.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 }
             </div>
             <div class="issue-main-area">
@@ -41,8 +61,8 @@
                     <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
                     <div class="issue-info-area">
                         <span class="issue-org-cat-topic">
-                            @if ( issue.CatId != 0 )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
-                            @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
+                            @if ( issue.CatId != null )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
+                            @if ( issue.TopicId != null ) { <span>in @issue.Topic.topicName</span> }
                         </span>
                         <span class="issue-user-date">
                             @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by

@@ -215,7 +215,12 @@
     <Content Include="Content\Images\check_mark_hover_small.png" />
     <Content Include="Content\Images\check_mark_small.png" />
     <Content Include="Content\Images\Dark-SpriteSheet.png" />
+    <Content Include="Content\Images\data-hover.png" />
+    <Content Include="Content\Images\data.png" />
     <Content Include="Content\Images\earth_white.png" />
+    <Content Include="Content\Images\favicon.png" />
+    <Content Include="Content\Images\feed-hover.png" />
+    <Content Include="Content\Images\feed.png" />
     <Content Include="Content\Images\helpful.png" />
     <Content Include="Content\Images\Light-SpriteSheet.png" />
     <Content Include="Content\Images\logo-600.png" />

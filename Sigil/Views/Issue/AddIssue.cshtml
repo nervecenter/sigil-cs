@@ -46,7 +46,7 @@
         textp.appendChild(textlabel);
         textlabel.innerHTML = "Explain your idea in-depth:";
         textp.appendChild(document.createElement("br"));
-        var textinput = document.createElement("input");
+        var textinput = document.createElement("textarea");
         textinput.type = "text";
         textinput.name = "text";
         textinput.classList.add("add-issue-input");
@@ -70,7 +70,7 @@
 
 <div class="first-column">
     <div class="first-column-box">
-        <form method="post">
+        <form method="post" style="margin-top:1em;">
             <fieldset id="add-issue-fieldset">
                 <legend>Post a new idea, suggestion, or issue</legend>
                 <p>

@@ -143,10 +143,8 @@ a {
 .sale-back {
 	width: 100%;
 	height: 100%;
-	background-image: url("../Content/Images/saleback.jpg");
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: 0em -18.5em;
+	background: url("../Content/Images/saleback.jpg") no-repeat center center fixed;
+	background-size: cover;
 }
 
 .sale-back-img {
@@ -251,7 +249,7 @@ a {
 	width: 50em;
 	height: 15em;
 	border: 1px solid #CCC;
-	margin-bottom: 1.5em;
+	margin-bottom: 1em;
 }
 
 .org-banner {
@@ -270,11 +268,11 @@ a {
 	font-size: 1.2em;
 }
 
-.login-page-block {
+.form-page-block {
     width: 30em;
 }
 
-.login-page-text-box {
+.form-page-text-box {
     width: 100%;
     height: 2em;
     margin-bottom: 1em;
@@ -287,7 +285,7 @@ a {
     margin-bottom: 1em;
 }
 
-.login-page-submit {
+.form-page-submit {
     width: 100%;
 }
 
@@ -303,14 +301,29 @@ a {
 .issue-body, 
 .issue-submit-body, 
 .issue-data-body, 
-.org-data-body, 
-.legal-body, 
+.org-data-body,  
 .user-edit-body {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;
 	background-color: #FFF;
 	margin-bottom: 1.5em;
+}
+
+.first-column-header {
+    margin: 1em 1em 1em 1em;
+}
+
+.first-column-paragraph {
+    margin: 0em 1em 1em 1em;
+}
+
+.banner-button {
+    width: 32%;
+}
+
+.ban-but-marg {
+    margin-right: 1.4%;
 }
 
 .issue-box-small {
@@ -505,8 +518,12 @@ legend {
 	margin-right: auto;
 }
 
-.comment-time, .response-time {
+.response-time {
 	font-size: 0.8em;
+}
+
+.comment-time {
+    font-size: 0.6em;
 }
 
 .comment-text, .response-text {
@@ -680,6 +697,10 @@ legend {
 	font-size: 0.9em;
 	text-decoration: none;
 	color: #FFF;
+}
+
+.rights {
+    font-size: 0.75em;
 }
 
 .aspnet {
