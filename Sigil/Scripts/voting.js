@@ -80,3 +80,7 @@ function voteunhover(votebutton) {
         votebutton.src = "../Content/Images/checked.png";
     }
 }
+
+function redirectToLogin() {
+    window.location = "/login";
+}

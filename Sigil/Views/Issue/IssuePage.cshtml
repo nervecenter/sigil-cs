@@ -19,7 +19,9 @@
     <article class="issue-body">
         <div class="issue-vote-area">
             <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
-            @if ( userVote != default( Vote ) ) {
+            @if ( !Request.IsAuthenticated ) {
+                <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+            } else if ( userVote != default( Vote ) ) {
                 // Issue has been voted on, get the checked button and checked class
                 <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/checked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
             } else {
