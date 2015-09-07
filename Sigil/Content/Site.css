@@ -477,6 +477,9 @@ legend {
 
 .add-issue-text-input {
     height: 20em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 
 .comments-area, .response-box, .first-column-box {
