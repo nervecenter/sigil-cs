@@ -30,12 +30,12 @@
                         <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
                         <div class="issue-info-area">
                             <span class="issue-org-cat-topic">
-                                <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Org.orgName
+                                <img class="issue-info-icon" src="@Sigil.Controllers.ImageController.Get_Icon_20(issue.OrgId, typeof(Org))">@issue.Org.orgName
                                 @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
                             </span>
                             <span class="issue-user-date">
                                 @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
-                                <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
+                                <img class="issue-info-icon" src="@Sigil.Controllers.ImageController.Get_Icon_20(issue.AspNetUser.Id)">@issue.AspNetUser.UserName
                             </span>
                         </div>
                     </div>

@@ -80,6 +80,7 @@
       <Association Name="Topic_Issue" Member="Issues" ThisKey="Id" OtherKey="TopicId" Type="Issue" />
       <Association Name="Topic_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="TopicId" Type="Subscription" />
       <Association Name="Topic_Org" Member="Orgs" ThisKey="Id" OtherKey="topicid" Type="Org" />
+      <Association Name="Topic_Image" Member="Images" ThisKey="Id" OtherKey="TopicId" Type="Image" />
     </Type>
   </Table>
   <Table Name="dbo.Subscriptions" Member="Subscriptions">
@@ -135,6 +136,7 @@
       <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
       <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
+      <Association Name="AspNetUser_Image" Member="Images" ThisKey="Id" OtherKey="UserId" Type="Image" />
       <Association Name="Org_AspNetUser" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
@@ -147,6 +149,7 @@
       <Column Name="topicId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
       <Association Name="Category_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="CatId" Type="Subscription" />
+      <Association Name="Category_Image" Member="Images" ThisKey="Id" OtherKey="CatId" Type="Image" />
       <Association Name="Org_Category" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
@@ -159,14 +162,33 @@
       <Column Name="lastView" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="orgURL" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="topicid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
       <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
-      <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
+      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
+      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
       <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
       <Association Name="Org_VoteCount" Member="VoteCounts" ThisKey="Id" OtherKey="OrgId" Type="VoteCount" />
-      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
       <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
+      <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
+      <Association Name="Org_Image" Member="Images" ThisKey="Id" OtherKey="OrgId" Type="Image" />
       <Association Name="Topic_Org" Member="Topic" ThisKey="topicid" OtherKey="Id" Type="Topic" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Images" Member="Images">
+    <Type Name="Image">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="icon_15" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="icon_20" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="icon_100" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="banner_tall" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="banner_short" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="CatId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TopicId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Org_Image" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+      <Association Name="AspNetUser_Image" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="Topic_Image" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
+      <Association Name="Category_Image" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

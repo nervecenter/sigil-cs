@@ -57,15 +57,18 @@
             </div>
         </section>
         @using Sigil.Models
-        @model List<IGrouping<int?, Issue>>
+        @model List<IGrouping<string, Issue>>
         <section class="main landing-main">
             @foreach (var group in Model)
             {
-                foreach (Issue issue in group)
-                {
+
                 <div class="landing-column landing-first-col">
-                    <a href="TopicPage.html" class="landing-topic-header">@issue.Topic.topicName >></a>
+
+                   <a href="TopicPage.html" class="landing-topic-header">@group.Key >></a>
+
                     <article class="issue-box issue-box-small">
+@foreach (Issue issue in group)
+{
                         <div class="issue-vote-area">
                             <span class="issue-vote-amount" id="count-1">@issue.votes</span>
                         </div>
@@ -75,7 +78,7 @@
                                 <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
                                     <span class="issue-org-cat-topic">
                                         <a href="/@issue.Org.orgURL"><img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png">@issue.Org.orgName</a>
-                                        @if (issue.CatId != null)
+                                        @if (issue.CatId != 0)
                                         {
                                             <a href="/@issue.Org.orgURL/@issue.Category.catURL"><img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png" >@issue.Category.catName</a>
                                         }
@@ -88,9 +91,11 @@
                                 </div>
                             </div>
                         </div>
+}
                     </article>
+                    
                 </div>
-                }
+                
             }
         </section>
     </div>

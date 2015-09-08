@@ -106,15 +106,14 @@ namespace Sigil.Controllers {
         /// Gets the Top 3 trending issues site wide. FOR THE LANDING PAGE ONLY
         /// </summary>
         /// <returns></returns>
-        private List<IGrouping<int?,Issue>> Get_Trending_Issues_With_Topics()
+        private List<IGrouping<string,Issue>> Get_Trending_Issues_With_Topics()
         {
             var pretrending = (from iss in dc.Issues
-                              where iss.TopicId != 0
                               select iss).ToList();
 
             pretrending.Sort(Rank);
 
-            var trending = pretrending.GroupBy(i => i.TopicId).ToList();
+            var trending = pretrending.GroupBy(i => i.Org.orgName).ToList();
 
             return trending;
         }
