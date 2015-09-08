@@ -361,6 +361,7 @@
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Home\Legal.cshtml" />
     <Content Include="Views\Subscriptions\Index.cshtml" />
+    <Content Include="Views\Shared\_VoteButton.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

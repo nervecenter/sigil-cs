@@ -19,7 +19,8 @@
     <article class="issue-body">
         <div class="issue-vote-area">
             <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
-            @if ( !Request.IsAuthenticated ) {
+            @Html.Partial( "_VoteButton", new Tuple<bool, bool, Issue>( Request.IsAuthenticated, userVote.Check_Vote( thisIssue.Id, thisOrg.Id ), thisIssue ) )
+            @*if ( !Request.IsAuthenticated ) {
                 <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
             } else if ( userVote.Check_Vote(thisIssue.Id, thisOrg.Id)) {
                 // Issue has been voted on, get the checked button and checked class
@@ -27,7 +28,7 @@
             } else {
                 // Issue hasn't been voted on, get the opposite
                 <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-            }
+            }*@
         </div>
         <div class="issue-main-area issue-main-issue-page">
             <div class="issue-main-cell">

@@ -68,8 +68,8 @@ namespace Sigil.Controllers
 
 
             // Get the user's vote on this issues if it exists
-            var user = dc.AspNetUsers.Single(u => u.Id == userID);
-            var userVote = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            AspNetUser user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userID);
+            UserVoteCol userVote = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
 
             ViewBag.userVote = userVote;
 
