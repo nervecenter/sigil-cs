@@ -324,8 +324,8 @@ namespace Sigil.Controllers
             newissue.viewCount = 1;
             newissue.title = Request.Form["title"];
             newissue.text = Request.Form[ "text" ];
-            newissue.CatId = 0;
-            newissue.TopicId = 0;
+            newissue.CatId =  catid == default(Category) ? 0 : catid.Id ;
+            newissue.TopicId = catid == default(Category) ? org.topicid : catid.topicId;
             if(catid != null)
                 newissue.CatId = catid.Id;
             // Try to submit the issue and go to the issue page; otherwise, write an error

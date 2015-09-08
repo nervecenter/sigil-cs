@@ -30,23 +30,6 @@
       <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.Orgs" Member="Orgs">
-    <Type Name="Org">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="orgName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="UserID" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="viewCount" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="lastView" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="orgURL" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
-      <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
-      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
-      <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
-      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
-      <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
-      <Association Name="Org_VoteCount" Member="VoteCounts" ThisKey="Id" OtherKey="OrgId" Type="VoteCount" />
-      <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
-    </Type>
-  </Table>
   <Table Name="dbo.OfficialResponse" Member="OfficialResponses">
     <Type Name="OfficialResponse">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -81,21 +64,10 @@
       <Association Name="Issue_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="issueId" Type="OfficialResponse" />
       <Association Name="Issue_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="IssueId" Type="ViewCount" />
       <Association Name="Issue_VoteCount" Member="VoteCounts" ThisKey="Id" OtherKey="IssueId" Type="VoteCount" />
-      <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
-      <Association Name="Category_Issue" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
       <Association Name="Topic_Issue" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
       <Association Name="AspNetUser_Issue" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Category" Member="Categories">
-    <Type Name="Category">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="catName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="catURL" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="orgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
-      <Association Name="Category_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="CatId" Type="Subscription" />
-      <Association Name="Org_Category" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+      <Association Name="Category_Issue" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
+      <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Topics" Member="Topics">
@@ -107,6 +79,7 @@
       <Column Name="views" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Association Name="Topic_Issue" Member="Issues" ThisKey="Id" OtherKey="TopicId" Type="Issue" />
       <Association Name="Topic_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="TopicId" Type="Subscription" />
+      <Association Name="Topic_Org" Member="Orgs" ThisKey="Id" OtherKey="topicid" Type="Org" />
     </Type>
   </Table>
   <Table Name="dbo.Subscriptions" Member="Subscriptions">
@@ -116,10 +89,10 @@
       <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
       <Column Name="TopicId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CatId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Category_Subscription" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
       <Association Name="Topic_Subscription" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
-      <Association Name="Org_Subscription" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
       <Association Name="AspNetUser_Subscription" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="Category_Subscription" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
+      <Association Name="Org_Subscription" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ViewCounts" Member="ViewCounts">
@@ -159,10 +132,41 @@
       <Column Name="orgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="votes" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
       <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" />
-      <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
+      <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
       <Association Name="Org_AspNetUser" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Category" Member="Categories">
+    <Type Name="Category">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="catName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="catURL" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="orgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="topicId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
+      <Association Name="Category_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="CatId" Type="Subscription" />
+      <Association Name="Org_Category" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orgs" Member="Orgs">
+    <Type Name="Org">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="orgName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="viewCount" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="lastView" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="orgURL" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="topicid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Org_Issue" Member="Issues" ThisKey="Id" OtherKey="OrgId" Type="Issue" />
+      <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
+      <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
+      <Association Name="Org_ViewCount" Member="ViewCounts" ThisKey="Id" OtherKey="OrgId" Type="ViewCount" />
+      <Association Name="Org_VoteCount" Member="VoteCounts" ThisKey="Id" OtherKey="OrgId" Type="VoteCount" />
+      <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
+      <Association Name="Org_AspNetUser" Member="AspNetUsers" ThisKey="Id" OtherKey="orgId" Type="AspNetUser" />
+      <Association Name="Topic_Org" Member="Topic" ThisKey="topicid" OtherKey="Id" Type="Topic" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
