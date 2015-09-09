@@ -4,7 +4,7 @@
 @if ( Request.IsAuthenticated ) {
     <nav class="header-link-container header-nav-logged-in">
         <img class="header-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
-        @Html.ActionLink( User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )
+        @Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )
         @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = /*"navbar-right*/ "header-link-container header-nav-logged-in" } ) ) {
             @Html.AntiForgeryToken()
             <a href="javascript:document.getElementById('logoutForm').submit()" class="header-link">Log Out</a>
