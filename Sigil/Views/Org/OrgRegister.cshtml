@@ -1,0 +1,49 @@
+﻿@model Sigil.Models.OrgRegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil - Register";
+}
+
+<div class="form-page-block centered">
+    <h2 style="margin-left:0.7em;">Join Sigil today</h2>
+
+    @using ( Html.BeginForm( "OrgRegister", "Org", FormMethod.Post, new { @class = "form-horizontal", role = "form" } ) ) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary( "", new { @class = "text-danger" } )
+
+        @Html.TextBoxFor( m => m.orgName, new { @class = "form-page-text-box centered", placeholder = "Organization name" } )
+
+        @Html.TextBoxFor( m => m.orgURL, new { @class = "form-page-text-box centered", placeholder = "Organization URL" } )
+
+        @Html.TextBoxFor( m => m.orgTallBanner, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "Large banner" } )
+
+        @Html.TextBoxFor( m => m.orgShortBanner, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "Small banner" } )
+
+        @Html.TextBoxFor( m => m.orgLargeIcon, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "A 100x100 icon or logo" } )
+
+        @Html.TextBoxFor( m => m.orgSmallIcon, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "A 20x20 icon or logo" } )
+
+        @Html.TextAreaFor( m => m.orgMiscellanea, new { @class = "form-page-text-box centered", placeholder = "Information about your organization, who you as the applicant individual are, and a way we can contact you if we have any queries before adding you" } )
+
+        @*Html.LabelFor( m => m.Email, new { @class = "col-md-2 control-label" } )*@
+        @Html.TextBoxFor( m => m.Email, new { @class = "form-page-text-box centered", placeholder = "Admin email" } )
+        
+        @*Html.LabelFor( m => m.Email_confirm, new { @class = "col-md-2 control-label" } )*@
+        @Html.TextBoxFor( m => m.Email_confirm, new { @class = "form-page-text-box centered", placeholder = "Confirm email" } )
+        
+        @*Html.LabelFor( m => m.UserName, new { @class = "col-md-2 control-label" } )*@
+        @Html.TextBoxFor( m => m.UserName, new { @class = "form-page-text-box centered", placeholder = "Admin username" } )
+
+        @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } )*@
+        @Html.PasswordFor( m => m.Password, new { @class = "form-page-text-box centered", placeholder = "Admin password" } )
+        
+        @*Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )*@
+        @Html.PasswordFor( m => m.ConfirmPassword, new { @class = "form-page-text-box centered", placeholder = "Confirm password" } )
+
+        <input class="form-page-submit centered" type="submit" value="Sign up" />
+    }
+
+    @section Scripts {
+        @Scripts.Render( "~/bundles/jqueryval" )
+    }
+</div>

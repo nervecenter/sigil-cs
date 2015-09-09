@@ -13,6 +13,12 @@ using System.Data.SqlTypes;
 
 namespace Sigil.Controllers
 {
+    enum VoteState {
+        NotLoggedIn,
+        Voted,
+        NotVoted
+    }
+
     public class IssueController : Controller
     {
         // GET: Issue
@@ -65,7 +71,6 @@ namespace Sigil.Controllers
                 // Create a new issue
                 Create_New_Comment(thisIssue, userID);
             }
-
 
             // Get the user's vote on this issues if it exists
             AspNetUser user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userID);
@@ -511,6 +516,17 @@ namespace Sigil.Controllers
             }
 
         }
+
+        /*public static Tuple<VoteState, int> VoteButtonModel(HttpContext currentContext, int issueID) {
+            if ( !currentContext.Request.IsAuthenticated ) {
+                return new Tuple<VoteState, int>( VoteState.NotLoggedIn, 0 );
+            }
+            AspNetUser user = dc.AspNetUsers.SingleOrDefault( u => u.Id == userID );
+            UserVoteCol userVote = CountXML<UserVoteCol>.XMLtoDATA( user.votes );
+
+            currentContext.User.Identity.GetUserId()
+        }*/
+
         // End class IssueController
     }
     // End namespace Sigil.Controllers

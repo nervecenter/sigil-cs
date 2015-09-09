@@ -55,6 +55,12 @@ namespace Sigil {
                 defaults: new { controller = "Account", action = "Register" }
             );
 
+            routes.MapRoute(
+                name: "OrgRegister",
+                url: "orgregister/",
+                defaults: new { controller = "Org", action = "OrgRegister" }
+            );
+
 
             //========================= Search Controller ==================================================================
             routes.MapRoute(

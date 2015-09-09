@@ -191,6 +191,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrgViewModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DataModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -362,6 +363,7 @@
     <Content Include="Views\Home\Legal.cshtml" />
     <Content Include="Views\Subscriptions\Index.cshtml" />
     <Content Include="Views\Shared\_VoteButton.cshtml" />
+    <Content Include="Views\Org\OrgRegister.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
