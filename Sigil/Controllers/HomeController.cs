@@ -47,9 +47,9 @@ namespace Sigil.Controllers {
                     user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
 
                 dc.SubmitChanges();
-                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes).Get_Votes();
+                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
 
-                Tuple<List<Issue>, List<UserVote>> issuesANDvotes = new Tuple<List<Issue>, List<UserVote>>(userIssues, userVotes);
+                Tuple<List<Issue>, UserVoteCol> issuesANDvotes = new Tuple<List<Issue>, UserVoteCol>(userIssues, userVotes);
 
                 return View(issuesANDvotes);
             }
