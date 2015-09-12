@@ -38,9 +38,9 @@ namespace Sigil
             TimeSpan duriation = stop.Date - start.Date;
             for (int i = 0; i < duriation.Days; ++i)
             {
-                foreach(var vi in views)
+                foreach (var vi in views)
                     total_views += vi.Get_Views(start.AddDays(i));
-                foreach(var vo in votes)
+                foreach (var vo in votes)
                     total_votes += vo.Get_Votes(start.AddDays(i));
             }
 
@@ -113,11 +113,11 @@ namespace Sigil
                 //voteViewdata.Add(new GraphData(start.AddDays(i), votes.Get_Votes(start.AddDays(i)), views.Get_Views(start.AddDays(i))));
 
                 //I was making this work with iqueryables of view/vote countcols for the org data page in the org controller
-                
+
                 int to_vo = 0;
                 int to_vi = 0;
 
-                foreach(var vo in votes )
+                foreach (var vo in votes)
                     to_vo += vo.Get_Votes(start.AddDays(i));
                 foreach (var vi in views)
                     to_vi += vi.Get_Views(start.AddDays(i));
@@ -169,5 +169,179 @@ namespace Sigil
             //                })
             //                .SetTitle(new Title { Text = chartTitle });
         }
+    }
+
+    namespace Controllers
+    {
+        public class ImageController : Controller
+        {
+            private static SigilDBDataContext dc = new SigilDBDataContext();
+            private static string default_img_path = "../Images/Default/";
+            private static string org_folder_path = "../Images/Org/";
+            private static string user_folder_path = "../Images/User/";
+
+
+
+            public static string Get_Icon_15(int id, Type caller)
+            {
+
+                try
+                {
+                    var entry = Get_DB_Entry(id, caller);
+
+                    return org_folder_path + entry.icon_15;
+                }
+                catch(Exception e)
+                {
+                    //if(e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(id, e);
+                    //}
+
+
+                    return default_img_path + "default_icon_15.png";
+                    
+                }
+            }
+
+            public static string Get_Icon_20(int id, Type caller)
+            {
+                try
+                {
+                    var entry = Get_DB_Entry(id, caller);
+
+                    return org_folder_path + entry.icon_20;
+                }
+                catch (Exception e)
+                {
+                    //if (e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(id, e);
+                    //}
+
+
+                    return default_img_path + "default_icon_20.png";
+
+                }
+            }
+
+            public static string Get_Icon_20(string id)
+            {
+                try
+                {
+                    return user_folder_path + dc.Images.Single(i => i.UserId == id).icon_20;
+                }
+                catch (Exception e)
+                {
+                    //if (e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(id, e);
+                    //}
+
+
+                    return default_img_path + "default_icon_20.png";
+
+                }
+            }
+
+            public static string Get_Icon_100(int id, Type caller)
+            {
+                try
+                {
+                    var entry = Get_DB_Entry(id, caller);
+                    return org_folder_path + entry.icon_100;
+                }
+                catch (Exception e)
+                {
+                    //if (e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(id, e);
+                    //}
+
+
+                    return default_img_path + "default_icon_100.png";
+
+                }
+            }
+            
+            public static string Get_Icon_100(string userId)
+            {
+                try
+                {
+                    return user_folder_path + dc.Images.Single(i => i.UserId == userId).icon_100;
+                }
+                catch (Exception e)
+                {
+                    //if (e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(userId, e);
+                    //}
+
+
+                    return default_img_path + "default_icon_100.png";
+
+                }
+            }
+
+            public static string Get_Banner_Tall(int id, Type caller)
+            {
+
+                try
+                {
+                    var entry = Get_DB_Entry(id, caller);
+                    return org_folder_path + entry.banner_tall;
+                }
+                catch (Exception e)
+                {
+                    //if (e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(id, e);
+                    //}
+
+
+                    return default_img_path + "default_banner_tall.png";
+
+                }
+            }
+
+            public static string Get_Banner_Short(int id, Type caller)
+            {
+                try
+                {
+                    var entry = Get_DB_Entry(id, caller);
+                    return org_folder_path + entry.banner_short;
+                }
+                catch (Exception e)
+                {
+                    //if (e.InnerException.GetType() != typeof(ArgumentNullException))
+                    //{
+                    //    ErrorHandler.Log_Error(id, e);
+                    //}
+
+
+                    return default_img_path + "default_banner_short.png";
+
+                }
+            }
+
+            private static Image Get_DB_Entry(int id, Type c)
+            {
+                var t = c.ToString();
+                switch (c.ToString())
+                {
+                    case "Sigil.Models.Org":
+                        return dc.Images.Single(i => i.OrgId == id);
+                    case "Sigil.Models.Topic":
+                        return dc.Images.Single(i => i.TopicId == id);
+                    case "Sigil.Models.Category":
+                        return dc.Images.Single(i => i.CatId == id);
+                    default:
+                        throw new ArgumentNullException();
+                }
+            }
+
+
+        }
+
     }
 }

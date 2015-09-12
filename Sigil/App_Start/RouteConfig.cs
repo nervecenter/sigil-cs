@@ -56,12 +56,10 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-                name: "OrgRegister",
-                url: "orgregister/",
-                defaults: new { controller = "Org", action = "OrgRegister" }
-            );
-
-
+                name: "Manage",
+                url: "manage/",
+                defaults: new { controller = "Manage", action = "Index" }
+                );
             //========================= Search Controller ==================================================================
             routes.MapRoute(
                 name: "Search for Header Dropdown",
@@ -83,7 +81,7 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "Search Page",
-                url: "search/all/{term}",
+                url: "search/all/",
                 defaults: new { controller = "Search", action = "Index" }
             );
 

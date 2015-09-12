@@ -57,37 +57,45 @@
             </div>
         </section>
         @using Sigil.Models
-        @model List<Issue>
+        @model List<IGrouping<string, Issue>>
         <section class="main landing-main">
-            @foreach (Issue issue in Model)
+            @foreach (var group in Model)
             {
-            <div class="landing-column landing-first-col">
-                <a href="TopicPage.html" class="landing-topic-header">@issue.Topic.topicName >></a>
-                <article class="issue-box issue-box-small">
-                    <div class="issue-vote-area">
-                        <span class="issue-vote-amount" id="count-1">@issue.votes</span>
-                    </div>
-                    <div class="issue-main-area issue-main-area-small">
-                        <div class="issue-main-cell">
-                            <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a></div>
-                            <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
-                                <span class="issue-org-cat-topic">
-                                    <a href="/@issue.Org.orgURL"><img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png">@issue.Org.orgName</a>
-                                    @if (issue.CatId != null)
-                                    {
-                                        <a href="/@issue.Org.orgURL/@issue.Category.catURL"><img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png" >@issue.Category.catName</a>
-                                    }
-                                </span>
-                                <br>
-                                <span class="issue-user-date issue-user-date-small">
-                                    @Sigil.Controllers.IssueController.TimeSince(issue.createTime);
-                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
-                                </span>
+
+                <div class="landing-column landing-first-col">
+
+                   <a href="TopicPage.html" class="landing-topic-header">@group.Key >></a>
+
+                    <article class="issue-box issue-box-small">
+@foreach (Issue issue in group)
+{
+                        <div class="issue-vote-area">
+                            <span class="issue-vote-amount" id="count-1">@issue.votes</span>
+                        </div>
+                        <div class="issue-main-area issue-main-area-small">
+                            <div class="issue-main-cell">
+                                <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a></div>
+                                <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
+                                    <span class="issue-org-cat-topic">
+                                        <a href="/@issue.Org.orgURL"><img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png">@issue.Org.orgName</a>
+                                        @if (issue.CatId != 0)
+                                        {
+                                            <a href="/@issue.Org.orgURL/@issue.Category.catURL"><img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png" >@issue.Category.catName</a>
+                                        }
+                                    </span>
+                                    <br>
+                                    <span class="issue-user-date issue-user-date-small">
+                                        @Sigil.Controllers.IssueController.TimeSince(issue.createTime);
+                                        <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </article>
-            </div>
+}
+                    </article>
+                    
+                </div>
+                
             }
         </section>
     </div>

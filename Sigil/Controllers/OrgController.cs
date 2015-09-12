@@ -9,7 +9,6 @@ using DotNet.Highcharts;
 using DotNet.Highcharts.Options;
 using DotNet.Highcharts.Helpers;
 using Sigil.Models;
-using System.Threading.Tasks;
 
 namespace Sigil.Controllers
 {
@@ -69,7 +68,7 @@ namespace Sigil.Controllers
             // MODEL: Put the org and the list of issues into a tuple as our page model
             Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>(thisOrg, issueList);
 
-            ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
+            ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
 
             // Pass our org and issues to the view as the model
             return View(orgAndIssues);
@@ -146,8 +145,8 @@ namespace Sigil.Controllers
 
             // For each day in the week, get that day's views on all issues in the org, group them into a week of integers of views
             var orgIssueViews = (from vc in dc.ViewCounts
-                               where vc.Issue.OrgId == thisOrg.Id
-                               select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+                                 where vc.Issue.OrgId == thisOrg.Id
+                                 select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
 
             // For each day in the week, get that day's votes on all issues in the org, group them into a week of integers of votes
             var orgIssueVotes = (from vote in dc.VoteCounts
@@ -160,11 +159,10 @@ namespace Sigil.Controllers
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
             listOfCharts.Add(weekChart);
             var weekSums = DataVisualization.Get_Sum(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
-            int weekViewCount = weekSums.Item1;
-            int weekVoteCount = weekSums.Item2;
-            ViewBag.weekViewCount = weekViewCount;
-            ViewBag.weekVoteCount = weekVoteCount;
-            ViewBag.weekRatio = ((double)weekVoteCount / (double)weekViewCount) * 100.0f;
+
+            ViewBag.weekViewCount = weekSums.Item1;
+            ViewBag.weekVoteCount = weekSums.Item2;
+            ViewBag.weekRatio = ((double)weekSums.Item2 / (double)weekSums.Item1) * 100.0f;
 
             /*
              *  MONTHLY Traffic Data
@@ -179,11 +177,10 @@ namespace Sigil.Controllers
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
             listOfCharts.Add(monthChart);
             var monthSums = DataVisualization.Get_Sum(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-            int monthViewCount = monthSums.Item1;
-            int monthVoteCount = monthSums.Item2;
-            ViewBag.monthViewCount = monthViewCount;
-            ViewBag.monthVoteCount = monthVoteCount;
-            ViewBag.monthRatio = ((double)monthVoteCount / (double)monthViewCount) * 100.0f;
+
+            ViewBag.monthViewCount = monthSums.Item1;
+            ViewBag.monthVoteCount = monthSums.Item2;
+            ViewBag.monthRatio = ((double)monthSums.Item2 / (double)monthSums.Item1) * 100.0f;
 
 
             /*
@@ -197,38 +194,6 @@ namespace Sigil.Controllers
             return View(listOfCharts);
         }
 
-        //
-        // GET: /orgregister
-        [AllowAnonymous]
-        public ActionResult OrgRegister() {
-            return View();
-        }
 
-        //
-        // POST: /orgregister
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> OrgRegister( OrgRegisterViewModel model ) {
-        //    if ( ModelState.IsValid ) {
-        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-        //        var result = await UserManager.CreateAsync( user, model.Password );
-        //        if ( result.Succeeded ) {
-        //            await SignInManager.SignInAsync( user, isPersistent: false, rememberBrowser: false );
-
-        //            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-        //            // Send an email with this link
-        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-        //            return RedirectToAction( "Index", "Home" );
-        //        }
-        //        AddErrors( result );
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View( model );
-        //}
     }
 }
