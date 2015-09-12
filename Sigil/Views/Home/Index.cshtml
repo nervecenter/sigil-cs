@@ -18,7 +18,7 @@
             <article class="issue-box">
                 <div class="issue-vote-area">
                     <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                    @{
+                    @using{
                         Tuple<bool, Issue> votePartial = new Tuple<bool, Issue>(voteList.Check_Vote(issue.Id, issue.OrgId), issue);
                         Html.RenderPartial("_VoteButton", votePartial);
                     }

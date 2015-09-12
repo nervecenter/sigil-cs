@@ -136,6 +136,11 @@ namespace Sigil {
             //    defaults: new { controller = "Org", action = "CatPage" }
             //);
 
+            routes.MapRoute(
+                name: "OrgRegister",
+                url: "orgregister/",
+                defaults: new { controller = "Org", action = "OrgRegister" }
+            );
 
             //========================= Issue Controller ==================================================================
             routes.MapRoute(
