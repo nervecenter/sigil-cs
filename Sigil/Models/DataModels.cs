@@ -91,6 +91,9 @@ namespace Sigil.Models
             vcArray.Add(newVCW);
         }
 
+        /// <summary>
+        /// Use to update the view count for an issue. When called checks to see if the last entry(the last time it was viewed) is the current day. If it is then it updates the view count for that day. If it is a new day it creates a new ViewCountDay and appends to the end of the collection.
+        /// </summary>
         public void Update()
         {
             if (vcArray.Count > 0 && isCurrent())
@@ -185,6 +188,9 @@ namespace Sigil.Models
             vcArray.Add(newVCW);
         }
 
+        /// <summary>
+        /// Used to increment the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new VoteCountDay and appends to the end of the collection.
+        /// </summary>
         public void Update()
         {
             if (vcArray.Count > 0 && isCurrent())
@@ -192,6 +198,17 @@ namespace Sigil.Models
             else
                 vcArray.Add(new VoteCountDay(DateTime.Today, 1));
 
+        }
+
+        /// <summary>
+        /// Used to decrement the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new VoteCountDay and appends to the end of the collection.
+        /// </summary>
+        public void Remove_Vote()
+        {
+            if (vcArray.Count > 0 && isCurrent())
+                vcArray[vcArray.Count - 1].count--;
+            else
+                vcArray.Add(new VoteCountDay(DateTime.Today, -1));
         }
 
         public bool isCurrent()

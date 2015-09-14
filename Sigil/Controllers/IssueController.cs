@@ -59,8 +59,11 @@ namespace Sigil.Controllers
                 Response.Redirect("~/404");
             }
 
-            //update the viewcount of the issue
+            //update the total viewcount of the issue
             Update_View_Count(thisIssue);
+
+            //// Update the viewcount for this day specifically
+            ViewCount_Routine(thisOrg, thisIssue);
 
             // Get the user
             var userID = User.Identity.GetUserId();
@@ -78,8 +81,7 @@ namespace Sigil.Controllers
 
             ViewBag.userVote = userVote;
 
-            //// Get today's issue viewcount and increment it; if there is none for today, create a new table entry for it
-            ViewCount_Routine(thisOrg, thisIssue);
+
 
             IQueryable<Comment> issueComments = from comment in dc.Comments
                                                 where comment.issueId == thisIssue.Id
@@ -225,17 +227,6 @@ namespace Sigil.Controllers
             /*
              *  WEEKLY Traffic Data
              */
-
-            // TODO: Dynamically fill in holes properly where no votes or views have happened, rather than appending zeros to the end
-
-            // For each day in the week, get that day's votes on the issue in the org, group them into a week of integers of votes
-
-            // If there were days without entries (no votes), append zeros to the beginning
-            // TODO: Fix this such that it inserts zeros into the days with no votes
-
-            // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
-
-            // Create a Highchart with X-axis for days of the week, and Y-axis series logging views and votes
             
             Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
 
@@ -252,7 +243,6 @@ namespace Sigil.Controllers
              *  MONTHLY Traffic Data
              */
 
-            // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
             Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
@@ -296,15 +286,17 @@ namespace Sigil.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult AddIssue() {
+        public ActionResult AddIssue()
+        {
             // Get the org for the issue we're adding
 
             // Get the user
             var userId = User.Identity.GetUserId();
 
+            // check to see if they are posting to a specific org's category or just to the org itself
             string orgName = Request.Form["orgName"];
             string category = null;
-            if(orgName.Contains("-"))
+            if (orgName.Contains("-"))
             {
                 var temp = orgName.Split('-');
                 orgName = temp[0];
@@ -314,40 +306,34 @@ namespace Sigil.Controllers
             var org = dc.Orgs.Where(o => o.orgName == orgName).Single();
             var catid = dc.Categories.SingleOrDefault(c => c.catName == category && c.orgId == org.Id);
 
+            //pass in creators userid, the org and possible category of the issue
+            int issueId = Create_New_Issue(userId, org, catid);
 
-            // Create a new issue
-            Issue newissue = new Issue();
-            
-            // Increment Id, drop in current user and date, set default weight, drop in the form text
-            newissue.Org = org;
-            newissue.OrgId = org.Id;
-            newissue.UserId = userId;
-            newissue.createTime = DateTime.UtcNow;
-            newissue.editTime = DateTime.UtcNow;
-            newissue.lastVoted = DateTime.UtcNow;
-            newissue.votes = 1;
-            newissue.viewCount = 1;
-            newissue.title = Request.Form["title"];
-            newissue.text = Request.Form[ "text" ];
-            newissue.CatId =  catid == default(Category) ? 0 : catid.Id ;
-            newissue.TopicId = catid == default(Category) ? org.topicid : catid.topicId;
-            if(catid != null)
-                newissue.CatId = catid.Id;
-            // Try to submit the issue and go to the issue page; otherwise, write an error
-            try {
-                dc.Issues.InsertOnSubmit( newissue );
-                dc.SubmitChanges();
-                
-            } catch ( Exception e ) {
-                ErrorHandler.Log_Error(newissue, e);
-                //Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue, e.Message );
+            if (issueId == 0)
+            {
+                //this is where we need to redirect to a page if the issue posting failed in the previous function call
             }
 
-            var lastId = dc.Issues.Max<Issue>(i => i.Id);// <--------------------- this probably wont work once we have multiple people submitting issues at the same time. Will probably have to do a look up using data from created issue.
+            New_Issue_Vote_Routine(userId, org, issueId);
+
+            return Redirect("~/" + org.orgURL + "/" + issueId);
+
+        }
+
+        private void New_Issue_Vote_Routine(string userId, Org org, int issueId)
+        {
             VoteCount newVote = new VoteCount();
-            newVote.IssueId = lastId;
+            newVote.IssueId = issueId;
             newVote.OrgId = org.Id;
-            newVote.count = CountXML<VoteCountCol>.DATAtoXML(new VoteCountCol());
+            VoteCountCol newVoCol = new VoteCountCol();
+            newVoCol.Update();
+            newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoCol);
+
+            var user = dc.AspNetUsers.Single(u => u.Id == userId);
+            var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            userVotes.Add_Vote(issueId, org.Id);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
+
             try
             {
                 dc.VoteCounts.InsertOnSubmit(newVote);
@@ -359,9 +345,44 @@ namespace Sigil.Controllers
                 ErrorHandler.Log_Error(newVote, e);
                 //Console.WriteLine("Could not write vote \"%s\" to database:\n%s", newVote, e.Message);
             }
+        }
 
-            return Redirect("~/" + org.orgURL + "/" + lastId);
+        private int Create_New_Issue(string userId, Org org, Category catid)
+        {
+            // Create a new issue
+            Issue newissue = new Issue();
 
+            // Increment Id, drop in current user and date, set default weight, drop in the form text
+            newissue.Org = org;
+            newissue.OrgId = org.Id;
+            newissue.UserId = userId;
+            newissue.createTime = DateTime.UtcNow;
+            newissue.editTime = DateTime.UtcNow;
+            newissue.lastVoted = DateTime.UtcNow;
+            newissue.votes = 1;
+            newissue.viewCount = 1;
+            newissue.title = Request.Form["title"];
+            newissue.text = Request.Form["text"];
+            newissue.CatId = catid == default(Category) ? 0 : catid.Id;
+            newissue.TopicId = catid == default(Category) ? org.topicid : catid.topicId;
+            if (catid != null)
+                newissue.CatId = catid.Id;
+            // Try to submit the issue and go to the issue page; otherwise, write an error
+            try
+            {
+                dc.Issues.InsertOnSubmit(newissue);
+                dc.SubmitChanges();
+
+                return dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
+
+
+            }
+            catch (Exception e)
+            {
+                ErrorHandler.Log_Error(newissue, e);
+                return 0;
+                //Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue, e.Message );
+            }
         }
 
         /* 

@@ -10,3 +10,27 @@ The statement has been terminated.
 
 15:48:57 Monday, September 7, 2015 -- Error From Sigil.Models.Issue -- Cannot insert the value NULL into column 'CatId', table 'aspnet-Sigil-20150716011718.dbo.Issues'; column does not allow nulls. INSERT fails.
 The statement has been terminated.
+
+14:22:20 Monday, September 14, 2015 -- Error From 9 -- Sequence contains no elements
+
+14:22:20 Monday, September 14, 2015 -- Error From 8 -- Sequence contains no elements
+
+14:22:20 Monday, September 14, 2015 -- Error From 7 -- Sequence contains no elements
+
+14:22:20 Monday, September 14, 2015 -- Error From 6 -- Sequence contains no elements
+
+14:23:04 Monday, September 14, 2015 -- Error From 6 -- Sequence contains no elements
+
+14:23:04 Monday, September 14, 2015 -- Error From 7 -- Sequence contains no elements
+
+14:23:04 Monday, September 14, 2015 -- Error From 8 -- Sequence contains no elements
+
+14:23:04 Monday, September 14, 2015 -- Error From 9 -- Sequence contains no elements
+
+14:23:10 Monday, September 14, 2015 -- Error From 6 -- Sequence contains no elements
+
+14:23:10 Monday, September 14, 2015 -- Error From 7 -- Sequence contains no elements
+
+14:23:10 Monday, September 14, 2015 -- Error From 8 -- Sequence contains no elements
+
+14:23:10 Monday, September 14, 2015 -- Error From 9 -- Sequence contains no elements
