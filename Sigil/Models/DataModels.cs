@@ -228,11 +228,7 @@ namespace Sigil.Models
             }
             return 0;
         }
-
-        public void Delete_Vote()
-        {
-            vcArray[vcArray.Count - 1].count--;
-        }        
+    
     }
 
     /// <summary>

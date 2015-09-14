@@ -134,7 +134,7 @@ namespace Sigil.Controllers
                 {
                     //WRITE TO ERROR FILE
                     ErrorHandler.Log_Error(thisIssue, e);
-                    //Console.WriteLine("Could not update view count on issue %d.", vc, e.Message);
+
                 }
             }
         }
@@ -149,7 +149,6 @@ namespace Sigil.Controllers
             Comment newComment = new Comment();
             
             // Increment Id, drop in current user and date, set default weight, drop in the form text
-            //newComment.Id = dc.Comments.Max<Comment>(c => c.Id) + 1;
             newComment.issueId = thisIssue.Id;
             newComment.UserId = userID;
             newComment.postDate = DateTime.UtcNow;
@@ -171,7 +170,7 @@ namespace Sigil.Controllers
             {
                 //WRITE TO ERROR FILE
                 ErrorHandler.Log_Error(newComment, e);
-                //Console.WriteLine("Could not write comment from %s to database:\n%s", newComment.UserId, e.Message);
+
             }
         }
 
@@ -191,7 +190,7 @@ namespace Sigil.Controllers
             {
                 //WILL WRITE TO ERROR FILE
                 ErrorHandler.Log_Error(issue, e);
-                //Console.WriteLine("Could not write comment from %s to database:\n%s", issue, e.Message);
+
             }
 
         }
@@ -381,7 +380,6 @@ namespace Sigil.Controllers
             {
                 ErrorHandler.Log_Error(newissue, e);
                 return 0;
-                //Console.WriteLine( "Could not write issue \"%s\" to database:\n%s", newissue, e.Message );
             }
         }
 
@@ -451,8 +449,14 @@ namespace Sigil.Controllers
 
                 var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
                 var vcol = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
-                vcol.Delete_Vote();
+                vcol.Remove_Vote();
                 VC.count = CountXML<VoteCountCol>.DATAtoXML(vcol);
+
+                var user = dc.AspNetUsers.Single(u => u.Id == userId);
+                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+                userVotes.Delete_Vote(thisIssue.Id, thisOrg.Id);
+
+                user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
 
                 dc.SubmitChanges();
 
@@ -460,8 +464,9 @@ namespace Sigil.Controllers
             catch ( Exception e )
             {
                 ErrorHandler.Log_Error(thisIssue, e);
-                //Console.WriteLine( "Could not unvote on issue %s:\n%s", thisIssue.Id, e.Message );
+                ErrorHandler.Log_Error(userId, e);
             }
+
             return new EmptyResult();
         }
 
