@@ -3,7 +3,7 @@
 
 @if ( Request.IsAuthenticated ) {
     <nav class="header-link-container header-nav-logged-in">
-        <img class="header-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
+        <img class="header-user-icon" src="@Sigil.Controllers.ImageController.Get_Icon_100(User.Identity.GetUserId())">
         @Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )
         @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = /*"navbar-right*/ "header-link-container header-nav-logged-in" } ) ) {
             @Html.AntiForgeryToken()

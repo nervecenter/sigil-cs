@@ -50,12 +50,12 @@ namespace Sigil.Controllers
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
-            List<UserVote> userVotes;
+            UserVoteCol userVotes;
 
             if (userId != null)
             {
                 // Get the user's votes on this org
-                userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userId).votes).Get_Votes();
+                userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userId).votes);
                 ViewBag.userVotes = userVotes;
             }
             // Get the issues of the org
@@ -168,9 +168,6 @@ namespace Sigil.Controllers
              *  MONTHLY Traffic Data
              */
 
-
-            // TODO: Possible solution: For each day up to current, add datestring to array, and add votecount to array; if no entry, add 0
-
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
             Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
 
@@ -181,7 +178,6 @@ namespace Sigil.Controllers
             ViewBag.monthViewCount = monthSums.Item1;
             ViewBag.monthVoteCount = monthSums.Item2;
             ViewBag.monthRatio = ((double)monthSums.Item2 / (double)monthSums.Item1) * 100.0f;
-
 
             /*
              * VIEWBAG
@@ -194,12 +190,12 @@ namespace Sigil.Controllers
             return View(listOfCharts);
         }
         //
-        //// GET: /orgregister
-        //[AllowAnonymous]
-        //public ActionResult OrgRegister()
-        //{
-        //    return View();
-        //}
+        // GET: /orgregister
+        [AllowAnonymous]
+        public ActionResult OrgRegister()
+        {
+            return View();
+        }
 
         ////
         //// POST: /orgregister

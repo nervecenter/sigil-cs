@@ -54,7 +54,7 @@ namespace Sigil.Models
     {
         private List<ViewCountDay> vcArray = new List<ViewCountDay>();
 
-        public ViewCountCol() { Update(); }
+        public ViewCountCol() {}
 
         public ViewCountDay this[int index]
         {
@@ -96,7 +96,7 @@ namespace Sigil.Models
             if (vcArray.Count > 0 && isCurrent())
                 vcArray[vcArray.Count - 1].updateCount();
             else
-                vcArray.Add(new ViewCountDay(DateTime.UtcNow, 1));
+                vcArray.Add(new ViewCountDay(DateTime.Today, 1));
             
         }
 
@@ -148,7 +148,7 @@ namespace Sigil.Models
     {
         private List<VoteCountDay> vcArray = new List<VoteCountDay>();
 
-        public VoteCountCol() { Update(); }
+        public VoteCountCol() {  }
 
         public VoteCountDay this[int index]
         {
@@ -190,7 +190,7 @@ namespace Sigil.Models
             if (vcArray.Count > 0 && isCurrent())
                 vcArray[vcArray.Count - 1].updateCount();
             else
-                vcArray.Add(new VoteCountDay(DateTime.UtcNow, 1));
+                vcArray.Add(new VoteCountDay(DateTime.Today, 1));
 
         }
 

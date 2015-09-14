@@ -8,7 +8,7 @@
     Org thisOrg = Model.Item1;
     ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
-    List<UserVote> userVotes = ViewBag.userVotes;
+    UserVoteCol userVotes = ViewBag.userVotes;
     Subscription userSub = ViewBag.userSub;
 }
 
@@ -46,15 +46,10 @@
         <article class="issue-box">
             <div class="issue-vote-area">
                 <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                @if ( !Request.IsAuthenticated ) {
-                    <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                } else if ( userVotes != null && userVotes.Any( v => v.IssueID == issue.Id ) ) {
-                    // Issue has been voted on, get the checked button and checked class
-                    <img class="issue-vote-button checked" id="button-@issue.Id" src="../Content/Images/checked.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                } else {
-                    // Issue hasn't been voted on, get the opposite
-                    <img class="issue-vote-button unchecked" id="button-@issue.Id" src="../Content/Images/unchecked.png" onclick="vote(this, @issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
-                }
+                @{
+                    Tuple<bool, Issue> votePartial = new Tuple<bool, Issue>(userVotes.Check_Vote(issue.Id, issue.OrgId), issue);
+                    Html.RenderPartial("_VoteButton", votePartial);
+                 }
             </div>
             <div class="issue-main-area">
                 <div class="issue-main-cell">
