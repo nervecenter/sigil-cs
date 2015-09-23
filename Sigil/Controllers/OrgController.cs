@@ -9,6 +9,10 @@ using DotNet.Highcharts;
 using DotNet.Highcharts.Options;
 using DotNet.Highcharts.Helpers;
 using Sigil.Models;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+
 
 namespace Sigil.Controllers
 {
@@ -137,48 +141,82 @@ namespace Sigil.Controllers
             // MODEL: List of Highcharts to display is out page model
             List<Highcharts> listOfCharts = new List<Highcharts>();
 
-            // TODO: Log Org views on Org page
-
-            /*
-             *  WEEKLY Traffic Data
-             */
 
             // For each day in the week, get that day's views on all issues in the org, group them into a week of integers of views
             var orgIssueViews = (from vc in dc.ViewCounts
-                                 where vc.Issue.OrgId == thisOrg.Id
+                                 where vc.OrgId == thisOrg.Id
                                  select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
 
             // For each day in the week, get that day's votes on all issues in the org, group them into a week of integers of votes
             var orgIssueVotes = (from vote in dc.VoteCounts
-                                 where vote.Issue.OrgId == thisOrg.Id
+                                 where vote.OrgId == thisOrg.Id
                                  select CountXML<VoteCountCol>.XMLtoDATA(vote.count));
 
-            var weekChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, "weekChart", "Traffic on " + thisOrg.orgName + " This Month");
+            var orgComments = (from comm in dc.CommentCounts
+                               where comm.OrgId == thisOrg.Id
+                               select CountXML<CommentCountCol>.XMLtoDATA(comm.count));
+
+            var orgSubs = dc.SubCounts.Where(s => s.OrgId == thisOrg.Id).Select(s => CountXML<SubCountCol>.XMLtoDATA(s.count));
+
+            var allComments = dc.Comments.Where(c => c.Issue.OrgId == thisOrg.Id).Select(c => c);
+            var allIssues = dc.Issues.Where(i => i.OrgId == thisOrg.Id).Select(i => i);
+
+            // TODO: Log Org views on Org page
+
+            //========================================= Weekly Traffic Data =======================================================================//
+
+
+
+
+            var weekChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, "weekChart", "Traffic on " + thisOrg.orgName + " This Month");
 
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
             listOfCharts.Add(weekChart);
-            var weekSums = DataVisualization.Get_Sum(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+            var weekSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+            var weekUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+            List<Issue> Week_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
+            List<Issue> Week_under_issues = DataVisualization.Get_Under_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
 
             ViewBag.weekViewCount = weekSums.Item1;
             ViewBag.weekVoteCount = weekSums.Item2;
             ViewBag.weekRatio = ((double)weekSums.Item2 / (double)weekSums.Item1) * 100.0f;
+            ViewBag.weekSubCount = weekSums.Item4;
+            ViewBag.weekSubRatio = ((double)weekSums.Item4 / (double)weekSums.Item2)*100.0f;
+            ViewBag.weekCommCount = weekSums.Item3;
+            ViewBag.weekUniqueCommCount = weekUnique;
+            ViewBag.weekUniqueRatioViews = ((double)weekUnique / (double)weekSums.Item1) * 100.0f;
+            ViewBag.weekUniqueRatioVotes = ((double)weekUnique / (double)weekSums.Item2) * 100.0f;
+            ViewBag.weekTopIssues = Week_top_issues;
+            ViewBag.weekUnderDogIssues = Week_under_issues;
 
-            /*
-             *  MONTHLY Traffic Data
-             */
+
+
+        //========================================= MONTHLY Traffic Data =======================================================================//
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-            Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
+            Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
             listOfCharts.Add(monthChart);
-            var monthSums = DataVisualization.Get_Sum(orgIssueViews, orgIssueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+            var monthSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+            var monthUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+            List<Issue> Month_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
+            List<Issue> Month_under_issues = DataVisualization.Get_Under_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
+
+
 
             ViewBag.monthViewCount = monthSums.Item1;
             ViewBag.monthVoteCount = monthSums.Item2;
             ViewBag.monthRatio = ((double)monthSums.Item2 / (double)monthSums.Item1) * 100.0f;
-
+            ViewBag.monthSubCount = monthSums.Item4;
+            ViewBag.monthSubRatio = ((double)monthSums.Item4 / (double)monthSums.Item2) * 100.0f; ;
+            ViewBag.monthCommCount = monthSums.Item3;
+            ViewBag.monthUniqueCommCount = monthUnique ;
+            ViewBag.monthUniqueRatioViews = ((double)monthUnique / (double)monthSums.Item1) * 100.0f; 
+            ViewBag.monthUniqueRatioVotes = ((double)monthUnique / (double)monthSums.Item2) * 100.0f; ;
+            ViewBag.monthTopIssues = Month_top_issues;
+            ViewBag.monthUnderDogIssues = Month_under_issues;
             /*
              * VIEWBAG
              */
@@ -197,35 +235,9 @@ namespace Sigil.Controllers
             return View();
         }
 
-        ////
-        //// POST: /orgregister
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> OrgRegister(OrgRegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-        //            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-        //            // Send an email with this link
-        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        AddErrors(result);
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+        //
+        // POST: /orgregister
+       
 
 
     }

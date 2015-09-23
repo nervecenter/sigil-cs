@@ -253,6 +253,212 @@ namespace Sigil.Models
     }
 
 
+    //================================= SubCounts helper data structures =========================================================================//
+
+
+    public class SubCountCol : ICollection
+    {
+        private List<SubCountDay> scArray = new List<SubCountDay>();
+
+        public SubCountCol() { }
+
+        public SubCountDay this[int index]
+        {
+            get { return (SubCountDay)scArray[index]; }
+        }
+
+        public void CopyTo(Array a, int index)
+        {
+            scArray.CopyTo((SubCountDay[])a, index);
+        }
+
+        public int Count
+        {
+            get { return scArray.Count; }
+        }
+
+        public object SyncRoot
+        {
+            get { return this; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return scArray.GetEnumerator();
+        }
+
+        public void Add(SubCountDay newVCW)
+        {
+            scArray.Add(newVCW);
+        }
+
+        /// <summary>
+        /// Used to increment the Sub count for an issue. When called checks to see if the last entry(the last time a user added the sub) is the current day. If it is then it updates the sub count for that day. If it is a new day it creates a new SubCountDay and appends to the end of the collection.
+        /// </summary>
+        public void Update()
+        {
+            if (scArray.Count > 0 && isCurrent())
+                scArray[scArray.Count - 1].updateCount();
+            else
+                scArray.Add(new SubCountDay(DateTime.Today, 1));
+
+        }
+
+        /// <summary>
+        /// Used to decrement the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new SubCountDay and appends to the end of the collection.
+        /// </summary>
+        public void Remove_Sub()
+        {
+            if (scArray.Count > 0 && isCurrent())
+                scArray[scArray.Count - 1].count--;
+            else
+                scArray.Add(new SubCountDay(DateTime.Today, -1));
+        }
+
+        public bool isCurrent()
+        {
+            if (scArray[scArray.Count - 1].date.Date == DateTime.UtcNow.Date)
+                return true;
+            else
+                return false;
+        }
+
+        public int Get_Subs(DateTime day)
+        {
+            foreach (SubCountDay s in scArray)
+            {
+                if (s.date.Date == day.Date)
+                    return s.count;
+            }
+            return 0;
+        }
+
+    }
+
+    /// <summary>
+    /// Class model Voteccount data for issues and orgs.
+    /// </summary>
+    public class SubCountDay
+    {
+        public int count;
+        public DateTime date;
+        public SubCountDay() { }
+        public SubCountDay(DateTime d, int c)
+        {
+            count = c;
+            date = d;
+        }
+
+        public void updateCount()
+        {
+            count++;
+        }
+
+    }
+
+    //================================= CommentCounts helper data structures =========================================================================//
+
+
+    public class CommentCountCol : ICollection
+    {
+        private List<CommentCountDay> ccArray = new List<CommentCountDay>();
+
+        public CommentCountCol() { }
+
+        public CommentCountDay this[int index]
+        {
+            get { return (CommentCountDay)ccArray[index]; }
+        }
+
+        public void CopyTo(Array a, int index)
+        {
+            ccArray.CopyTo((CommentCountDay[])a, index);
+        }
+
+        public int Count
+        {
+            get { return ccArray.Count; }
+        }
+
+        public object SyncRoot
+        {
+            get { return this; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return ccArray.GetEnumerator();
+        }
+
+        public void Add(CommentCountDay newVCW)
+        {
+            ccArray.Add(newVCW);
+        }
+
+        /// <summary>
+        /// Use to update the view count for an issue. When called checks to see if the last entry(the last time it was viewed) is the current day. If it is then it updates the view count for that day. If it is a new day it creates a new CommentCountDay and appends to the end of the collection.
+        /// </summary>
+        public void Update()
+        {
+            if (ccArray.Count > 0 && isCurrent())
+                ccArray[ccArray.Count - 1].updateCount();
+            else
+                ccArray.Add(new CommentCountDay(DateTime.Today, 1));
+
+        }
+
+        public bool isCurrent()
+        {
+            if (ccArray[ccArray.Count - 1].date.Date == DateTime.UtcNow.Date)
+                return true;
+            else
+                return false;
+        }
+
+        public int Get_Comments(DateTime day)
+        {
+            foreach (CommentCountDay c in ccArray)
+            {
+                if (c.date.Date == day.Date)
+                    return c.count;
+            }
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// Class model Viewccount data for issues and orgs.
+    /// </summary>
+    public class CommentCountDay
+    {
+        public int count;
+        public DateTime date;
+        public CommentCountDay() { }
+        public CommentCountDay(DateTime d, int c)
+        {
+            count = c;
+            date = d;
+        }
+
+        public void updateCount()
+        {
+            count++;
+        }
+
+    }
+
+
+
     //================================= UserVotes helper data structures =========================================================================//
 
 
@@ -374,7 +580,96 @@ namespace Sigil.Models
     }
 
 
+    //================================= UserIDs helper data structures =========================================================================//
 
+
+    public class UserIDCol : ICollection
+    {
+        private List<string> uvArray = new List<string>();
+
+        public UserIDCol() { }
+        public UserIDCol(List<string> usV)
+        {
+            uvArray = usV;
+        }
+        public UserIDCol(string userid)
+        {
+            Add_User(userid);
+        }
+
+        public string this[int index]
+        {
+            get { return (string)uvArray[index]; }
+        }
+
+        public void CopyTo(Array a, int index)
+        {
+            uvArray.CopyTo((string[])a, index);
+        }
+
+        public int Count
+        {
+            get { return uvArray.Count; }
+        }
+
+        public object SyncRoot
+        {
+            get { return this; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return uvArray.GetEnumerator();
+        }
+
+        public void Add(string newVCW)
+        {
+            uvArray.Add(newVCW);
+        }
+
+
+        public void Add_User(string userid)
+        {
+            uvArray.Add(userid);
+        }
+
+
+        public bool Delete_User(string userid)
+        {
+            foreach (string uv in uvArray)
+            {
+                if (uv == userid)
+                {
+                    uvArray.Remove(uv);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public List<string> Get_Users()
+        {
+            return uvArray;
+        }
+
+        public bool Check_User(string userid)
+        {
+            foreach (string uv in uvArray)
+            {
+                if (uv == userid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }
 
 
     //============================= HighChart Helper Datastructure ===============================================================================//

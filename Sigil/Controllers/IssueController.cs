@@ -159,6 +159,12 @@ namespace Sigil.Controllers
             newComment.text = Request.Form["text"];
             Notification_Check(newComment.text, userID);
 
+            var commentData = dc.CommentCounts.Single(c => c.OrgId == thisIssue.OrgId && c.IssueId == thisIssue.Id);
+
+            var commDataCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
+            commDataCol.Update();
+            commentData.count = CountXML<CommentCountCol>.DATAtoXML(commDataCol);
+
             // Try to submit the issue and go to the issue page; otherwise, write an error
             try
             {
@@ -170,6 +176,7 @@ namespace Sigil.Controllers
             {
                 //WRITE TO ERROR FILE
                 ErrorHandler.Log_Error(newComment, e);
+                ErrorHandler.Log_Error(commentData, e);
 
             }
         }
@@ -221,22 +228,27 @@ namespace Sigil.Controllers
             List<Highcharts> listOfCharts = new List<Highcharts>();
 
             //get the collection of viewcounts from the xml field in the table
-            ViewCountCol issueViews = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.SingleOrDefault(v => v.IssueId == thisIssue.Id).count);
-            VoteCountCol issueVotes = CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.SingleOrDefault(v => v.IssueId == thisIssue.Id).count);
+            ViewCountCol issueViews = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisIssue.OrgId).count);
+            VoteCountCol issueVotes = CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisIssue.OrgId).count);
+            CommentCountCol issueComms = CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(c => c.IssueId == thisIssue.Id && c.OrgId == thisIssue.OrgId).count);
+            
             /*
              *  WEEKLY Traffic Data
              */
             
-            Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
+            Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms,DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
             listOfCharts.Add(weekChart);
-            var totals = DataVisualization.Get_Sum(issueViews, issueVotes, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
-
+            var totals = DataVisualization.Get_Sums(issueViews, issueVotes, issueComms, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+            var uniqueCommsWeek = DataVisualization.Get_Unique_Count(dc.Comments.Where(c => c.issueId == thisIssue.Id).Select(c => c), DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
             ViewBag.weekViewCount = totals.Item1;
             ViewBag.weekVoteCount = totals.Item2;
+            ViewBag.weekCommCount = totals.Item3;
+            ViewBag.weekCommUnique = uniqueCommsWeek;
             ViewBag.weekRatio = ((double)totals.Item2 / (double)totals.Item1) * 100.0f;
-
+            ViewBag.weekUniqueRatioViews = ((double)uniqueCommsWeek / (double)totals.Item1) * 100.0f;
+            ViewBag.weekUniqueRatioVotes = ((double)uniqueCommsWeek / (double)totals.Item1) * 100.0f;
 
             /*
              *  MONTHLY Traffic Data
@@ -244,15 +256,19 @@ namespace Sigil.Controllers
 
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-            Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
+            Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
             listOfCharts.Add(monthChart);
-            totals = DataVisualization.Get_Sum(issueViews, issueVotes, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-
+            totals = DataVisualization.Get_Sums(issueViews, issueVotes, issueComms,DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+            var uniqueCommsMonth = DataVisualization.Get_Unique_Count(dc.Comments.Where(c => c.issueId == thisIssue.Id).Select(c => c), DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
             ViewBag.monthViewCount = totals.Item1;
             ViewBag.monthVoteCount = totals.Item2;
+            ViewBag.monthCommCount = totals.Item3;
+            ViewBag.monthCommUnique = uniqueCommsMonth;
             ViewBag.monthRatio = ((double)totals.Item2 / (double)totals.Item1) * 100.0f;
+            ViewBag.monthUniqueRatioViews = ((double)uniqueCommsMonth / (double)totals.Item1) * 100.0f;
+            ViewBag.monthUniqueRatioVotes = ((double)uniqueCommsMonth / (double)totals.Item1) * 100.0f;
 
 
             /*
@@ -321,13 +337,22 @@ namespace Sigil.Controllers
 
         private void New_Issue_Vote_Routine(string userId, Org org, int issueId)
         {
+            //Create Vote count table entry
             VoteCount newVote = new VoteCount();
             newVote.IssueId = issueId;
             newVote.OrgId = org.Id;
+
             VoteCountCol newVoCol = new VoteCountCol();
             newVoCol.Update();
             newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoCol);
 
+            //Create Comment count table entry
+            CommentCount newCom = new CommentCount();
+            newCom.IssueId = issueId;
+            newCom.OrgId = org.Id;
+            newCom.count = CountXML<CommentCountCol>.DATAtoXML(new CommentCountCol());
+            
+            //update the users votes xml ds because every user votes on the issue they make
             var user = dc.AspNetUsers.Single(u => u.Id == userId);
             var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
             userVotes.Add_Vote(issueId, org.Id);
@@ -336,6 +361,7 @@ namespace Sigil.Controllers
             try
             {
                 dc.VoteCounts.InsertOnSubmit(newVote);
+                dc.CommentCounts.InsertOnSubmit(newCom);
                 dc.SubmitChanges();
 
             }
