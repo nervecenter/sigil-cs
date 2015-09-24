@@ -196,7 +196,7 @@ namespace Sigil
 
     namespace Controllers
     {
-        internal class ImageController : Controller
+        public class ImageController : Controller
         {
             private static SigilDBDataContext dc = new SigilDBDataContext();
             private static string default_img_path = "../Images/Default/";
