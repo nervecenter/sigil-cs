@@ -14,19 +14,19 @@
     ViewBag.Title = "Sigil - " + thisIssue.title;
 }
 
-<div class="first-column">
-    <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png">
-    <article class="issue-body">
+<div class="col-md-9 .col-lg-9">
+    <img class="img-rounded img-responsive org-banner-small" src="../Content/Images/orgbanners/@(thisOrg.orgURL).png">
+    <article class="panel panel-default">
         <div class="issue-vote-area">
             <span class="issue-vote-amount" id="count-@thisIssue.Id">@thisIssue.votes</span>
-            
+
             @{
-                Tuple<bool, Issue> votePartial = new Tuple<bool, Issue>(userVote.Check_Vote(thisIssue.Id, thisIssue.OrgId), thisIssue);
-                Html.Partial("_VoteButton", votePartial);
+                Tuple<bool, Issue> votePartial = new Tuple<bool, Issue>( userVote.Check_Vote( thisIssue.Id, thisIssue.OrgId ), thisIssue );
+                Html.Partial( "_VoteButton", votePartial );
             }
 
         </div>
-        <div class="issue-main-area issue-main-issue-page">
+        <div class="panel-body">
             <div class="issue-main-cell">
                 <div class="issue-title-area issue-main-sub-areas"><span class="issue-title">@thisIssue.title</span></div>
                 <div class="issue-info-area issue-main-sub-areas">
@@ -42,59 +42,58 @@
                 </div>
             </div>
         </div>
-        <br class="clear" />
         <p class="issue-text">@thisIssue.text</p>
     </article>
-    @{
-        if ( thisIssue.responded ) {
-            <article class="response-box">
-                <article class="response">
-                    <span class="response-header">O F F I C I A L&emsp;R E S P O N S E</span>
-                    <div class="response-user-area">
-                        <img class="response-user-icon" src="../Content/Images/usericons/ms-mike_100.png">
-                        <br>
-                        MS-Mike
-                        <br>
-                        <span class="response-time">2 days ago</span>
-                        <br>
-                        <br>
-                        <img class="icon-helpful" src="../Content/Images/helpful.png">
-                        <br>
-                        <img class="icon-unhelpful" src="../Content/Images/unhelpful.png">
+        @if ( thisIssue.responded ) {
+            <div class="panel panel-primary">
+                <div class="panel-heading">Official Response</div>
+                <div class="panel-body">
+                    <div class="media">
+                        <a href="#" class="pull-left">
+                            <img src="../Content/Images/usericons/micro_100.png" class="media-object" alt="Sample Image">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">Micro-Mike <small><i>Posted 1 hour ago</i></small></h4>
+                            <p>
+                                @thisIssue.officialComment
+                            </p>
+                            <div class="btn-group glyphicon-position" data-toggle="buttons">
+                                <button type="button" class="btn btn-success btn-xs"><!--<span class="glyphicon glyphicon-ok"></span>--> Helpful</button>
+                                <button type="button" class="btn btn-danger btn-xs"><!--<span class="glyphicon glyphicon-remove"></span>--> Unhelpful</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="response-text">@thisIssue.officialComment</div>
-                </article>
-            </article>
+                </div>
+            </div>
         }
-    }
-    <div class="comments-area">
-        <span class="comments-header">C O M M E N T S</span>
-        @{
-            foreach ( Comment comm in issueComments ) {
-                <article class="comment">
+    <div class="panel panel-default">
+        <div class="panel-heading">Comments</div>
+        <div class="panel-body">
+            @foreach ( Comment comm in issueComments ) {
+                <div class="media">
                     <div class="comment-user-area">
-                        <img class="comment-user-icon" src="../Content/Images/usericons/nervecenter_large.png">
-                        @comm.AspNetUser.UserName
-                        <br />
-                        <span class="comment-time">@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )</span>
+                        <a href="#" class="pull-left">
+                            <img src="../Content/Images/usericons/@(comm.AspNetUser.UserName)_large.png" class="media-object" alt="Sample Image">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">@comm.AspNetUser.UserName <small><i>Posted @Sigil.Controllers.IssueController.TimeSince( @comm.postDate )</i></small></h4>
+                            <p>@comm.text</p>
+                        </div>
                     </div>
-                    <div class="comment-text">@comm.text</div>
-                    <br class="clear" />
-                </article>
-                <hr class="comment-separator" />
+                </div>
             }
-        }
-        @if ( Request.IsAuthenticated ) { 
-            <form method="post" class="comment-add-form">
-                <fieldset>
-                    <legend>Add a comment:</legend>
-                    <p>
-                        <input type="text" name="text" />
-                        @Html.ValidationMessage( "text" )
-                    </p>
-                    <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
-                </fieldset>
-            </form>
-        }
+            @if ( Request.IsAuthenticated ) {
+                <form method="post" class="comment-add-form">
+                    <fieldset>
+                        <legend>Add a comment:</legend>
+                        <p>
+                            <input type="text" name="text" />
+                            @Html.ValidationMessage( "text" )
+                        </p>
+                        <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
+                    </fieldset>
+                </form>
+            }
+        </div>
     </div>
 </div>

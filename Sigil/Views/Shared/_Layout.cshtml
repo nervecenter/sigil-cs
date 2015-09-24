@@ -34,26 +34,29 @@
     });
     </script>
 
+    @Styles.Render( "~/Content/bootstrap.css" )
+    @Styles.Render( "~/Content/bootstrap-theme.css" )
+    @Styles.Render( "~/Content/Site.css" )
+
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
     <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
 
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/Site.css")
 </head>
 <body class="page">
-    <div class="page-container">
-        @Html.Partial( "_Header" )
-        <section class="main">
+    @Html.Partial( "_Header" )
+    <div class="container">
+        <div class="row">
             @RenderBody()
             @if ( !actionsWithoutSidebar.Contains( actionCalled ) ) {
                 @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
             }
-            <br class="clear" />
-        </section>
+        </div>  
     </div>
     @if ( !actionsWithoutFooter.Contains( actionCalled ) ) {
         @Html.Partial( "_Footer" )
     }
-    @RenderSection("scripts", required: false)
+    @RenderSection( "scripts", required: false )
 </body>
 </html>

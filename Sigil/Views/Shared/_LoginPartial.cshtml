@@ -2,17 +2,15 @@
 @using Sigil.Models
 
 @if ( Request.IsAuthenticated ) {
-    <nav class="header-link-container header-nav-logged-in">
-        <img class="header-user-icon" src="@Sigil.Controllers.ImageController.Get_Icon_100(User.Identity.GetUserId())">
-        @Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "header-link", title = "Manage" } )
-        @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = /*"navbar-right*/ "header-link-container header-nav-logged-in" } ) ) {
+    @*<img class="header-user-icon" src="@Sigil.Controllers.ImageController.Get_Icon_100(User.Identity.GetUserId())">*@
+    <li>@Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { } )</li>
+    <li>
+        @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm" } ) ) {
             @Html.AntiForgeryToken()
-            <a href="javascript:document.getElementById('logoutForm').submit()" class="header-link">Log Out</a>
+            <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
         }
-    </nav>
+    </li>
 } else {
-    <nav class="header-link-container">
-        @Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-        @Html.ActionLink( "Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-    </nav>
+    <li>@Html.ActionLink( "Log In", "Login", "Account", routeValues: null, htmlAttributes: new { } )</li>
+    <li>@Html.ActionLink( "Create Account", "Register", "Account", routeValues: null, htmlAttributes: new { } )</li>
 }

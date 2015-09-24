@@ -2,29 +2,28 @@
 
 @model List<Subscription>
 
-<div class="second-column">
-    <a href="@Url.Action("CreateIssue", "Issue")">
-        <div class="second-column-box add-issue-box">
-            <span style="font-weight:600;">Submit a thought</span>
-        </div>
-    </a>
-    @if ( Request.IsAuthenticated ) {
-        <div class="second-column-box">
-            <a href="@Url.Action( "Index", "Subscriptions" )"><span class="subs-header">Y O U R&emsp;S U B S C R I P T I O N S</span></a>
-            <div class="sub-list">
+<div class="col-md-3 .col-lg-3">
+    <a href="#" class="btn btn-primary btn-block sidebar-button">Subscribe to X Org</a>
+    <a href="#" class="btn btn-info btn-block sidebar-button">Submit a thought</a>
+    @if (Request.IsAuthenticated) {
+        <div class="panel panel-default">
+            <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>
+            <div class="panel-body">
                 @foreach ( Subscription sub in Model ) {
                     if ( sub.OrgId != 0 && sub.CatId == 0 ) {
-                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName</a><br>
+                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/@(sub.Org.orgURL)_15.png">@sub.Org.orgName</a><br>
                     } else if ( sub.CatId != 0 ) {
-                        <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Org.orgName - @sub.Category.catName</a><br>
+                        <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="../Content/Images/caticons/@(sub.Category.catURL)_15.png">@sub.Category.catName</a><br>
                     } else {
-                        <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/microsoft_15.png">@sub.Topic.topicURL</a><br>
+                        <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="../Content/Images/topicicons/@(sub.Topic.topicURL)_15.png">@sub.Topic.topicURL</a><br>
                     }
                 }
             </div>
         </div>
     }
-    <div class="placeholder">
-        Placeholder.
+    <div class="panel panel-default">
+        <div class="panel-body">
+            Ads go here.
+        </div>
     </div>
 </div>

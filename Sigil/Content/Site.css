@@ -1,9 +1,35 @@
-﻿html, body {
+/* Bootstrap CSS addins */
+
+.container {
+	max-width: 1000px;
+	margin-top: 70px;
+}
+
+.media-object {
+	width: 64px;
+}
+
+.navbar-logo {
+	margin-top: 7px;
+	height: 35px;
+	margin-left: 20px;
+}
+
+.org-banner-small {
+	margin-bottom: 20px;
+}
+
+.sidebar-button {
+	margin-bottom: 20px;
+}
+
+/* Old CSS to keep */
+
+html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	/*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
+	font-family: 'Tahoma', Geneva, Verdana, sans-serif;
 }
 
 a {
@@ -14,6 +40,129 @@ a {
 .page {
 	background-color: #E5E5E5;
 }
+
+.issue-text {
+	margin: 0px 25px 20px 25px;
+}
+
+/* Bootstrap Navbar Recolor */
+
+.navbar-custom {
+  background-color: #494949;
+  border-color: #383838;
+  /*background-image: -webkit-gradient(linear, left 0%, left 100%, from(#626262), to(#494949));
+  background-image: -webkit-linear-gradient(top, #626262, 0%, #494949, 100%);
+  background-image: -moz-linear-gradient(top, #626262 0%, #494949 100%);
+  background-image: linear-gradient(to bottom, #626262 0%, #494949 100%);*/
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff626262', endColorstr='#ff494949', GradientType=0);
+}
+.navbar-custom .navbar-brand {
+  color: #ffffff;
+}
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-brand:focus {
+  color: #e6e6e6;
+  background-color: transparent;
+}
+.navbar-custom .navbar-text {
+  color: #ffffff;
+}
+.navbar-custom .navbar-nav > li:last-child > a {
+  border-right: 1px solid #383838;
+}
+.navbar-custom .navbar-nav > li > a {
+  color: #ffffff;
+  border-left: 1px solid #383838;
+}
+.navbar-custom .navbar-nav > li > a:hover,
+.navbar-custom .navbar-nav > li > a:focus {
+  color: #c0c0c0;
+  background-color: transparent;
+}
+.navbar-custom .navbar-nav > .active > a,
+.navbar-custom .navbar-nav > .active > a:hover,
+.navbar-custom .navbar-nav > .active > a:focus {
+  color: #c0c0c0;
+  background-color: #383838;
+  /*background-image: -webkit-gradient(linear, left 0%, left 100%, from(#383838), to(#525252));
+  background-image: -webkit-linear-gradient(top, #383838, 0%, #525252, 100%);
+  background-image: -moz-linear-gradient(top, #383838 0%, #525252 100%);
+  background-image: linear-gradient(to bottom, #383838 0%, #525252 100%);*/
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff383838', endColorstr='#ff525252', GradientType=0);
+}
+.navbar-custom .navbar-nav > .disabled > a,
+.navbar-custom .navbar-nav > .disabled > a:hover,
+.navbar-custom .navbar-nav > .disabled > a:focus {
+  color: #cccccc;
+  background-color: transparent;
+}
+.navbar-custom .navbar-toggle {
+  border-color: #dddddd;
+}
+.navbar-custom .navbar-toggle:hover,
+.navbar-custom .navbar-toggle:focus {
+  background-color: #dddddd;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+  background-color: #cccccc;
+}
+.navbar-custom .navbar-collapse,
+.navbar-custom .navbar-form {
+  border-color: #373737;
+}
+.navbar-custom .navbar-nav > .dropdown > a:hover .caret,
+.navbar-custom .navbar-nav > .dropdown > a:focus .caret {
+  border-top-color: #c0c0c0;
+  border-bottom-color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .open > a,
+.navbar-custom .navbar-nav > .open > a:hover,
+.navbar-custom .navbar-nav > .open > a:focus {
+  background-color: #383838;
+  color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .open > a .caret,
+.navbar-custom .navbar-nav > .open > a:hover .caret,
+.navbar-custom .navbar-nav > .open > a:focus .caret {
+  border-top-color: #c0c0c0;
+  border-bottom-color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .dropdown > a .caret {
+  border-top-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+@media (max-width: 767) {
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #c0c0c0;
+    background-color: transparent;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #c0c0c0;
+    background-color: #383838;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #cccccc;
+    background-color: transparent;
+  }
+}
+.navbar-custom .navbar-link {
+  color: #ffffff;
+}
+.navbar-custom .navbar-link:hover {
+  color: #c0c0c0;
+}
+
+/* Old CSS shit */
 
 .page-container {
 	min-height: 56em;
@@ -51,11 +200,6 @@ a {
 	display: block;
 }
 
-.header-nav-logged-in {
-    padding-right: 0em;
-    margin-left: 0.5em;
-}
-
 .landing-header-link-container {
 	position: relative;
 	margin-top: -3.2em;
@@ -72,8 +216,8 @@ a {
 	height: 2.5em;
 	vertical-align: middle;
 	border: 0.1em #FFF solid;
-	margin-right: -0.3em;
-	/*margin-left: 1em;*/
+	margin-right: 0.5em;
+	margin-left: 1em;
 }
 
 .search-box-form {
@@ -108,7 +252,6 @@ a {
 
 .landing-search-submit-button {
 	top: 0.6em;
-    position: absolute;
 }
 
 .search-submit-button-icon {
@@ -141,10 +284,10 @@ a {
 }
 
 .sale-back {
+    background: url("/Content/Images/saleback.jpg") no-repeat center center fixed;
+    background-size: cover;
 	width: 100%;
 	height: 100%;
-	background: url("../Content/Images/saleback.jpg") no-repeat center center fixed;
-	background-size: cover;
 }
 
 .sale-back-img {
@@ -231,12 +374,6 @@ a {
 	display: block;
 }
 
-.single-column {
-	width: 64em;
-	float: left;
-	display: block;
-}
-
 .feed-intent {
 	font-size: 1.5em;
 	font-weight: 600;
@@ -249,7 +386,7 @@ a {
 	width: 50em;
 	height: 15em;
 	border: 1px solid #CCC;
-	margin-bottom: 1em;
+	margin-bottom: 1.5em;
 }
 
 .org-banner {
@@ -268,62 +405,24 @@ a {
 	font-size: 1.2em;
 }
 
-.form-page-block {
-    width: 30em;
-}
-
-.form-page-text-box {
-    width: 100%;
-    height: 2em;
-    margin-bottom: 1em;
-    font-size: 1.1em;
-    font-weight: 600;
-    padding-left: 1em;
-}
-
-.login-page-remember {
-    margin-bottom: 1em;
-}
-
-.form-page-submit {
-    width: 100%;
-}
-
 .issue-box {
 	height: 6em;
 }
 
-.issue-text {
-	margin: 0.5em 2em 1em 2em;
-}
+
 
 .issue-box, 
 .issue-body, 
 .issue-submit-body, 
 .issue-data-body, 
-.org-data-body,  
+.org-data-body, 
+.legal-body, 
 .user-edit-body {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;
 	background-color: #FFF;
 	margin-bottom: 1.5em;
-}
-
-.first-column-header {
-    margin: 1em 1em 1em 1em;
-}
-
-.first-column-paragraph {
-    margin: 0em 1em 1em 1em;
-}
-
-.banner-button {
-    width: 32%;
-}
-
-.ban-but-marg {
-    margin-right: 1.4%;
 }
 
 .issue-box-small {
@@ -454,40 +553,13 @@ a {
 	position: absolute;
 }
 
-fieldset {
-    border: none;
-}
-
-legend {
-    font-size: 1.4em;
-}
-
-.add-issue-input {
-    height: 2em;
-    padding-left: 1em;
-}
-
-.add-issue-half-width {
-    width: 45%;
-}
-
-.add-issue-full-width {
-    width: 90%;
-}
-
-.add-issue-text-input {
-    height: 20em;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
-
-.comments-area, .response-box, .first-column-box {
+.comments-area, .response-box {
 	display: block;
 	width: 50em;
 	border: 1px solid #CCC;
 	background-color: #FFF;
 	margin-bottom: 1em;
+	padding-bottom: 0.5em;
 }
 
 .comments-header, .response-header {
@@ -521,12 +593,8 @@ legend {
 	margin-right: auto;
 }
 
-.response-time {
+.comment-time, .response-time {
 	font-size: 0.8em;
-}
-
-.comment-time {
-    font-size: 0.6em;
 }
 
 .comment-text, .response-text {
@@ -535,11 +603,6 @@ legend {
 	margin-right: 1em;
 	margin-bottom: 1em;
 	height: 100%;
-}
-
-.comment-add-form {
-    display: block;
-    margin-bottom: 0.5em;
 }
 
 .icon-helpful, .icon-unhelpful {
@@ -577,21 +640,12 @@ legend {
 	margin-left: 1em;
 }
 
-.second-column-box, .user-page-databox {
+.sub-list-box, .user-page-databox {
 	margin-bottom: 1em;
 	width: 14em;
 	line-height: 1.6em;
 	border: 1px solid #CCC;
 	background-color: #FFF;
-}
-
-.add-issue-box {
-    text-align: center;
-}
-
-.add-issue-box:hover {
-    background-color: #2E95A5;
-    color: #FFF;
 }
 
 .subs-header, .user-databox-header {
@@ -702,24 +756,8 @@ legend {
 	color: #FFF;
 }
 
-.rights {
-    font-size: 0.75em;
-}
-
 .aspnet {
 	font-size: 0.9em;
 	text-decoration: none;
 	color: #FFF;
-}
-
-/* Common properties */
-
-.invisible {
-    visibility: hidden;
-}
-
-.centered {
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
 }

@@ -1,11 +1,21 @@
 ﻿
-<header class="page-header">
-    <a href="@Url.Action("Index", "Home")" class="logo"><img src="../Content/Images/logo-small.png"></a>
-    <nav class="header-link-container">
-        @using ( Html.BeginRouteForm("Search Page", FormMethod.Post, new { @class = "search-box-form" } ) ) {
-            <button class="search-submit-button " type="submit"><img src="../Content/Images/search-icon-small.png"></button>
-            <input id="searchBox" name="term" class="search-query" type="text" placeholder="Search for a company, organization, or person">
-        }
-        @Html.Partial("_LoginPartial")
-    </nav>
-</header>
+<nav class="navbar navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a href="@Url.Action("Index", "Home")"><img src="../Content/Images/logo-small.png" class="navbar-logo"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" } ) ) {
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                }
+                @Html.Partial( "_LoginPartial" )
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
