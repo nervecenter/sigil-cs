@@ -12,7 +12,7 @@
 }
 
 <div class="first-column">
-    <span class="feed-intent">@User.Identity.Name feed</span>
+    <span class="feed-intent">@User.Identity.GetUserName() feed</span>
     @if ( issueList.Count > 0 ) {
         foreach ( Issue issue in issueList ) {
             <article class="issue-box">

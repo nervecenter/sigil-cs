@@ -12,6 +12,8 @@
     UserVoteCol userVote = ViewBag.userVote;
 
     ViewBag.Title = "Sigil - " + thisIssue.title;
+
+    bool pull = true;
 }
 
 <div class="col-md-9 col-lg-9">
@@ -71,27 +73,24 @@
         <div class="panel-body">
             @foreach ( Comment comm in issueComments ) {
                 <div class="media">
-                    <div class="comment-user-area">
-                        <a href="#" class="pull-left">
-                            <img src="../Content/Images/usericons/@(comm.AspNetUser.UserName)_large.png" class="media-object" alt="Sample Image">
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">@comm.AspNetUser.UserName <small><i>Posted @Sigil.Controllers.IssueController.TimeSince( @comm.postDate )</i></small></h4>
-                            <p>@comm.text</p>
-                        </div>
+                    <a href="#" class=@(pull ? "pull-left" : "pull-right")>
+                        <img src="@Sigil.Controllers.ImageController.Get_Icon_100(comm.AspNetUser.Id)" class="media-object" alt="Sample Image">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">@comm.AspNetUser.UserName <small><i>Posted @Sigil.Controllers.IssueController.TimeSince( @comm.postDate )</i></small></h4>
+                        <p>@comm.text</p>
                     </div>
                 </div>
+                pull = !pull;
             }
             @if ( Request.IsAuthenticated ) {
-                <form method="post" class="comment-add-form">
-                    <fieldset>
-                        <legend>Add a comment:</legend>
-                        <p>
-                            <input type="text" name="text" />
-                            @Html.ValidationMessage( "text" )
-                        </p>
-                        <p><input type="submit" name="buttonSubmit" value="Add Comment" /></p>
-                    </fieldset>
+                <form method="post" class="issue-add-comment">
+                    <div class="form-group">
+                        <label for="inputComment">Add a comment</label>
+                        <textarea type="text" name="text" class="form-control" id="inputComment" placeholder="What would you like to say?"></textarea>
+                        @Html.ValidationMessage( "text" )
+                    </div>
+                    <button type="submit" name="buttonSubmit" class="btn btn-primary">Submit</button>
                 </form>
             }
         </div>

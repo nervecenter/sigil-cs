@@ -159,11 +159,11 @@ namespace Sigil.Controllers
             newComment.text = Request.Form["text"];
             Notification_Check(newComment.text, userID);
 
-            var commentData = dc.CommentCounts.Single(c => c.OrgId == thisIssue.OrgId && c.IssueId == thisIssue.Id);
+            /*var commentData = dc.CommentCounts.Single(c => c.OrgId == thisIssue.OrgId && c.IssueId == thisIssue.Id);
 
             var commDataCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
             commDataCol.Update();
-            commentData.count = CountXML<CommentCountCol>.DATAtoXML(commDataCol);
+            commentData.count = CountXML<CommentCountCol>.DATAtoXML(commDataCol);*/
 
             // Try to submit the issue and go to the issue page; otherwise, write an error
             try
@@ -176,7 +176,7 @@ namespace Sigil.Controllers
             {
                 //WRITE TO ERROR FILE
                 ErrorHandler.Log_Error(newComment, e);
-                ErrorHandler.Log_Error(commentData, e);
+                //ErrorHandler.Log_Error(commentData, e);
 
             }
         }

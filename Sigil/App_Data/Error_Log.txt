@@ -58,3 +58,35 @@ The statement has been terminated.
 6:39:18 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
 
 6:39:30 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:46:09 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:48:40 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:54:58 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:55:56 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:56:09 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:56:52 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:58:46 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:58:50 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:58:52 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:59:02 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+6:59:04 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+7:03:36 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+7:10:32 PM Thursday, September 24, 2015 -- Error From 6 -- Sequence contains no elements
+
+7:11:49 PM Thursday, September 24, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+7:13:02 PM Thursday, September 24, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+7:15:52 PM Thursday, September 24, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
