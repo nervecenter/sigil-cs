@@ -173,6 +173,12 @@ namespace Sigil.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult OrgRegister()
+        {
+            return View();
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -185,6 +191,8 @@ namespace Sigil.Controllers
 
                 var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == model.orgURL);
 
+
+                //need to create org along side of user account so that if there is an issue with the creation of either accounts the db should remove either of the entries that were made and then notify us of the failure to fix.
                 if (result.Succeeded && org_check == default(Org))
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -193,7 +201,7 @@ namespace Sigil.Controllers
                     newOrg.orgName = model.orgName;
                     newOrg.orgURL = model.orgURL;
                     newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id));
-
+                    newOrg.lastView = DateTime.UtcNow;
                     try
                     {
                         dc.Orgs.InsertOnSubmit(newOrg);
@@ -202,7 +210,33 @@ namespace Sigil.Controllers
                     catch(Exception e)
                     {
                         ErrorHandler.Log_Error(newOrg, e);
+                        //need to kick back to a new screen to have them try again
                     }
+
+                    //Setup Org data collection db entries
+                    int orgID = dc.Orgs.Single(o => o.orgName == model.orgName).Id;
+                    SubCount newSubs = new SubCount();
+                    newSubs.OrgId = orgID;
+                    newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
+
+                    ViewCount newVCount = new ViewCount();
+                    newVCount.OrgId = orgID;
+                    newVCount.IssueId = 0;
+                    newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
+
+                    try {
+                        dc.SubCounts.InsertOnSubmit(newSubs);
+                        dc.ViewCounts.InsertOnSubmit(newVCount);
+                        dc.SubmitChanges();
+                    }
+                    catch(Exception e)
+                    {
+                        ErrorHandler.Log_Error(newSubs, e);
+                        ErrorHandler.Log_Error(newVCount, e);
+
+                        //need to figure out what to do this error and the before one
+                    }
+
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

@@ -363,7 +363,7 @@
     <Content Include="Views\Home\Legal.cshtml" />
     <Content Include="Views\Subscriptions\Index.cshtml" />
     <Content Include="Views\Shared\_VoteButton.cshtml" />
-    <Content Include="Views\Org\OrgRegister.cshtml" />
+    <Content Include="Views\Account\OrgRegister.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
