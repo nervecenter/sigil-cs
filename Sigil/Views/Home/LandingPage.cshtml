@@ -70,31 +70,11 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="panel panel-default">
                             <div class="panel-heading">@group.Key</div>
-                            <div class="panel-body">
-                                @foreach ( Issue issue in group ) {
-                                    <div class="issue-vote-area">
-                                        <span class="issue-vote-amount" id="count-1">@issue.votes</span>
-                                    </div>
-                                    <div class="issue-main-area issue-main-area-small">
-                                        <div class="issue-main-cell">
-                                            <div class="issue-title-area issue-main-sub-areas issue-main-sub-areas-small"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a></div>
-                                            <div class="issue-info-area issue-main-sub-areas issue-main-sub-areas-small">
-                                                <span class="issue-org-cat-topic">
-                                                    <a href="/@issue.Org.orgURL"><img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png">@issue.Org.orgName</a>
-                                                    @if ( issue.CatId != 0 ) {
-                                                        <a href="/@issue.Org.orgURL/@issue.Category.catURL"><img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png">@issue.Category.catName</a>
-                                                    }
-                                                </span>
-                                                <br>
-                                                <span class="issue-user-date issue-user-date-small">
-                                                    @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
-                                                    <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@issue.AspNetUser.UserName
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
+                            @*<div class="panel-body"></div>*@
+                            @foreach ( Issue issue in group ) {
+                                var issuePanelModel = new Tuple<bool, bool, bool, bool, Issue>( false, true, true, true, issue );
+                                @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel)
+                            }
                         </div>
                     </div>
                 }

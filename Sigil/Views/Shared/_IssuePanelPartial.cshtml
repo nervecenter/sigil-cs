@@ -1,0 +1,40 @@
+﻿@using Sigil.Models
+@model Tuple<bool, bool, bool, bool, Issue>
+
+@{
+    bool inPanel = Model.Item1;
+    bool showOrg = Model.Item2;
+    bool showCat = Model.Item3;
+    bool showTopic = Model.Item4;
+    Issue thisIssue = Model.Item5;
+}
+
+@helper MainMarkup() {
+    <div class="panel-body">
+        <div class="media">
+            <a href="#" class="pull-left">
+                <img src="../Content/Images/usericons/nervecenter_large.png" class="media-object" alt="Sample Image">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">
+                    @thisIssue.text
+                    @if ( thisIssue.responded ) { <small><i style="color:red;">Response!</i></small> }
+                </h4>
+                <p class="pull-left">
+                    @if ( showOrg ) { <span>@thisIssue.Org.orgName</span> }
+                    @if ( showCat ) { <span>: @thisIssue.Category.catName</span> }
+                    @if ( showTopic ) { <span>in @thisIssue.Topic.topicName</span> }
+                </p>
+                <p class="pull-right">Posted @Sigil.Controllers.IssueController.TimeSince( thisIssue.createTime ) by @thisIssue.AspNetUser.UserName</p>
+            </div>
+        </div>
+    </div>
+}
+
+@if ( inPanel ) {
+    <div class="panel panel-default">
+        @MainMarkup()
+    </div>
+} else {
+    @MainMarkup()
+}

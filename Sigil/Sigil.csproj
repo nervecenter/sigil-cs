@@ -364,6 +364,7 @@
     <Content Include="Views\Subscriptions\Index.cshtml" />
     <Content Include="Views\Shared\_VoteButton.cshtml" />
     <Content Include="Views\Org\OrgRegister.cshtml" />
+    <Content Include="Views\Shared\_IssuePanelPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
