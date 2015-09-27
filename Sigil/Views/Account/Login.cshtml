@@ -5,35 +5,38 @@
     ViewBag.Title = "Sigil - Login";
 }
 
-<div class="form-page-block centered">
-    <h2 style="margin-left:0.7em;">Log in to Sigil</h2>
-    @using ( Html.BeginForm( "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" } ) ) {
+<div class="col-md-4 col-md-offset-4">
+    <h2>Log in to Sigil</h2>
+    @using ( Html.BeginForm( "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" } ) ) {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary( true, "", new { @class = "text-danger" } )
 
-        @*Html.LabelFor( m => m.Email, new { @class = "col-md-2 control-label" } )*@
-        @Html.TextBoxFor( m => m.Email, new { @class = "form-page-text-box centered", placeholder = "Email" } )
-        @Html.ValidationMessageFor( m => m.Email, "", new { @class = "text-danger" } )
+        <div class="form-group">
+            @Html.LabelFor( m => m.Email )
+            @Html.TextBoxFor( m => m.Email, new { @class = "form-control", placeholder = "Email" } )
+            @Html.ValidationMessageFor( m => m.Email, "", new { @class = "text-danger" } )
+        </div>
         
-        @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } )*@
-        @Html.PasswordFor( m => m.Password, new { @class = "form-page-text-box centered", placeholder = "Password" } )
-        @Html.ValidationMessageFor( m => m.Password, "", new { @class = "text-danger" } )
-
+        <div class="form-group">
+            @Html.LabelFor( m => m.Password )
+            @Html.PasswordFor( m => m.Password, new { @class = "form-control", placeholder = "Password" } )
+            @Html.ValidationMessageFor( m => m.Password, "", new { @class = "text-danger" } )
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Log In</button>
         <div class="login-page-remember">
             @Html.CheckBoxFor( m => m.RememberMe )
             @Html.LabelFor( m => m.RememberMe )
         </div>
-
-        <input class="form-page-submit centered" type="submit" value="Log in" />
-
-        <p>
-            @Html.ActionLink( "Sign up", "Register" )
-        </p>
+        
         @* Enable this once you have account confirmation enabled for password reset functionality
             <p>
                 @Html.ActionLink("Forgot your password?", "ForgotPassword")
             </p>*@
     }
+    <form action="@Url.Action( "Register", "Account" )">
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
     @*<div class="col-md-4">
             <section id="socialLoginForm">
                 @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
