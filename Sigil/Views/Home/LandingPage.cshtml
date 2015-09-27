@@ -72,7 +72,7 @@
                             <div class="panel-heading">@group.Key</div>
                             @*<div class="panel-body"></div>*@
                             @foreach ( Issue issue in group ) {
-                                var issuePanelModel = new Tuple<bool, bool, bool, bool, Issue>( false, true, true, true, issue );
+                                var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false }, issue );
                                 @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel)
                             }
                         </div>

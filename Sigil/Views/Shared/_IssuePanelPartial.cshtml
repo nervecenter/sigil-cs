@@ -1,15 +1,17 @@
 ﻿@using Sigil.Models
-@model Tuple<bool, bool, bool, bool, Issue>
+
+@model Tuple<IssuePanelOptions, Issue>
 
 @{
-    bool inPanel = Model.Item1;
-    bool showOrg = Model.Item2;
-    bool showCat = Model.Item3;
-    bool showTopic = Model.Item4;
-    Issue thisIssue = Model.Item5;
+    bool inPanel = Model.Item1.inPanel;
 }
 
 @helper MainMarkup() {
+    bool showOrg = Model.Item1.showOrg;
+    bool showCat = Model.Item1.showCat;
+    bool showTopic = Model.Item1.showTopic;
+    Issue thisIssue = Model.Item2;
+
     <div class="panel-body">
         <div class="media">
             <a href="#" class="pull-left">
@@ -17,7 +19,7 @@
             </a>
             <div class="media-body">
                 <h4 class="media-heading">
-                    @thisIssue.text
+                    <a href="/@thisIssue.Org.orgURL/@thisIssue.Id">@thisIssue.text</a>
                     @if ( thisIssue.responded ) { <small><i style="color:red;">Response!</i></small> }
                 </h4>
                 <p class="pull-left">

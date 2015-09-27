@@ -29,9 +29,9 @@
     }
 </script>
 
-<div class="first-column">
-    <img class="feed-header" src="../Content/Images/orgheaders/microsoft.png">
-    <nav class="centered" style="margin-bottom:0.7em;">
+<div class="col-md-9 col-lg-9">
+    <img class="img-rounded img-responsive org-banner-small" src="../Content/Images/orgbanners/@(thisOrg.orgURL).png">
+    @*<nav class="centered" style="margin-bottom:0.7em;">
         <img class="banner-button ban-but-marg feed-btn" src="~/Content/Images/feed.png">
         <a href="/@(thisOrg.orgURL)/data"><img class="banner-button ban-but-marg data-btn" src="~/Content/Images/data.png" onmouseover="bannerbuttonhover(this)" onmouseout="bannerbuttonunhover(this)"></a>
         @if ( !Request.IsAuthenticated ) {
@@ -41,31 +41,9 @@
         } else {
             <img id="sub-button" class="banner-button subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
         }
-    </nav>
+    </nav>*@
     @foreach ( Issue issue in Model.Item2 ) {
-        <article class="issue-box">
-            <div class="issue-vote-area">
-                <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                @{
-                    Tuple<bool, Issue> votePartial = new Tuple<bool, Issue>(userVotes.Check_Vote(issue.Id, issue.OrgId), issue);
-                    Html.RenderPartial("_VoteButton", votePartial);
-                 }
-            </div>
-            <div class="issue-main-area">
-                <div class="issue-main-cell">
-                    <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
-                    <div class="issue-info-area">
-                        <span class="issue-org-cat-topic">
-                            @if ( issue.CatId != 0 )   { <img class="issue-info-icon" src="../Content/Images/orgicons/sigsauer_20.png">@issue.Category.catName }
-                            @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
-                        </span>
-                        <span class="issue-user-date">
-                            @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
-                            <img class="issue-info-icon" src="../Content/Images/usericons/nervecenter_20.png">@User.Identity.GetUserName()
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </article>
+        var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false }, issue );
+        @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
     }
 </div>

@@ -11,37 +11,15 @@
     UserVoteCol voteList = Model.Item2;
 }
 
-<div class="first-column">
-    <span class="feed-intent">@User.Identity.GetUserName() feed</span>
+<div class="col-md-9 col-lg-9">
+    <h3>@User.Identity.GetUserName()'s feed</h3>
     @if ( issueList.Count > 0 ) {
         foreach ( Issue issue in issueList ) {
-            <article class="issue-box">
-                <div class="issue-vote-area">
-                    <span class="issue-vote-amount" id="count-@issue.Id">@issue.votes</span>
-                    @{
-                        Tuple<bool, Issue> votePartial = new Tuple<bool, Issue>(voteList.Check_Vote(issue.Id, issue.OrgId), issue);
-                        Html.RenderPartial("_VoteButton", votePartial);
-                    }
-
-                </div>
-                <div class="issue-main-area">
-                    <div class="issue-main-cell">
-                        <div class="issue-title-area"><a href="/@issue.Org.orgURL/@issue.Id" class="issue-title">@issue.title</a>@if ( issue.responded ) { <b>Official Response!</b> }</div>
-                        <div class="issue-info-area">
-                            <span class="issue-org-cat-topic">
-                                <img class="issue-info-icon" src="@Sigil.Controllers.ImageController.Get_Icon_20(issue.OrgId, typeof(Org))">@issue.Org.orgName
-                                @if ( issue.TopicId != 0 ) { <span>in @issue.Topic.topicName</span> }
-                            </span>
-                            <span class="issue-user-date">
-                                @Sigil.Controllers.IssueController.TimeSince( issue.createTime ) by
-                                <img class="issue-info-icon" src="@Sigil.Controllers.ImageController.Get_Icon_20(issue.AspNetUser.Id)">@issue.AspNetUser.UserName
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </article>
+            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false }, issue );
+            @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         }
     } else {
-        <h3>Nothing here. :( Search for a company, person, or topic to subscribe to!</h3>
+        <br />
+        <h4>There's nothing here. :( Search for a company, person, or topic to subscribe to!</h4>
     }
 </div>

@@ -69,20 +69,16 @@
 </script>
 
 
-<div class="first-column">
-    <div class="first-column-box">
-        <form method="post" style="margin-top:1em;">
-            <fieldset id="add-issue-fieldset">
-                <legend>Post a new idea, suggestion, or issue</legend>
-                <p>
-                    <label for="text">Company, person, or product:</label><br />
-                    <input id="orgBox" class="add-issue-input add-issue-half-width" type="text" name="orgName" value="@Request.Form["orgName"]" placeholder="Enter a company, person, or product" />
-                </p>
-                <p>
-                    <label for="text">Summary:</label><br />
-                    <input id="title-input" class="add-issue-input add-issue-full-width" type="text" name="title" value="@Request.Form["title"]" oninput="appendAddTextButton()" placeholder="Search to see if your suggestion, idea, or issue has already been posted" />
-                </p>
-            </fieldset>
-        </form>
-    </div>
+<div class="col-md-9 col-lg-9">
+    <h2>Post new feedback</h2>
+    <form>
+        <div class="form-group">
+            <label for="text">Company, person, or product:</label><br />
+            <input id="orgBox" class="form-control" type="text" name="orgName" value="@Request.Form["orgName"]" placeholder="Enter a company, person, or product" />
+        </div>
+        <div class="form-group">
+            <label for="text">Summary:</label><br />
+            <input id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" oninput="appendAddTextButton()" placeholder="Search to see if your suggestion, idea, or issue has already been posted" />
+        </div>
+</form>
 </div>
