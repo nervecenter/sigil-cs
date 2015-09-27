@@ -1,8 +1,41 @@
 /* Bootstrap CSS addins */
 
-.container {
+.main-container {
 	max-width: 1000px;
 	margin-top: 70px;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto !important;
+    margin: 0 auto -100px;
+}
+
+#footer {
+    background-color: #494949;
+    color: #e6e6e6;
+    text-decoration: none;
+}
+
+.footer-row {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-list {
+	list-style: outside none none;
+	line-height: 1.5em;
+}
+
+.footer-link {
+	font-size: 0.9em;
+	text-decoration: none;
+	color: #e6e6e6;
+}
+
+.footer-link:hover {
+	text-decoration: none;
+	color: #e6e6e6;
 }
 
 .landing-container {
@@ -756,16 +789,7 @@ a {
 	font-size: 0.9em;
 }
 
-.footer-list {
-	list-style: outside none none;
-	line-height: 1.5em;
-}
 
-.footer-list-item {
-	font-size: 0.9em;
-	text-decoration: none;
-	color: #FFF;
-}
 
 .aspnet {
 	font-size: 0.9em;

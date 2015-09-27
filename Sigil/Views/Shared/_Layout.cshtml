@@ -45,16 +45,17 @@
     <title>@ViewBag.Title</title>
 </head>
 <body class="page">
-    @Html.Partial( "_Header" )
-    <div class="container">
-        <div class="row">
-            @RenderBody()
-            @if ( !actionsWithoutSidebar.Contains( actionCalled ) ) {
-                @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
-            }
-        </div>  
+    <div class="wrap">
+        @Html.Partial( "_Header" )
+        <div class="container main-container">
+            <div class="row">
+                @RenderBody()
+                @if ( !actionsWithoutSidebar.Contains( actionCalled ) ) {
+                    @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
+                }
+            </div>
+        </div>
     </div>
-    <br class="clear" />
     @*if ( !actionsWithoutFooter.Contains( actionCalled ) ) {}*@
         @Html.Partial( "_Footer" )
     

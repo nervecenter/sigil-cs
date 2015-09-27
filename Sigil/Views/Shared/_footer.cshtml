@@ -1,32 +1,33 @@
-﻿<section class="footer-container">
-    <footer class="page-footer">
-        <div class="footer-column">
-            <a href="@Url.Action("Index", "Home")"><img src="../Content/Images/logo-small.png"></a><br>
-            <a href="@Url.Action("Index", "Home")" class="tagline">The Feedback Destination</a>
-            <p class="address">
-                12345 Some St.
-                <br></br>
-                Tampa FL, 33333
-            </p>
+﻿<div id="footer">
+    <div class="container">
+        <div class="row footer-row">
+            <div class="col-md-4">
+                <ul class="footer-list">
+                    <li><a href="@Url.Action("Index", "Home")"><img src="../Content/Images/logo-small.png"></a></li>
+                    <li><a href="@Url.Action("Index", "Home")" class="footer-link">The Feedback Destination</a></li>
+                    <li style="margin-top:10px;">12345 Some St.</li>
+                    <li>Tampa FL, 33333</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="footer-list">
+                    <li><a href="/about" class="footer-link">About</a></li>
+                    <li><a href="/legal" class="footer-link">Legal</a></li>
+                    <li><a href="FrontPage.html" class="footer-link">Advertise</a></li>
+                    <li><a href="FrontPage.html" class="footer-link">Twitter</a></li>
+                    <li><a href="FrontPage.html" class="footer-link">Facebook</a></li>
+                    <li><a href="FrontPage.html" class="footer-link">Support</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="footer-list">
+                    <li>© 2015 Sigil Inc. All rights reserved.</li>
+                    <li>Sigil and the Sigil logo are trademarks of Sigil Inc.</li>
+                    <br />
+                    <li><a href="http://asp.net" class="footer-link">Powered by ASP.NET</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-column">
-            <ul class="footer-list">
-                <li><a href="/about" class="footer-list-item">About</a></li>
-                <li><a href="/legal" class="footer-list-item">Legal</a></li>
-                <li><a href="FrontPage.html" class="footer-list-item">Advertise</a></li>
-                <li><a href="FrontPage.html" class="footer-list-item">Twitter</a></li>
-                <li><a href="FrontPage.html" class="footer-list-item">Facebook</a></li>
-                <li><a href="FrontPage.html" class="footer-list-item">Support</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <ul class="footer-list">
-                <li><a class="footer-list-item rights">© 2015 Sigil Inc. All rights reserved.</a></li>
-                <li><a class="footer-list-item rights">Sigil and the Sigil logo are trademarks of Sigil Inc.</a></li>
-                <br>
-                <li><a href="http://asp.net" class="aspnet">Powered by ASP.NET</a></li>
-            </ul>
-        </div>
-    </footer>
-</section>
+    </div>
+</div>
 
