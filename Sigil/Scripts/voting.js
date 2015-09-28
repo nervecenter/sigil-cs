@@ -7,9 +7,8 @@
             votebutton.classList.add('unvoteup');
             votebutton.src = "../Content/Images/voted.png";
             votebutton.setAttribute('onClick', 'unvoteup(this, ' + issueid + ')');
-            var countid = "#count-" + issueID.toString();
-            var count = $(countid).html();
-            $("#count-" + issueID).html(parseInt(count, 10) + 1);
+            var count = document.getElementById("count-" + issueid);
+            count.innerHTML = (parseInt(count.innerHTML, 10) + 1);
         },
         error: function (ts) {
             //alert('Could not vote up.');
@@ -27,9 +26,8 @@ function unvoteup(votebutton, issueid) {
             votebutton.classList.add('voteup');
             votebutton.src = "../Content/Images/notvoted-hover.png";
             votebutton.setAttribute('onClick', 'voteup(this, ' + issueid + ')');
-            var countid = "#count-" + issueID.toString();
-            var count = $(countid).html();
-            $("#count-" + issueID).html(parseInt(count, 10) + 1);
+            var count = document.getElementById("count-" + issueid);
+            count.innerHTML = (parseInt(count.innerHTML, 10) - 1);
         },
         error: function (ts) {
             alert('Could not unvote up.');

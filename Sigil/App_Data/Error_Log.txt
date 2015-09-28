@@ -108,3 +108,37 @@ The statement has been terminated.
 3:00:56 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
 
 3:01:06 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:02:30 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:02:33 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:03:53 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:03:56 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:04:18 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:04:37 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:04:40 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:04:44 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:05:56 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:06:01 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:06:34 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:06:35 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:06:38 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:07:47 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:07:52 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:08:29 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
+
+5:08:37 PM Monday, September 28, 2015 -- Error From 1d38b82a-9e93-42b8-beba-fd74c05f32fa -- Sequence contains no elements
