@@ -179,7 +179,7 @@ namespace Sigil.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult OrgRegister(OrgRegisterViewModel model)
@@ -190,9 +190,9 @@ namespace Sigil.Controllers
             newOrg.username = model.UserName;
             newOrg.website = 
 
-        }
+        }*/
 
-        [HttpPost]
+        /*[HttpPost]
         public ActionResult OrgConfirmed()
         {
             if (ModelState.IsValid)
@@ -262,7 +262,7 @@ namespace Sigil.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
+        }*/
 
         //
         // GET: /Account/ConfirmEmail

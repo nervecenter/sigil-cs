@@ -12,23 +12,6 @@
     Subscription userSub = ViewBag.userSub;
 }
 
-<script>
-    function bannerbuttonhover(element) {
-        if (element.classList.contains("feed-btn")) {
-            element.src = "../Content/Images/feed-hover.png";
-        } else if (element.classList.contains("data-btn")) {
-            element.src = "../Content/Images/data-hover.png";
-        }
-    }
-    function bannerbuttonunhover(element) {
-        if (element.classList.contains("feed-btn")) {
-            element.src = "../Content/Images/feed.png";
-        } else if (element.classList.contains("data-btn")) {
-            element.src = "../Content/Images/data.png";
-        }
-    }
-</script>
-
 <div class="col-md-9 col-lg-9">
     <img class="img-rounded img-responsive org-banner-small" src="../Content/Images/orgbanners/@(thisOrg.orgURL).png">
     @*<nav class="centered" style="margin-bottom:0.7em;">
@@ -47,3 +30,4 @@
         @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
     }
 </div>
+@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( thisOrg, Sigil.Controllers.AccountController.userSubs( User ) ) )

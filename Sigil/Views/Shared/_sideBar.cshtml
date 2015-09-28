@@ -1,11 +1,22 @@
 ﻿@using Sigil.Models
 
-@model List<Subscription>
+@* Model is <Org, List of user subs *@
+@model Tuple<Org, List<Subscription>>
+
+@{ 
+    Org thisOrg = Model.Item1;
+    List<Subscription> userSubs = Model.Item2;
+}
 
 <div class="col-md-3 .col-lg-3">
     <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
-    <a class="btn btn-primary btn-block sidebar-button subscribe" onclick="subscribe(this, thisOrg.orgURL)">Subscribe to X Org</a>
-    <a class="btn btn-danger btn-block sidebar-button unsubscribe" onclick="unsubscribe(this, thisOrg.orgURL)">Unsubscribe from X Org</a>
+    @if ( thisOrg != default( Org ) ) {
+        if ( userSubs.Any<Subscription>( s => s.OrgId == thisOrg.Id ) ) {
+            <a class="btn btn-danger btn-block sidebar-button unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL')">Unsubscribe from @thisOrg.orgName</a>
+        } else {
+            <a class="btn btn-primary btn-block sidebar-button subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>
+        }
+    }
     <form action="@Url.Action( "CreateIssue", "Issue" )">
         <button class="btn btn-info btn-block sidebar-button">Submit a thought</button>
     </form>
@@ -13,7 +24,7 @@
         <div class="panel panel-default">
             <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>
             <div class="panel-body">
-                @foreach ( Subscription sub in Model ) {
+                @foreach ( Subscription sub in userSubs ) {
                     if ( sub.OrgId != 0 && sub.CatId == 0 ) {
                         <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/@(sub.Org.orgURL)_15.png">@sub.Org.orgName</a><br>
                     } else if ( sub.CatId != 0 ) {

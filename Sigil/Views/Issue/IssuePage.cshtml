@@ -82,3 +82,4 @@
         </div>
     </div>
 </div>
+@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( thisOrg, Sigil.Controllers.AccountController.userSubs( User ) ) )

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Sigil.Models
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Sigil - Legal";
 }
@@ -11,3 +13,4 @@
         <p class="first-column-paragraph">Photos obtained from <a href="https://stocksnap.io/">StockSnap.io</a> - Used under the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0 License</a>.</p>
     </article>
 </div>
+@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( default(Org), Sigil.Controllers.AccountController.userSubs( User ) ) )

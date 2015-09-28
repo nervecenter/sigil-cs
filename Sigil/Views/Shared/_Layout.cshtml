@@ -3,13 +3,19 @@
 
 @{ 
     string actionCalled = ViewContext.RouteData.GetRequiredString( "action" );
-    string[] urlParts = Request.Url.AbsoluteUri.Remove(0, 24).Split('/');
-    Org thisOrg;
+    string[] urlParts = Request.Url.AbsoluteUri.Remove( 0, 24 ).Split( '/' );
 
     string[] actionsWithoutSidebar = {
         "Login",
         "Register",
         "OrgRegister"
+    };
+
+    string[] actionsWithSubButton = {
+        "OrgPage",
+        "IssuePage",
+        "CatPage",
+        "TopicPage"
     };
 
     /*string[] actionsWithoutFooter = {
@@ -52,16 +58,14 @@
         @Html.Partial( "_Header" )
         <div class="container main-container">
             <div class="row">
+                <!-- Main column and sidebar in here -->
                 @RenderBody()
-                @if ( !actionsWithoutSidebar.Contains( actionCalled ) ) {
-                    @Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
-                }
             </div>
         </div>
     </div>
     <br class="clear" />
     @*if ( !actionsWithoutFooter.Contains( actionCalled ) ) {}*@
-        @Html.Partial( "_Footer" )
+    @Html.Partial( "_Footer" )
     
     @RenderSection( "scripts", required: false )
 </body>
