@@ -54,7 +54,7 @@ namespace Sigil.Controllers
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
-            UserVoteCol userVotes;
+            UserVoteCol userVotes = new UserVoteCol();
 
             if (userId != null)
             {
@@ -77,52 +77,6 @@ namespace Sigil.Controllers
             // Pass our org and issues to the view as the model
             return View(orgAndIssues);
         }
-
-        /* 
-        ==================== 
-        OrgSubscribe
-  
-            Action method to be linked for allowing a user to subscribe to an org  
-        ==================== 
-        
-        [Authorize]
-        public ActionResult OrgSubscribe( string orgUrl ) {
-            Subscription newSub = new Subscription();
-            string userId = User.Identity.GetUserId();
-            Org thisOrg = dc.Orgs.Single( o => o.orgURL == orgUrl );
-
-            try {
-                newSub.UserId = userId;
-                newSub.OrgId = thisOrg.Id;
-
-                dc.Subscriptions.InsertOnSubmit( newSub );
-                dc.SubmitChanges();
-            } catch ( Exception e ) {
-                Console.WriteLine( "Could not subscribe to org: User %s, Org %s\n%s", User.Identity.GetUserName(), thisOrg.orgURL, e.Message );
-            }
-            return new EmptyResult();
-        }
-
-        /* 
-        ==================== 
-        OrgUnSubscribe
-  
-            Action method to be linked for allowing a user to unsubscribe from an org  
-        ==================== 
-        
-        [Authorize]
-        public ActionResult OrgUnSubscribe( string orgUrl ) {
-            string userId = User.Identity.GetUserId();
-            Subscription thisSub = dc.Subscriptions.Single( s => s.UserId == userId );
-
-            try {
-                dc.Subscriptions.DeleteOnSubmit( thisSub );
-                dc.SubmitChanges();
-            } catch ( Exception e ) {
-                Console.WriteLine( "Could not unsubscribe from org: User %s, Org %s\n%s", User.Identity.GetUserName(), thisSub.Org.orgURL, e.Message );
-            }
-            return new EmptyResult();
-        }*/
 
         /* 
         ==================== 
@@ -227,18 +181,6 @@ namespace Sigil.Controllers
             // Pass our model list of charts as the model of the view
             return View(listOfCharts);
         }
-        //
-        // GET: /orgregister
-        [AllowAnonymous]
-        public ActionResult OrgRegister()
-        {
-            return View();
-        }
-
-        //
-        // POST: /orgregister
-       
-
 
     }
 }

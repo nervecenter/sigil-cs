@@ -12,9 +12,14 @@ namespace Sigil.Models
 
         [Required]
         [StringLength( 16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5 )]
-        [Display( Name = "Organization URL" )]
+        [Display( Name = "Requested Organization URL for Sigil" )]
         public string orgURL { get; set; }
 
+        [Required]
+        [StringLength(256)]
+        [Display( Name = "Organization's Website")]
+        public string orgWebsite { get; set; }
+        
         // orgTallBanner
 
         // orgSmallBanner
