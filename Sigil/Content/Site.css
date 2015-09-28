@@ -79,6 +79,11 @@ a {
 	color: #267C89;
 }
 
+a:hover {
+	text-decoration: none;
+	color: #267C89;
+}
+
 .page {
 	background-color: #E5E5E5;
 }
