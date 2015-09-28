@@ -43,10 +43,10 @@ namespace Sigil.Controllers
             new_sub.CatId = 0;
             new_sub.TopicId = 0;
 
-            var subCs = dc.SubCounts.Single(s => s.OrgId == orgid.Id);
+            /*var subCs = dc.SubCounts.Single(s => s.OrgId == orgid.Id);
             var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
             subData.Update();
-            subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);
+            subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);*/
 
             try
             {
@@ -69,10 +69,10 @@ namespace Sigil.Controllers
             var org = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
             var sub = dc.Subscriptions.SingleOrDefault<Subscription>(s => s.OrgId == org.Id && s.UserId == userid);
 
-            var subCs = dc.SubCounts.Single(s => s.OrgId == org.Id);
+            /*var subCs = dc.SubCounts.Single(s => s.OrgId == org.Id);
             var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
             subData.Remove_Sub();
-            subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);
+            subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);*/
 
             try {
 
