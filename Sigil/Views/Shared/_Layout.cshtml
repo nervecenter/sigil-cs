@@ -1,7 +1,10 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Sigil.Models
 
 @{ 
     string actionCalled = ViewContext.RouteData.GetRequiredString( "action" );
+    string[] urlParts = Request.Url.AbsoluteUri.Remove(0, 24).Split('/');
+    Org thisOrg;
 
     string[] actionsWithoutSidebar = {
         "Login",
@@ -28,11 +31,11 @@
     <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
 
     <script type="text/javascript">
-    $(function () {
-        $('#searchBox').autocomplete({
-            source: '@Url.Action("SearchDB","Search")'
+        $(function () {
+            $('#searchBox').autocomplete({
+                source: '@Url.Action("SearchDB","Search")'
+            });
         });
-    });
     </script>
 
     @Styles.Render( "~/Content/bootstrap.css" )
@@ -41,7 +44,6 @@
 
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
-    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
 
     <title>@ViewBag.Title</title>
 </head>
@@ -57,6 +59,7 @@
             </div>
         </div>
     </div>
+    <br class="clear" />
     @*if ( !actionsWithoutFooter.Contains( actionCalled ) ) {}*@
         @Html.Partial( "_Footer" )
     

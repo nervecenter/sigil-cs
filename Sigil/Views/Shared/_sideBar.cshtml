@@ -3,7 +3,9 @@
 @model List<Subscription>
 
 <div class="col-md-3 .col-lg-3">
-    <a href="#" class="btn btn-primary btn-block sidebar-button">Subscribe to X Org</a>
+    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
+    <a class="btn btn-primary btn-block sidebar-button subscribe" onclick="subscribe(this, thisOrg.orgURL)">Subscribe to X Org</a>
+    <a class="btn btn-danger btn-block sidebar-button unsubscribe" onclick="unsubscribe(this, thisOrg.orgURL)">Unsubscribe from X Org</a>
     <form action="@Url.Action( "CreateIssue", "Issue" )">
         <button class="btn btn-info btn-block sidebar-button">Submit a thought</button>
     </form>
