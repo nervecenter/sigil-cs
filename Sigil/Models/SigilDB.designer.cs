@@ -75,6 +75,9 @@ namespace Sigil.Models
     partial void InsertSubCount(SubCount instance);
     partial void UpdateSubCount(SubCount instance);
     partial void DeleteSubCount(SubCount instance);
+    partial void InsertOrgApp(OrgApp instance);
+    partial void UpdateOrgApp(OrgApp instance);
+    partial void DeleteOrgApp(OrgApp instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -224,6 +227,14 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<SubCount>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OrgApp> OrgApps
+		{
+			get
+			{
+				return this.GetTable<OrgApp>();
 			}
 		}
 	}
@@ -4436,6 +4447,236 @@ namespace Sigil.Models
 					this._count = value;
 					this.SendPropertyChanged("count");
 					this.OncountChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OrgApp")]
+	public partial class OrgApp : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _orgName;
+		
+		private string _orgUrl;
+		
+		private string _username;
+		
+		private string _email;
+		
+		private string _contact;
+		
+		private string _website;
+		
+		private string _comment;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnorgNameChanging(string value);
+    partial void OnorgNameChanged();
+    partial void OnorgUrlChanging(string value);
+    partial void OnorgUrlChanged();
+    partial void OnusernameChanging(string value);
+    partial void OnusernameChanged();
+    partial void OnemailChanging(string value);
+    partial void OnemailChanged();
+    partial void OncontactChanging(string value);
+    partial void OncontactChanged();
+    partial void OnwebsiteChanging(string value);
+    partial void OnwebsiteChanged();
+    partial void OncommentChanging(string value);
+    partial void OncommentChanged();
+    #endregion
+		
+		public OrgApp()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orgName", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string orgName
+		{
+			get
+			{
+				return this._orgName;
+			}
+			set
+			{
+				if ((this._orgName != value))
+				{
+					this.OnorgNameChanging(value);
+					this.SendPropertyChanging();
+					this._orgName = value;
+					this.SendPropertyChanged("orgName");
+					this.OnorgNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orgUrl", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string orgUrl
+		{
+			get
+			{
+				return this._orgUrl;
+			}
+			set
+			{
+				if ((this._orgUrl != value))
+				{
+					this.OnorgUrlChanging(value);
+					this.SendPropertyChanging();
+					this._orgUrl = value;
+					this.SendPropertyChanged("orgUrl");
+					this.OnorgUrlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_username", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string username
+		{
+			get
+			{
+				return this._username;
+			}
+			set
+			{
+				if ((this._username != value))
+				{
+					this.OnusernameChanging(value);
+					this.SendPropertyChanging();
+					this._username = value;
+					this.SendPropertyChanged("username");
+					this.OnusernameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string email
+		{
+			get
+			{
+				return this._email;
+			}
+			set
+			{
+				if ((this._email != value))
+				{
+					this.OnemailChanging(value);
+					this.SendPropertyChanging();
+					this._email = value;
+					this.SendPropertyChanged("email");
+					this.OnemailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contact", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string contact
+		{
+			get
+			{
+				return this._contact;
+			}
+			set
+			{
+				if ((this._contact != value))
+				{
+					this.OncontactChanging(value);
+					this.SendPropertyChanging();
+					this._contact = value;
+					this.SendPropertyChanged("contact");
+					this.OncontactChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_website", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string website
+		{
+			get
+			{
+				return this._website;
+			}
+			set
+			{
+				if ((this._website != value))
+				{
+					this.OnwebsiteChanging(value);
+					this.SendPropertyChanging();
+					this._website = value;
+					this.SendPropertyChanged("website");
+					this.OnwebsiteChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comment", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string comment
+		{
+			get
+			{
+				return this._comment;
+			}
+			set
+			{
+				if ((this._comment != value))
+				{
+					this.OncommentChanging(value);
+					this.SendPropertyChanging();
+					this._comment = value;
+					this.SendPropertyChanged("comment");
+					this.OncommentChanged();
 				}
 			}
 		}

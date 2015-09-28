@@ -179,10 +179,21 @@ namespace Sigil.Controllers
             return View();
         }
 
-        [HttpPost]
         [AllowAnonymous]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> OrgRegister(OrgRegisterViewModel model)
+        public ActionResult OrgRegister(OrgRegisterViewModel model)
+        {
+            OrgApp newOrg = new OrgApp();
+            newOrg.orgName = model.orgName;
+            newOrg.orgUrl = model.orgURL;
+            newOrg.username = model.UserName;
+            newOrg.website = 
+
+        }
+
+        [HttpPost]
+        public ActionResult OrgConfirmed()
         {
             if (ModelState.IsValid)
             {
