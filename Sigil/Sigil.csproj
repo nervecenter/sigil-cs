@@ -229,6 +229,8 @@
     <Content Include="Content\Images\logo-medium.png" />
     <Content Include="Content\Images\logo-small.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\notvoted-hover.png" />
+    <Content Include="Content\Images\notvoted.png" />
     <Content Include="Content\Images\saleback.jpg" />
     <Content Include="Content\Images\search-icon-small.png" />
     <Content Include="Content\Images\speakerphone_white.png" />
@@ -238,6 +240,7 @@
     <Content Include="Content\Images\unsubscribe.png" />
     <Content Include="Content\Images\unsubscribe_hover.png" />
     <Content Include="Content\Images\unhelpful.png" />
+    <Content Include="Content\Images\voted.png" />
     <Content Include="Content\Images\votedown-clicked.png" />
     <Content Include="Content\Images\votedown-hover.png" />
     <Content Include="Content\Images\votedown.png" />
@@ -366,6 +369,7 @@
     <Content Include="Views\Shared\_VoteButton.cshtml" />
     <Content Include="Views\Shared\_IssuePanelPartial.cshtml" />
     <Content Include="Views\Account\OrgRegister.cshtml" />
+    <Content Include="Views\Account\OrgApplicants.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

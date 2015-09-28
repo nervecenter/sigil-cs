@@ -6,7 +6,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Sigil";
     List<Issue> issueList = Model.Item1;
     UserVoteCol voteList = Model.Item2;
 }
@@ -15,7 +15,9 @@
     <h3>@User.Identity.GetUserName()'s feed</h3>
     @if ( issueList.Count > 0 ) {
         foreach ( Issue issue in issueList ) {
-            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false }, issue );
+            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false,
+                                                                                                 userVoted = voteList.Check_Vote( issue.Id, issue.OrgId ) }, 
+                                                                       issue );
             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         }
     } else {
