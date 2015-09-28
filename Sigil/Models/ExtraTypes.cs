@@ -6,5 +6,6 @@
         public bool showOrg;
         public bool showCat;
         public bool showTopic;
+        public bool userVoted;
     }
 }
