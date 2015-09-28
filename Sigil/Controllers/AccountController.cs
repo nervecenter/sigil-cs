@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Security;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -188,81 +189,90 @@ namespace Sigil.Controllers
             newOrg.orgName = model.orgName;
             newOrg.orgUrl = model.orgURL;
             newOrg.username = model.UserName;
-            newOrg.website = 
-
-        }
-
-        [HttpPost]
-        public ActionResult OrgConfirmed()
-        {
-            if (ModelState.IsValid)
+            newOrg.website = model.orgWebsite;
+            newOrg.comment = model.orgComment;
+            newOrg.email = model.Email;
+            
+            try
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-
-                var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == model.orgURL);
-
-
-                //need to create org along side of user account so that if there is an issue with the creation of either accounts the db should remove either of the entries that were made and then notify us of the failure to fix.
-                if (result.Succeeded && org_check == default(Org))
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    var newOrg = new Org();
-                    newOrg.orgName = model.orgName;
-                    newOrg.orgURL = model.orgURL;
-                    newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id));
-                    newOrg.lastView = DateTime.UtcNow;
-                    try
-                    {
-                        dc.Orgs.InsertOnSubmit(newOrg);
-                        dc.SubmitChanges();
-                    }
-                    catch(Exception e)
-                    {
-                        ErrorHandler.Log_Error(newOrg, e);
-                        //need to kick back to a new screen to have them try again
-                    }
-
-                    //Setup Org data collection db entries
-                    int orgID = dc.Orgs.Single(o => o.orgName == model.orgName).Id;
-                    SubCount newSubs = new SubCount();
-                    newSubs.OrgId = orgID;
-                    newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
-
-                    ViewCount newVCount = new ViewCount();
-                    newVCount.OrgId = orgID;
-                    newVCount.IssueId = 0;
-                    newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
-
-                    try {
-                        dc.SubCounts.InsertOnSubmit(newSubs);
-                        dc.ViewCounts.InsertOnSubmit(newVCount);
-                        dc.SubmitChanges();
-                    }
-                    catch(Exception e)
-                    {
-                        ErrorHandler.Log_Error(newSubs, e);
-                        ErrorHandler.Log_Error(newVCount, e);
-
-                        //need to figure out what to do this error and the before one
-                    }
-
-
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
+                dc.OrgApps.InsertOnSubmit(newOrg);
+                dc.SubmitChanges();
+            }
+            catch(Exception e)
+            {
+                ErrorHandler.Log_Error(newOrg, e, dc);
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return View("LandingPage");
         }
+
+        //need to protect this so that sigil is the only role allowed to call
+        public async Task<ActionResult> OrgConfirmed(int norgID)
+        {
+            OrgApp verifiedOrg = dc.OrgApps.Single(o => o.Id == norgID);
+
+
+
+            var user = new ApplicationUser { UserName = verifiedOrg.username, Email = verifiedOrg.email };
+            string tempPassword = Generate_Temp_Password();
+            var result = await UserManager.CreateAsync(user, tempPassword);
+
+            //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
+
+
+            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+            var newOrg = new Org();
+            newOrg.orgName = verifiedOrg.orgName;
+            newOrg.orgURL = verifiedOrg.orgUrl;
+            newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id));
+            newOrg.lastView = DateTime.UtcNow;
+            try
+            {
+                dc.Orgs.InsertOnSubmit(newOrg);
+                dc.SubmitChanges();
+            }
+            catch(Exception e)
+            {
+                ErrorHandler.Log_Error(newOrg, e, dc);
+                //need to kick back to a new screen to have them try again
+            }
+
+            //Setup Org data collection db entries
+            int orgID = dc.Orgs.Single(o => o.orgName == newOrg.orgName).Id;
+            SubCount newSubs = new SubCount();
+            newSubs.OrgId = orgID;
+            newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
+
+            ViewCount newVCount = new ViewCount();
+            newVCount.OrgId = orgID;
+            newVCount.IssueId = 0;
+            newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
+
+            try {
+                dc.SubCounts.InsertOnSubmit(newSubs);
+                dc.ViewCounts.InsertOnSubmit(newVCount);
+                dc.SubmitChanges();
+            }
+            catch(Exception e)
+            {
+                ErrorHandler.Log_Error(newSubs, e, dc);
+                ErrorHandler.Log_Error(newVCount, e, dc);
+
+                //need to figure out what to do this error and the before one
+            }
+
+
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
 
         //
         // GET: /Account/ConfirmEmail
@@ -602,6 +612,11 @@ namespace Sigil.Controllers
                      where Subs.UserId == user.Identity.GetUserId()
                      select Subs ).ToList();
             return subs;
+        }
+
+        private string Generate_Temp_Password()
+        {
+            return Membership.GeneratePassword(8, 2);
         }
     }
 }

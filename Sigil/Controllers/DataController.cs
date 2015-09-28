@@ -218,7 +218,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e);
+                        ErrorHandler.Log_Error(id, e, dc);
                     }
 
 
@@ -239,7 +239,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e);
+                        ErrorHandler.Log_Error(id, e, dc);
                     }
 
 
@@ -258,7 +258,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e);
+                        ErrorHandler.Log_Error(id, e, dc);
                     }
 
 
@@ -278,7 +278,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e);
+                        ErrorHandler.Log_Error(id, e, dc);
                     }
 
 
@@ -297,7 +297,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(userId, e);
+                        ErrorHandler.Log_Error(userId, e, dc);
                     }
 
 
@@ -318,7 +318,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e);
+                        ErrorHandler.Log_Error(id, e, dc);
                     }
 
 
@@ -338,7 +338,7 @@ namespace Sigil
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e);
+                        ErrorHandler.Log_Error(id, e, dc);
                     }
 
 

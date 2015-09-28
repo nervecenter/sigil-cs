@@ -78,6 +78,9 @@ namespace Sigil.Models
     partial void InsertOrgApp(OrgApp instance);
     partial void UpdateOrgApp(OrgApp instance);
     partial void DeleteOrgApp(OrgApp instance);
+    partial void InsertError(Error instance);
+    partial void UpdateError(Error instance);
+    partial void DeleteError(Error instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -235,6 +238,14 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<OrgApp>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Error> Errors
+		{
+			get
+			{
+				return this.GetTable<Error>();
 			}
 		}
 	}
@@ -4677,6 +4688,140 @@ namespace Sigil.Models
 					this._comment = value;
 					this.SendPropertyChanged("comment");
 					this.OncommentChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Error")]
+	public partial class Error : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.DateTime _error_date;
+		
+		private string _error_object;
+		
+		private string _error_exception;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void Onerror_dateChanging(System.DateTime value);
+    partial void Onerror_dateChanged();
+    partial void Onerror_objectChanging(string value);
+    partial void Onerror_objectChanged();
+    partial void Onerror_exceptionChanging(string value);
+    partial void Onerror_exceptionChanged();
+    #endregion
+		
+		public Error()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_date", DbType="DateTime NOT NULL")]
+		public System.DateTime error_date
+		{
+			get
+			{
+				return this._error_date;
+			}
+			set
+			{
+				if ((this._error_date != value))
+				{
+					this.Onerror_dateChanging(value);
+					this.SendPropertyChanging();
+					this._error_date = value;
+					this.SendPropertyChanged("error_date");
+					this.Onerror_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_object", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string error_object
+		{
+			get
+			{
+				return this._error_object;
+			}
+			set
+			{
+				if ((this._error_object != value))
+				{
+					this.Onerror_objectChanging(value);
+					this.SendPropertyChanging();
+					this._error_object = value;
+					this.SendPropertyChanged("error_object");
+					this.Onerror_objectChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_error_exception", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string error_exception
+		{
+			get
+			{
+				return this._error_exception;
+			}
+			set
+			{
+				if ((this._error_exception != value))
+				{
+					this.Onerror_exceptionChanging(value);
+					this.SendPropertyChanging();
+					this._error_exception = value;
+					this.SendPropertyChanged("error_exception");
+					this.Onerror_exceptionChanged();
 				}
 			}
 		}

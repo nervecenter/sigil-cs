@@ -117,7 +117,7 @@ namespace Sigil.Controllers
                 catch (Exception e)
                 {
                     //WRITE TO ERROR FILE
-                    ErrorHandler.Log_Error(vc, e);
+                    ErrorHandler.Log_Error(vc, e, dc);
                     //Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
                 }
             }
@@ -133,7 +133,7 @@ namespace Sigil.Controllers
                 catch(Exception e)
                 {
                     //WRITE TO ERROR FILE
-                    ErrorHandler.Log_Error(thisIssue, e);
+                    ErrorHandler.Log_Error(thisIssue, e, dc);
 
                 }
             }
@@ -175,7 +175,7 @@ namespace Sigil.Controllers
             catch (Exception e)
             {
                 //WRITE TO ERROR FILE
-                ErrorHandler.Log_Error(newComment, e);
+                ErrorHandler.Log_Error(newComment, e, dc);
                 //ErrorHandler.Log_Error(commentData, e);
 
             }
@@ -196,7 +196,7 @@ namespace Sigil.Controllers
             catch (Exception e)
             {
                 //WILL WRITE TO ERROR FILE
-                ErrorHandler.Log_Error(issue, e);
+                ErrorHandler.Log_Error(issue, e, dc);
 
             }
 
@@ -367,7 +367,7 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(newVote, e);
+                ErrorHandler.Log_Error(newVote, e, dc);
                 //Console.WriteLine("Could not write vote \"%s\" to database:\n%s", newVote, e.Message);
             }
         }
@@ -404,7 +404,7 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(newissue, e);
+                ErrorHandler.Log_Error(newissue, e, dc);
                 return 0;
             }
         }
@@ -446,8 +446,8 @@ namespace Sigil.Controllers
             }
             catch ( Exception e )
             {
-                ErrorHandler.Log_Error(VC, e);
-                ErrorHandler.Log_Error(user, e);
+                ErrorHandler.Log_Error(VC, e, dc);
+                ErrorHandler.Log_Error(user, e, dc);
                 //Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
             }
 
@@ -489,8 +489,8 @@ namespace Sigil.Controllers
             }
             catch ( Exception e )
             {
-                ErrorHandler.Log_Error(thisIssue, e);
-                ErrorHandler.Log_Error(userId, e);
+                ErrorHandler.Log_Error(thisIssue, e, dc);
+                ErrorHandler.Log_Error(userId, e, dc);
             }
 
             return new EmptyResult();
@@ -533,7 +533,7 @@ namespace Sigil.Controllers
                 }
                 catch (Exception e)
                 {
-                    ErrorHandler.Log_Error(note, e);
+                    ErrorHandler.Log_Error(note, e, dc);
                     //Console.WriteLine("Could not unvote on issue %s:\n%s", note.Id, e.Message);
                 }
             }

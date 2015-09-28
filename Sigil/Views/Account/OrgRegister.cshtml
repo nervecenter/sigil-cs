@@ -18,8 +18,23 @@
 
         <div class="form-group">
             <label for="orgUrl">Enter a handle for your company's url (i.e. sigil.com/handle)</label><br />
-            @Html.TextBoxFor( m => m.orgURL, new { @class = "form-control", placeholder = "Company handle" } )
-        </div> 
+            @Html.TextBoxFor( m => m.orgURL, new { @class = "form-control", placeholder = "Company URL handle" } )
+        </div>
+
+        <div class="form-group">
+            <label for="orgWebsite">Enter your companys Website URL</label><br />
+            @Html.TextBoxFor(m => m.orgWebsite, new { @class = "form-control", placeholder = "Company Website URL" })
+        </div>
+
+        <div class="form-group">
+            <label for="orgContact">Enter a contact number we can reach you at if needed</label><br />
+            @Html.TextBoxFor(m => m.orgContact, new { @class = "form-control", placeholder = "Company Website URL" })
+        </div>
+
+        <div class="form-group">
+            <label for="OrgComment">Give us some Information about your company</label><br />
+            @Html.TextBoxFor(m => m.orgComment, new { @class="form-control", placeholder = "Information about your Organization"})
+        </div>
 
         @*  
         @Html.TextBoxFor( m => m.orgTallBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Large banner" } )
@@ -49,16 +64,18 @@
             @Html.TextBoxFor( m => m.UserName, new { @class = "form-control", placeholder = "Admin username" } )
         </div> 
 
-        <div class="form-group">
+
+
+        @*<div class="form-group">
             <label for="Password">The password of your first privileged admin</label><br />
-            @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } )*@
+            @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } 
             @Html.PasswordFor( m => m.Password, new { @class = "form-control", placeholder = "Admin password" } )
         </div> 
 
         <div class="form-group">
-            @*Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )*@
+            Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )
             @Html.PasswordFor( m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm password" } )
-        </div> 
+        </div>*@ 
 
         <button type="submit" class="btn btn-primary">Sign Up</button>
     }

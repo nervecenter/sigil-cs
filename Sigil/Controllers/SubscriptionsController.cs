@@ -55,7 +55,7 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(new_sub, e);
+                ErrorHandler.Log_Error(new_sub, e, dc);
                 //Console.WriteLine("Could not write new sub \"%s\" to database:\n%s", new_sub, e.Message);
             }
             return new EmptyResult();
@@ -81,7 +81,7 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(sub, e);
+                ErrorHandler.Log_Error(sub, e, dc);
                 //Console.WriteLine("Could not delete sub \"%s\" to database:\n%s", sub, e.Message);
             }
 
