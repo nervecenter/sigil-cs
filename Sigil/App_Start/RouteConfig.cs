@@ -36,6 +36,15 @@ namespace Sigil {
                 url: "legal/",
                 defaults: new { controller = "Home", action = "Legal" }
             );
+
+            //========================= Sigil Admin Stuff =================================================
+
+            routes.MapRoute(
+                name: "Org Applications",
+                url: "sadmin/orgapps",
+                defaults: new { controller = "Account", action = "OrgApplicants" }
+            );
+
             //========================= Account Controller ==================================================================
             routes.MapRoute(
                 name:"Login",
