@@ -4,43 +4,60 @@
     ViewBag.Title = "Sigil - Register";
 }
 
-<div class="form-page-block centered">
-    <h2 style="margin-left:0.7em;">Join Sigil today</h2>
+<div class="col-xs-9 col-md-8">
+    <h2>Create a company page</h2>
+    <h4>Reshape your feedback pipeline</h4>
 
-    @using ( Html.BeginForm( "OrgRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" } ) ) {
+    @using ( Html.BeginForm( "OrgRegister", "Account", FormMethod.Post, new { role = "form" } ) ) {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary( "", new { @class = "text-danger" } )
 
-        @Html.TextBoxFor( m => m.orgName, new { @class = "form-page-text-box centered", placeholder = "Organization name" } )
+        <div class="form-group">
+            @Html.TextBoxFor( m => m.orgName, new { @class = "form-control", placeholder = "Organization name" } )
+        </div> 
 
-        @Html.TextBoxFor( m => m.orgURL, new { @class = "form-page-text-box centered", placeholder = "Organization URL" } )
+        <div class="form-group">
+            @Html.TextBoxFor( m => m.orgURL, new { @class = "form-control", placeholder = "Organization URL" } )
+        </div> 
 
-    @*  @Html.TextBoxFor( m => m.orgTallBanner, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "Large banner" } )
+        @*  
+        @Html.TextBoxFor( m => m.orgTallBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Large banner" } )
 
-        @Html.TextBoxFor( m => m.orgShortBanner, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "Small banner" } )
+        @Html.TextBoxFor( m => m.orgShortBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Small banner" } )
 
-        @Html.TextBoxFor( m => m.orgLargeIcon, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "A 100x100 icon or logo" } )
+        @Html.TextBoxFor( m => m.orgLargeIcon, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "A 100x100 icon or logo" } )
 
-        @Html.TextBoxFor( m => m.orgSmallIcon, new { @class = "form-page-text-box centered", type = "file", accept = "image/*", placeholder = "A 20x20 icon or logo" } )
+        @Html.TextBoxFor( m => m.orgSmallIcon, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "A 20x20 icon or logo" } )
     
-        @Html.TextAreaFor( m => m.orgMiscellanea, new { @class = "form-page-text-box centered", placeholder = "Information about your organization, who you as the applicant individual are, and a way we can contact you if we have any queries before adding you" } )
-*@
-        @*Html.LabelFor( m => m.Email, new { @class = "col-md-2 control-label" } )*@
-        @Html.TextBoxFor( m => m.Email, new { @class = "form-page-text-box centered", placeholder = "Admin email" } )
-        
-        @*Html.LabelFor( m => m.Email_confirm, new { @class = "col-md-2 control-label" } )*@
-        @Html.TextBoxFor( m => m.Email_confirm, new { @class = "form-page-text-box centered", placeholder = "Confirm email" } )
-        
-        @*Html.LabelFor( m => m.UserName, new { @class = "col-md-2 control-label" } )*@
-        @Html.TextBoxFor( m => m.UserName, new { @class = "form-page-text-box centered", placeholder = "Admin username" } )
+        @Html.TextAreaFor( m => m.orgMiscellanea, new { @class = "form-control", placeholder = "Information about your organization, who you as the applicant individual are, and a way we can contact you if we have any queries before adding you" } )
+        *@
 
-        @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } )*@
-        @Html.PasswordFor( m => m.Password, new { @class = "form-page-text-box centered", placeholder = "Admin password" } )
-        
-        @*Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )*@
-        @Html.PasswordFor( m => m.ConfirmPassword, new { @class = "form-page-text-box centered", placeholder = "Confirm password" } )
+        <div class="form-group">
+            @*Html.LabelFor( m => m.Email, new { @class = "col-md-2 control-label" } )*@
+            @Html.TextBoxFor( m => m.Email, new { @class = "form-control", placeholder = "Admin email" } )
+        </div> 
 
-        <input class="form-page-submit centered" type="submit" value="Sign up" />
+        <div class="form-group">
+            @*Html.LabelFor( m => m.Email_confirm, new { @class = "col-md-2 control-label" } )*@
+            @Html.TextBoxFor( m => m.Email_confirm, new { @class = "form-control", placeholder = "Confirm email" } )
+        </div> 
+
+        <div class="form-group">
+            @*Html.LabelFor( m => m.UserName, new { @class = "col-md-2 control-label" } )*@
+            @Html.TextBoxFor( m => m.UserName, new { @class = "form-control", placeholder = "Admin username" } )
+        </div> 
+
+        <div class="form-group">
+            @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } )*@
+            @Html.PasswordFor( m => m.Password, new { @class = "form-control", placeholder = "Admin password" } )
+        </div> 
+
+        <div class="form-group">
+            @*Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )*@
+            @Html.PasswordFor( m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm password" } )
+        </div> 
+
+        <button type="submit" class="btn btn-primary">Sign Up</button>
     }
 
     @section Scripts {
