@@ -27,6 +27,11 @@
         </div>
 
         <div class="form-group">
+            <label for="orgAdminName">Enter your Name</label><br />
+            @Html.TextBoxFor(m => m.orgAdminName, new { @class = "form-control", placeholder = "First Last Name" })
+        </div>
+
+        <div class="form-group">
             <label for="orgContact">Enter a contact number we can reach you at if needed</label><br />
             @Html.TextBoxFor(m => m.orgContact, new { @class = "form-control", placeholder = "Company Website URL" })
         </div>

@@ -30,13 +30,10 @@ namespace Sigil.Models
         [Display(Name = "About your Organization")]
         public string orgComment { get; set; }
 
-        // orgTallBanner
-
-        // orgSmallBanner
-
-        // orgLargeIcon
-
-        // orgSmallIcon
+        [Required]
+        [StringLength(50)]
+        [Display(Name = "Your Name")]
+        public string orgAdminName { get; set; }
 
         [Required]
         [EmailAddress]

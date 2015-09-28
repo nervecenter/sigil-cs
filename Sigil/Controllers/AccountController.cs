@@ -190,9 +190,10 @@ namespace Sigil.Controllers
             newOrg.orgUrl = model.orgURL;
             newOrg.username = model.UserName;
             newOrg.website = model.orgWebsite;
+            newOrg.contact = model.orgContact;
             newOrg.comment = model.orgComment;
             newOrg.email = model.Email;
-            
+            newOrg.AdminName = model.orgAdminName;
             try
             {
                 dc.OrgApps.InsertOnSubmit(newOrg);

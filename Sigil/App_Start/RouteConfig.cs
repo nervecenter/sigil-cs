@@ -42,7 +42,13 @@ namespace Sigil {
             routes.MapRoute(
                 name: "Org Applications",
                 url: "sadmin/orgapps",
-                defaults: new { controller = "Account", action = "OrgApplicants" }
+                defaults: new { controller = "Admin", action = "OrgApplicants" }
+            );
+
+            routes.MapRoute(
+                name: "Error Log",
+                url: "sadmin/errors",
+                defaults: new { controller = "Admin", action = "ErrorLog" }
             );
 
             //========================= Account Controller ==================================================================

@@ -36,7 +36,7 @@ namespace Sigil
             }
             catch(Exception ee)
             {
-                Log_Error_File(newError, ee);
+                Log_Error_File(newError, ee.InnerException);
             }
 
         }

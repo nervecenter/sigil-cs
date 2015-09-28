@@ -181,6 +181,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IssueController.cs" />
@@ -366,6 +367,8 @@
     <Content Include="Views\Shared\_VoteButton.cshtml" />
     <Content Include="Views\Shared\_IssuePanelPartial.cshtml" />
     <Content Include="Views\Account\OrgRegister.cshtml" />
+    <Content Include="Views\Admin\OrgApplicants.cshtml" />
+    <Content Include="Views\Admin\ErrorLog.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

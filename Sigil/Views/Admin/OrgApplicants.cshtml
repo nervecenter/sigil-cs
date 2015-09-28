@@ -1,0 +1,28 @@
+﻿@using Sigil.Models
+@using Microsoft.AspNet.Identity
+@using Microsoft.Owin.Security
+
+@model List<OrgApp>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil - Org Applications";
+    List<OrgApp> applicantList = Model;
+}
+
+<div class="col-md-12 col-lg-12">
+    @foreach (OrgApp applicant in applicantList) {
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                Org Name: @applicant.orgName<br />
+                Requested OrgURL: @applicant.orgUrl<br />
+                Org's Website:<a href="https://@applicant.website">@applicant.website</a><br />
+                Requested Org Admin Username: @applicant.username<br />
+                Org Admin's Email: @applicant.email<br />
+                Org Admin's Name: @applicant.AdminName<br />
+                Org Admins Phone: @applicant.contact<br />
+                Org Admins Comment: @applicant.comment
+            </div>
+        </div>
+    }
+</div>
