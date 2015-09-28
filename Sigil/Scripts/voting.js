@@ -1,48 +1,31 @@
-﻿function voteup(issueid, userhandle) {
+﻿function voteup(votebutton, issueid, userhandle) {
     $.ajax({
         type: "POST",
         url: '/voteup/' + issueid + '/',
         success: function () {
-            /*// Get the element
-            var elementID = "vote_" + issueid;
-            var thisElement = document.getElementById(elementID);
-            // Change its picture to voted on, function to unvoteup()
-            thisElement.src = '/Content/Images/voteup-clicked.png';
-            thisElement.onclick = new Function("unvoteup('" + issueid + "', '" + userhandle + "')");
-            // Update the count displayed beneath it
-            var voteCount = parseInt(document.getElementById("votecount_" + issueid).innerHTML, 10);
-            document.getElementById("votecount_" + issueid).innerHTML = voteCount + 1;
-            //alert('Voted up');*/
+            votebutton.classList.remove('unchecked');
+            votebutton.classList.add('checked');
+            var count = document.getElementById('count-' + issueID);
+            count.innerHTML = parseInt(count.innerHTML, 10) + 1;
         },
         error: function (ts) {
             //alert('Could not vote up.');
             alert(ts.responseText);
-            return false;
         }
     });
 }
 
-function unvoteup(issueid, userhandle) {
+function unvoteup(votebutton, issueid, userhandle) {
     $.ajax({
         type: "POST",
         url: '/unvoteup/' + issueid + '/',
         success: function () {
-            /*// Get the element
-            var elementID = "vote_" + issueid;
-            var thisElement = document.getElementById(elementID);
-            // Change its picture to not voted on, function to voteup()
-            thisElement.src = '/Content/Images/voteup.png';
-            thisElement.onclick = new Function("voteup('" + issueid + "', '" + userhandle + "')");
-            // Update the count displayed beneath it
-            var voteCount = parseInt(document.getElementById("votecount_" + issueid).innerHTML, 10);
-            document.getElementById("votecount_" + issueid).innerHTML = voteCount - 1;
-            //alert('Unvoted up');*/
-            return true;
+            var count = document.getElementById('count-' + issueID);
+            count.innerHTML = parseInt(count.innerHTML, 10) - 1;
         },
         error: function (ts) {
             alert('Could not unvote up.');
             alert(ts.responseText);
-            return false;
         }
     });
 }

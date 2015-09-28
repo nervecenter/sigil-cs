@@ -1,0 +1,28 @@
+﻿@using Sigil.Models
+@using Microsoft.AspNet.Identity
+@using Microsoft.Owin.Security
+
+@model List<OrgApp>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil - Org Applications";
+    List<OrgApp> applicantList = Model;
+}
+
+<div class="col-md-12 col-lg-12">
+    @foreach (OrgApp applicant in applicantList) {
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                @applicant.orgName<br />
+                @applicant.orgUrl<br />
+                @applicant.website<br />
+                @applicant.username<br />
+                @applicant.email<br />
+                @applicant.contact<br />
+                @applicant.comment
+            </div>
+        </div>
+    }
+</div>
+@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( default(Org), Sigil.Controllers.AccountController.userSubs( User ) ) )
