@@ -370,12 +370,9 @@
     <Content Include="Views\Shared\_VoteButton.cshtml" />
     <Content Include="Views\Shared\_IssuePanelPartial.cshtml" />
     <Content Include="Views\Account\OrgRegister.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Admin\OrgApplicants.cshtml" />
     <Content Include="Views\Admin\ErrorLog.cshtml" />
-=======
     <Content Include="Views\Account\OrgApplicants.cshtml" />
->>>>>>> Chris
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
