@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
-
+@using Sigil.Models
+@model List<IGrouping<Org, Issue>>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,14 +64,13 @@
                 </div>
             </div>
         </section>
-        @using Sigil.Models
-        @model List<IGrouping<string, Issue>>
+
         <div class="container landing-container">
             <div class="row">
                 @foreach ( var group in Model ) {
                     <div class="col-md-4 col-lg-4">
                         <div class="panel panel-default">
-                            <div class="panel-heading">@group.Key</div>
+                            <div class="panel-heading"><img src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(group.Key))"> @group.Key.orgName</div>
                             @*<div class="panel-body"></div>*@
                             @foreach ( Issue issue in group ) {
                                 var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false, userVoted = false }, issue );

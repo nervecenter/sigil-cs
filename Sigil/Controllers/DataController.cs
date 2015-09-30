@@ -196,58 +196,14 @@ namespace Sigil
 
     namespace Controllers
     {
-        public class ImageController : Controller
+        public class ImageController<T> : Controller
         {
             private static SigilDBDataContext dc = new SigilDBDataContext();
             private static string default_img_path = "../Images/Default/";
             private static string org_folder_path = "../Images/Org/";
             private static string user_folder_path = "../Images/User/";
 
-
-
-            public static string Get_Icon_15(int id, Type caller)
-            {
-
-                try
-                {
-                    var entry = Get_DB_Entry(id, caller);
-
-                    return org_folder_path + entry.icon_15;
-                }
-                catch(Exception e)
-                {
-                    if (!(e.InnerException is ArgumentNullException))
-                    {
-                        ErrorHandler.Log_Error(id, e, dc);
-                    }
-
-
-                    return default_img_path + "default_icon_15.png";
-                    
-                }
-            }
-
-            public static string Get_Icon_20(int id, Type caller)
-            {
-                try
-                {
-                    var entry = Get_DB_Entry(id, caller);
-
-                    return org_folder_path + entry.icon_20;
-                }
-                catch (Exception e)
-                {
-                    if (!(e.InnerException is ArgumentNullException))
-                    {
-                        ErrorHandler.Log_Error(id, e, dc);
-                    }
-
-
-                    return default_img_path + "default_icon_20.png";
-
-                }
-            }
-
+            //=============================== User Icon Functions ==================================================//
             public static string Get_Icon_20(string id)
             {
                 try
@@ -260,33 +216,11 @@ namespace Sigil
                     {
                         ErrorHandler.Log_Error(id, e, dc);
                     }
-
-
                     return default_img_path + "default_icon_20.png";
-
                 }
             }
 
-            public static string Get_Icon_100(int id, Type caller)
-            {
-                try
-                {
-                    var entry = Get_DB_Entry(id, caller);
-                    return org_folder_path + entry.icon_100;
-                }
-                catch (Exception e)
-                {
-                    if (!(e.InnerException is ArgumentNullException))
-                    {
-                        ErrorHandler.Log_Error(id, e, dc);
-                    }
 
-
-                    return default_img_path + "default_icon_100.png";
-
-                }
-            }
-            
             public static string Get_Icon_100(string userId)
             {
                 try
@@ -299,72 +233,117 @@ namespace Sigil
                     {
                         ErrorHandler.Log_Error(userId, e, dc);
                     }
-
-
                     return default_img_path + "default_icon_100.png";
-
                 }
             }
 
-            public static string Get_Banner_Tall(int id, Type caller)
-            {
 
+            //============================= Org/Cat/Topic Functions ==============================================//
+
+            public static string Get_Icon_15(T caller)
+            {
                 try
                 {
-                    var entry = Get_DB_Entry(id, caller);
+                    var entry = Get_DB_Entry(caller);
+                    return org_folder_path + entry.icon_15;
+                }
+                catch(Exception e)
+                {
+                    if (!(e.InnerException is ArgumentNullException))
+                    {
+                        ErrorHandler.Log_Error(caller, e, dc);
+                    }
+                    return default_img_path + "default_icon_15.png";                   
+                }
+            }
+
+            public static string Get_Icon_20(T caller)
+            {
+                try
+                {
+                    var entry = Get_DB_Entry(caller);
+                    return org_folder_path + entry.icon_20;
+                }
+                catch (Exception e)
+                {
+                    if (!(e is ArgumentNullException))
+                    {
+                        ErrorHandler.Log_Error(caller, e, dc);
+                    }
+                    return default_img_path + "default_icon_20.png";
+                }
+            }
+
+            public static string Get_Icon_100(T caller)
+            {
+                try
+                {
+                    var entry = Get_DB_Entry(caller);
+                    return org_folder_path + entry.icon_100;
+                }
+                catch (Exception e)
+                {
+                    if (!(e.InnerException is ArgumentNullException))
+                    {
+                        ErrorHandler.Log_Error(caller, e, dc);
+                    }
+                    return default_img_path + "default_icon_100.png";
+                }
+            }
+
+            public static string Get_Banner_Tall(T caller)
+            {
+                try
+                {
+                    var entry = Get_DB_Entry(caller);
                     return org_folder_path + entry.banner_tall;
                 }
                 catch (Exception e)
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e, dc);
+                        ErrorHandler.Log_Error(caller, e, dc);
                     }
-
-
                     return default_img_path + "default_banner_tall.png";
-
                 }
             }
 
-            public static string Get_Banner_Short(int id, Type caller)
+            public static string Get_Banner_Short(T caller)
             {
                 try
                 {
-                    var entry = Get_DB_Entry(id, caller);
+                    var entry = Get_DB_Entry(caller);
                     return org_folder_path + entry.banner_short;
                 }
                 catch (Exception e)
                 {
                     if (!(e.InnerException is ArgumentNullException))
                     {
-                        ErrorHandler.Log_Error(id, e, dc);
+                        ErrorHandler.Log_Error(caller, e, dc);
                     }
-
-
                     return default_img_path + "default_banner_short.png";
-
                 }
             }
 
-            private static Image Get_DB_Entry(int id, Type c)
+            private static Image Get_DB_Entry(T caller)
             {
-                var t = c.ToString();
-                switch (c.ToString())
+                if(caller is Org)
                 {
-                    case "Sigil.Models.Org":
-                        return dc.Images.Single(i => i.OrgId == id);
-                    case "Sigil.Models.Topic":
-                        return dc.Images.Single(i => i.TopicId == id);
-                    case "Sigil.Models.Category":
-                        return dc.Images.Single(i => i.CatId == id);
-                    default:
-                        throw new ArgumentNullException();
+                    Org c = (Org)Convert.ChangeType(caller, typeof(T));
+                    return dc.Images.Single(i => i.OrgId == c.Id);
                 }
+                else if(caller is Topic)
+                {
+                    Topic c = (Topic)Convert.ChangeType(caller, typeof(T));
+                    return dc.Images.Single(i => i.TopicId == c.Id);
+                }
+                else if(caller is Category)
+                {
+                    Category c = (Category)Convert.ChangeType(caller, typeof(T));
+                    return dc.Images.Single(i => i.CatId == c.Id);
+                }
+                throw new ArgumentNullException();
             }
-
-
         }
-
     }
 }
