@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ImageProcessor;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
@@ -10,6 +11,9 @@ using DotNet.Highcharts;
 using DotNet.Highcharts.Options;
 using DotNet.Highcharts.Helpers;
 using System.Data.SqlTypes;
+using ImageProcessor.Imaging.Formats;
+using System.Drawing;
+using System.IO;
 
 namespace Sigil
 {
@@ -196,12 +200,107 @@ namespace Sigil
 
     namespace Controllers
     {
+        public class ImageUploader : Controller
+        {
+            private SigilDBDataContext dc;
+
+            enum imgType{
+                user_icon, org_icon, banner_small, banner_large
+            };
+
+            private static string org_folder_path = "../Images/Org/";
+            private static string user_folder_path = "../Images/User/";
+            private static string tmp_upload_path = "../Images/TMP/";
+            public ImageUploader()
+            {
+                dc = new SigilDBDataContext();
+            }
+
+            public ActionResult Index(bool result)
+            {
+                if(result)
+                {
+                    ViewBag.upload_result = "File Uploaded!";
+                }
+                else
+                {
+                    ViewBag.upload_result = "Upload Failed. Sigil has been notified of the error.";
+                }
+
+                return View("Manage");
+            }
+
+            [Authorize]
+            [HttpPost]
+            public ActionResult User_Icon_Upload(HttpPostedFile img)
+            {
+                if(img != null && img.ContentLength > 0)
+                {
+                    var userid = User.Identity.GetUserId();
+                    string user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).UserName;
+                    if(user == null)
+                    {
+                        ErrorHandler.Log_Error(userid, "No user for Userid", dc);
+                        return Index(false);
+                    }
+
+
+
+                    string img_path = tmp_upload_path + user + "_" + img.FileName;
+                    img.SaveAs(img_path);
+                    string convertedImgPath = img_convert(img_path, user,imgType.user_icon);
+
+
+                }
+            }
+
+            private string img_convert(string file, string owner, imgType type)
+            {
+                byte[] img_bytes = System.IO.File.ReadAllBytes(file);
+                ISupportedImageFormat format = new PngFormat();
+                Size size = new Size();
+                
+                if (type == imgType.user_icon)
+                    size = new Size(100, 100);
+
+                using (MemoryStream inStream = new MemoryStream(img_bytes))
+                {
+                    using (MemoryStream outStream = new MemoryStream())
+                    {
+                        using (ImageFactory imgFact = new ImageFactory(preserveExifData: true))
+                        {
+                            imgFact.Load(inStream).Resize(size).Format(format).Save(outStream);
+                        }
+
+                        string final_path = "";
+                        if(type == imgType.user_icon)
+                        {
+                            final_path = user_folder_path + owner + "_100.png";
+                            
+
+                        }
+
+
+                        var final_img = System.IO.File.Create(final_path);
+                        outStream.Seek(0, SeekOrigin.Begin);
+                        outStream.CopyTo(final_img);
+                        final_img.Close();
+
+                        return final_path;
+                    }
+
+                }
+            }
+        }
+
+
         public class ImageController<T> : Controller
         {
             private static SigilDBDataContext dc = new SigilDBDataContext();
             private static string default_img_path = "../Images/Default/";
             private static string org_folder_path = "../Images/Org/";
             private static string user_folder_path = "../Images/User/";
+
 
             //=============================== User Icon Functions ==================================================//
             public static string Get_Icon_20(string id)
