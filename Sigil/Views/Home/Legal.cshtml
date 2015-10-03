@@ -5,12 +5,14 @@
     ViewBag.Title = "Sigil - Legal";
 }
 
-<div class="first-column">
-    <article class="first-column-box legal-body">
-        <h3 class="first-column-header">Sigil would like to give attribution to:</h3>
-        <p class="first-column-paragraph"><a href="http://ionicons.com/">ionicons</a> - Used under the <a href="https://en.wikipedia.org/wiki/MIT_License">MIT License</a>.</p>
-        <p class="first-column-paragraph"><a href="https://dotnethighcharts.codeplex.com/">DotNet.Highcharts</a> - Used under the <a href="https://en.wikipedia.org/wiki/MIT_License">MIT License</a>.</p>
-        <p class="first-column-paragraph">Photos obtained from <a href="https://stocksnap.io/">StockSnap.io</a> - Used under the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0 License</a>.</p>
+<div class="col-md-9 col-lg-9">
+    <article class="panel panel-default">
+        <div class="panel-body">
+            <h3 style="margin-top:0px;">Sigil would like to give attribution to:</h3>
+            <p><a href="http://ionicons.com/">ionicons</a> - Used under the <a href="https://en.wikipedia.org/wiki/MIT_License">MIT License</a>.</p>
+            <p><a href="https://dotnethighcharts.codeplex.com/">DotNet.Highcharts</a> - Used under the <a href="https://en.wikipedia.org/wiki/MIT_License">MIT License</a>.</p>
+            <p>Photos obtained from <a href="https://stocksnap.io/">StockSnap.io</a> - Used under the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0 License</a>.</p>
+        </div>
     </article>
 </div>
-@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( default(Org), Sigil.Controllers.AccountController.userSubs( User ) ) )
+@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( default( Org ), Sigil.Controllers.AccountController.userSubs( User ) ) )
