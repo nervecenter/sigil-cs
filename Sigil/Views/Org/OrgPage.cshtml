@@ -10,21 +10,13 @@
 
     UserVoteCol userVotes = ViewBag.userVotes;
     Subscription userSub = ViewBag.userSub;
+
+    string banner = Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg);
 }
 
 <div class="col-md-9 col-lg-9">
-    <img class="img-rounded img-responsive org-banner-small" src="../Content/Images/orgbanners/@(thisOrg.orgURL).png">
-    @*<nav class="centered" style="margin-bottom:0.7em;">
-        <img class="banner-button ban-but-marg feed-btn" src="~/Content/Images/feed.png">
-        <a href="/@(thisOrg.orgURL)/data"><img class="banner-button ban-but-marg data-btn" src="~/Content/Images/data.png" onmouseover="bannerbuttonhover(this)" onmouseout="bannerbuttonunhover(this)"></a>
-        @if ( !Request.IsAuthenticated ) {
-            <img id="sub-button" class="banner-button unsubscribed" onclick="redirectToLogin()" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-        } else if ( userSub == default( Subscription ) ) {
-            <img id="sub-button" class="banner-button unsubscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/subscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-        } else {
-            <img id="sub-button" class="banner-button subscribed" onclick="set_sub(this, @thisOrg.orgURL)" src="~/Content/Images/unsubscribe.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
-        }
-    </nav>*@
+    <img class="img-rounded img-responsive org-banner-small" src="@banner">
+
     @foreach ( Issue issue in Model.Item2 ) {
         var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false,
                                                                                              userVoted = userVotes.Check_Vote( issue.Id, issue.OrgId )}, 

@@ -13,11 +13,13 @@
 
     ViewBag.Title = "Sigil - " + thisIssue.title;
 
-    bool pull = true;
+    bool pull = false;
+
 }
 
 <div class="col-md-9 col-lg-9">
-    <img class="img-rounded img-responsive org-banner-small" src="../Content/Images/orgbanners/@(thisOrg.orgURL).png">
+    )
+    <img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg))">
     <article class="panel panel-default">
         @{var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false,
                                                                                                userVoted = userVote.Check_Vote(thisIssue.Id, thisOrg.Id)}, thisIssue ); }
@@ -58,15 +60,15 @@
                 foreach ( Comment comm in issueComments ) 
                 {
                     <div class="media">
-                        <a href="#" class=@(pull ? "pull-left" : "pull-right")>
-                            <img src="@Sigil.Controllers.ImageController.Get_Icon_100(comm.AspNetUser.Id)" class="media-object" alt="Sample Image">
+                        <a href="#" class=@((pull = !pull) ? "pull-left" : "pull-right")>
+                            <img src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(comm.AspNetUser.Id))" class="media-object" alt="Sample Image">
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading">@comm.AspNetUser.UserName <small><i>Posted @Sigil.Controllers.IssueController.TimeSince( @comm.postDate )</i></small></h4>
                             <p>@comm.text</p>
                         </div>
                     </div>
-                    pull = !pull;
+
                 }
             }
             @if ( Request.IsAuthenticated ) 

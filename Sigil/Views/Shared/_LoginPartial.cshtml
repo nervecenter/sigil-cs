@@ -2,7 +2,7 @@
 @using Sigil.Models
 
 @if ( Request.IsAuthenticated ) {
-    @*<img class="header-user-icon" src="@Sigil.Controllers.ImageController.Get_Icon_100(User.Identity.GetUserId())">*@
+    <img class="img-rounded img-responsive" src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(User.Identity.GetUserId()))">
     <li>@Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { } )</li>
     <li>
         <a href="javascript:document.getElementById('logoutForm').submit()">
