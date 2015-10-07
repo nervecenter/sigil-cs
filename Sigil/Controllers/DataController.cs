@@ -200,7 +200,7 @@ namespace Sigil
 
     namespace Controllers
     {
-        public class ImageUploader : Controller
+        public class ImageUploaderController : Controller
         {
             private SigilDBDataContext dc;
 
@@ -208,10 +208,10 @@ namespace Sigil
                 user_icon, org_icon, banner_small, banner_large
             };
 
-            private static string org_folder_path = "../Images/Org/";
-            private static string user_folder_path = "../Images/User/";
-            private static string tmp_upload_path = "../Images/TMP/";
-            public ImageUploader()
+            private static string org_folder_path = "C:/Sigil/Sigil/Images/Org/";
+            private static string user_folder_path = "C:/Sigil/Sigil/Images/User/";
+            private static string tmp_upload_path = "C:/Sigil/Sigil/Images/TMP/";
+            public ImageUploaderController()
             {
                 dc = new SigilDBDataContext();
             }
@@ -230,28 +230,52 @@ namespace Sigil
                 return View("Manage");
             }
 
-            [Authorize]
-            [HttpPost]
-            public ActionResult User_Icon_Upload(HttpPostedFile img)
+
+            public ActionResult User_Icon_Upload()
             {
+                var img = Request.Files[0];
                 if(img != null && img.ContentLength > 0)
                 {
                     var userid = User.Identity.GetUserId();
                     string user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).UserName;
-                    if(user == null)
+                    if(userid == null)
                     {
                         ErrorHandler.Log_Error(userid, "No user for Userid", dc);
                         return Index(false);
                     }
-
-
-
+                
                     string img_path = tmp_upload_path + user + "_" + img.FileName;
+                    
                     img.SaveAs(img_path);
-                    string convertedImgPath = img_convert(img_path, user,imgType.user_icon);
+                    string convertedImgPath = img_convert(img_path, user, imgType.user_icon);
 
+                    if (convertedImgPath != "")
+                    {
+                        var userImg = dc.Images.SingleOrDefault(i => i.UserId == userid);
+                        if (userImg == default(Image))
+                        {
+                            userImg = new Sigil.Models.Image();
+                            userImg.UserId = userid;
+                            userImg.icon_100 = user + "_100.png";
+                        
+ 
+                            try
+                            {
+                                dc.Images.InsertOnSubmit(userImg);
+                                dc.SubmitChanges();
+                            }
+                            catch(Exception e)
+                            {
+                                ErrorHandler.Log_Error(userImg, e, dc);
+                            }
+                        }
 
+                    }
+
+                    return RedirectToAction("Index", "Manage");
                 }
+
+                return new EmptyResult();
             }
 
             private string img_convert(string file, string owner, imgType type)
@@ -424,7 +448,7 @@ namespace Sigil
                 }
             }
 
-            private static Image Get_DB_Entry(T caller)
+            private static Sigil.Models.Image Get_DB_Entry(T caller)
             {
                 if(caller is Org)
                 {
