@@ -60,8 +60,10 @@ namespace Sigil.Controllers
             {
                 // Get the user's votes on this org
                 userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userId).votes);
-                ViewBag.userVotes = userVotes;
             }
+
+            ViewBag.userVotes = userVotes;
+
             // Get the issues of the org
             // TODO: Grab issues chosen by an algorithm based on age and weight
             IQueryable<Issue> issueList = from issue in dc.Issues
