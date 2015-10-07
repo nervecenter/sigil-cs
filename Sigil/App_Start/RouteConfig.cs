@@ -37,6 +37,12 @@ namespace Sigil {
                 defaults: new { controller = "Home", action = "Legal" }
             );
 
+            routes.MapRoute(
+    name: "User Icon Upload",
+    url: "user_icon_upload/",
+    defaults: new { controller = "ImageUploader", action = "User_Icon_Upload", }
+);
+
             //========================= Sigil Admin Stuff =================================================
 
             routes.MapRoute(
@@ -52,12 +58,13 @@ namespace Sigil {
             );
 
             //========================= Account Controller ==================================================================
+
             routes.MapRoute(
                 name:"Login",
                 url: "login/",
                 defaults: new { controller = "Account", action="Login"}
             );
-
+            
             routes.MapRoute(
                 name: "Logout",
                 url: "logout/",

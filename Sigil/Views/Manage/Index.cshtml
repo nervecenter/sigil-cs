@@ -1,5 +1,5 @@
 ﻿@model Sigil.Models.IndexViewModel
-
+@using Sigil.Controllers
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Sigil - Manage Account";
@@ -26,6 +26,20 @@
                 @Model.Logins.Count [
                 @Html.ActionLink( "Manage", "ManageLogins" ) ]
             </dd>
+            <dt>Upload New User Icon</dt>
+            <dd>
+                <h2>Upload New Icon!</h2>
+                    @using (Html.BeginForm("User_Icon_Upload", "ImageUploader", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        
+                        <label for= "img" > New User Icon: </label>
+                        <input type = "file" name = "img" id = "img" />
+
+                        <input type = "submit" />
+                    }
+
+            </ dd >
             @*
                 Phone Numbers can used as a second factor of verification in a two-factor authentication system.
 
@@ -51,7 +65,7 @@
                     ]
                 </dd>
             *@
-            <dt>Two-Factor Authentication:</dt>
+            < dt > Two - Factor Authentication:</dt>
             <dd>
                 <p>
                     There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>

@@ -47,7 +47,7 @@ namespace Sigil.Controllers
             var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
             subData.Update();
             subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);*/
-
+            
             try
             {
                 dc.Subscriptions.InsertOnSubmit(new_sub);
