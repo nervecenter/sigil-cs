@@ -252,7 +252,7 @@ namespace Sigil
                     if (convertedImgPath != "")
                     {
                         var userImg = dc.Images.SingleOrDefault(i => i.UserId == userid);
-                        if (userImg == default(Image))
+                        if (userImg == default(Sigil.Models.Image))
                         {
                             userImg = new Sigil.Models.Image();
                             userImg.UserId = userid;

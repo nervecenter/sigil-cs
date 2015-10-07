@@ -11,12 +11,9 @@ using System.Data.SqlTypes;
 using System.Xml.Linq;
 namespace Sigil.Models
 {
-<<<<<<< HEAD
-    public struct IssuePanelOptions {
-=======
     public struct IssuePanelOptions
     {
->>>>>>> Algorithm_Additions
+
         public bool inPanel;
         public bool showOrg;
         public bool showCat;
