@@ -1,0 +1,44 @@
+﻿@using Sigil.Models
+@using Microsoft.AspNet.Identity
+@model Tuple<Org, IQueryable<Issue>>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Org thisOrg = Model.Item1;
+    ViewBag.Title = "Sigil - " + thisOrg.orgName;
+
+    UserVoteCol userVotes = ViewBag.userVotes;
+    Subscription userSub = ViewBag.userSub;
+
+    string banner = Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg);
+}
+
+<div class="col-md-9 col-lg-9">
+    <img class="img-rounded img-responsive org-banner-small" src="@banner">
+    <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
+        <a class="btn btn-warning" href="/@thisOrg.orgURL">Main feed</a>
+        <a class="btn btn-default active">Responses</a>
+        <a class="btn btn-success">Data</a>
+        <a class="btn btn-primary">Subscribe to @thisOrg.orgName</a>
+    </div>
+    @if ( Model.Item2.Count<Issue>() != 0 ) {
+        foreach ( Issue issue in Model.Item2 ) {
+            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( 
+                new IssuePanelOptions() {
+                    inPanel = true,
+                    showOrg = false,
+                    showCat = false,
+                    showTopic = false,
+                    showUser = true,
+                    userVoted = userVotes.Check_Vote( issue.Id, issue.OrgId )
+                },
+                issue 
+            );
+            @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
+        }
+    } else {
+        <h4>There don't appear to be any responses yet.</h4>
+    }
+</div>
+@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( thisOrg, Sigil.Controllers.AccountController.userSubs( User ) ) )

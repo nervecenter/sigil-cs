@@ -5,6 +5,10 @@
     text-align: center;
 }
 
+.btn-group-justified > .btn {
+    width: 25%;
+}
+
 .votebutton-box {
     text-align: center;
     font-weight: 600;

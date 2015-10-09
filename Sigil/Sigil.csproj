@@ -380,6 +380,7 @@
     <Content Include="Views\Admin\OrgApplicants.cshtml" />
     <Content Include="Views\Admin\ErrorLog.cshtml" />
     <Content Include="Views\Account\OrgApplicants.cshtml" />
+    <Content Include="Views\Org\OrgResponsesPage.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

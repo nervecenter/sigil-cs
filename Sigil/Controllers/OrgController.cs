@@ -82,6 +82,53 @@ namespace Sigil.Controllers
 
         /* 
         ==================== 
+        OrgResponsesPage
+  
+            Returns a page listing the issues specific to an org with responses, sorted by date descending
+        ==================== 
+        */
+
+        public ActionResult OrgResponsesPage( string orgURL ) {
+            // Get the org
+            Org thisOrg = dc.Orgs.FirstOrDefault( o => o.orgURL == orgURL );
+
+            // If the org doesn't exist, redirect to 404
+            if ( thisOrg == default( Org ) ) {
+                Response.Redirect( "~/404" );
+            }
+
+            // Get the user and their subscriptions
+            var userId = User.Identity.GetUserId();
+            UserVoteCol userVotes = new UserVoteCol();
+
+            if ( userId != null ) {
+                // Get the user's votes on this org
+                userVotes = CountXML<UserVoteCol>.XMLtoDATA( dc.AspNetUsers.Single( u => u.Id == userId ).votes );
+            }
+
+            ViewBag.userVotes = userVotes;
+
+            // Get the issues of the org
+            // TODO: Grab issues chosen by an algorithm based on age and weight
+            IQueryable<Issue> issueList = from issue in dc.Issues
+                                          where issue.OrgId == thisOrg.Id && issue.responded == true
+                                          select issue;
+
+            if (issueList.Count<Issue>() > 0) {
+                issueList.OrderBy( i => i.OfficialResponses.ToList()[ 0 ].createTime );
+            }
+
+            // MODEL: Put the org and the list of issues into a tuple as our page model
+            Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, issueList );
+
+            ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
+
+            // Pass our org and issues to the view as the model
+            return View( orgAndIssues );
+        }
+
+        /* 
+        ==================== 
         OrgData
   
             Data page for an Org, showing views/votes this week/month, responsiveness, and top issues  

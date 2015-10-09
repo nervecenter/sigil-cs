@@ -16,7 +16,12 @@
 
 <div class="col-md-9 col-lg-9">
     <img class="img-rounded img-responsive org-banner-small" src="@banner">
-
+    <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
+        <a class="btn btn-default active">Main feed</a>
+        <a class="btn btn-info" href="/@thisOrg.orgURL/responses">Responses</a>
+        <a class="btn btn-success">Data</a>
+        <a class="btn btn-primary">Subscribe to @thisOrg.orgName</a>
+    </div>
     @foreach ( Issue issue in Model.Item2 ) {
         var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
                                                                                              userVoted = userVotes.Check_Vote( issue.Id, issue.OrgId )}, 
