@@ -18,7 +18,7 @@
     <img class="img-rounded img-responsive org-banner-small" src="@banner">
 
     @foreach ( Issue issue in Model.Item2 ) {
-        var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false,
+        var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
                                                                                              userVoted = userVotes.Check_Vote( issue.Id, issue.OrgId )}, 
                                                                    issue );
         @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )

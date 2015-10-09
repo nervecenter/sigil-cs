@@ -21,7 +21,7 @@
     )
     <img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg))">
     <article class="panel panel-default">
-        @{var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false,
+        @{var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false, showUser = true,
                                                                                                userVoted = userVote.Check_Vote(thisIssue.Id, thisOrg.Id)}, thisIssue ); }
         @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         <div class="panel-body">@thisIssue.text</div>

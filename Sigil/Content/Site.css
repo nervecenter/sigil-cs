@@ -5,6 +5,12 @@
     text-align: center;
 }
 
+.votebutton-box {
+    text-align: center;
+    font-weight: 600;
+    color: #494949;
+}
+
 /*.navbar-center > li {
     float: none;
     display: inline-block;

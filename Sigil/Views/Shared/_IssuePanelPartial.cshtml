@@ -7,24 +7,25 @@
 }
 
 @helper MainMarkup() {
-    bool showOrg = Model.Item1.showOrg;
-    bool showCat = Model.Item1.showCat;
-    bool showTopic = Model.Item1.showTopic;
-    bool userVoted = Model.Item1.userVoted;
-    Issue thisIssue = Model.Item2;
+bool showOrg = Model.Item1.showOrg;
+bool showCat = Model.Item1.showCat;
+bool showTopic = Model.Item1.showTopic;
+bool showUser = Model.Item1.showUser;
+bool userVoted = Model.Item1.userVoted;
+Issue thisIssue = Model.Item2;
 
     <div class="panel-body">
         <div class="media">
-            <div class="media-object pull-left">
+            <div class="media-object pull-left votebutton-box">
                 @if ( !Request.IsAuthenticated ) {
-                    <img src="~/Content/Images/notvoted.png" class="voteup centered" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/notvoted.png" class="voteup" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else if ( userVoted ) {
-                    <img src="~/Content/Images/voted.png" class="unvoteup center-block" onclick="unvoteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/voted.png" class="unvoteup" onclick="unvoteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else {
-                    <img src="~/Content/Images/notvoted.png" class="voteup center-block" onclick="voteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/notvoted.png" class="voteup" onclick="voteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 }
                 <br />
-                <span id="count-@thisIssue.Id" class="text-center">@thisIssue.votes</span>
+                <span id="count-@thisIssue.Id" class="voteamount">@thisIssue.votes</span>
             </div>
             <div class="media-body">
                 <h4 class="media-heading">
@@ -36,7 +37,10 @@
                     @if ( showCat ) { <span>: @thisIssue.Category.catName</span> }
                     @if ( showTopic ) { <span>in @thisIssue.Topic.topicName</span> }
                 </p>
-                <p class="pull-right">Posted @Sigil.Controllers.IssueController.TimeSince( thisIssue.createTime ) by @thisIssue.AspNetUser.UserName</p>
+                <p class="pull-right">
+                    Posted @Sigil.Controllers.IssueController.TimeSince( thisIssue.createTime ) 
+                    @if ( showUser ) { <span>by @thisIssue.AspNetUser.UserName</span> }
+                </p>
             </div>
         </div>
     </div>

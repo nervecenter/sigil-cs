@@ -15,7 +15,7 @@
     <h3>@User.Identity.GetUserName()'s feed</h3>
     @if ( issueList.Count > 0 ) {
         foreach ( Issue issue in issueList ) {
-            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false,
+            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false, showUser = true,
                                                                                                  userVoted = voteList.Check_Vote( issue.Id, issue.OrgId ) }, 
                                                                        issue );
             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
