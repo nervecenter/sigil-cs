@@ -6,9 +6,6 @@ using System.Web.Mvc;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-using DotNet.Highcharts;
-using DotNet.Highcharts.Options;
-using DotNet.Highcharts.Helpers;
 using System.Data.SqlTypes;
 
 namespace Sigil.Controllers
@@ -225,7 +222,7 @@ namespace Sigil.Controllers
             }
 
             // MODEL: List of charts we'll be displaying in sequence
-            List<Highcharts> listOfCharts = new List<Highcharts>();
+           // List<Highcharts> listOfCharts = new List<Highcharts>();
 
             //get the collection of viewcounts from the xml field in the table
             ViewCountCol issueViews = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisIssue.OrgId).count);
@@ -236,10 +233,10 @@ namespace Sigil.Controllers
              *  WEEKLY Traffic Data
              */
             
-            Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms,DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
+           // Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms,DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
-            listOfCharts.Add(weekChart);
+           // listOfCharts.Add(weekChart);
             var totals = DataVisualization.Get_Sums(issueViews, issueVotes, issueComms, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
             var uniqueCommsWeek = DataVisualization.Get_Unique_Count(dc.Comments.Where(c => c.issueId == thisIssue.Id).Select(c => c), DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
             ViewBag.weekViewCount = totals.Item1;
@@ -256,10 +253,10 @@ namespace Sigil.Controllers
 
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-            Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
+           // Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
-            listOfCharts.Add(monthChart);
+           // listOfCharts.Add(monthChart);
             totals = DataVisualization.Get_Sums(issueViews, issueVotes, issueComms,DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
             var uniqueCommsMonth = DataVisualization.Get_Unique_Count(dc.Comments.Where(c => c.issueId == thisIssue.Id).Select(c => c), DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
             ViewBag.monthViewCount = totals.Item1;
@@ -280,7 +277,8 @@ namespace Sigil.Controllers
             ViewBag.thisOrg = thisOrg;
 
             // Pass our model list of charts as the model of the view
-            return View(listOfCharts);
+            //  return View(listOfCharts);
+            return View();
         }
 
 

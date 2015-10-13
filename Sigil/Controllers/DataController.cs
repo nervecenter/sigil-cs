@@ -7,9 +7,7 @@ using ImageProcessor;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-using DotNet.Highcharts;
-using DotNet.Highcharts.Options;
-using DotNet.Highcharts.Helpers;
+
 using System.Data.SqlTypes;
 using ImageProcessor.Imaging.Formats;
 using System.Drawing;
@@ -69,87 +67,87 @@ namespace Sigil
             return new Tuple<int, int, int, int>(total_views, total_votes, total_comms, total_subs);
         }
 
-        public static Highcharts Create_Highchart(ViewCountCol views, VoteCountCol votes, CommentCountCol comms, DateTime start, DateTime stop, string chartName, string chartTitle)
-        {
-            TimeSpan duriation = stop.Date - start.Date;
-            Tuple<List<int>, List<int>, List<int>> voteViewdata = new Tuple<List<int>, List<int>, List<int>>(new List<int>(), new List<int>(), new List<int>());
+        //public static Highcharts Create_Highchart(ViewCountCol views, VoteCountCol votes, CommentCountCol comms, DateTime start, DateTime stop, string chartName, string chartTitle)
+        //{
+        //    TimeSpan duriation = stop.Date - start.Date;
+        //    Tuple<List<int>, List<int>, List<int>> voteViewdata = new Tuple<List<int>, List<int>, List<int>>(new List<int>(), new List<int>(), new List<int>());
 
-            List<string> xA = new List<string>();
+        //    List<string> xA = new List<string>();
 
-            for (int i = 0; i < duriation.Days; ++i)
-            {
+        //    for (int i = 0; i < duriation.Days; ++i)
+        //    {
                 
-                voteViewdata.Item1.Add(votes.Get_Votes(start.AddDays(i + 1)));
-                voteViewdata.Item2.Add(views.Get_Views(start.AddDays(i + 1)));
-                voteViewdata.Item3.Add(comms.Get_Comments(start.AddDays(i + 1)));
-                xA.Add(start.AddDays(i+1).ToShortDateString());
-            }
+        //        voteViewdata.Item1.Add(votes.Get_Votes(start.AddDays(i + 1)));
+        //        voteViewdata.Item2.Add(views.Get_Views(start.AddDays(i + 1)));
+        //        voteViewdata.Item3.Add(comms.Get_Comments(start.AddDays(i + 1)));
+        //        xA.Add(start.AddDays(i+1).ToShortDateString());
+        //    }
 
 
-            object[] viewSeriesObject = new object[voteViewdata.Item1.Count];
-            object[] voteSeriesObject = new object[voteViewdata.Item2.Count];
-            object[] commSeriesObject = new object[voteViewdata.Item3.Count];
+        //    object[] viewSeriesObject = new object[voteViewdata.Item1.Count];
+        //    object[] voteSeriesObject = new object[voteViewdata.Item2.Count];
+        //    object[] commSeriesObject = new object[voteViewdata.Item3.Count];
 
-            voteViewdata.Item1.ToArray().CopyTo(viewSeriesObject, 0);
-            voteViewdata.Item2.ToArray().CopyTo(voteSeriesObject, 0);
-            voteViewdata.Item3.ToArray().CopyTo(commSeriesObject, 0);
+        //    voteViewdata.Item1.ToArray().CopyTo(viewSeriesObject, 0);
+        //    voteViewdata.Item2.ToArray().CopyTo(voteSeriesObject, 0);
+        //    voteViewdata.Item3.ToArray().CopyTo(commSeriesObject, 0);
 
-            var HChart = new DotNet.Highcharts.Highcharts(chartName);
-            HChart.SetXAxis(new XAxis { Categories = xA.ToArray() });
-            HChart.SetSeries(new Series[] { new Series { Data = new Data(viewSeriesObject), Name = "Views" },
-                                            new Series { Data = new Data(voteSeriesObject), Name = "Votes" },
-                                            new Series { Data = new Data(commSeriesObject), Name = "Comments" } });
-            HChart.SetTitle(new Title { Text = chartTitle });
+        //    var HChart = new DotNet.Highcharts.Highcharts(chartName);
+        //    HChart.SetXAxis(new XAxis { Categories = xA.ToArray() });
+        //    HChart.SetSeries(new Series[] { new Series { Data = new Data(viewSeriesObject), Name = "Views" },
+        //                                    new Series { Data = new Data(voteSeriesObject), Name = "Votes" },
+        //                                    new Series { Data = new Data(commSeriesObject), Name = "Comments" } });
+        //    HChart.SetTitle(new Title { Text = chartTitle });
 
-            return HChart;
-        }
+        //    return HChart;
+        //}
 
-        public static Highcharts Create_Highchart(IQueryable<ViewCountCol> views, IQueryable<VoteCountCol> votes, IQueryable<CommentCountCol> comms, IQueryable<SubCountCol> subs, DateTime start, DateTime stop, string chartName, string chartTitle)
-        {
-            TimeSpan duriation = stop.Date - start.Date;
-            Tuple<List<int>, List<int>, List<int>, List<int>> voteViewdata = new Tuple<List<int>, List<int>, List<int>, List<int>>(new List<int>(), new List<int>(), new List<int>(), new List<int>());
-            List<string> xA = new List<string>();
-            for (int i = 0; i < duriation.Days; ++i)
-            {
-                int to_vo = 0;
-                int to_vi = 0;
-                int to_co = 0;
-                int to_su = 0;
-                foreach (var vo in votes)
-                    to_vo += vo.Get_Votes(start.AddDays(i+1));
-                foreach (var vi in views)
-                    to_vi += vi.Get_Views(start.AddDays(i+1));
-                foreach (var co in comms)
-                    to_co += co.Get_Comments(start.AddDays(i + 1));
-                foreach (var su in subs)
-                    to_su += su.Get_Subs(start.AddDays(i + 1));
-                voteViewdata.Item1.Add(to_vi);
-                voteViewdata.Item2.Add(to_vo);
-                voteViewdata.Item3.Add(to_co);
-                voteViewdata.Item4.Add(to_su);
-                xA.Add(start.AddDays(i+1).ToShortDateString());
-            }
+        //public static Highcharts Create_Highchart(IQueryable<ViewCountCol> views, IQueryable<VoteCountCol> votes, IQueryable<CommentCountCol> comms, IQueryable<SubCountCol> subs, DateTime start, DateTime stop, string chartName, string chartTitle)
+        //{
+        //    TimeSpan duriation = stop.Date - start.Date;
+        //    Tuple<List<int>, List<int>, List<int>, List<int>> voteViewdata = new Tuple<List<int>, List<int>, List<int>, List<int>>(new List<int>(), new List<int>(), new List<int>(), new List<int>());
+        //    List<string> xA = new List<string>();
+        //    for (int i = 0; i < duriation.Days; ++i)
+        //    {
+        //        int to_vo = 0;
+        //        int to_vi = 0;
+        //        int to_co = 0;
+        //        int to_su = 0;
+        //        foreach (var vo in votes)
+        //            to_vo += vo.Get_Votes(start.AddDays(i+1));
+        //        foreach (var vi in views)
+        //            to_vi += vi.Get_Views(start.AddDays(i+1));
+        //        foreach (var co in comms)
+        //            to_co += co.Get_Comments(start.AddDays(i + 1));
+        //        foreach (var su in subs)
+        //            to_su += su.Get_Subs(start.AddDays(i + 1));
+        //        voteViewdata.Item1.Add(to_vi);
+        //        voteViewdata.Item2.Add(to_vo);
+        //        voteViewdata.Item3.Add(to_co);
+        //        voteViewdata.Item4.Add(to_su);
+        //        xA.Add(start.AddDays(i+1).ToShortDateString());
+        //    }
 
-            object[] viewSeriesObject = new object[voteViewdata.Item1.Count];
-            object[] voteSeriesObject = new object[voteViewdata.Item2.Count];
-            object[] commSeriesObject = new object[voteViewdata.Item3.Count];
-            object[] subsSeriesObject = new object[voteViewdata.Item4.Count];
+        //    object[] viewSeriesObject = new object[voteViewdata.Item1.Count];
+        //    object[] voteSeriesObject = new object[voteViewdata.Item2.Count];
+        //    object[] commSeriesObject = new object[voteViewdata.Item3.Count];
+        //    object[] subsSeriesObject = new object[voteViewdata.Item4.Count];
 
-            voteViewdata.Item1.ToArray().CopyTo(viewSeriesObject, 0);
-            voteViewdata.Item2.ToArray().CopyTo(voteSeriesObject, 0);
-            voteViewdata.Item3.ToArray().CopyTo(commSeriesObject, 0);
-            voteViewdata.Item4.ToArray().CopyTo(subsSeriesObject, 0);
+        //    voteViewdata.Item1.ToArray().CopyTo(viewSeriesObject, 0);
+        //    voteViewdata.Item2.ToArray().CopyTo(voteSeriesObject, 0);
+        //    voteViewdata.Item3.ToArray().CopyTo(commSeriesObject, 0);
+        //    voteViewdata.Item4.ToArray().CopyTo(subsSeriesObject, 0);
 
-            var HChart = new DotNet.Highcharts.Highcharts(chartName);
-            HChart.SetXAxis(new XAxis { Categories = xA.ToArray() });
-            HChart.SetSeries(new Series[] { new Series { Data = new Data(viewSeriesObject), Name = "Views" },
-                                            new Series { Data = new Data(voteSeriesObject), Name = "Votes" },
-                                            new Series { Data = new Data(commSeriesObject), Name = "Comments" },
-                                            new Series { Data = new Data(subsSeriesObject), Name = "Subscriptions" } });
-            HChart.SetTitle(new Title { Text = chartTitle });
+        //    var HChart = new DotNet.Highcharts.Highcharts(chartName);
+        //    HChart.SetXAxis(new XAxis { Categories = xA.ToArray() });
+        //    HChart.SetSeries(new Series[] { new Series { Data = new Data(viewSeriesObject), Name = "Views" },
+        //                                    new Series { Data = new Data(voteSeriesObject), Name = "Votes" },
+        //                                    new Series { Data = new Data(commSeriesObject), Name = "Comments" },
+        //                                    new Series { Data = new Data(subsSeriesObject), Name = "Subscriptions" } });
+        //    HChart.SetTitle(new Title { Text = chartTitle });
 
-            return HChart;
-        }
+        //    return HChart;
+        //}
 
         internal static int Get_Unique_Count(IQueryable<Comment> allComments, DateTime start, DateTime stop)
         {

@@ -38,10 +38,10 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-    name: "User Icon Upload",
-    url: "user_icon_upload/",
-    defaults: new { controller = "ImageUploader", action = "User_Icon_Upload", }
-);
+                name: "User Icon Upload",
+                url: "user_icon_upload/",
+                defaults: new { controller = "ImageUploader", action = "User_Icon_Upload", }
+            );
 
             //========================= Sigil Admin Stuff =================================================
 

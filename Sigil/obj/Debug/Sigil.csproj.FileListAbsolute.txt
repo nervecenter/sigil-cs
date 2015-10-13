@@ -170,7 +170,6 @@ C:\Sigil\Sigil\bin\Sigil.dll.config
 C:\Sigil\Sigil\bin\Sigil.dll
 C:\Sigil\Sigil\bin\Sigil.pdb
 C:\Sigil\Sigil\bin\Antlr3.Runtime.dll
-C:\Sigil\Sigil\bin\DotNet.Highcharts.dll
 C:\Sigil\Sigil\bin\EntityFramework.dll
 C:\Sigil\Sigil\bin\EntityFramework.SqlServer.dll
 C:\Sigil\Sigil\bin\Microsoft.AspNet.Identity.Core.dll

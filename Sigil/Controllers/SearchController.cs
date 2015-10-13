@@ -33,38 +33,62 @@ namespace Sigil.Controllers
 
         public JsonResult SearchDB(string term)
         {
-            List<string> search_list = new List<string>();
-            if(!string.IsNullOrEmpty(term))
+            Dictionary<string, object> search_list = new Dictionary<string, object>();
+            Dictionary<string, string> Final_search_list = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(term))
             {
-                search_list.AddRange(search_users(term));
-                search_list.AddRange(search_orgs(term));
-                search_list.AddRange(search_issues(term));
+                //search_list.AddRange(search_users(term));
+                search_list["Org"] = search_orgs(term);
+                
+                search_list["Issue"] = search_issues(term);
             }
 
-            return Json(search_list, JsonRequestBehavior.AllowGet);
-        }
 
-        public JsonResult SearchOrgs(string term)
-        {
-            List<string> search_list = new List<string>();
-            if (!string.IsNullOrEmpty(term) )
+
+            foreach(string k in search_list.Keys)
             {
-                search_list.AddRange(search_orgs(term));
+                if(k == "Org")
+                {
+                    List<Org> found_orgs = (List<Org>)search_list[k];
+                    foreach(Org o in found_orgs)
+                    {
+                        Final_search_list[o.orgName] = "/" + o.orgName;
+                    }
+                }
+                else if(k == "Issue")
+                {
+                    List<Issue> found_orgs = (List<Issue>)search_list[k];
+                    foreach (Issue i in found_orgs)
+                    {
+                        Final_search_list[i.title] = "/" + i.Org.orgName + "/" + i.Id;
+                    }
+                }
             }
-            return Json(search_list, JsonRequestBehavior.AllowGet);
+
+            return Json(Final_search_list.Select(s => new { label = s.Key, value = s.Value }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SearchOrgs_Cats(string term)
-        {
-            List<string> search_list = new List<string>();
-            if(!string.IsNullOrEmpty(term))
-            {
-                search_list.AddRange(search_orgs(term));
-                search_list.AddRange(search_orgs_and_cats(term));          
-            }
+        //public JsonResult SearchOrgs(string term)
+        //{
+        //    List<string> search_list = new List<string>();
+        //    if (!string.IsNullOrEmpty(term) )
+        //    {
+        //        search_list.AddRange(search_orgs(term));
+        //    }
+        //    return Json(search_list, JsonRequestBehavior.AllowGet);
+        //}
 
-            return Json(search_list, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult SearchOrgs_Cats(string term)
+        //{
+        //    List<string> search_list = new List<string>();
+        //    if(!string.IsNullOrEmpty(term))
+        //    {
+        //        search_list.AddRange(search_orgs(term));
+        //        search_list.AddRange(search_orgs_and_cats(term));          
+        //    }
+
+        //    return Json(search_list, JsonRequestBehavior.AllowGet);
+        //}
 
 
 
@@ -95,25 +119,25 @@ namespace Sigil.Controllers
 
         }
 
-        private List<string> search_orgs(string term)
+        private List<Org> search_orgs(string term)
         {
 
             var qu = from org in dc.Orgs
                           where org.orgName.StartsWith(term)
                           select org;
 
-            return qu.Select(o => o.orgName).ToList();
+            return qu.Select(o => o).ToList();
 
         }
 
-        private List<string> search_issues(string term)
+        private List<Issue> search_issues(string term)
         {
 
             var qu = from iss in dc.Issues
                           where iss.title.StartsWith(term)
                           select iss;
 
-            return qu.Select(i => i.title).ToList();
+            return qu.Select(i => i).ToList();
 
         }
     }

@@ -15,14 +15,6 @@
     <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
     <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
 
-    <script type="text/javascript">
-    $(function () {
-        $('#searchBox').autocomplete({
-            source: '@Url.Action("SearchDB","Search")'
-        });
-    });
-    </script>
-
     @Styles.Render( "~/Content/bootstrap.css" )
     @Styles.Render( "~/Content/bootstrap-theme.css" )
     @Styles.Render( "~/Content/Site.css" )
@@ -38,10 +30,7 @@
         }
     </style>
 
-    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
-    <script type="text/javascript" src="~/Scripts/voting.js"></script>
-    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
-
+  
     <title>Sigil</title>
 </head>
 <body class="page">
@@ -64,9 +53,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-center">
                     <li style="margin-left:30%;width:40%;display:inline-block;">
-                        @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search", style = "padding-left:-50%;width:100%;" } ) ) {
+                        @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new {@class = "navbar-form navbar-left", role = "search", style = "padding-left:-50%;width:100%;" } ) ) {
                             <div class="form-group" style="width:100%;">
-                                <input type="text" class="form-control" placeholder="Search for a company, person, or product" style="width:100%;">
+                                <input id="searchBox" type="text" class="form-control" placeholder="Search for a company, person, or product" autocomplete="on" style="width:100%;">
                             </div>
                         }
                     </li>
@@ -119,8 +108,9 @@
         </div>
     </div>
     @Html.Partial( "_Footer" )
-    @{
-        //}@RenderSection( "scripts", required: false )
-    }
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/voting.js"></script>
+    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
+    <script type="text/javascript" src="~/Scripts/Search.js"></script>
 </body>
 </html>

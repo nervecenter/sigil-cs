@@ -11,7 +11,7 @@
             <ul class="nav navbar-nav navbar-right">
                 @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" } ) ) {
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input id="searchBox" type="text" class="form-control" placeholder="Search">
                     </div>
                 }
                 @Html.Partial( "_LoginPartial" )

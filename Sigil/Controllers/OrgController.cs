@@ -5,9 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-using DotNet.Highcharts;
-using DotNet.Highcharts.Options;
-using DotNet.Highcharts.Helpers;
+
 using Sigil.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
@@ -142,7 +140,7 @@ namespace Sigil.Controllers
 
 
             // MODEL: List of Highcharts to display is out page model
-            List<Highcharts> listOfCharts = new List<Highcharts>();
+            //List<Highcharts> listOfCharts = new List<Highcharts>();
 
 
             // For each day in the week, get that day's views on all issues in the org, group them into a week of integers of views
@@ -171,11 +169,11 @@ namespace Sigil.Controllers
 
 
 
-            var weekChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, "weekChart", "Traffic on " + thisOrg.orgName + " This Month");
+           // var weekChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, "weekChart", "Traffic on " + thisOrg.orgName + " This Month");
 
 
             // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
-            listOfCharts.Add(weekChart);
+           // listOfCharts.Add(weekChart);
             var weekSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
             var weekUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
             List<Issue> Week_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
@@ -198,10 +196,10 @@ namespace Sigil.Controllers
         //========================================= MONTHLY Traffic Data =======================================================================//
 
             // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-            Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
+           // Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
 
             // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
-            listOfCharts.Add(monthChart);
+          //  listOfCharts.Add(monthChart);
             var monthSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
             var monthUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
             List<Issue> Month_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
@@ -228,7 +226,8 @@ namespace Sigil.Controllers
             ViewBag.thisOrg = thisOrg;
 
             // Pass our model list of charts as the model of the view
-            return View(listOfCharts);
+            // return View(listOfCharts);
+            return View();
         }
 
     }
