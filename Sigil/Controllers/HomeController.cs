@@ -7,7 +7,6 @@ using System.Data.Entity;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-
 using PagedList;
 
 namespace Sigil.Controllers {
@@ -25,7 +24,7 @@ namespace Sigil.Controllers {
         }
 
         
-        public ActionResult Index() {
+        public ActionResult Index(int? page) {
             var userID = User.Identity.GetUserId();
 
             if (userID != null)
@@ -34,10 +33,11 @@ namespace Sigil.Controllers {
                 IQueryable<Subscription> userSubs = dc.Subscriptions.Where(s => s.UserId == userID);
 
                 //get all the users issues based on their subscriptions
-                var userIssues = Get_User_Issues(userID, userSubs).ToList();
+                var userIssues = Get_User_Issues(userID, userSubs);
 
                 //sort the users issues by issue rank
-                userIssues.Sort(Rank);
+
+                userIssues.OrderBy(i => Rank);
 
                 //gather all the votes the user made 
                 var user = dc.AspNetUsers.Single(u => u.Id == userID);
@@ -49,8 +49,11 @@ namespace Sigil.Controllers {
                 dc.SubmitChanges();
                 var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
 
-                Tuple<List<Issue>, UserVoteCol> issuesANDvotes = new Tuple<List<Issue>, UserVoteCol>(userIssues, userVotes);
+              
 
+                int num_results_per_page = 6;
+                int pageNumber = (page ?? 1);
+                Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol> issuesANDvotes = new Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>(userIssues.ToPagedList(pageNumber, num_results_per_page), userVotes);
                 return View(issuesANDvotes);
             }
             else 

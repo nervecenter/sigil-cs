@@ -1,13 +1,13 @@
 ﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
 @using Microsoft.Owin.Security
-
-@model Tuple<List<Issue>, UserVoteCol>
+@using PagedList.Mvc;
+@model Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Sigil";
-    List<Issue> issueList = Model.Item1;
+    PagedList.IPagedList<Sigil.Models.Issue> issueList = Model.Item1;
     UserVoteCol voteList = Model.Item2;
 }
 
@@ -20,6 +20,10 @@
                                                                        issue );
             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         }
+        <br />
+        @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
+
+        @Html.PagedListPager(Model.Item1, page => Url.Action("Index","Home", new {page}))
     } else {
         <br />
         <h4>There's nothing here. :( Search for a company, person, or topic to subscribe to!</h4>

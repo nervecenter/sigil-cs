@@ -1,7 +1,7 @@
 ﻿@using Sigil.Models
 @using Microsoft.AspNet.Identity
-@model Tuple<Org, IQueryable<Issue>>
-
+@model Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>
+@using PagedList.Mvc;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -28,5 +28,9 @@
                                                                    issue );
         @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
     }
+    <br />
+    @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
+
+    @Html.PagedListPager(Model.Item2, page => Url.Action("OrgPage","Org", new { page}))
 </div>
 @Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( thisOrg, Sigil.Controllers.AccountController.userSubs( User ) ) )

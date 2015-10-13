@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-
+using PagedList;
 using Sigil.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
@@ -39,7 +39,7 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult OrgPage(string orgURL)
+        public ActionResult OrgPage(string orgURL, int? page)
         {
             // Get the org
             Org thisOrg = dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
@@ -70,7 +70,9 @@ namespace Sigil.Controllers
                                           select issue;
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
-            Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>(thisOrg, issueList);
+            int num_results_per_page = 3;
+            int pageNumber = (page ?? 1);
+            Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, issueList.ToPagedList(pageNumber, num_results_per_page));
 
             ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
 

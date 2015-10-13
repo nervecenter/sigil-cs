@@ -223,3 +223,7 @@ C:\Sigil\Sigil\obj\Debug\Sigil.pdb
 C:\Sigil\Sigil\obj\Debug\Sigil.csprojResolveAssemblyReference.cache
 C:\Sigil\Sigil\bin\ImageProcessor.dll
 C:\Sigil\Sigil\bin\ImageProcessor.Web.dll
+C:\Sigil\Sigil\bin\PagedList.dll
+C:\Sigil\Sigil\bin\PagedList.Mvc.dll
+C:\Sigil\Sigil\bin\PagedList.xml
+C:\Sigil\Sigil\bin\PagedList.Mvc.xml
