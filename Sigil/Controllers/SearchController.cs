@@ -43,8 +43,6 @@ namespace Sigil.Controllers
                 search_list["Issue"] = search_issues(term);
             }
 
-
-
             foreach(string k in search_list.Keys)
             {
                 if(k == "Org")

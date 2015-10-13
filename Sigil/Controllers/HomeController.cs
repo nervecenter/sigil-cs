@@ -8,7 +8,7 @@ using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 
-
+using PagedList;
 
 namespace Sigil.Controllers {
 
