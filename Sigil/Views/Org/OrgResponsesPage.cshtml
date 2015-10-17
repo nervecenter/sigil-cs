@@ -9,7 +9,7 @@
     ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
     UserVoteCol userVotes = ViewBag.userVotes;
-    Subscription userSub = ViewBag.userSub;
+    List<Subscription> userSubs = Sigil.Controllers.AccountController.userSubs( User );
 
     string banner = Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg);
 }
@@ -20,7 +20,15 @@
         <a class="btn btn-warning" href="/@thisOrg.orgURL">Main feed</a>
         <a class="btn btn-default active">Responses</a>
         <a class="btn btn-success">Data</a>
-        <a class="btn btn-primary">Subscribe to @thisOrg.orgName</a>
+        @*<a class="btn btn-primary">Subscribe to @thisOrg.orgName</a>*@
+        <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
+        @if ( !Request.IsAuthenticated ) {
+            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
+        } else if ( userSubs.Any<Subscription>( s => s.OrgId == thisOrg.Id ) ) {
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL')">Unsubscribe from @thisOrg.orgName</a>
+        } else {
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>
+        }
     </div>
     @if ( Model.Item2.Count<Issue>() != 0 ) {
         foreach ( Issue issue in Model.Item2 ) {
@@ -41,4 +49,4 @@
         <h4>There don't appear to be any responses yet.</h4>
     }
 </div>
-@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( thisOrg, Sigil.Controllers.AccountController.userSubs( User ) ) )
+@Html.Partial( "../Shared/_SideBar", userSubs )

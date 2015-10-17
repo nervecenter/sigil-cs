@@ -74,7 +74,8 @@ namespace Sigil.Controllers
             int pageNumber = (page ?? 1);
             Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, issueList.ToPagedList(pageNumber, num_results_per_page));
 
-            ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
+            // This may not actually be necessary.
+            //ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
 
             // Pass our org and issues to the view as the model
             return View(orgAndIssues);
@@ -121,7 +122,8 @@ namespace Sigil.Controllers
             // MODEL: Put the org and the list of issues into a tuple as our page model
             Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, issueList );
 
-            ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
+            // Again, might not actually be necessary.
+            //ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
 
             // Pass our org and issues to the view as the model
             return View( orgAndIssues );
