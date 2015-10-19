@@ -4,8 +4,17 @@ using System.Web.Hosting;
 using Sigil.Models;
 namespace Sigil
 {
+    /// <summary>
+    /// Class that handles error logging for sigil
+    /// </summary>
     public static class ErrorHandler 
     {
+        /// <summary>
+        /// Logs the passed exception and object into the db as well as to a text file on the server
+        /// </summary>
+        /// <param name="source">Object that was created and caused an error</param>
+        /// <param name="e">The associated exception</param>
+        /// <param name="dc">Callers database instance</param>
         public static void Log_Error(Object source, Exception e, SigilDBDataContext dc)
         {
             Log_Error_File(source, e);
@@ -13,6 +22,12 @@ namespace Sigil
 
         }
 
+        /// <summary>
+        /// Logs the passed string as an error. Can be used to log custom errors
+        /// </summary>
+        /// <param name="source">Object that was created and caused an error</param>
+        /// <param name="e">The associated custom error</param>
+        /// <param name="dc">Callers database instance</param>
         public static void Log_Error(Object source, String e, SigilDBDataContext dc)
         {
             Log_Error_File(source, e);
@@ -20,6 +35,11 @@ namespace Sigil
 
         }
 
+        /// <summary>
+        /// Function that takes care of logging an error to the error text file
+        /// </summary>
+        /// <param name="source">Object that was created that is associated with the error</param>
+        /// <param name="e">The passed exception</param>
         private static void Log_Error_File(Object source, Exception e)
         {
             string path = HostingEnvironment.MapPath(@"~/App_Data/");
@@ -29,6 +49,12 @@ namespace Sigil
             w.Close();
         }
 
+        /// <summary>
+        /// Function that handles logging the error to the database so Sigil members can see them remotely
+        /// </summary>
+        /// <param name="dc">Database reference associated with the source</param>
+        /// <param name="source">The object that was created and caused an error</param>
+        /// <param name="e">The associated exception </param>
         private static void Log_Error_DB(SigilDBDataContext dc, Object source, Exception e)
         {
             Error newError = new Error();
@@ -48,6 +74,11 @@ namespace Sigil
 
         }
 
+        /// <summary>
+        /// Same as function above but overloaded to work with a passed string
+        /// </summary>
+        /// <param name="source"> Object that was created and caused an issue</param>
+        /// <param name="e">Passed string used for error</param>
         private static void Log_Error_File(Object source, String e)
         {
             string path = HostingEnvironment.MapPath(@"~/App_Data/");
@@ -57,6 +88,12 @@ namespace Sigil
             w.Close();
         }
 
+        /// <summary>
+        /// Same as function above but overloaded to work with a passed string
+        /// </summary>
+        /// <param name="dc">Database reference associated with object</param>
+        /// <param name="source">Object that was created and caused error</param>
+        /// <param name="e">Passed string assicated with error</param>
         private static void Log_Error_DB(SigilDBDataContext dc, Object source, String e)
         {
             Error newError = new Error();

@@ -13,6 +13,7 @@ using Sigil.Models;
 
 namespace Sigil.Controllers
 {
+
     [Authorize]
     public class AccountController : Controller
     {
@@ -180,6 +181,11 @@ namespace Sigil.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Org Registration function used to add new Org to OrgApp database table for Sigil to review
+        /// </summary>
+        /// <param name="model">OrgRegistration model</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]

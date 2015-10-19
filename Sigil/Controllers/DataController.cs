@@ -15,8 +15,20 @@ using System.IO;
 
 namespace Sigil
 {
+    /// <summary>
+    /// Class that handles transforing Org data into correct format so that it can be visualized usings assiociated Graph API
+    /// </summary>
     static class DataVisualization
     {
+        /// <summary>
+        /// Function used to get total sums of an Issues Views, Votes and Comments over a specificed duration
+        /// </summary>
+        /// <param name="views">Issues view count collection</param>
+        /// <param name="votes">Issues vote count collection</param>
+        /// <param name="comms">Issues comment count collection</param>
+        /// <param name="start">Starting DateTime date</param>
+        /// <param name="stop">Ending DateTime date</param>
+        /// <returns> A tuple of three ints where item1 is total views, item2 is total votes, and item3 is total comments.</returns>
         public static Tuple<int, int, int> Get_Sums(ViewCountCol views, VoteCountCol votes, CommentCountCol comms, DateTime start, DateTime stop)
         {
             int total_views = 0;
@@ -35,7 +47,7 @@ namespace Sigil
         }
 
         /// <summary>
-        /// Gets the total counts of various data for an Org
+        /// Gets the total counts of Views, Votes and Comments over a specificed duration accross all issues of an Org 
         /// </summary>
         /// <param name="views"> Collection of org view counts</param>
         /// <param name="votes"> Collection of org vote counts</param>
@@ -149,6 +161,13 @@ namespace Sigil
         //    return HChart;
         //}
 
+        /// <summary>
+        /// Gets the total number of unique comments for an issues. Unique is defined as different users
+        /// </summary>
+        /// <param name="allComments">A collection of comments for specified issue</param>
+        /// <param name="start">Start datetime</param>
+        /// <param name="stop">End datetime</param>
+        /// <returns>Returns and interger that is the total number of unique commentors.</returns>
         internal static int Get_Unique_Count(IQueryable<Comment> allComments, DateTime start, DateTime stop)
         {
             Dictionary<Tuple<string, int>, int> unique_users = new Dictionary<Tuple<string, int>, int>();
