@@ -15,6 +15,11 @@
     color: #494949;
 }
 
+.header-user-icon {
+	height:40px;
+    margin-top:5px;
+}
+
 /*.navbar-center > li {
     float: none;
     display: inline-block;
@@ -315,13 +320,7 @@ a:hover {
 	text-decoration: none;
 }
 
-.header-user-icon {
-	height: 2.5em;
-	vertical-align: middle;
-	border: 0.1em #FFF solid;
-	margin-right: 0.5em;
-	margin-left: 1em;
-}
+
 
 .search-box-form {
 	float: left;

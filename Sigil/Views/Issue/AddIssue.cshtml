@@ -1,9 +1,9 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Sigil - Submit a thought";
+    ViewBag.Title = "Sigil - Submit new feedback";
 }
 
-<script type="text/javascript">
+@*<script type="text/javascript">
     $(function () {
         $('#orgBox').autocomplete({
             source: '@Url.Action("SearchOrgs_Cats", "Search")'
@@ -66,12 +66,13 @@
         submitbutton.formAction = "@Url.Action("AddIssue", "Issue")";
         submitp.appendChild(submitbutton);
     }
-</script>
+</script>*@
 
+<script type="text/javascript" src="~/Scripts/addissueform.js"></script>
 
 <div class="col-md-9 col-lg-9">
     <h2>Post new feedback</h2>
-    <form>
+    <form id="add-issue-form">
         <div class="form-group">
             <label for="text">Company, person, or product:</label><br />
             <input id="orgBox" class="form-control" type="text" name="orgName" value="@Request.Form["orgName"]" placeholder="Enter a company, person, or product" />
@@ -80,5 +81,5 @@
             <label for="text">Summary:</label><br />
             <input id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" oninput="appendAddTextButton()" placeholder="Search to see if your suggestion, idea, or issue has already been posted" />
         </div>
-</form>
+    </form>
 </div>
