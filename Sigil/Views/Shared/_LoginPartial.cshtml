@@ -2,8 +2,10 @@
 @using Sigil.Models
 
 @if ( Request.IsAuthenticated ) {
-    <img class="img-rounded img-responsive" src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(User.Identity.GetUserId()))">
-    <li>@Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { } )</li>
+    <li>
+        <img class="img-rounded img-responsive header-user-icon pull-left" src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(User.Identity.GetUserId()))">
+        @Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right" } )
+    </li>
     <li>
         <a href="javascript:document.getElementById('logoutForm').submit()">
             @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm" } ) ) {

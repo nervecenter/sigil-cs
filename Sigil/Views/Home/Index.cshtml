@@ -29,4 +29,4 @@
         <h4>There's nothing here. :( Search for a company, person, or topic to subscribe to!</h4>
     }
 </div>
-@Html.Partial( "../Shared/_SideBar", new Tuple<Org, List<Subscription>>( default(Org), Sigil.Controllers.AccountController.userSubs( User ) ) )
+@Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
