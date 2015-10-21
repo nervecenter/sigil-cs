@@ -51,6 +51,29 @@
     background-size: cover;
 }
 
+#notifications-shade {
+    position: absolute;
+    top: 50px;
+    right: 140px;
+    max-width: 300px;
+}
+
+.callout {
+    position: relative;
+    float: right;
+    margin-right:20px;
+    z-index: 10000;
+}
+
+.notifications-panel {
+    position: relative;
+    top: 10px;
+    font-size: 12px;
+}
+
+.notification-icon {
+    width: 35px;
+}
 
 .header-user-icon {
 	height:40px;
