@@ -68,7 +68,6 @@
     <section class="splash">
         <div class="splash-back-darken"></div>
         <div class="splash-back"></div>
-        <!--<img class="sale-back-img" src="../Content/Images/saleback.jpg"></img>-->
         <div class="container" style="max-width:800px; margin-top:-380px;">
             <div class="row" style="margin-bottom:40px;">
                 <div class="col-lg-12 col-centered" style="max-width:350px;">
@@ -102,7 +101,7 @@
             @foreach ( var group in Model ) {
                 <div class="col-md-4 col-lg-4">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><a href="/@group.Key.orgName"><img src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(group.Key))" style="margin-right:5px;"/>@group.Key.orgName</a></div>
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(group.Key))" style="margin-right:5px;"/>@group.Key.orgName</a></div>
                         @*<div class="panel-body"></div>*@
                         @foreach ( Issue issue in group ) {
                             var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false, showUser = false, userVoted = false }, issue );
