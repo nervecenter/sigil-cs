@@ -15,3 +15,7 @@ $('#searchBox').autocomplete({
     }
 });
 
+$('#orgBox').autocomplete({
+    source: 'search/Orgs_Cats',
+
+});

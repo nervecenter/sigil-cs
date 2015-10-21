@@ -512,7 +512,7 @@ namespace Sigil.Controllers
             if (to_user != null || to_org != null)
             {
                 var to_user_id = from users in dc.AspNetUsers
-                                 where users.UserName == to_user
+                                 where users.DisplayName == to_user
                                  select users.Id;
 
                 var to_org_id = from org in dc.Orgs

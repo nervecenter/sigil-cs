@@ -154,7 +154,7 @@ namespace Sigil.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, DisplayName = model.DisplayName};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -166,7 +166,7 @@ namespace Sigil.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                   
+                    
                     Create_User_Extras(user.Id);
 
                     return RedirectToAction("Index", "Home");
@@ -205,7 +205,7 @@ namespace Sigil.Controllers
             OrgApp newOrg = new OrgApp();
             newOrg.orgName = model.orgName;
             newOrg.orgUrl = model.orgURL;
-            newOrg.username = model.UserName;
+            newOrg.username = model.DisplayName;
             newOrg.website = model.orgWebsite;
             newOrg.contact = model.orgContact;
             newOrg.comment = model.orgComment;

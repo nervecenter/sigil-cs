@@ -1,9 +1,4 @@
-﻿$(function () {
-    $('#orgBox').autocomplete({
-        source: '@Url.Action("SearchOrgs_Cats", "Search")'
-    });
-});
-
+﻿
 function appendAddTextButton() {
     /*// Get the fieldset we'll be adding to
     var fieldset = document.getElementById("add-issue-fieldset");

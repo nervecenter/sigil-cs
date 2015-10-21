@@ -258,7 +258,7 @@ namespace Sigil
                 if(img != null && img.ContentLength > 0)
                 {
                     var userid = User.Identity.GetUserId();
-                    string user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).UserName;
+                    string user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).DisplayName;
                     if(userid == null)
                     {
                         ErrorHandler.Log_Error(userid, "No user for Userid", dc);

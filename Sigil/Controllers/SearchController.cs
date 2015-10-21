@@ -22,7 +22,7 @@ namespace Sigil.Controllers
         public ActionResult Index(string term)
         {
 
-            var quUsers = dc.AspNetUsers.Where(u => u.UserName.StartsWith(term)).ToList();
+            var quUsers = dc.AspNetUsers.Where(u => u.DisplayName.StartsWith(term)).ToList();
             var quOrgs = dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();
             var quIssues = dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
 
@@ -76,17 +76,17 @@ namespace Sigil.Controllers
         //    return Json(search_list, JsonRequestBehavior.AllowGet);
         //}
 
-        //public JsonResult SearchOrgs_Cats(string term)
-        //{
-        //    List<string> search_list = new List<string>();
-        //    if(!string.IsNullOrEmpty(term))
-        //    {
-        //        search_list.AddRange(search_orgs(term));
-        //        search_list.AddRange(search_orgs_and_cats(term));          
-        //    }
+        public JsonResult SearchOrgs_Cats(string term)
+        {
+            List<string> search_list = new List<string>();
+            if (!string.IsNullOrEmpty(term))
+            {
+                search_list.AddRange(search_orgs(term).Select(o => o.orgName));
+                search_list.AddRange(search_orgs_and_cats(term));
+            }
 
-        //    return Json(search_list, JsonRequestBehavior.AllowGet);
-        //}
+            return Json(search_list, JsonRequestBehavior.AllowGet);
+        }
 
 
 
@@ -110,10 +110,10 @@ namespace Sigil.Controllers
         {
 
             var qu = from user in dc.AspNetUsers
-                          where user.UserName.StartsWith(term)
+                          where user.DisplayName.StartsWith(term)
                           select user;
 
-            return qu.Select(u => u.UserName).ToList();
+            return qu.Select(u => u.DisplayName).ToList();
 
         }
 
