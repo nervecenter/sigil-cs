@@ -7,7 +7,6 @@ using ImageProcessor;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-
 using System.Data.SqlTypes;
 using ImageProcessor.Imaging.Formats;
 using System.Drawing;
@@ -222,12 +221,16 @@ namespace Sigil
             private SigilDBDataContext dc;
 
             enum imgType{
-                user_icon, org_icon, banner_small, banner_large
+                user_icon, org_icon_100, org_icon_20, banner
             };
+
+           
 
             private static string org_folder_path = "C:/Sigil/Sigil/Images/Org/";
             private static string user_folder_path = "C:/Sigil/Sigil/Images/User/";
             private static string tmp_upload_path = "C:/Sigil/Sigil/Images/TMP/";
+            private static string default_folder_path = "C:/Sigil/Sigil/Images/Default/";
+
             public ImageUploaderController()
             {
                 dc = new SigilDBDataContext();
@@ -246,6 +249,7 @@ namespace Sigil
 
                 return View("Manage");
             }
+
 
 
             public ActionResult User_Icon_Upload()
@@ -320,7 +324,22 @@ namespace Sigil
                             
 
                         }
+                        else if(type == imgType.org_icon_100)
+                        {
 
+                        }
+                        else if(type == imgType.org_icon_20)
+                        {
+
+                        }
+                        else if(type == imgType.banner)
+                        {
+
+                        }
+                        else
+                        {
+                            //Something went wrong
+                        }
 
                         var final_img = System.IO.File.Create(final_path);
                         outStream.Seek(0, SeekOrigin.Begin);
@@ -338,28 +357,125 @@ namespace Sigil
         public class ImageController<T> : Controller
         {
             private static SigilDBDataContext dc = new SigilDBDataContext();
-            private static string default_img_path = "../Images/Default/";
+            private static string default_folder_path = "../Images/Default/";
             private static string org_folder_path = "../Images/Org/";
             private static string user_folder_path = "../Images/User/";
 
-
-            //=============================== User Icon Functions ==================================================//
-            public static string Get_Icon_20(string id)
+            //=============================== Default Image Assignment Functions ====================================//
+            /// <summary>
+            /// Assigns randomly 1 of 5 possible default icons of size 100 to passed user
+            /// </summary>
+            /// <param name="userID">Id of user that is getting default image assigned.</param>
+            public static void Assign_Default_Icon(string userID)
             {
+                int defaultIMG = RNG.RandomNumber(1, 6);
+
+                string IMG_PATH = "default" + defaultIMG + ".png";
+
                 try
                 {
-                    return user_folder_path + dc.Images.Single(i => i.UserId == id).icon_20;
+                    Sigil.Models.Image userImg = new Sigil.Models.Image();
+                    userImg.UserId = userID;
+                    userImg.icon_100 = IMG_PATH;
+                    dc.Images.InsertOnSubmit(userImg);
+                    dc.SubmitChanges();
                 }
                 catch (Exception e)
                 {
-                    if (!(e.InnerException is ArgumentNullException))
-                    {
-                        ErrorHandler.Log_Error(id, e, dc);
-                    }
-                    return default_img_path + "default_icon_20.png";
+                    ErrorHandler.Log_Error(userID, e, dc);
                 }
             }
 
+            /// <summary>
+            /// Assigns randomly 1 of 5 possible default icons of size 100 to passed org
+            /// </summary>
+            /// <param name="orgID">Id of org that is getting defaut image assigned.</param>
+            public static void Assign_Default_Icon(int orgID)
+            {
+                int defaultIMG = RNG.RandomNumber(1, 6);
+
+                string IMG_PATH = "default" + defaultIMG + ".png";
+
+                try
+                {
+                    Sigil.Models.Image Img = new Sigil.Models.Image();
+                    Img.OrgId = orgID;
+                    Img.icon_100 = IMG_PATH;
+                    dc.Images.InsertOnSubmit(Img);
+                    dc.SubmitChanges();
+                }
+                catch (Exception e)
+                {
+                    ErrorHandler.Log_Error(orgID, e, dc);
+                }
+            }
+
+            /// <summary>
+            /// Assigns default icon of size 20 to passed id of either an org or Topic
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <param name="caller">Either the Type Org or Topic</param>
+            public static void Assign_Default_Icon20(int ID, T caller)
+            {
+                string IMG_PATH = "default20.png";
+
+                try
+                {
+                    Sigil.Models.Image Img = new Sigil.Models.Image();
+
+                    if (caller is Org)
+                        Img.OrgId = ID;
+                    else if (caller is Topic)
+                        Img.TopicId = ID;
+                    else
+                    {
+                        throw new Exception("Passed caller is not an Org or Topic");
+                    }
+                    Img.icon_20 = IMG_PATH;
+                    dc.Images.InsertOnSubmit(Img);
+                    dc.SubmitChanges();
+                }
+                catch (Exception e)
+                {
+                    ErrorHandler.Log_Error(ID, e, dc);
+                }
+            }
+
+            /// <summary>
+            /// Assigns 1 out of 2 possible default banners to passed in Org or Topic
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <param name="caller"></param>
+            public static void Assign_Default_Banner(int ID, T caller)
+            {
+                int defaultIMG = RNG.RandomNumber(1, 3);
+
+                string IMG_PATH = "default_Banner" + defaultIMG + ".png";
+
+                try
+                {
+                    Sigil.Models.Image Img = new Sigil.Models.Image();
+
+                    if (caller is Org)
+                        Img.OrgId = ID;
+                    else if (caller is Topic)
+                        Img.TopicId = ID;
+                    else
+                    {
+                        throw new Exception("Passed caller is not an Org or Topic");
+                    }
+
+                    Img.banner = IMG_PATH;
+                    dc.Images.InsertOnSubmit(Img);
+                    dc.SubmitChanges();
+                }
+                catch (Exception e)
+                {
+                    ErrorHandler.Log_Error(ID, e, dc);
+                }
+            }
+
+            //=============================== User Icon Functions ==================================================//
 
             public static string Get_Icon_100(string userId)
             {
@@ -373,29 +489,13 @@ namespace Sigil
                     {
                         ErrorHandler.Log_Error(userId, e, dc);
                     }
-                    return default_img_path + "default_icon_100.png";
+                    return default_folder_path + "default1.png";
                 }
             }
 
 
             //============================= Org/Cat/Topic Functions ==============================================//
 
-            public static string Get_Icon_15(T caller)
-            {
-                try
-                {
-                    var entry = Get_DB_Entry(caller);
-                    return org_folder_path + entry.icon_15;
-                }
-                catch(Exception e)
-                {
-                    if (!(e.InnerException is ArgumentNullException))
-                    {
-                        ErrorHandler.Log_Error(caller, e, dc);
-                    }
-                    return default_img_path + "default_icon_15.png";                   
-                }
-            }
 
             public static string Get_Icon_20(T caller)
             {
@@ -410,7 +510,7 @@ namespace Sigil
                     {
                         ErrorHandler.Log_Error(caller, e, dc);
                     }
-                    return default_img_path + "default_icon_20.png";
+                    return default_folder_path + "default20.png";
                 }
             }
 
@@ -427,16 +527,16 @@ namespace Sigil
                     {
                         ErrorHandler.Log_Error(caller, e, dc);
                     }
-                    return default_img_path + "default_icon_100.png";
+                    return default_folder_path + "default2.png";
                 }
             }
 
-            public static string Get_Banner_Tall(T caller)
+            public static string Get_Banner(T caller)
             {
                 try
                 {
                     var entry = Get_DB_Entry(caller);
-                    return org_folder_path + entry.banner_tall;
+                    return org_folder_path + entry.banner;
                 }
                 catch (Exception e)
                 {
@@ -444,26 +544,11 @@ namespace Sigil
                     {
                         ErrorHandler.Log_Error(caller, e, dc);
                     }
-                    return default_img_path + "default_banner_tall.png";
+                    return default_folder_path + "default_banner.png";
                 }
             }
 
-            public static string Get_Banner_Short(T caller)
-            {
-                try
-                {
-                    var entry = Get_DB_Entry(caller);
-                    return org_folder_path + entry.banner_short;
-                }
-                catch (Exception e)
-                {
-                    if (!(e.InnerException is ArgumentNullException))
-                    {
-                        ErrorHandler.Log_Error(caller, e, dc);
-                    }
-                    return default_img_path + "default_banner_short.png";
-                }
-            }
+           
 
             private static Sigil.Models.Image Get_DB_Entry(T caller)
             {

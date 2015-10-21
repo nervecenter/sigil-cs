@@ -19,7 +19,7 @@
 }
 
 <div class="col-md-9 col-lg-9">
-    <img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg))">
+    <img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-warning" href="/@thisOrg.orgURL">Main feed</a>
         <a class="btn btn-info" href="/@thisOrg.orgURL/responses">Responses</a>

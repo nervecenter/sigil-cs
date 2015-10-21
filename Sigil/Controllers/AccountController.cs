@@ -159,12 +159,15 @@ namespace Sigil.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                   
+                    Create_User_Extras(user.Id);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -173,6 +176,14 @@ namespace Sigil.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        /// <summary>
+        /// Function that handles all setting up all the users extra database entries for the site.
+        /// </summary>
+        private void Create_User_Extras(string userID)
+        {
+            ImageController<AspNetUser>.Assign_Default_Icon(userID);
         }
 
         [AllowAnonymous]

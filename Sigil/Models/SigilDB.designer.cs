@@ -66,9 +66,6 @@ namespace Sigil.Models
     partial void InsertOrg(Org instance);
     partial void UpdateOrg(Org instance);
     partial void DeleteOrg(Org instance);
-    partial void InsertImage(Image instance);
-    partial void UpdateImage(Image instance);
-    partial void DeleteImage(Image instance);
     partial void InsertCommentCount(CommentCount instance);
     partial void UpdateCommentCount(CommentCount instance);
     partial void DeleteCommentCount(CommentCount instance);
@@ -81,6 +78,9 @@ namespace Sigil.Models
     partial void InsertError(Error instance);
     partial void UpdateError(Error instance);
     partial void DeleteError(Error instance);
+    partial void InsertImage(Image instance);
+    partial void UpdateImage(Image instance);
+    partial void DeleteImage(Image instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -209,14 +209,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Image> Images
-		{
-			get
-			{
-				return this.GetTable<Image>();
-			}
-		}
-		
 		public System.Data.Linq.Table<CommentCount> CommentCounts
 		{
 			get
@@ -246,6 +238,14 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<Error>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Image> Images
+		{
+			get
+			{
+				return this.GetTable<Image>();
 			}
 		}
 	}
@@ -3797,448 +3797,6 @@ namespace Sigil.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Images")]
-	public partial class Image : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _OrgId;
-		
-		private string _UserId;
-		
-		private string _icon_15;
-		
-		private string _icon_20;
-		
-		private string _icon_100;
-		
-		private string _banner_tall;
-		
-		private string _banner_short;
-		
-		private int _CatId;
-		
-		private int _TopicId;
-		
-		private EntityRef<Org> _Org;
-		
-		private EntityRef<AspNetUser> _AspNetUser;
-		
-		private EntityRef<Topic> _Topic;
-		
-		private EntityRef<Category> _Category;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnOrgIdChanging(int value);
-    partial void OnOrgIdChanged();
-    partial void OnUserIdChanging(string value);
-    partial void OnUserIdChanged();
-    partial void Onicon_15Changing(string value);
-    partial void Onicon_15Changed();
-    partial void Onicon_20Changing(string value);
-    partial void Onicon_20Changed();
-    partial void Onicon_100Changing(string value);
-    partial void Onicon_100Changed();
-    partial void Onbanner_tallChanging(string value);
-    partial void Onbanner_tallChanged();
-    partial void Onbanner_shortChanging(string value);
-    partial void Onbanner_shortChanged();
-    partial void OnCatIdChanging(int value);
-    partial void OnCatIdChanged();
-    partial void OnTopicIdChanging(int value);
-    partial void OnTopicIdChanged();
-    #endregion
-		
-		public Image()
-		{
-			this._Org = default(EntityRef<Org>);
-			this._AspNetUser = default(EntityRef<AspNetUser>);
-			this._Topic = default(EntityRef<Topic>);
-			this._Category = default(EntityRef<Category>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
-		public int OrgId
-		{
-			get
-			{
-				return this._OrgId;
-			}
-			set
-			{
-				if ((this._OrgId != value))
-				{
-					if (this._Org.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrgIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrgId = value;
-					this.SendPropertyChanged("OrgId");
-					this.OnOrgIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._AspNetUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_icon_15", DbType="NVarChar(MAX)")]
-		public string icon_15
-		{
-			get
-			{
-				return this._icon_15;
-			}
-			set
-			{
-				if ((this._icon_15 != value))
-				{
-					this.Onicon_15Changing(value);
-					this.SendPropertyChanging();
-					this._icon_15 = value;
-					this.SendPropertyChanged("icon_15");
-					this.Onicon_15Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_icon_20", DbType="NVarChar(MAX)")]
-		public string icon_20
-		{
-			get
-			{
-				return this._icon_20;
-			}
-			set
-			{
-				if ((this._icon_20 != value))
-				{
-					this.Onicon_20Changing(value);
-					this.SendPropertyChanging();
-					this._icon_20 = value;
-					this.SendPropertyChanged("icon_20");
-					this.Onicon_20Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_icon_100", DbType="NVarChar(MAX)")]
-		public string icon_100
-		{
-			get
-			{
-				return this._icon_100;
-			}
-			set
-			{
-				if ((this._icon_100 != value))
-				{
-					this.Onicon_100Changing(value);
-					this.SendPropertyChanging();
-					this._icon_100 = value;
-					this.SendPropertyChanged("icon_100");
-					this.Onicon_100Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_banner_tall", DbType="NVarChar(MAX)")]
-		public string banner_tall
-		{
-			get
-			{
-				return this._banner_tall;
-			}
-			set
-			{
-				if ((this._banner_tall != value))
-				{
-					this.Onbanner_tallChanging(value);
-					this.SendPropertyChanging();
-					this._banner_tall = value;
-					this.SendPropertyChanged("banner_tall");
-					this.Onbanner_tallChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_banner_short", DbType="NVarChar(MAX)")]
-		public string banner_short
-		{
-			get
-			{
-				return this._banner_short;
-			}
-			set
-			{
-				if ((this._banner_short != value))
-				{
-					this.Onbanner_shortChanging(value);
-					this.SendPropertyChanging();
-					this._banner_short = value;
-					this.SendPropertyChanged("banner_short");
-					this.Onbanner_shortChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CatId", DbType="Int NOT NULL")]
-		public int CatId
-		{
-			get
-			{
-				return this._CatId;
-			}
-			set
-			{
-				if ((this._CatId != value))
-				{
-					if (this._Category.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCatIdChanging(value);
-					this.SendPropertyChanging();
-					this._CatId = value;
-					this.SendPropertyChanged("CatId");
-					this.OnCatIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TopicId", DbType="Int NOT NULL")]
-		public int TopicId
-		{
-			get
-			{
-				return this._TopicId;
-			}
-			set
-			{
-				if ((this._TopicId != value))
-				{
-					if (this._Topic.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTopicIdChanging(value);
-					this.SendPropertyChanging();
-					this._TopicId = value;
-					this.SendPropertyChanged("TopicId");
-					this.OnTopicIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Image", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
-		public Org Org
-		{
-			get
-			{
-				return this._Org.Entity;
-			}
-			set
-			{
-				Org previousValue = this._Org.Entity;
-				if (((previousValue != value) 
-							|| (this._Org.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Org.Entity = null;
-						previousValue.Images.Remove(this);
-					}
-					this._Org.Entity = value;
-					if ((value != null))
-					{
-						value.Images.Add(this);
-						this._OrgId = value.Id;
-					}
-					else
-					{
-						this._OrgId = default(int);
-					}
-					this.SendPropertyChanged("Org");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Image", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
-		public AspNetUser AspNetUser
-		{
-			get
-			{
-				return this._AspNetUser.Entity;
-			}
-			set
-			{
-				AspNetUser previousValue = this._AspNetUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetUser.Entity = null;
-						previousValue.Images.Remove(this);
-					}
-					this._AspNetUser.Entity = value;
-					if ((value != null))
-					{
-						value.Images.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(string);
-					}
-					this.SendPropertyChanged("AspNetUser");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Image", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
-		public Topic Topic
-		{
-			get
-			{
-				return this._Topic.Entity;
-			}
-			set
-			{
-				Topic previousValue = this._Topic.Entity;
-				if (((previousValue != value) 
-							|| (this._Topic.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Topic.Entity = null;
-						previousValue.Images.Remove(this);
-					}
-					this._Topic.Entity = value;
-					if ((value != null))
-					{
-						value.Images.Add(this);
-						this._TopicId = value.Id;
-					}
-					else
-					{
-						this._TopicId = default(int);
-					}
-					this.SendPropertyChanged("Topic");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Image", Storage="_Category", ThisKey="CatId", OtherKey="Id", IsForeignKey=true)]
-		public Category Category
-		{
-			get
-			{
-				return this._Category.Entity;
-			}
-			set
-			{
-				Category previousValue = this._Category.Entity;
-				if (((previousValue != value) 
-							|| (this._Category.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Category.Entity = null;
-						previousValue.Images.Remove(this);
-					}
-					this._Category.Entity = value;
-					if ((value != null))
-					{
-						value.Images.Add(this);
-						this._CatId = value.Id;
-					}
-					else
-					{
-						this._CatId = default(int);
-					}
-					this.SendPropertyChanged("Category");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CommentCount")]
 	public partial class CommentCount : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -4846,6 +4404,400 @@ namespace Sigil.Models
 					this._error_exception = value;
 					this.SendPropertyChanged("error_exception");
 					this.Onerror_exceptionChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Images")]
+	public partial class Image : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _OrgId;
+		
+		private string _UserId;
+		
+		private int _CatId;
+		
+		private int _TopicId;
+		
+		private string _icon_20;
+		
+		private string _icon_100;
+		
+		private string _banner;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+		private EntityRef<Topic> _Topic;
+		
+		private EntityRef<Category> _Category;
+		
+		private EntityRef<Org> _Org;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnOrgIdChanging(int value);
+    partial void OnOrgIdChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
+    partial void OnCatIdChanging(int value);
+    partial void OnCatIdChanged();
+    partial void OnTopicIdChanging(int value);
+    partial void OnTopicIdChanged();
+    partial void Onicon_20Changing(string value);
+    partial void Onicon_20Changed();
+    partial void Onicon_100Changing(string value);
+    partial void Onicon_100Changed();
+    partial void OnbannerChanging(string value);
+    partial void OnbannerChanged();
+    #endregion
+		
+		public Image()
+		{
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			this._Topic = default(EntityRef<Topic>);
+			this._Category = default(EntityRef<Category>);
+			this._Org = default(EntityRef<Org>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
+		public int OrgId
+		{
+			get
+			{
+				return this._OrgId;
+			}
+			set
+			{
+				if ((this._OrgId != value))
+				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOrgIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrgId = value;
+					this.SendPropertyChanged("OrgId");
+					this.OnOrgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CatId", DbType="Int NOT NULL")]
+		public int CatId
+		{
+			get
+			{
+				return this._CatId;
+			}
+			set
+			{
+				if ((this._CatId != value))
+				{
+					if (this._Category.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCatIdChanging(value);
+					this.SendPropertyChanging();
+					this._CatId = value;
+					this.SendPropertyChanged("CatId");
+					this.OnCatIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TopicId", DbType="Int NOT NULL")]
+		public int TopicId
+		{
+			get
+			{
+				return this._TopicId;
+			}
+			set
+			{
+				if ((this._TopicId != value))
+				{
+					if (this._Topic.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTopicIdChanging(value);
+					this.SendPropertyChanging();
+					this._TopicId = value;
+					this.SendPropertyChanged("TopicId");
+					this.OnTopicIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_icon_20", DbType="NVarChar(MAX)")]
+		public string icon_20
+		{
+			get
+			{
+				return this._icon_20;
+			}
+			set
+			{
+				if ((this._icon_20 != value))
+				{
+					this.Onicon_20Changing(value);
+					this.SendPropertyChanging();
+					this._icon_20 = value;
+					this.SendPropertyChanged("icon_20");
+					this.Onicon_20Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_icon_100", DbType="NVarChar(MAX)")]
+		public string icon_100
+		{
+			get
+			{
+				return this._icon_100;
+			}
+			set
+			{
+				if ((this._icon_100 != value))
+				{
+					this.Onicon_100Changing(value);
+					this.SendPropertyChanging();
+					this._icon_100 = value;
+					this.SendPropertyChanged("icon_100");
+					this.Onicon_100Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_banner", DbType="NVarChar(MAX)")]
+		public string banner
+		{
+			get
+			{
+				return this._banner;
+			}
+			set
+			{
+				if ((this._banner != value))
+				{
+					this.OnbannerChanging(value);
+					this.SendPropertyChanging();
+					this._banner = value;
+					this.SendPropertyChanged("banner");
+					this.OnbannerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Image", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.Images.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.Images.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Image", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
+		public Topic Topic
+		{
+			get
+			{
+				return this._Topic.Entity;
+			}
+			set
+			{
+				Topic previousValue = this._Topic.Entity;
+				if (((previousValue != value) 
+							|| (this._Topic.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Topic.Entity = null;
+						previousValue.Images.Remove(this);
+					}
+					this._Topic.Entity = value;
+					if ((value != null))
+					{
+						value.Images.Add(this);
+						this._TopicId = value.Id;
+					}
+					else
+					{
+						this._TopicId = default(int);
+					}
+					this.SendPropertyChanged("Topic");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Image", Storage="_Category", ThisKey="CatId", OtherKey="Id", IsForeignKey=true)]
+		public Category Category
+		{
+			get
+			{
+				return this._Category.Entity;
+			}
+			set
+			{
+				Category previousValue = this._Category.Entity;
+				if (((previousValue != value) 
+							|| (this._Category.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Category.Entity = null;
+						previousValue.Images.Remove(this);
+					}
+					this._Category.Entity = value;
+					if ((value != null))
+					{
+						value.Images.Add(this);
+						this._CatId = value.Id;
+					}
+					else
+					{
+						this._CatId = default(int);
+					}
+					this.SendPropertyChanged("Category");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Image", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.Images.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.Images.Add(this);
+						this._OrgId = value.Id;
+					}
+					else
+					{
+						this._OrgId = default(int);
+					}
+					this.SendPropertyChanged("Org");
 				}
 			}
 		}

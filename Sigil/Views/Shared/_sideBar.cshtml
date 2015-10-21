@@ -17,11 +17,11 @@
             <div class="panel-body">
                 @foreach ( Subscription sub in userSubs ) {
                     if ( sub.OrgId != 0 && sub.CatId == 0 ) {
-                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="../Content/Images/orgicons/@(sub.Org.orgURL)_15.png">@sub.Org.orgName</a><br>
+                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" style="width:15px; height:15px;" src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(sub.Org))">@sub.Org.orgName</a><br>
                     } else if ( sub.CatId != 0 ) {
-                        <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="../Content/Images/caticons/@(sub.Category.catURL)_15.png">@sub.Category.catName</a><br>
+                        <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Category>.Get_Icon_20(sub.Category))">@sub.Category.catName</a><br>
                     } else {
-                        <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="../Content/Images/topicicons/@(sub.Topic.topicURL)_15.png">@sub.Topic.topicURL</a><br>
+                        <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Topic>.Get_Icon_20(sub.Topic))">@sub.Topic.topicURL</a><br>
                     }
                 }
             </div>
