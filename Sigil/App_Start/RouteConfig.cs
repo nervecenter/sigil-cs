@@ -26,6 +26,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Features",
+                url: "features/",
+                defaults: new { controller = "Home", action = "FeaturesPage" }
+            );
+
+            routes.MapRoute(
                 name: "About",
                 url: "about/",
                 defaults: new { controller = "Home", action = "About" }
@@ -87,7 +93,7 @@ namespace Sigil {
                 name: "Manage",
                 url: "manage/",
                 defaults: new { controller = "Manage", action = "Index" }
-                );
+            );
             //========================= Search Controller ==================================================================
             routes.MapRoute(
                 name: "Search for Header Dropdown",

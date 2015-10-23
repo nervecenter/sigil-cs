@@ -70,6 +70,9 @@ namespace Sigil.Controllers {
             return View("LandingPage", trending_topics);
         }
 
+        public ActionResult FeaturesPage() {
+            return View( "FeaturesPage" );
+        }
 
         public ActionResult Legal()
         {
