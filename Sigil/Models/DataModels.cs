@@ -410,6 +410,10 @@ namespace Sigil.Models
             return ccArray.GetEnumerator();
         }
 
+        /// <summary>
+        /// Don't use this to add a new day to the collection. Use Update instead.
+        /// </summary>
+        /// <param name="newVCW">Don't do it you fool.</param>
         public void Add(CommentCountDay newVCW)
         {
             ccArray.Add(newVCW);

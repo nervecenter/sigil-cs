@@ -69,7 +69,8 @@ namespace Sigil.Controllers
             if (Request.HttpMethod == "POST")
             {
                 // Create a new issue
-                Create_New_Comment(thisIssue, userID);
+                
+                CommentController.Create_New_Comment(Request, thisIssue, userID);
             }
 
             // Get the user's vote on this issues if it exists
@@ -136,47 +137,7 @@ namespace Sigil.Controllers
             }
         }
 
-        /// <summary>
-        /// Creates a new comment and saves to DB
-        /// </summary>
-        /// <param name="thisIssue">Issue the comment is for</param>
-        /// <param name="userID">Comment creators user ID</param>
-        private void Create_New_Comment(Issue thisIssue, string userID)
-        {
-            Comment newComment = new Comment();
-            
-            // Increment Id, drop in current user and date, set default weight, drop in the form text
-            newComment.issueId = thisIssue.Id;
-            newComment.UserId = userID;
-            newComment.postDate = DateTime.UtcNow;
-            newComment.editTime = DateTime.UtcNow;
-            newComment.lastVoted = DateTime.UtcNow;
-            newComment.votes = 1;
 
-            newComment.text = Request.Form["text"];
-            Notification_Check(newComment.text, userID);
-
-            var commentData = dc.CommentCounts.Single(c => c.OrgId == thisIssue.OrgId && c.IssueId == thisIssue.Id);
-
-            var commDataCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
-            commDataCol.Update();
-            commentData.count = CountXML<CommentCountCol>.DATAtoXML(commDataCol);   
-
-            // Try to submit the issue and go to the issue page; otherwise, write an error
-            try
-            {
-                dc.Comments.InsertOnSubmit(newComment);
-
-                dc.SubmitChanges();
-            }
-            catch (Exception e)
-            {
-                //WRITE TO ERROR FILE
-                ErrorHandler.Log_Error(newComment, e, dc);
-                //ErrorHandler.Log_Error(commentData, e);
-
-            }
-        }
 
         /// <summary>
         /// Updates the total view count of the passed in issue.
@@ -494,48 +455,7 @@ namespace Sigil.Controllers
             return new EmptyResult();
         }
 
-        private void Notification_Check(string text, string user)
-        {
-            string to_user = null;
-            string to_org = null;
-            var text_words = text.Split(' ');
-            foreach (string t in text_words)
-            {
-                if (t[0] == '@')
-                {
-                    to_user = t.Remove(0, 1);
-                    
-                }
-
-            }
-
-            if (to_user != null || to_org != null)
-            {
-                var to_user_id = from users in dc.AspNetUsers
-                                 where users.DisplayName == to_user
-                                 select users.Id;
-
-                var to_org_id = from org in dc.Orgs
-                                where org.orgURL == to_org
-                                select org.Id;
-
-                Notification note = new Notification();
-                try
-                {
-                    note.From_UserId = user;
-                    note.To_UserId = to_user_id.Cast<string>().First();
-                    //note.To_OrgId = Convert.ToInt32(to_org_id.ToString());
-                    note.createTime = DateTime.UtcNow;
-                    dc.Notifications.InsertOnSubmit(note);
-                    dc.SubmitChanges();
-                }
-                catch (Exception e)
-                {
-                    ErrorHandler.Log_Error(note, e, dc);
-                    //Console.WriteLine("Could not unvote on issue %s:\n%s", note.Id, e.Message);
-                }
-            }
-        }
+        
 
         /* 
         ==================== 
