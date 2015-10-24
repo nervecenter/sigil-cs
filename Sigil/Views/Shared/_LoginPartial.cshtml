@@ -2,7 +2,7 @@
 @using Sigil.Models
 
 @if ( Request.IsAuthenticated ) {
-    <script type="text/javascript" src="~/Scripts/notifications.js"></script>
+
     <li>
         <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(User.Identity.GetUserId()))">
         @Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right", style = "border-left:0;" } )

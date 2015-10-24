@@ -49,6 +49,12 @@ namespace Sigil {
                 defaults: new { controller = "ImageUploader", action = "User_Icon_Upload", }
             );
 
+            routes.MapRoute(
+                name: "Check Notifications",
+                url: "check_notes/",
+                defaults: new { controller = "Notification", action = "Get_Notifications", }
+            );
+
             //========================= Sigil Admin Stuff =================================================
 
             routes.MapRoute(

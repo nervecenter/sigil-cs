@@ -29,7 +29,7 @@ namespace Sigil.Controllers
             newComment.votes = 1;
 
             newComment.text = request.Form["text"];
-            NotificationController.Notification_Check(newComment.text, userID);
+            
 
             var commentData = dc.CommentCounts.SingleOrDefault(c => c.OrgId == thisIssue.OrgId && c.IssueId == thisIssue.Id);
             if (commentData == default(CommentCount))
@@ -57,7 +57,7 @@ namespace Sigil.Controllers
                 commDataCol.Update();
                 commentData.count = CountXML<CommentCountCol>.DATAtoXML(commDataCol);
             }
-            // Try to submit the issue and go to the issue page; otherwise, write an error
+
             try
             {
                 dc.Comments.InsertOnSubmit(newComment);
@@ -71,6 +71,8 @@ namespace Sigil.Controllers
                 //ErrorHandler.Log_Error(commentData, e);
 
             }
+
+            NotificationController.Notification_Check(newComment.text, userID, thisIssue.Id, thisIssue.OrgId, newComment.Id);
         }
     }
 }

@@ -7,29 +7,6 @@
       <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Comments" Member="Comments">
-    <Type Name="Comment">
-      <Column Name="Id" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="UserId" Type="System.String" DbType="NChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="postDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="editTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="text" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="issueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="votes" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="lastVoted" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Issue_Comment" Member="Issue" ThisKey="issueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
-      <Association Name="AspNetUser_Comment" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Notifications" Member="Notifications">
-    <Type Name="Notification">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="From_UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="To_UserId" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
-      <Column Name="To_OrgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
   <Table Name="dbo.OfficialResponse" Member="OfficialResponses">
     <Type Name="OfficialResponse">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -60,8 +37,8 @@
       <Column Name="viewCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CatId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TopicId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
       <Association Name="Issue_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="issueId" Type="OfficialResponse" />
+      <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
       <Association Name="Topic_Issue" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
       <Association Name="Category_Issue" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
       <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
@@ -137,6 +114,7 @@
       <Association Name="Org_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="OrgId" Type="Subscription" />
       <Association Name="Org_Category" Member="Categories" ThisKey="Id" OtherKey="orgId" Type="Category" />
       <Association Name="Org_Image" Member="Images" ThisKey="Id" OtherKey="OrgId" Type="Image" />
+      <Association Name="Org_Comment" Member="Comments" ThisKey="Id" OtherKey="OrgId" Type="Comment" />
       <Association Name="Topic_Org" Member="Topic" ThisKey="topicid" OtherKey="Id" Type="Topic" IsForeignKey="true" />
     </Type>
   </Table>
@@ -210,10 +188,38 @@
       <Column Name="votes" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="DisplayName" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
       <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" />
-      <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
       <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
       <Association Name="AspNetUser_Image" Member="Images" ThisKey="Id" OtherKey="UserId" Type="Image" />
+      <Association Name="AspNetUser_Comment" Member="Comments" ThisKey="Id" OtherKey="UserId" Type="Comment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Comments" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.String" DbType="NChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="postDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="editTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="issueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="votes" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="lastVoted" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Issue_Comment" Member="Issue" ThisKey="issueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
+      <Association Name="AspNetUser_Comment" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="Org_Comment" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Notifications" Member="Notifications">
+    <Type Name="Notification">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="From_UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="To_UserId" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="To_OrgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="createTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="issueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CommentId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>
