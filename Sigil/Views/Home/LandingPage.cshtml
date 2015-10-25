@@ -16,7 +16,7 @@
     <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
 
     @Styles.Render( "~/Content/bootstrap.css" )
-    @Styles.Render( "~/Content/bootstrap-theme.css" )
+    @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
     @Styles.Render( "~/Content/Site.css" )
 
     <style type="text/css">
@@ -89,9 +89,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="btn-group btn-group-justified col-centered" style="max-width:500px;">
-                    <a class="btn btn-primary" href="/register">Use Sigil as a user</a>
-                    <a class="btn btn-warning" href="/features">Create a page for your enterprise</a>
+                <div class="btn-group btn-group-justified col-centered" style="max-width:800px;">
+                    <a class="btn btn-primary" href="/register">Start giving your own feedback</a>
+                    <a class="btn btn-success" href="/features">See how Sigil can revamp feedback for your company.</a>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
                         <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(group.Key))" style="margin-right:5px;"/>@group.Key.orgName</a></div>
                         @*<div class="panel-body"></div>*@
                         @foreach ( Issue issue in group ) {
-                            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = true, showCat = false, showTopic = false, showUser = false, userVoted = false }, issue );
+                            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = false, showCat = false, showTopic = false, showUser = false, userVoted = false }, issue );
                             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel)
                         }
                     </div>

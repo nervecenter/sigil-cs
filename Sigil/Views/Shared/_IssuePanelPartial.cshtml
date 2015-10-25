@@ -33,7 +33,7 @@ Issue thisIssue = Model.Item2;
                     @if ( thisIssue.responded ) { <small><i style="color:red;">Response!</i></small> }
                 </h4>
                 <p class="pull-left">
-                    @if ( showOrg ) { <span>@thisIssue.Org.orgName</span> }
+                    @if ( showOrg ) { <img class="issue-panel-icon" src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20( thisIssue.Org ))" /><span><a href="/@thisIssue.Org.orgURL">@thisIssue.Org.orgName</a></span> }
                     @if ( showCat ) { <span>: @thisIssue.Category.catName</span> }
                     @if ( showTopic ) { <span>in @thisIssue.Topic.topicName</span> }
                 </p>

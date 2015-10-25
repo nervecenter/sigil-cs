@@ -98,7 +98,7 @@ namespace Sigil.Controllers
                 
             }
 
-            return Json("No Notifications :{");
+            return Json("No notifications, you're all caught up. :)");
         }
 
     }

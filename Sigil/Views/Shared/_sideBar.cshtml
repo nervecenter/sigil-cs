@@ -17,7 +17,7 @@
             <div class="panel-body">
                 @foreach ( Subscription sub in userSubs ) {
                     if ( sub.OrgId != 0 && sub.CatId == 0 ) {
-                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" style="width:15px; height:15px;" src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(sub.Org))">@sub.Org.orgName</a><br>
+                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(sub.Org))">@sub.Org.orgName</a><br>
                     } else if ( sub.CatId != 0 ) {
                         <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Category>.Get_Icon_20(sub.Category))">@sub.Category.catName</a><br>
                     } else {

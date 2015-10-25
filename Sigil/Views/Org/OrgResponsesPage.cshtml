@@ -11,7 +11,7 @@
     UserVoteCol userVotes = ViewBag.userVotes;
     List<Subscription> userSubs = Sigil.Controllers.AccountController.userSubs( User );
 
-    string banner = Sigil.Controllers.ImageController<Org>.Get_Banner_Tall(thisOrg);
+    string banner = Sigil.Controllers.ImageController<Org>.Get_Banner( thisOrg);
 }
 
 <div class="col-md-9 col-lg-9">
