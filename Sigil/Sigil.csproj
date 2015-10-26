@@ -361,6 +361,7 @@
     <Content Include="Views\Account\OrgApplicants.cshtml" />
     <Content Include="Views\Org\OrgResponsesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage.cshtml" />
+    <Content Include="Views\Home\FeaturesPage - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

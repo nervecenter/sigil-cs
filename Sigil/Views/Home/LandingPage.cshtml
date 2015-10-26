@@ -34,18 +34,7 @@
     <title>Sigil</title>
 </head>
 <body class="page">
-    @*<header class="page-header page-header-landing">
-        @using ( Html.BeginForm( "Index", "Search", FormMethod.Post, new { @class = "search-box-form landing-search-form" } ) ) {
-            <button class="search-submit-button landing-search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></button>
-                <input id="searchBox" name="term" class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person">
-        }
-        <nav class="header-link-container landing-header-link-container">
-            @Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-            @Html.ActionLink( "Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-            @Html.ActionLink( "Register Organization", "OrgRegister", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-        </nav>
-    </header>*@
-    <nav class="navbar transparent navbar-static-top">
+    <nav class="navbar navbar-transparent navbar-static-top">
         <div class="navbar-inner">
             <!-- Brand and toggle get grouped for better mobile display -->
 
@@ -65,10 +54,9 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-    <section class="splash">
-        <div class="splash-back-darken"></div>
-        <div class="splash-back"></div>
-        <div class="container" style="max-width:800px; margin-top:-380px;">
+    @*Html.Partial( "_Header" )*@
+    <section class="splash splash-landing">
+        <div class="container" style="max-width:800px;">
             <div class="row" style="margin-bottom:40px;">
                 <div class="col-lg-12 col-centered" style="max-width:350px;">
                     <img class="img-responsive" src="../Content/Images/logo-600.png">

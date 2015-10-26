@@ -42,7 +42,7 @@
             @Html.ActionLink( "Register Organization", "OrgRegister", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
         </nav>
     </header>*@
-    <nav class="navbar transparent navbar-static-top">
+    @*<nav class="navbar transparent navbar-static-top">
         <div class="navbar-inner">
             <!-- Brand and toggle get grouped for better mobile display -->
 
@@ -61,12 +61,11 @@
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
-    </nav>
-    <section class="splash" style="height:350px;">
-        <div class="splash-back-darken"></div>
-        <div class="splash-back" style="background-image:none;background-color:#494949;"></div>
-        <div class="container" style="max-width:800px; margin-top:-300px;">
-            <div class="row" style="margin-bottom:25px;">
+    </nav>*@
+    @Html.Partial( "_Header" )
+    <section class="splash" style="background-position: 0px 0px;">
+        <div class="container" style="max-width:800px;">
+            <div class="row">
                 <div class="col-lg-12 col-centered" style="max-width:350px;">
                     <img class="img-responsive" src="../Content/Images/logo-600.png">
                 </div>
@@ -74,16 +73,28 @@
             <div class="row landing-blurbs">
                 <div class="col-lg-12 col-centered">
                     <p style="text-align:center;">
-                        The best gauge of the direction your company should take is customer demand. Know exactly what your users want the most, and easily afford them the same courtesy.
+                        A feedback destination for a new age.
                     </p>
+                </div>
+            </div>
+            <div class="row landing-blurbs" style="margin-bottom:10px;">
+                <div class="col-lg-4">
+                    <img class="landing-blurb-image" src="../Content/Images/earth_white.png">
+                    <p class="landing-blurb-text">We connect big and small. Engage with your customers at a interactive and personal level.</p>
+                </div>
+                <div class="col-lg-4 hidden-xs hidden-sm">
+                    <img class="landing-blurb-image" src="../Content/Images/speakerphone_white.png">
+                    <p class="landing-blurb-text">Have a voice in the future. Your feedback matters. Make your thoughts known, and support those of your peers.</p>
+                </div>
+                <div class="col-lg-4 hidden-xs hidden-sm">
+                    <img class="landing-blurb-image" src="../Content/Images/speedometer_white.png">
+                    <p class="landing-blurb-text">The best gauge of the direction your company should take is customer demand. Know exactly what your users want the most.</p>
                 </div>
             </div>
         </div>
     </section>
-    <section class="splash" style="height:300px;">
-        <div class="splash-back-darken"></div>
-        <div class="splash-back splash-back-2"></div>
-        <div class="container" style="margin-top:-230px;">
+    <section class="splash splash-2">
+        <div class="container">
             <div class="row landing-blurbs">
                 <div class="col-lg-6 pull-right">
                     <p style="text-align:center;">
@@ -94,10 +105,8 @@
             </div>
         </div>
     </section>
-    <section class="splash" style="height:300px;">
-        <div class="splash-back-darken"></div>
-        <div class="splash-back splash-back-3"></div>
-        <div class="container" style="margin-top:-220px;">
+    <section class="splash splash-3">
+        <div class="container">
             <div class="row landing-blurbs">
                 <div class="col-lg-6 pull-left">
                     <p style="text-align:center;">
@@ -108,10 +117,8 @@
             </div>
         </div>
     </section>
-    <section class="splash" style="height:300px;">
-        <div class="splash-back-darken"></div>
-        <div class="splash-back splash-back-4"></div>
-        <div class="container" style="margin-top:-245px;">
+    <section class="splash splash-4">
+        <div class="container">
             <div class="row landing-blurbs">
                 <div class="col-lg-6 pull-right">
                     <p style="text-align:center;">
@@ -122,10 +129,8 @@
             </div>
         </div>
     </section>
-    <section class="splash" style="height:300px;">
-        <div class="splash-back-darken"></div>
-        <div class="splash-back splash-back-5"></div>
-        <div class="container" style="margin-top:-180px;">
+    <section class="splash splash-5">
+        <div class="container">
             <div class="row landing-blurbs">
                 <div class="col-lg-6 pull-left">
                     <p style="text-align:center;">
