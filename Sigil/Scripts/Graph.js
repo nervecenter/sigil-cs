@@ -28,7 +28,7 @@ $(document).ready(function () {
                     vAxis: { title: 'Number of Users' }
                 };
                 
-                var default_chart = new google.visualization.LineChart(document.getElementById('default_org_chart_div'));
+                var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));
                 default_chart.draw(chart_data, default_options);
             }
         });
@@ -46,10 +46,10 @@ function Custom_Chart() {
     var stop_date = jsDateToCSharp($("#datepickerStop").datepicker("getDate"));
 
     var orgURL = get_org_url();
-    var URL = "/custom_graph/" + orgURL + "/" +dataOption+ "/" + start_date + "/" + stop_date;
+    var URL = "/custom_graph/" + orgURL + "/" + dataOption+ "/" + start_date + "/" + stop_date;
     $.ajax({
         url: URL,
-        success: function (data) {
+        success: function (org_data) {
             var chart_data = new google.visualization.DataTable();
             chart_data.addColumn({ type: 'date', id: "Date" });
             chart_data.addColumn({ type: 'number', id: "Count" });
@@ -64,7 +64,11 @@ function Custom_Chart() {
                 vAxis: { title: 'Number of Users' }
             };
 
-            var default_chart = new google.visualization.LineChart(document.getElementById('default_org_chart_div'));
+           // var chartP = document.getElementById('chart_panel');
+            //chartP.removeChild(document.getElementById('org_chart_div'));
+
+            var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));//(document.createElement('div').setAttribute("id",'org_chart_div'));
+            
             default_chart.draw(chart_data, default_options);
         }
     });
@@ -74,15 +78,7 @@ function Custom_Chart() {
 
 function jsDateToCSharp(date)
 {
-    var day = date.getDay();        // yields day
-    var month = date.getMonth();    // yields month
-    var year = date.getFullYear();  // yields year
-    var hour = date.getHours();     // yields hours 
-    var minute = date.getMinutes(); // yields minutes
-    var second = date.getSeconds(); // yields seconds
-
-    // After this construct a string with the above results as below
-    var time = day + "+" + month + "+" + year + "+" + hour + '+' + minute + '+' + second;
+    var time = date.getTime();
 
     return time;
 }

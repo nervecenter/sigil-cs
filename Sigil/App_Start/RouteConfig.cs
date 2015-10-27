@@ -166,10 +166,10 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-    name: "VoteUp",
-    url: "voteup/{IssueId}/",
-    defaults: new { controller = "Issue", action = "VoteUp" }
-);
+                name: "VoteUp",
+                url: "voteup/{IssueId}/",
+                defaults: new { controller = "Issue", action = "VoteUp" }
+            );
 
             routes.MapRoute(
                 name: "UnVoteUp",

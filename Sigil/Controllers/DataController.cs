@@ -15,16 +15,21 @@ using System.IO;
 namespace Sigil
 {
     /// <summary>
-    /// Class that converts C# datetime objects to equivalent JS Datetime objects -- Taken from here http://stackoverflow.com/questions/2404247/datetime-to-javascript-date
+    /// Class that converts C# datetime objects to equivalent JS Date objects and JS Date objects to C# Datetime objects -- Idea taken from here http://stackoverflow.com/questions/2404247/datetime-to-javascript-date
     /// </summary>
-    public static class DateTimeJavaScript
+    public static class DateTimeConversion
     {
         private static readonly long DatetimeMinTimeTicks =
            (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
 
-        public static long ToJavaScriptMilliseconds(this DateTime dt)
+        public static long ToJSms(this DateTime dt)
         {
             return (long)((dt.ToUniversalTime().Ticks - DatetimeMinTimeTicks) / 10000);
+        }
+
+        public static DateTime FromJSms(string ms)
+        {
+            return new DateTime(1970, 1, 1).AddTicks(Convert.ToInt64(ms) * 10000);
         }
     }
 
@@ -102,7 +107,7 @@ namespace Sigil
                 int total = 0;
                 foreach (var d in data)
                     total += d.Get_Value(start.AddDays(i + 1));
-                formated_data.Add(new Tuple<long, int>(DateTimeJavaScript.ToJavaScriptMilliseconds(start.AddDays(i + 1)), total));
+                formated_data.Add(new Tuple<long, int>(DateTimeConversion.ToJSms(start.AddDays(i + 1)), total));
             }
 
             return formated_data;

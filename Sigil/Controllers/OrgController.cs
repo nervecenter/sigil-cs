@@ -168,9 +168,9 @@ namespace Sigil.Controllers
         {
             Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
-            DateTime startDate = DateTime.ParseExact(start, "dd+MM+yyyy+HH+mm+ss", CultureInfo.InvariantCulture);
+            DateTime startDate = DateTimeConversion.FromJSms(start);
 
-            DateTime stopDate = DateTime.ParseExact(stop, "dd+MM+yyyy+HH+mm+ss", CultureInfo.InvariantCulture);
+            DateTime stopDate = DateTimeConversion.FromJSms(stop);
 
             List<Tuple<long, int>> view_data = new List<Tuple<long, int>>();
 

@@ -1,5 +1,4 @@
 ﻿/// <autosync enabled="true" />
-/// <reference path="../areas/routedebugger/scripts/detect.js" />
 /// <reference path="addissueform.js" />
 /// <reference path="bootstrap.min.js" />
 /// <reference path="charts.js" />
