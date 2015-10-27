@@ -1,5 +1,14 @@
-﻿
-<nav class="navbar navbar-custom navbar-fixed-top">
+﻿@{ 
+    string action = ViewContext.RouteData.Values[ "action" ].ToString();
+    string controller = ViewContext.RouteData.Values[ "controller" ].ToString();
+    bool transparent = false;
+    if ( controller == "Home" && ( action == "Index" || action == "FeaturesPage" ) ) {
+        transparent = true;
+    }
+}
+
+
+<nav class="navbar navbar-fixed-top @(!transparent ? "navbar-default" : "") @(transparent ? "navbar-transparent" : "")">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
