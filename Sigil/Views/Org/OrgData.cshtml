@@ -1,21 +1,31 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@using DotNet.Highcharts
 @using Sigil.Models
-@model List<Highcharts>
+
 @{
     Org thisOrg = ViewBag.thisOrg;
 }
 
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script type="text/javascript" src="~/Scripts/Highcharts-4.0.1/js/highcharts.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="~/Scripts/Graph.js"></script>
 
 <div class="first-column">
     <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png"><h1>@thisOrg.orgName</h1>
     <article class="org-data-body">
-        Views over week/month
+        <div id="default_org_chart_div" style="width: 600px; height: 350px;">
+        </div>
+        <select id ="selected_data" name="selected_data">
+            <option value="Views">Views</option>
+            <option value="Votes">Votes</option>
+            <option value="Comments">Comments</option>
+            <option value="Subscriptions">Subscriptions</option>
+            <option value="All">All</option>
+        </select>
+        <input type="text" id="datepickerStart" name="start" />
+        <input type="text" id="datepickerStop" name="stop" />
+        <input type="button" value="Get Chart" onclick="Custom_Chart()" />
+        @*Views over week/month
         @(Model[0])
         <p>
             Views this week: @ViewBag.weekViewCount<br />
@@ -29,8 +39,8 @@
             Views this month: @ViewBag.monthViewCount<br />
             Votes this month: @ViewBag.monthVoteCount<br />
             Conversion rate: @ViewBag.monthRatio%
-        </p>
-        <br />
+        </p>*@
+        @*<br />
         Conversion rates views->votes over week/month
         <br />
         New Subscriptions over week/month
@@ -41,6 +51,8 @@
         <br />
         Top 10 underdog issues this week/month
         <br />
-        Company Responsiveness this week/month: Response Rate, average time to respond
+        Company Responsiveness this week/month: Response Rate, average time to respond*@
         </article>
 </div>
+
+

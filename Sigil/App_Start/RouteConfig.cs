@@ -158,6 +158,31 @@ namespace Sigil {
 
 
             //========================= Org Controller ==================================================================
+
+            routes.MapRoute(
+                name: "Default Org Data",
+                url: "default_graph/{orgURL}/",
+                defaults: new { controller = "Org", action = "DefaultData" }
+            );
+
+            routes.MapRoute(
+    name: "VoteUp",
+    url: "voteup/{IssueId}/",
+    defaults: new { controller = "Issue", action = "VoteUp" }
+);
+
+            routes.MapRoute(
+                name: "UnVoteUp",
+                url: "unvoteup/{IssueId}/",
+                defaults: new { controller = "Issue", action = "UnVoteUp" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Org Data",
+                url: "custom_graph/{orgURL}/{dataType}/{start}/{stop}/",
+                defaults: new { controller = "Org", Action = "CustomData" }
+                );
+
             routes.MapRoute(
                 name: "OrgData",
                 url: "{orgURL}/data/",
@@ -183,17 +208,6 @@ namespace Sigil {
             //);
 
             //========================= Issue Controller ==================================================================
-            routes.MapRoute(
-                name: "VoteUp",
-                url: "voteup/{IssueId}/",
-                defaults: new { controller = "Issue", action = "VoteUp" }
-            );
-
-            routes.MapRoute(
-                name: "UnVoteUp",
-                url: "unvoteup/{IssueId}/",
-                defaults: new { controller = "Issue", action = "UnVoteUp" }
-            );
 
 
             routes.MapRoute(
@@ -207,6 +221,8 @@ namespace Sigil {
                 url: "{orgURL}/{IssueId}/data/",
                 defaults: new { controller = "Issue", action = "IssueData" }
             );
+
+       
 
             //========================= Default Controller ==================================================================
 

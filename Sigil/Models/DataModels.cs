@@ -59,12 +59,11 @@ namespace Sigil.Models
 
     //================================= ViewCounts helper data structures =========================================================================//
 
-    
-    public class ViewCountCol : ICollection
+    public abstract class CountCol: ICollection
     {
         private List<ViewCountDay> vcArray = new List<ViewCountDay>();
 
-        public ViewCountCol() {}
+        public CountCol() { }
 
         public ViewCountDay this[int index]
         {
@@ -101,6 +100,16 @@ namespace Sigil.Models
             vcArray.Add(newVCW);
         }
 
+        public abstract int Get_Value(DateTime day);    
+    }
+
+    
+    public class ViewCountCol : CountCol    
+    {
+        private List<ViewCountDay> vcArray = new List<ViewCountDay>();
+
+        public ViewCountCol() {}
+
         /// <summary>
         /// Use to update the view count for an issue. When called checks to see if the last entry(the last time it was viewed) is the current day. If it is then it updates the view count for that day. If it is a new day it creates a new ViewCountDay and appends to the end of the collection.
         /// </summary>
@@ -121,7 +130,12 @@ namespace Sigil.Models
                 return false;
         }
 
-        public int Get_Views(DateTime day)
+        /// <summary>
+        /// Returns the number of new views from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new views.</param>
+        /// <returns>The number of new views of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
             foreach (ViewCountDay v in vcArray)
             {
@@ -157,46 +171,11 @@ namespace Sigil.Models
     //================================= VoteCounts helper data structures =========================================================================//
 
 
-    public class VoteCountCol : ICollection
+    public class VoteCountCol : CountCol
     {
         private List<VoteCountDay> vcArray = new List<VoteCountDay>();
 
         public VoteCountCol() {  }
-
-        public VoteCountDay this[int index]
-        {
-            get { return (VoteCountDay)vcArray[index]; }
-        }
-
-        public void CopyTo(Array a, int index)
-        {
-            vcArray.CopyTo((VoteCountDay[])a, index);
-        }
-
-        public int Count
-        {
-            get { return vcArray.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return vcArray.GetEnumerator();
-        }
-
-        public void Add(VoteCountDay newVCW)
-        {
-            vcArray.Add(newVCW);
-        }
 
         /// <summary>
         /// Used to increment the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new VoteCountDay and appends to the end of the collection.
@@ -229,7 +208,12 @@ namespace Sigil.Models
                 return false;
         }
 
-        public int Get_Votes(DateTime day)
+        /// <summary>
+        /// Returns the number of new votes from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new votes.</param>
+        /// <returns>The number of new votes of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
             foreach(VoteCountDay v in vcArray)
             {
@@ -266,46 +250,11 @@ namespace Sigil.Models
     //================================= SubCounts helper data structures =========================================================================//
 
 
-    public class SubCountCol : ICollection
+    public class SubCountCol : CountCol
     {
         private List<SubCountDay> scArray = new List<SubCountDay>();
 
-        public SubCountCol() { }
-
-        public SubCountDay this[int index]
-        {
-            get { return (SubCountDay)scArray[index]; }
-        }
-
-        public void CopyTo(Array a, int index)
-        {
-            scArray.CopyTo((SubCountDay[])a, index);
-        }
-
-        public int Count
-        {
-            get { return scArray.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return scArray.GetEnumerator();
-        }
-
-        public void Add(SubCountDay newVCW)
-        {
-            scArray.Add(newVCW);
-        }
+       
 
         /// <summary>
         /// Used to increment the Sub count for an issue. When called checks to see if the last entry(the last time a user added the sub) is the current day. If it is then it updates the sub count for that day. If it is a new day it creates a new SubCountDay and appends to the end of the collection.
@@ -338,7 +287,12 @@ namespace Sigil.Models
                 return false;
         }
 
-        public int Get_Subs(DateTime day)
+        /// <summary>
+        /// Returns the number of new subscriptions from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new subscriptions.</param>
+        /// <returns>The number of new subscritions of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
             foreach (SubCountDay s in scArray)
             {
@@ -374,41 +328,11 @@ namespace Sigil.Models
     //================================= CommentCounts helper data structures =========================================================================//
 
 
-    public class CommentCountCol : ICollection
+    public class CommentCountCol : CountCol
     {
         private List<CommentCountDay> ccArray = new List<CommentCountDay>();
 
         public CommentCountCol() { }
-
-        public CommentCountDay this[int index]
-        {
-            get { return (CommentCountDay)ccArray[index]; }
-        }
-
-        public void CopyTo(Array a, int index)
-        {
-            ccArray.CopyTo((CommentCountDay[])a, index);
-        }
-
-        public int Count
-        {
-            get { return ccArray.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return ccArray.GetEnumerator();
-        }
 
         /// <summary>
         /// Don't use this to add a new day to the collection. Use Update instead.
@@ -438,8 +362,12 @@ namespace Sigil.Models
             else
                 return false;
         }
-
-        public int Get_Comments(DateTime day)
+        /// <summary>
+        /// Returns the number of new comments from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new comments.</param>
+        /// <returns>The number of new comments of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
             foreach (CommentCountDay c in ccArray)
             {

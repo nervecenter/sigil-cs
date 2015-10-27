@@ -10,7 +10,7 @@ using Sigil.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-
+using System.Globalization;
 
 namespace Sigil.Controllers
 {
@@ -137,6 +137,78 @@ namespace Sigil.Controllers
         ==================== 
         */
 
+        public JsonResult DefaultData(string orgURL)
+        {
+            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            var orgIssueViews = (from vc in dc.ViewCounts
+                                 where vc.OrgId == thisOrg.Id
+                                 select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+
+            // For each day in the week, get that day's votes on all issues in the org, group them into a week of integers of votes
+            //var orgIssueVotes = (from vote in dc.VoteCounts
+            //                     where vote.OrgId == thisOrg.Id
+            //                     select CountXML<VoteCountCol>.XMLtoDATA(vote.count));
+
+            //var orgComments = (from comm in dc.CommentCounts
+            //                   where comm.OrgId == thisOrg.Id
+            //                   select CountXML<CommentCountCol>.XMLtoDATA(comm.count));
+
+            //var orgSubs = dc.SubCounts.Where(s => s.OrgId == thisOrg.Id).Select(s => CountXML<SubCountCol>.XMLtoDATA(s.count));
+
+            //var allComments = dc.Comments.Where(c => c.Issue.OrgId == thisOrg.Id).Select(c => c);
+            //var allIssues = dc.Issues.Where(i => i.OrgId == thisOrg.Id).Select(i => i);
+
+            var View_Data = DataVisualization.Data_to_Google_Graph_Format(orgIssueViews, DateTime.Now.AddDays(-7), DateTime.Now);
+
+            return Json(View_Data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CustomData(string orgURL, string dataType, string start, string stop)
+        {
+            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            DateTime startDate = DateTime.ParseExact(start, "dd.MM.yyyy.HH:mm:ss", CultureInfo.InvariantCulture);
+
+            DateTime stopDate = DateTime.ParseExact(stop, "dd.MM.yyyy.HH:mm:ss", CultureInfo.InvariantCulture);
+
+            List<Tuple<long, int>> view_data = new List<Tuple<long, int>>();
+
+            switch(dataType)
+            {
+                case "Views":
+                    {
+                        var data = dc.ViewCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<ViewCountCol>.XMLtoDATA(v.count)); 
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "Votes":
+                    {
+                        var data = dc.VoteCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<VoteCountCol>.XMLtoDATA(v.count));
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "Comments":
+                    {
+                        var data = dc.CommentCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<CommentCountCol>.XMLtoDATA(v.count));
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "Subscriptions":
+                    {
+                        var data = dc.SubCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<SubCountCol>.XMLtoDATA(v.count));
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "All":
+                    {
+                        break;
+                    }
+            }
+
+            return Json(view_data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult OrgData(string orgURL)
         {
             // Get the org
@@ -147,81 +219,81 @@ namespace Sigil.Controllers
             //List<Highcharts> listOfCharts = new List<Highcharts>();
 
 
-            // For each day in the week, get that day's views on all issues in the org, group them into a week of integers of views
-            var orgIssueViews = (from vc in dc.ViewCounts
-                                 where vc.OrgId == thisOrg.Id
-                                 select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+        //    // For each day in the week, get that day's views on all issues in the org, group them into a week of integers of views
+        //    var orgIssueViews = (from vc in dc.ViewCounts
+        //                         where vc.OrgId == thisOrg.Id
+        //                         select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
 
-            // For each day in the week, get that day's votes on all issues in the org, group them into a week of integers of votes
-            var orgIssueVotes = (from vote in dc.VoteCounts
-                                 where vote.OrgId == thisOrg.Id
-                                 select CountXML<VoteCountCol>.XMLtoDATA(vote.count));
+        //    // For each day in the week, get that day's votes on all issues in the org, group them into a week of integers of votes
+        //    var orgIssueVotes = (from vote in dc.VoteCounts
+        //                         where vote.OrgId == thisOrg.Id
+        //                         select CountXML<VoteCountCol>.XMLtoDATA(vote.count));
 
-            var orgComments = (from comm in dc.CommentCounts
-                               where comm.OrgId == thisOrg.Id
-                               select CountXML<CommentCountCol>.XMLtoDATA(comm.count));
+        //    var orgComments = (from comm in dc.CommentCounts
+        //                       where comm.OrgId == thisOrg.Id
+        //                       select CountXML<CommentCountCol>.XMLtoDATA(comm.count));
 
-            var orgSubs = dc.SubCounts.Where(s => s.OrgId == thisOrg.Id).Select(s => CountXML<SubCountCol>.XMLtoDATA(s.count));
+        //    var orgSubs = dc.SubCounts.Where(s => s.OrgId == thisOrg.Id).Select(s => CountXML<SubCountCol>.XMLtoDATA(s.count));
 
-            var allComments = dc.Comments.Where(c => c.Issue.OrgId == thisOrg.Id).Select(c => c);
-            var allIssues = dc.Issues.Where(i => i.OrgId == thisOrg.Id).Select(i => i);
+        //    var allComments = dc.Comments.Where(c => c.Issue.OrgId == thisOrg.Id).Select(c => c);
+        //    var allIssues = dc.Issues.Where(i => i.OrgId == thisOrg.Id).Select(i => i);
 
-            // TODO: Log Org views on Org page
+        //    // TODO: Log Org views on Org page
 
-            //========================================= Weekly Traffic Data =======================================================================//
-
-
-
-
-           // var weekChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, "weekChart", "Traffic on " + thisOrg.orgName + " This Month");
-
-
-            // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
-           // listOfCharts.Add(weekChart);
-            var weekSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
-            var weekUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
-            List<Issue> Week_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
-            List<Issue> Week_under_issues = DataVisualization.Get_Under_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
-
-            ViewBag.weekViewCount = weekSums.Item1;
-            ViewBag.weekVoteCount = weekSums.Item2;
-            ViewBag.weekRatio = ((double)weekSums.Item2 / (double)weekSums.Item1) * 100.0f;
-            ViewBag.weekSubCount = weekSums.Item4;
-            ViewBag.weekSubRatio = ((double)weekSums.Item4 / (double)weekSums.Item2)*100.0f;
-            ViewBag.weekCommCount = weekSums.Item3;
-            ViewBag.weekUniqueCommCount = weekUnique;
-            ViewBag.weekUniqueRatioViews = ((double)weekUnique / (double)weekSums.Item1) * 100.0f;
-            ViewBag.weekUniqueRatioVotes = ((double)weekUnique / (double)weekSums.Item2) * 100.0f;
-            ViewBag.weekTopIssues = Week_top_issues;
-            ViewBag.weekUnderDogIssues = Week_under_issues;
+        //    //========================================= Weekly Traffic Data =======================================================================//
 
 
 
-        //========================================= MONTHLY Traffic Data =======================================================================//
 
-            // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-           // Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
-
-            // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
-          //  listOfCharts.Add(monthChart);
-            var monthSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-            var monthUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-            List<Issue> Month_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
-            List<Issue> Month_under_issues = DataVisualization.Get_Under_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
+        //   // var weekChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, "weekChart", "Traffic on " + thisOrg.orgName + " This Month");
 
 
+        //    // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
+        //   // listOfCharts.Add(weekChart);
+        //    var weekSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+        //    var weekUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
+        //    List<Issue> Week_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
+        //    List<Issue> Week_under_issues = DataVisualization.Get_Under_Issues(allIssues, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow, 10);
 
-            ViewBag.monthViewCount = monthSums.Item1;
-            ViewBag.monthVoteCount = monthSums.Item2;
-            ViewBag.monthRatio = ((double)monthSums.Item2 / (double)monthSums.Item1) * 100.0f;
-            ViewBag.monthSubCount = monthSums.Item4;
-            ViewBag.monthSubRatio = ((double)monthSums.Item4 / (double)monthSums.Item2) * 100.0f; ;
-            ViewBag.monthCommCount = monthSums.Item3;
-            ViewBag.monthUniqueCommCount = monthUnique ;
-            ViewBag.monthUniqueRatioViews = ((double)monthUnique / (double)monthSums.Item1) * 100.0f; 
-            ViewBag.monthUniqueRatioVotes = ((double)monthUnique / (double)monthSums.Item2) * 100.0f; ;
-            ViewBag.monthTopIssues = Month_top_issues;
-            ViewBag.monthUnderDogIssues = Month_under_issues;
+        //    ViewBag.weekViewCount = weekSums.Item1;
+        //    ViewBag.weekVoteCount = weekSums.Item2;
+        //    ViewBag.weekRatio = ((double)weekSums.Item2 / (double)weekSums.Item1) * 100.0f;
+        //    ViewBag.weekSubCount = weekSums.Item4;
+        //    ViewBag.weekSubRatio = ((double)weekSums.Item4 / (double)weekSums.Item2)*100.0f;
+        //    ViewBag.weekCommCount = weekSums.Item3;
+        //    ViewBag.weekUniqueCommCount = weekUnique;
+        //    ViewBag.weekUniqueRatioViews = ((double)weekUnique / (double)weekSums.Item1) * 100.0f;
+        //    ViewBag.weekUniqueRatioVotes = ((double)weekUnique / (double)weekSums.Item2) * 100.0f;
+        //    ViewBag.weekTopIssues = Week_top_issues;
+        //    ViewBag.weekUnderDogIssues = Week_under_issues;
+
+
+
+        ////========================================= MONTHLY Traffic Data =======================================================================//
+
+        //    // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
+        //   // Highcharts monthChart = DataVisualization.Create_Highchart(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, "monthChart", "Traffic on " + thisOrg.orgURL + " This Month");
+
+        //    // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
+        //  //  listOfCharts.Add(monthChart);
+        //    var monthSums = DataVisualization.Get_Sums(orgIssueViews, orgIssueVotes, orgComments, orgSubs, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+        //    var monthUnique = DataVisualization.Get_Unique_Count(allComments, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
+        //    List<Issue> Month_top_issues = DataVisualization.Get_Top_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
+        //    List<Issue> Month_under_issues = DataVisualization.Get_Under_Issues(allIssues, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow, 10);
+
+
+
+        //    ViewBag.monthViewCount = monthSums.Item1;
+        //    ViewBag.monthVoteCount = monthSums.Item2;
+        //    ViewBag.monthRatio = ((double)monthSums.Item2 / (double)monthSums.Item1) * 100.0f;
+        //    ViewBag.monthSubCount = monthSums.Item4;
+        //    ViewBag.monthSubRatio = ((double)monthSums.Item4 / (double)monthSums.Item2) * 100.0f; ;
+        //    ViewBag.monthCommCount = monthSums.Item3;
+        //    ViewBag.monthUniqueCommCount = monthUnique ;
+        //    ViewBag.monthUniqueRatioViews = ((double)monthUnique / (double)monthSums.Item1) * 100.0f; 
+        //    ViewBag.monthUniqueRatioVotes = ((double)monthUnique / (double)monthSums.Item2) * 100.0f; ;
+        //    ViewBag.monthTopIssues = Month_top_issues;
+        //    ViewBag.monthUnderDogIssues = Month_under_issues;
             /*
              * VIEWBAG
              */

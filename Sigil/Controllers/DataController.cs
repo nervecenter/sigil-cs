@@ -15,6 +15,20 @@ using System.IO;
 namespace Sigil
 {
     /// <summary>
+    /// Class that converts C# datetime objects to equivalent JS Datetime objects -- Taken from here http://stackoverflow.com/questions/2404247/datetime-to-javascript-date
+    /// </summary>
+    public static class DateTimeJavaScript
+    {
+        private static readonly long DatetimeMinTimeTicks =
+           (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
+
+        public static long ToJavaScriptMilliseconds(this DateTime dt)
+        {
+            return (long)((dt.ToUniversalTime().Ticks - DatetimeMinTimeTicks) / 10000);
+        }
+    }
+
+    /// <summary>
     /// Class that handles transforing Org data into correct format so that it can be visualized usings assiociated Graph API
     /// </summary>
     static class DataVisualization
@@ -36,9 +50,9 @@ namespace Sigil
             TimeSpan duriation = stop.Date - start.Date;
             for (int i = 0; i < duriation.Days; ++i)
             {
-                total_views += views.Get_Views(start.AddDays(i+1));
-                total_votes += votes.Get_Votes(start.AddDays(i+1));
-                total_comms += comms.Get_Comments(start.AddDays(i + 1));
+                total_views += views.Get_Value(start.AddDays(i+1));
+                total_votes += votes.Get_Value(start.AddDays(i+1));
+                total_comms += comms.Get_Value(start.AddDays(i + 1));
                 
             }
 
@@ -65,18 +79,35 @@ namespace Sigil
             for (int i = 0; i < duriation.Days; ++i)
             {
                 foreach (var vi in views)
-                    total_views += vi.Get_Views(start.AddDays(i+1));
+                    total_views += vi.Get_Value(start.AddDays(i + 1));
                 foreach (var vo in votes)
-                    total_votes += vo.Get_Votes(start.AddDays(i+1));
+                    total_votes += vo.Get_Value(start.AddDays(i + 1));
                 foreach (var co in comms)
-                    total_comms += co.Get_Comments(start.AddDays(i + 1));
+                    total_comms += co.Get_Value(start.AddDays(i + 1));
                 foreach (var su in subs)
-                    total_subs += su.Get_Subs(start.AddDays(i + 1));
+                    total_subs += su.Get_Value(start.AddDays(i + 1));
 
             }
 
             return new Tuple<int, int, int, int>(total_views, total_votes, total_comms, total_subs);
         }
+
+        public static List<Tuple<long, int>> Data_to_Google_Graph_Format(IQueryable<CountCol> data, DateTime start, DateTime stop)
+        {
+            List<Tuple<long, int>> formated_data = new List<Tuple<long, int>>();
+            TimeSpan duriation = stop.Date - start.Date;
+
+            for(int i = 0; i < duriation.Days; ++i)
+            {
+                int total = 0;
+                foreach (var d in data)
+                    total += d.Get_Value(start.AddDays(i + 1));
+                formated_data.Add(new Tuple<long, int>(DateTimeJavaScript.ToJavaScriptMilliseconds(start.AddDays(i + 1)), total));
+            }
+
+            return formated_data;
+        }
+        
 
         //public static Highcharts Create_Highchart(ViewCountCol views, VoteCountCol votes, CommentCountCol comms, DateTime start, DateTime stop, string chartName, string chartTitle)
         //{
@@ -87,7 +118,7 @@ namespace Sigil
 
         //    for (int i = 0; i < duriation.Days; ++i)
         //    {
-                
+
         //        voteViewdata.Item1.Add(votes.Get_Votes(start.AddDays(i + 1)));
         //        voteViewdata.Item2.Add(views.Get_Views(start.AddDays(i + 1)));
         //        voteViewdata.Item3.Add(comms.Get_Comments(start.AddDays(i + 1)));
