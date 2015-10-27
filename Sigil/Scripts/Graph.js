@@ -82,7 +82,7 @@ function jsDateToCSharp(date)
     var second = date.getSeconds(); // yields seconds
 
     // After this construct a string with the above results as below
-    var time = day + "." + month + "." + year + "." + hour + ':' + minute + ':' + second;
+    var time = day + "+" + month + "+" + year + "+" + hour + '+' + minute + '+' + second;
 
     return time;
 }
