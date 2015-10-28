@@ -12,25 +12,27 @@
         url: "/check_notes",
         success: function (data) {
             $.each(data, function (index, Note) {
-                var note = document.createElement("div"); //parent div for entire notification
-                note.className = "media";
-                var Nicon = document.createElement("a"); //icon for from user -- need to change return value of from userid to a link to their icon instead
-                Nicon.className = 'pull-left';
-                var NImg = document.createElement("img"); //img container for the user icon
-                NImg.setAttribute("src", '/Images/User/nervecenter_100.png');
-                NImg.setAttribute("class", 'notification-icon');
-                Nicon.appendChild(NImg);
-                var nTitle = document.createElement("div"); //div container that includes the title and link
-                nTitle.className = 'media-body';
-                var nURL = document.createElement("a"); //link container that allows clicking the notification to take you to where it is
-                nURL.setAttribute("href", Note.url);
-                //nTitle.setAttribute('href', Note.url);
-                var nTitleSpan = document.createElement("span"); //The span that includes the issue title where the notification took place
-                nTitleSpan.innerHTML = Note.title;
-                nURL.appendChild(nTitleSpan);
-                nTitle.appendChild(nURL);
-                Nicon.appendChild(nTitle);
-                document.getElementById("NoteParent").appendChild(Nicon); 
+                var media = document.createElement("div"); //parent div for entire notification
+                media.classList.add("media");
+                var imganchor = document.createElement("a"); //icon for from user -- need to change return value of from userid to a link to their icon instead
+                imganchor.classList.add('pull-left');
+                var img = document.createElement("img"); //img container for the user icon
+                img.setAttribute("src", '/Images/User/nervecenter_100.png');
+                img.classList.add('media-object');
+                img.classList.add('notification-icon');
+                imganchor.appendChild(img);
+                var mediabody = document.createElement("div"); //div container that includes the title and link
+                mediabody.classList.add('media-body');
+                var notificationtext = document.createElement("a"); //link container that allows clicking the notification to take you to where it is
+                notificationtext.setAttribute("href", Note.url);
+                //mediabody.setAttribute('href', Note.url);
+                //var mediabodySpan = document.createElement("span"); //The span that includes the issue title where the notification took place
+                notificationtext.innerHTML = Note.title;
+                mediabody.appendChild(notificationtext);
+                //nURL.appendChild(mediabodySpan);
+                media.appendChild(imganchor);
+                media.appendChild(mediabody);
+                document.getElementById("NoteParent").appendChild(media); 
             });
             //should probably include a check on data to see if there is stuff there and if not just have a message that shows no notifications
         }

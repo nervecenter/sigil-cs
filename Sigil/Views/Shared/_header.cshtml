@@ -2,7 +2,7 @@
     string action = ViewContext.RouteData.Values[ "action" ].ToString();
     string controller = ViewContext.RouteData.Values[ "controller" ].ToString();
     bool transparent = false;
-    if ( controller == "Home" && ( action == "Index" || action == "FeaturesPage" ) ) {
+    if ( controller == "Home" && ( action == "LandingPage" || action == "FeaturesPage" ) ) {
         transparent = true;
     }
 }
