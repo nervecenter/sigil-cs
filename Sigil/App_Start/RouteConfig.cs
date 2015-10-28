@@ -55,21 +55,17 @@ namespace Sigil {
                 defaults: new { controller = "Notification", action = "Get_Notifications", }
             );
 
-            //========================= Sigil Admin Stuff =================================================
-
             routes.MapRoute(
-                name: "Org Applications",
-                url: "sadmin/orgapps",
-                defaults: new { controller = "Admin", action = "OrgApplicants" }
+                name: "Create Issue",
+                url: "create_issue/",
+                defaults: new { controller = "Issue", action = "CreateIssue" }
             );
 
             routes.MapRoute(
-                name: "Error Log",
-                url: "sadmin/errors",
-                defaults: new { controller = "Admin", action = "ErrorLog" }
+                name: "Add Issue",
+                url: "add_issue/",
+                defaults: new { controller = "Issue", action = "AddIssue" }
             );
-
-            //========================= Account Controller ==================================================================
 
             routes.MapRoute(
                 name:"Login",
@@ -108,6 +104,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Subscriptions",
+                url: "subscriptions/",
+                defaults: new { controller = "Subscriptions", action = "Index" }
+            );
+
+            routes.MapRoute(
                 name: "Search Orgs",
                 url: "search/Orgs/",
                 defaults: new { controller = "Search", action = "SearchOrgs" }
@@ -125,12 +127,21 @@ namespace Sigil {
                 defaults: new { controller = "Search", action = "Index" }
             );
 
-            //========================= Subscription Controller ==================================================================
             routes.MapRoute(
-               name: "Subscriptions",
-               url: "subscriptions/",
-               defaults: new { controller = "Subscriptions", action = "Index" }
+                 name: "Org Applications",
+                 url: "sadmin/orgapps",
+                 defaults: new { controller = "Admin", action = "OrgApplicants" }
+             );
+
+            routes.MapRoute(
+                name: "Error Log",
+                url: "sadmin/errors",
+                defaults: new { controller = "Admin", action = "ErrorLog" }
             );
+
+
+            //========================= Subscription Controller ==================================================================
+       
             routes.MapRoute(
                 name: "Subscribe",
                 url: "subscribe/{orgURL}/",
@@ -144,17 +155,6 @@ namespace Sigil {
             );
 
 
-            routes.MapRoute(
-                name: "Create Issue",
-                url: "create_issue/",
-                defaults: new { controller = "Issue", action = "CreateIssue" }
-            );
-
-            routes.MapRoute(
-                name: "Add Issue",
-                url: "add_issue/",
-                defaults: new { controller = "Issue", action = "AddIssue" }
-            );
 
 
             //========================= Org Controller ==================================================================
@@ -178,10 +178,22 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Default Issue Data",
+                url: "default_graph/{orgURL}/{issueId}",
+                defaults: new { controller = "Issue", action = "DefaultData" }
+            );
+
+            routes.MapRoute(
                 name: "Custom Org Data",
                 url: "custom_graph/{orgURL}/{dataType}/{start}/{stop}/",
                 defaults: new { controller = "Org", Action = "CustomData" }
-                );
+            );
+
+            routes.MapRoute(
+                name: "Custom Issue Data",
+                url: "custom_graph/{orgURL}/{issueId}/{dataType}/{start}/{stop}/",
+                defaults: new { controller = "Issue", Action = "CustomData" }
+            );
 
             routes.MapRoute(
                 name: "OrgData",

@@ -19,8 +19,9 @@ namespace Sigil.Controllers
             dc = new SigilDBDataContext();
         }
         // GET: Search
-        public ActionResult Index(string term)
+        public ActionResult Index()
         {
+            string term = Request.Form["searchTerm"];
 
             var quUsers = dc.AspNetUsers.Where(u => u.DisplayName.StartsWith(term)).ToList();
             var quOrgs = dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();

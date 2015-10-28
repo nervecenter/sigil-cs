@@ -10,12 +10,10 @@
 
     UserVoteCol userVotes = ViewBag.userVotes;
     List<Subscription> userSubs = Sigil.Controllers.AccountController.userSubs( User );
-
-    string banner = Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg);
 }
 
 <div class="col-md-9 col-lg-9">
-    <img class="img-rounded img-responsive org-banner-small" src="@banner">
+    <img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-default active">Main feed</a>
         <a class="btn btn-info" href="/@thisOrg.orgURL/responses">Responses</a>

@@ -167,6 +167,58 @@ namespace Sigil.Controllers
             Data page for an issue, showing views/votes this week/month 
         ==================== 
         */
+
+        public JsonResult DefaultData(string orgURL, int issueId)
+        {
+            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            var issueViews = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+
+            var View_Data = DataVisualization.Data_to_Google_Graph_Format(issueViews, DateTime.Now.AddDays(-7), DateTime.Now);
+
+            return Json(View_Data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult CustomData(string orgURL, int issueId ,string dataType, string start, string stop)
+        {
+            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            DateTime startDate = DateTimeConversion.FromJSms(start);
+
+            DateTime stopDate = DateTimeConversion.FromJSms(stop);
+
+            List<Tuple<long, int>> view_data = new List<Tuple<long, int>>();
+
+            switch (dataType)
+            {
+                case "Views":
+                    {
+                        var data = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "Votes":
+                    {
+                        var data = CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "Comments":
+                    {
+                        var data = CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
+                        break;
+                    }
+                case "All":
+                    {
+                        break;
+                    }
+            }
+
+            return Json(view_data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
+        }
+
         [Authorize]
         public ActionResult IssueData(string orghandle, long issueID)
         {
@@ -175,60 +227,6 @@ namespace Sigil.Controllers
 
             // Get the org
             Org thisOrg = thisIssue.Org;
-
-            // If neither are valid, redirect to 404 page
-            if (thisOrg == default(Org) || thisIssue == default(Issue))
-            {
-                Response.Redirect("~/404");
-            }
-
-            // MODEL: List of charts we'll be displaying in sequence
-           // List<Highcharts> listOfCharts = new List<Highcharts>();
-
-            //get the collection of viewcounts from the xml field in the table
-            ViewCountCol issueViews = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisIssue.OrgId).count);
-            VoteCountCol issueVotes = CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisIssue.OrgId).count);
-            CommentCountCol issueComms = CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(c => c.IssueId == thisIssue.Id && c.OrgId == thisIssue.OrgId).count);
-            
-            /*
-             *  WEEKLY Traffic Data
-             */
-            
-           // Highcharts weekChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms,DateTime.UtcNow, DateTime.UtcNow.AddDays(-6),"weekchart", "Traffic on Issue " + thisIssue.Id + " This Week");
-
-            // Add week chart to our list, get the total counts for views and votes over week, add them and turnover rate to ViewBag
-           // listOfCharts.Add(weekChart);
-            var totals = DataVisualization.Get_Sums(issueViews, issueVotes, issueComms, DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
-            var uniqueCommsWeek = DataVisualization.Get_Unique_Count(dc.Comments.Where(c => c.issueId == thisIssue.Id).Select(c => c), DateTime.UtcNow.AddDays(-6), DateTime.UtcNow);
-            ViewBag.weekViewCount = totals.Item1;
-            ViewBag.weekVoteCount = totals.Item2;
-            ViewBag.weekCommCount = totals.Item3;
-            ViewBag.weekCommUnique = uniqueCommsWeek;
-            ViewBag.weekRatio = ((double)totals.Item2 / (double)totals.Item1) * 100.0f;
-            ViewBag.weekUniqueRatioViews = ((double)uniqueCommsWeek / (double)totals.Item1) * 100.0f;
-            ViewBag.weekUniqueRatioVotes = ((double)uniqueCommsWeek / (double)totals.Item1) * 100.0f;
-
-            /*
-             *  MONTHLY Traffic Data
-             */
-
-
-            // Create a Highchart with X-axis for days of the month, and Y-axis series logging views and votes
-           // Highcharts monthChart = DataVisualization.Create_Highchart(issueViews, issueVotes, issueComms, DateTime.UtcNow, DateTime.UtcNow.AddMonths(-1), "monthchart", "Traffic on Issue " + thisIssue.Id + " This Month");
-
-            // Add month chart to our list, get the total counts for views and votes over month, add them and turnover rate to ViewBag
-           // listOfCharts.Add(monthChart);
-            totals = DataVisualization.Get_Sums(issueViews, issueVotes, issueComms,DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-            var uniqueCommsMonth = DataVisualization.Get_Unique_Count(dc.Comments.Where(c => c.issueId == thisIssue.Id).Select(c => c), DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-            ViewBag.monthViewCount = totals.Item1;
-            ViewBag.monthVoteCount = totals.Item2;
-            ViewBag.monthCommCount = totals.Item3;
-            ViewBag.monthCommUnique = uniqueCommsMonth;
-            ViewBag.monthRatio = ((double)totals.Item2 / (double)totals.Item1) * 100.0f;
-            ViewBag.monthUniqueRatioViews = ((double)uniqueCommsMonth / (double)totals.Item1) * 100.0f;
-            ViewBag.monthUniqueRatioVotes = ((double)uniqueCommsMonth / (double)totals.Item1) * 100.0f;
-
-
             /*
              * VIEWBAG
              */
@@ -237,8 +235,7 @@ namespace Sigil.Controllers
             ViewBag.thisIssue = thisIssue;
             ViewBag.thisOrg = thisOrg;
 
-            // Pass our model list of charts as the model of the view
-            //  return View(listOfCharts);
+
             return View();
         }
 

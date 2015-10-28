@@ -11,7 +11,7 @@
 <script type="text/javascript" src="~/Scripts/Graph.js"></script>
 
 <div class="first-column">
-    <img class="org-banner" src="../Content/Images/orgbanners/microsoft.png"><h1>@thisOrg.orgName</h1>
+    <img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))"><h1>@thisOrg.orgName</h1>
     <article class="org-data-body">
         <div id="chart_panel">
             <div id="org_chart_div" style="width: 600px; height: 350px;">
@@ -26,34 +26,8 @@
         </select>
         <input type="text" id="datepickerStart" name="start" />
         <input type="text" id="datepickerStop" name="stop" />
-        <input type="button" value="Get Chart" onclick="Custom_Chart()" />
-        @*Views over week/month
-        @(Model[0])
-        <p>
-            Views this week: @ViewBag.weekViewCount<br />
-            Votes this week: @ViewBag.weekVoteCount<br />
-            Conversion rate: @ViewBag.weekRatio%
-        </p>
-        <br />
-        Votes over week/month
-        @(Model[1])
-        <p>
-            Views this month: @ViewBag.monthViewCount<br />
-            Votes this month: @ViewBag.monthVoteCount<br />
-            Conversion rate: @ViewBag.monthRatio%
-        </p>*@
-        @*<br />
-        Conversion rates views->votes over week/month
-        <br />
-        New Subscriptions over week/month
-        <br />
-        Conversion rates votes-> Subscriptions over week/month
-        <br />
-        Top 10 votes issues this week/month
-        <br />
-        Top 10 underdog issues this week/month
-        <br />
-        Company Responsiveness this week/month: Response Rate, average time to respond*@
+        <input type="button" value="Get Chart" onclick="Custom_Org_Chart()" />
+
         </article>
 </div>
 
