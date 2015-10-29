@@ -69,8 +69,11 @@ namespace Sigil.Controllers
             if (Request.HttpMethod == "POST")
             {
                 // Create a new issue
-                
-                CommentController.Create_New_Comment(Request, thisIssue, userID);
+
+                using (var action = new CommentController())
+                {
+                    action.Comment_Handler(Request, thisIssue, userID);
+                };
             }
 
             // Get the user's vote on this issues if it exists
@@ -86,8 +89,9 @@ namespace Sigil.Controllers
                                                 orderby comment.postDate descending
                                                 select comment;
 
+            IQueryable<OfficialResponse> official = dc.OfficialResponses.Where(o => o.issueId == issueID && o.OrgId == thisOrg.Id).Select(o => o);
             // MODEL: A tuple of the org and the issue are the model for the IssuePage
-            Tuple<Org, Issue, IQueryable<Comment>> orgIssueComments = new Tuple<Org, Issue, IQueryable<Comment>>(thisOrg, thisIssue, issueComments);
+            Tuple<Org, Issue, IQueryable<Comment>, IQueryable<OfficialResponse>> orgIssueComments = new Tuple<Org, Issue, IQueryable<Comment>, IQueryable<OfficialResponse>>(thisOrg, thisIssue, issueComments, official);
 
             // Pass the org and issue as the model to the view
             return View(orgIssueComments);
@@ -375,8 +379,8 @@ namespace Sigil.Controllers
         [Authorize]
         public ActionResult VoteUp( int issueID) {
             // Find our issue object and create a new vote
-            Issue thisIssue = dc.Issues.First<Issue>( i => i.Id == issueID );
-            Org thisOrg = dc.Orgs.First<Org>(o => o.Id == thisIssue.OrgId);
+            Issue thisIssue = dc.Issues.First( i => i.Id == issueID );
+            Org thisOrg = dc.Orgs.First(o => o.Id == thisIssue.OrgId);
             //Vote thisVote = new Vote();
             var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
 

@@ -2766,3 +2766,181 @@ The statement has been terminated.
 15:39:41 Wednesday, October 28, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
 
 15:39:41 Wednesday, October 28, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:23:41 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:23:41 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:23:57 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:23:57 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:23:57 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:24:16 Thursday, October 29, 2015 -- Error From Sigil.Models.Comment -- There is already an open DataReader associated with this Command which must be closed first.
+
+15:24:17 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:24:17 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:24:17 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:30:09 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:30:09 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:30:12 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:30:12 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:30:12 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:31:46 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:31:46 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:31:46 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:31:55 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:31:55 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:31:55 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:32:14 Thursday, October 29, 2015 -- Error From Sigil.Models.OfficialResponse -- Invalid object name 'dbo.OfficialResponse'.
+
+15:38:11 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:38:11 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:38:15 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:38:15 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:38:15 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:38:31 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:38:31 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:40:07 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:40:07 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:40:09 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:40:09 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:40:09 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:40:13 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:47:04 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:47:04 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:47:06 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:47:07 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:47:07 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:47:21 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:55:34 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:55:34 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:55:39 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:55:39 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:55:39 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:55:52 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:01 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:01 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:05 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:05 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:05 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:13 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:57:13 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:20 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:20 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:22 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:22 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:23 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:24 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:37 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:37 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+15:59:37 Thursday, October 29, 2015 -- Error From Sigil.Models.Notification -- An item with the same key has already been added.
+
+15:59:37 Thursday, October 29, 2015 -- Error From Sigil.Models.Notification -- An item with the same key has already been added.
+
+16:02:14 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:02:14 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:02:17 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:02:17 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:02:17 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:02:29 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:02:29 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:41 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:41 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:45 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:45 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:45 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:56 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:56 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:03:56 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:14:39 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:14:39 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:14:42 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:14:42 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:14:42 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:15:30 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:15:30 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:15:31 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:15:42 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:15:42 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements
+
+16:15:43 Thursday, October 29, 2015 -- Error From Sigil.Models.Org -- Sequence contains no elements

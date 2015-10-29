@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Sigil.Models
-@model Tuple<Org, Issue, IQueryable<Comment>>
+@model Tuple<Org, Issue, IQueryable<Comment>, IQueryable<OfficialResponse>>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,6 +8,7 @@
     Org thisOrg = Model.Item1;
     Issue thisIssue = Model.Item2;
     IQueryable<Comment> issueComments = Model.Item3;
+    IQueryable<OfficialResponse> official = Model.Item4;
     List<Subscription> userSubs = Sigil.Controllers.AccountController.userSubs( User );
 
     UserVoteCol userVote = ViewBag.userVote;
@@ -39,26 +40,29 @@
         @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         <div class="panel-body">@thisIssue.text</div>
     </article>
-    @if ( thisIssue.responded ) {
+    @if ( official.Count() > 0) {
         <div class="panel panel-primary">
-            <div class="panel-heading">Official Response</div>
-            <div class="panel-body">
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <img src="../Content/Images/usericons/micro_100.png" class="media-object" alt="Sample Image">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Micro-Mike <small><i>Posted 1 hour ago</i></small></h4>
-                        <p>
-                            @thisIssue.officialComment
-                        </p>
-                        <div class="btn-group glyphicon-position" data-toggle="buttons">
-                            <button type="button" class="btn btn-success btn-xs"><!--<span class="glyphicon glyphicon-ok"></span>--> Helpful</button>
-                            <button type="button" class="btn btn-danger btn-xs"><!--<span class="glyphicon glyphicon-remove"></span>--> Unhelpful</button>
+            @foreach (var OfResponse in official)
+            {
+                <div class="panel-heading">Official Response</div>
+                <div class="panel-body">
+                    <div class="media">
+                        <a href="#" class="pull-left">
+                            <img src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(OfResponse.UserId))" class="media-object" alt="Sample Image">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">@OfResponse.AspNetUser.DisplayName<small><i> Posted @Sigil.Controllers.IssueController.TimeSince(OfResponse.createTime)</i></small></h4>
+                            <p>
+                                @OfResponse.text
+                            </p>
+                            <div class="btn-group glyphicon-position" data-toggle="buttons">
+                                <button type="button" class="btn btn-success btn-xs"><!--<span class="glyphicon glyphicon-ok"></span>--> Helpful</button>
+                                <button type="button" class="btn btn-danger btn-xs"><!--<span class="glyphicon glyphicon-remove"></span>--> Unhelpful</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     }
     <div class="panel panel-default">
@@ -92,7 +96,13 @@
                         <textarea type="text" name="text" class="form-control" id="inputComment" placeholder="What would you like to say?"></textarea>
                         @Html.ValidationMessage( "text" )
                     </div>
+                    @if (Sigil.Controllers.AccountController.CheckUserRole(User.Identity.GetUserId(), thisOrg.Id))
+                    {
+                        <input type="checkbox" name="IsOfficial" id="IsOfficial" />
+                        <label for="IsOfficial">Is Official Comment</label><br />
+                    }
                     <button type="submit" name="buttonSubmit" class="btn btn-primary">Submit</button>
+                    
                 </form>
             }
         </div>

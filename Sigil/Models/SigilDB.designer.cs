@@ -33,9 +33,6 @@ namespace Sigil.Models
     partial void InsertAspNetUserRole(AspNetUserRole instance);
     partial void UpdateAspNetUserRole(AspNetUserRole instance);
     partial void DeleteAspNetUserRole(AspNetUserRole instance);
-    partial void InsertOfficialResponse(OfficialResponse instance);
-    partial void UpdateOfficialResponse(OfficialResponse instance);
-    partial void DeleteOfficialResponse(OfficialResponse instance);
     partial void InsertIssue(Issue instance);
     partial void UpdateIssue(Issue instance);
     partial void DeleteIssue(Issue instance);
@@ -78,9 +75,15 @@ namespace Sigil.Models
     partial void InsertComment(Comment instance);
     partial void UpdateComment(Comment instance);
     partial void DeleteComment(Comment instance);
+    partial void InsertAspNetRole(AspNetRole instance);
+    partial void UpdateAspNetRole(AspNetRole instance);
+    partial void DeleteAspNetRole(AspNetRole instance);
     partial void InsertNotification(Notification instance);
     partial void UpdateNotification(Notification instance);
     partial void DeleteNotification(Notification instance);
+    partial void InsertOfficialResponse(OfficialResponse instance);
+    partial void UpdateOfficialResponse(OfficialResponse instance);
+    partial void DeleteOfficialResponse(OfficialResponse instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -118,14 +121,6 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<AspNetUserRole>();
-			}
-		}
-		
-		public System.Data.Linq.Table<OfficialResponse> OfficialResponses
-		{
-			get
-			{
-				return this.GetTable<OfficialResponse>();
 			}
 		}
 		
@@ -241,11 +236,27 @@ namespace Sigil.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<AspNetRole> AspNetRoles
+		{
+			get
+			{
+				return this.GetTable<AspNetRole>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Notification> Notifications
 		{
 			get
 			{
 				return this.GetTable<Notification>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OfficialResponse> OfficialResponses
+		{
+			get
+			{
+				return this.GetTable<OfficialResponse>();
 			}
 		}
 	}
@@ -262,6 +273,8 @@ namespace Sigil.Models
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
+		private EntityRef<AspNetRole> _AspNetRole;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -275,6 +288,7 @@ namespace Sigil.Models
 		public AspNetUserRole()
 		{
 			this._AspNetUser = default(EntityRef<AspNetUser>);
+			this._AspNetRole = default(EntityRef<AspNetRole>);
 			OnCreated();
 		}
 		
@@ -313,6 +327,10 @@ namespace Sigil.Models
 			{
 				if ((this._RoleId != value))
 				{
+					if (this._AspNetRole.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnRoleIdChanging(value);
 					this.SendPropertyChanging();
 					this._RoleId = value;
@@ -356,314 +374,36 @@ namespace Sigil.Models
 			}
 		}
 		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OfficialResponse")]
-	public partial class OfficialResponse : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _upVotes;
-		
-		private int _downVotes;
-		
-		private int _OrgId;
-		
-		private string _UserId;
-		
-		private System.DateTime _createTime;
-		
-		private string _text;
-		
-		private int _issueId;
-		
-		private EntityRef<Issue> _Issue;
-		
-		private EntityRef<Org> _Org;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnupVotesChanging(int value);
-    partial void OnupVotesChanged();
-    partial void OndownVotesChanging(int value);
-    partial void OndownVotesChanged();
-    partial void OnOrgIdChanging(int value);
-    partial void OnOrgIdChanged();
-    partial void OnUserIdChanging(string value);
-    partial void OnUserIdChanged();
-    partial void OncreateTimeChanging(System.DateTime value);
-    partial void OncreateTimeChanged();
-    partial void OntextChanging(string value);
-    partial void OntextChanged();
-    partial void OnissueIdChanging(int value);
-    partial void OnissueIdChanged();
-    #endregion
-		
-		public OfficialResponse()
-		{
-			this._Issue = default(EntityRef<Issue>);
-			this._Org = default(EntityRef<Org>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetRole_AspNetUserRole", Storage="_AspNetRole", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public AspNetRole AspNetRole
 		{
 			get
 			{
-				return this._Id;
+				return this._AspNetRole.Entity;
 			}
 			set
 			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_upVotes", DbType="Int NOT NULL")]
-		public int upVotes
-		{
-			get
-			{
-				return this._upVotes;
-			}
-			set
-			{
-				if ((this._upVotes != value))
-				{
-					this.OnupVotesChanging(value);
-					this.SendPropertyChanging();
-					this._upVotes = value;
-					this.SendPropertyChanged("upVotes");
-					this.OnupVotesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_downVotes", DbType="Int NOT NULL")]
-		public int downVotes
-		{
-			get
-			{
-				return this._downVotes;
-			}
-			set
-			{
-				if ((this._downVotes != value))
-				{
-					this.OndownVotesChanging(value);
-					this.SendPropertyChanging();
-					this._downVotes = value;
-					this.SendPropertyChanged("downVotes");
-					this.OndownVotesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
-		public int OrgId
-		{
-			get
-			{
-				return this._OrgId;
-			}
-			set
-			{
-				if ((this._OrgId != value))
-				{
-					if (this._Org.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrgIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrgId = value;
-					this.SendPropertyChanged("OrgId");
-					this.OnOrgIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_createTime", DbType="DateTime NOT NULL")]
-		public System.DateTime createTime
-		{
-			get
-			{
-				return this._createTime;
-			}
-			set
-			{
-				if ((this._createTime != value))
-				{
-					this.OncreateTimeChanging(value);
-					this.SendPropertyChanging();
-					this._createTime = value;
-					this.SendPropertyChanged("createTime");
-					this.OncreateTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string text
-		{
-			get
-			{
-				return this._text;
-			}
-			set
-			{
-				if ((this._text != value))
-				{
-					this.OntextChanging(value);
-					this.SendPropertyChanging();
-					this._text = value;
-					this.SendPropertyChanged("text");
-					this.OntextChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_issueId", DbType="Int NOT NULL")]
-		public int issueId
-		{
-			get
-			{
-				return this._issueId;
-			}
-			set
-			{
-				if ((this._issueId != value))
-				{
-					if (this._Issue.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnissueIdChanging(value);
-					this.SendPropertyChanging();
-					this._issueId = value;
-					this.SendPropertyChanged("issueId");
-					this.OnissueIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_OfficialResponse", Storage="_Issue", ThisKey="issueId", OtherKey="Id", IsForeignKey=true)]
-		public Issue Issue
-		{
-			get
-			{
-				return this._Issue.Entity;
-			}
-			set
-			{
-				Issue previousValue = this._Issue.Entity;
+				AspNetRole previousValue = this._AspNetRole.Entity;
 				if (((previousValue != value) 
-							|| (this._Issue.HasLoadedOrAssignedValue == false)))
+							|| (this._AspNetRole.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Issue.Entity = null;
-						previousValue.OfficialResponses.Remove(this);
+						this._AspNetRole.Entity = null;
+						previousValue.AspNetUserRoles.Remove(this);
 					}
-					this._Issue.Entity = value;
+					this._AspNetRole.Entity = value;
 					if ((value != null))
 					{
-						value.OfficialResponses.Add(this);
-						this._issueId = value.Id;
+						value.AspNetUserRoles.Add(this);
+						this._RoleId = value.Id;
 					}
 					else
 					{
-						this._issueId = default(int);
+						this._RoleId = default(string);
 					}
-					this.SendPropertyChanged("Issue");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
-		public Org Org
-		{
-			get
-			{
-				return this._Org.Entity;
-			}
-			set
-			{
-				Org previousValue = this._Org.Entity;
-				if (((previousValue != value) 
-							|| (this._Org.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Org.Entity = null;
-						previousValue.OfficialResponses.Remove(this);
-					}
-					this._Org.Entity = value;
-					if ((value != null))
-					{
-						value.OfficialResponses.Add(this);
-						this._OrgId = value.Id;
-					}
-					else
-					{
-						this._OrgId = default(int);
-					}
-					this.SendPropertyChanged("Org");
+					this.SendPropertyChanged("AspNetRole");
 				}
 			}
 		}
@@ -723,9 +463,9 @@ namespace Sigil.Models
 		
 		private System.Nullable<int> _TopicId;
 		
-		private EntitySet<OfficialResponse> _OfficialResponses;
-		
 		private EntitySet<Comment> _Comments;
+		
+		private EntitySet<OfficialResponse> _OfficialResponses;
 		
 		private EntityRef<Topic> _Topic;
 		
@@ -771,8 +511,8 @@ namespace Sigil.Models
 		
 		public Issue()
 		{
-			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Topic = default(EntityRef<Topic>);
 			this._Category = default(EntityRef<Category>);
 			this._Org = default(EntityRef<Org>);
@@ -1076,19 +816,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="issueId")]
-		public EntitySet<OfficialResponse> OfficialResponses
-		{
-			get
-			{
-				return this._OfficialResponses;
-			}
-			set
-			{
-				this._OfficialResponses.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Comment", Storage="_Comments", ThisKey="Id", OtherKey="issueId")]
 		public EntitySet<Comment> Comments
 		{
@@ -1099,6 +826,19 @@ namespace Sigil.Models
 			set
 			{
 				this._Comments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="issueId")]
+		public EntitySet<OfficialResponse> OfficialResponses
+		{
+			get
+			{
+				return this._OfficialResponses;
+			}
+			set
+			{
+				this._OfficialResponses.Assign(value);
 			}
 		}
 		
@@ -1258,18 +998,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		private void attach_OfficialResponses(OfficialResponse entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = this;
-		}
-		
-		private void detach_OfficialResponses(OfficialResponse entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = null;
-		}
-		
 		private void attach_Comments(Comment entity)
 		{
 			this.SendPropertyChanging();
@@ -1277,6 +1005,18 @@ namespace Sigil.Models
 		}
 		
 		private void detach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = null;
+		}
+		
+		private void attach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Issue = this;
+		}
+		
+		private void detach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
 			entity.Issue = null;
@@ -2446,8 +2186,6 @@ namespace Sigil.Models
 		
 		private int _topicid;
 		
-		private EntitySet<OfficialResponse> _OfficialResponses;
-		
 		private EntitySet<Issue> _Issues;
 		
 		private EntitySet<Subscription> _Subscriptions;
@@ -2457,6 +2195,8 @@ namespace Sigil.Models
 		private EntitySet<Image> _Images;
 		
 		private EntitySet<Comment> _Comments;
+		
+		private EntitySet<OfficialResponse> _OfficialResponses;
 		
 		private EntityRef<Topic> _Topic;
 		
@@ -2482,12 +2222,12 @@ namespace Sigil.Models
 		
 		public Org()
 		{
-			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
 			this._Images = new EntitySet<Image>(new Action<Image>(this.attach_Images), new Action<Image>(this.detach_Images));
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			this._Topic = default(EntityRef<Topic>);
 			OnCreated();
 		}
@@ -2636,19 +2376,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<OfficialResponse> OfficialResponses
-		{
-			get
-			{
-				return this._OfficialResponses;
-			}
-			set
-			{
-				this._OfficialResponses.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Issue", Storage="_Issues", ThisKey="Id", OtherKey="OrgId")]
 		public EntitySet<Issue> Issues
 		{
@@ -2714,6 +2441,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="OrgId")]
+		public EntitySet<OfficialResponse> OfficialResponses
+		{
+			get
+			{
+				return this._OfficialResponses;
+			}
+			set
+			{
+				this._OfficialResponses.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Org", Storage="_Topic", ThisKey="topicid", OtherKey="Id", IsForeignKey=true)]
 		public Topic Topic
 		{
@@ -2766,18 +2506,6 @@ namespace Sigil.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_OfficialResponses(OfficialResponse entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_OfficialResponses(OfficialResponse entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
 		}
 		
 		private void attach_Issues(Issue entity)
@@ -2835,6 +2563,18 @@ namespace Sigil.Models
 		}
 		
 		private void detach_Comments(Comment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = null;
+		}
+		
+		private void attach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Org = this;
+		}
+		
+		private void detach_OfficialResponses(OfficialResponse entity)
 		{
 			this.SendPropertyChanging();
 			entity.Org = null;
@@ -3913,6 +3653,8 @@ namespace Sigil.Models
 		
 		private EntitySet<Comment> _Comments;
 		
+		private EntitySet<OfficialResponse> _OfficialResponses;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3956,6 +3698,7 @@ namespace Sigil.Models
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._Images = new EntitySet<Image>(new Action<Image>(this.attach_Images), new Action<Image>(this.detach_Images));
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
+			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
 			OnCreated();
 		}
 		
@@ -4324,6 +4067,19 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_OfficialResponse", Storage="_OfficialResponses", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<OfficialResponse> OfficialResponses
+		{
+			get
+			{
+				return this._OfficialResponses;
+			}
+			set
+			{
+				this._OfficialResponses.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4403,6 +4159,18 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
 		}
+		
+		private void attach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_OfficialResponses(OfficialResponse entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Comments")]
@@ -4429,11 +4197,13 @@ namespace Sigil.Models
 		
 		private int _OrgId;
 		
+		private bool _IsOfficialResponse;
+		
 		private EntityRef<Issue> _Issue;
 		
-		private EntityRef<AspNetUser> _AspNetUser;
-		
 		private EntityRef<Org> _Org;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -4457,13 +4227,15 @@ namespace Sigil.Models
     partial void OnlastVotedChanged();
     partial void OnOrgIdChanging(int value);
     partial void OnOrgIdChanged();
+    partial void OnIsOfficialResponseChanging(bool value);
+    partial void OnIsOfficialResponseChanged();
     #endregion
 		
 		public Comment()
 		{
 			this._Issue = default(EntityRef<Issue>);
-			this._AspNetUser = default(EntityRef<AspNetUser>);
 			this._Org = default(EntityRef<Org>);
+			this._AspNetUser = default(EntityRef<AspNetUser>);
 			OnCreated();
 		}
 		
@@ -4659,6 +4431,26 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsOfficialResponse", DbType="Bit NOT NULL")]
+		public bool IsOfficialResponse
+		{
+			get
+			{
+				return this._IsOfficialResponse;
+			}
+			set
+			{
+				if ((this._IsOfficialResponse != value))
+				{
+					this.OnIsOfficialResponseChanging(value);
+					this.SendPropertyChanging();
+					this._IsOfficialResponse = value;
+					this.SendPropertyChanged("IsOfficialResponse");
+					this.OnIsOfficialResponseChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Comment", Storage="_Issue", ThisKey="issueId", OtherKey="Id", IsForeignKey=true)]
 		public Issue Issue
 		{
@@ -4689,40 +4481,6 @@ namespace Sigil.Models
 						this._issueId = default(int);
 					}
 					this.SendPropertyChanged("Issue");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Comment", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
-		public AspNetUser AspNetUser
-		{
-			get
-			{
-				return this._AspNetUser.Entity;
-			}
-			set
-			{
-				AspNetUser previousValue = this._AspNetUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetUser.Entity = null;
-						previousValue.Comments.Remove(this);
-					}
-					this._AspNetUser.Entity = value;
-					if ((value != null))
-					{
-						value.Comments.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(string);
-					}
-					this.SendPropertyChanged("AspNetUser");
 				}
 			}
 		}
@@ -4761,6 +4519,40 @@ namespace Sigil.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Comment", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.Comments.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.Comments.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4779,6 +4571,144 @@ namespace Sigil.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AspNetRoles")]
+	public partial class AspNetRole : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _Id;
+		
+		private string _Name;
+		
+		private int _Rank;
+		
+		private EntitySet<AspNetUserRole> _AspNetUserRoles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(string value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnRankChanging(int value);
+    partial void OnRankChanged();
+    #endregion
+		
+		public AspNetRole()
+		{
+			this._AspNetUserRoles = new EntitySet<AspNetUserRole>(new Action<AspNetUserRole>(this.attach_AspNetUserRoles), new Action<AspNetUserRole>(this.detach_AspNetUserRoles));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rank", DbType="Int NOT NULL")]
+		public int Rank
+		{
+			get
+			{
+				return this._Rank;
+			}
+			set
+			{
+				if ((this._Rank != value))
+				{
+					this.OnRankChanging(value);
+					this.SendPropertyChanging();
+					this._Rank = value;
+					this.SendPropertyChanged("Rank");
+					this.OnRankChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetRole_AspNetUserRole", Storage="_AspNetUserRoles", ThisKey="Id", OtherKey="RoleId")]
+		public EntitySet<AspNetUserRole> AspNetUserRoles
+		{
+			get
+			{
+				return this._AspNetUserRoles;
+			}
+			set
+			{
+				this._AspNetUserRoles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_AspNetUserRoles(AspNetUserRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetRole = this;
+		}
+		
+		private void detach_AspNetUserRoles(AspNetUserRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetRole = null;
 		}
 	}
 	
@@ -4804,6 +4734,8 @@ namespace Sigil.Models
 		
 		private int _CommentId;
 		
+		private int _NoteType;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4824,6 +4756,8 @@ namespace Sigil.Models
     partial void OnOrgIdChanged();
     partial void OnCommentIdChanging(int value);
     partial void OnCommentIdChanged();
+    partial void OnNoteTypeChanging(int value);
+    partial void OnNoteTypeChanged();
     #endregion
 		
 		public Notification()
@@ -4987,6 +4921,379 @@ namespace Sigil.Models
 					this._CommentId = value;
 					this.SendPropertyChanged("CommentId");
 					this.OnCommentIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NoteType", DbType="Int NOT NULL")]
+		public int NoteType
+		{
+			get
+			{
+				return this._NoteType;
+			}
+			set
+			{
+				if ((this._NoteType != value))
+				{
+					this.OnNoteTypeChanging(value);
+					this.SendPropertyChanging();
+					this._NoteType = value;
+					this.SendPropertyChanged("NoteType");
+					this.OnNoteTypeChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OfficialResponse")]
+	public partial class OfficialResponse : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _upVotes;
+		
+		private int _downVotes;
+		
+		private int _OrgId;
+		
+		private string _UserId;
+		
+		private System.DateTime _createTime;
+		
+		private string _text;
+		
+		private int _issueId;
+		
+		private EntityRef<Org> _Org;
+		
+		private EntityRef<Issue> _Issue;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnupVotesChanging(int value);
+    partial void OnupVotesChanged();
+    partial void OndownVotesChanging(int value);
+    partial void OndownVotesChanged();
+    partial void OnOrgIdChanging(int value);
+    partial void OnOrgIdChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
+    partial void OncreateTimeChanging(System.DateTime value);
+    partial void OncreateTimeChanged();
+    partial void OntextChanging(string value);
+    partial void OntextChanged();
+    partial void OnissueIdChanging(int value);
+    partial void OnissueIdChanged();
+    #endregion
+		
+		public OfficialResponse()
+		{
+			this._Org = default(EntityRef<Org>);
+			this._Issue = default(EntityRef<Issue>);
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_upVotes", DbType="Int NOT NULL")]
+		public int upVotes
+		{
+			get
+			{
+				return this._upVotes;
+			}
+			set
+			{
+				if ((this._upVotes != value))
+				{
+					this.OnupVotesChanging(value);
+					this.SendPropertyChanging();
+					this._upVotes = value;
+					this.SendPropertyChanged("upVotes");
+					this.OnupVotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_downVotes", DbType="Int NOT NULL")]
+		public int downVotes
+		{
+			get
+			{
+				return this._downVotes;
+			}
+			set
+			{
+				if ((this._downVotes != value))
+				{
+					this.OndownVotesChanging(value);
+					this.SendPropertyChanging();
+					this._downVotes = value;
+					this.SendPropertyChanged("downVotes");
+					this.OndownVotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
+		public int OrgId
+		{
+			get
+			{
+				return this._OrgId;
+			}
+			set
+			{
+				if ((this._OrgId != value))
+				{
+					if (this._Org.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOrgIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrgId = value;
+					this.SendPropertyChanged("OrgId");
+					this.OnOrgIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_createTime", DbType="DateTime NOT NULL")]
+		public System.DateTime createTime
+		{
+			get
+			{
+				return this._createTime;
+			}
+			set
+			{
+				if ((this._createTime != value))
+				{
+					this.OncreateTimeChanging(value);
+					this.SendPropertyChanging();
+					this._createTime = value;
+					this.SendPropertyChanged("createTime");
+					this.OncreateTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string text
+		{
+			get
+			{
+				return this._text;
+			}
+			set
+			{
+				if ((this._text != value))
+				{
+					this.OntextChanging(value);
+					this.SendPropertyChanging();
+					this._text = value;
+					this.SendPropertyChanged("text");
+					this.OntextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_issueId", DbType="Int NOT NULL")]
+		public int issueId
+		{
+			get
+			{
+				return this._issueId;
+			}
+			set
+			{
+				if ((this._issueId != value))
+				{
+					if (this._Issue.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnissueIdChanging(value);
+					this.SendPropertyChanging();
+					this._issueId = value;
+					this.SendPropertyChanged("issueId");
+					this.OnissueIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_OfficialResponse", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
+		public Org Org
+		{
+			get
+			{
+				return this._Org.Entity;
+			}
+			set
+			{
+				Org previousValue = this._Org.Entity;
+				if (((previousValue != value) 
+							|| (this._Org.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Org.Entity = null;
+						previousValue.OfficialResponses.Remove(this);
+					}
+					this._Org.Entity = value;
+					if ((value != null))
+					{
+						value.OfficialResponses.Add(this);
+						this._OrgId = value.Id;
+					}
+					else
+					{
+						this._OrgId = default(int);
+					}
+					this.SendPropertyChanged("Org");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_OfficialResponse", Storage="_Issue", ThisKey="issueId", OtherKey="Id", IsForeignKey=true)]
+		public Issue Issue
+		{
+			get
+			{
+				return this._Issue.Entity;
+			}
+			set
+			{
+				Issue previousValue = this._Issue.Entity;
+				if (((previousValue != value) 
+							|| (this._Issue.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Issue.Entity = null;
+						previousValue.OfficialResponses.Remove(this);
+					}
+					this._Issue.Entity = value;
+					if ((value != null))
+					{
+						value.OfficialResponses.Add(this);
+						this._issueId = value.Id;
+					}
+					else
+					{
+						this._issueId = default(int);
+					}
+					this.SendPropertyChanged("Issue");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_OfficialResponse", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.OfficialResponses.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.OfficialResponses.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
 				}
 			}
 		}

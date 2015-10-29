@@ -636,5 +636,25 @@ namespace Sigil.Controllers
         {
             return Membership.GeneratePassword(8, 2);
         }
+
+        /// <summary>
+        /// Used to determine whether or not to show the IsOfficial comment check box when making comments. ---- NEED TO REFACTOR as well as add support for SigilAdmins as well
+        /// </summary>
+        /// <param name="userId"> UserId of the user that is looking at the issue page</param>
+        /// <param name="orgId">OrgId of the issue currently being viewed</param>
+        /// <returns> Either True if the user is an admin of the org or False if not.</returns>
+        public static bool CheckUserRole(string userId, int orgId)
+        {
+            using (SigilDBDataContext dc = new SigilDBDataContext())
+            {
+                var user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userId && u.orgId == orgId);
+                if (user == default(AspNetUser))
+                    return false;
+                else if (user.AspNetUserRoles.SingleOrDefault(r => r.AspNetRole.Rank <= (int)Role.OrgAdmin) != default(AspNetUserRole))
+                    return true;
+                else
+                    return false;
+            }
+        }
     }
 }

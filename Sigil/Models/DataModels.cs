@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Data.SqlTypes;
 using System.Xml.Linq;
+
+
 namespace Sigil.Models
 {
     public struct IssuePanelOptions

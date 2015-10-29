@@ -36,6 +36,27 @@ function unvoteup(votebutton, issueid) {
     });
 }
 
+
+function official_voteup(votebutton, officialId) {
+
+}
+
+function official_unvoteup(votebutton, officialId)
+{
+
+}
+
+function official_votedown(votebutton, officialId)
+{
+
+}
+
+function official_unvotedown(votebutton, officialId)
+{
+
+}
+
+
 function votehover(votebutton) {
     if (votebutton.classList.contains('voteup')) {
         votebutton.src = "../Content/Images/notvoted-hover.png";

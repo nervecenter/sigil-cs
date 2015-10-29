@@ -14,6 +14,14 @@ using Sigil.Models;
 
 namespace Sigil
 {
+    /// <summary>
+    /// Enum to easily assign and compare roles
+    /// </summary>
+    public enum Role
+    {
+        SigilSuper, SigilAdmin, OrgSuper, OrgAdmin, User
+    };
+
     public class EmailService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)
