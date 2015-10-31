@@ -1,5 +1,20 @@
 /* Bootstrap CSS addins */
 
+a {
+    /* old: 267C89 */
+	text-decoration: none;
+	color: #2C3E50;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #2C3E50;
+}
+
+.panel {
+    box-shadow: #898989 3px 3px 5px 1px;
+}
+
 .navbar-center {
     width: 100%;
     text-align: center;
@@ -266,17 +281,8 @@ html, body {
 	font-family: 'Tahoma', Geneva, Verdana, sans-serif;
 }
 
-a {
-	text-decoration: none;
-	color: #267C89;
-}
-
-a:hover {
-	text-decoration: none;
-	color: #267C89;
-}
-
 .page {
+    /* old: E5E5E5 */
 	background-color: #E5E5E5;
 }
 
