@@ -254,9 +254,11 @@
     <Compile Include="Respositories\CategoryRepository.cs" />
     <Compile Include="Respositories\CommentRepository.cs" />
     <Compile Include="Respositories\CountRepository.cs" />
+    <Compile Include="Respositories\ErrorRepository.cs" />
     <Compile Include="Respositories\ImageRepository.cs" />
     <Compile Include="Respositories\IssueRepository.cs" />
     <Compile Include="Respositories\NotificationRepository.cs" />
+    <Compile Include="Respositories\OfficialResponseRepository.cs" />
     <Compile Include="Respositories\OrgRepository.cs" />
     <Compile Include="Respositories\SubscriptionRepository.cs" />
     <Compile Include="Respositories\TopicRepository.cs" />
@@ -264,9 +266,11 @@
     <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\CommentService.cs" />
     <Compile Include="Services\CountService.cs" />
+    <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\IssueService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\OfficialResponseService.cs" />
     <Compile Include="Services\OrgService.cs" />
     <Compile Include="Services\SubscriptionService.cs" />
     <Compile Include="Services\TopicService.cs" />

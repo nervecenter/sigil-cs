@@ -12,16 +12,9 @@ using PagedList;
 namespace Sigil.Controllers {
 
     public class HomeController : Controller {
-
-        private SigilDBDataContext dc;
-
+        
         //Comparison Object for sorting
         private static Comparison<Issue> Rank = new Comparison<Issue>(Issue_Compare);
-
-        public HomeController()
-        {
-            dc = new SigilDBDataContext();
-        }
 
         
         public ActionResult Index(int? page) {

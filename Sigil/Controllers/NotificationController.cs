@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace Sigil.Controllers
 {
-    enum NotificationType
-    {
-        Comment,OfficialResponse,
-    }
+    //need to move this to models
+    //enum NotificationType
+    //{
+    //    Comment,OfficialResponse,
+    //}
 
     struct NotificationPanel
     {
@@ -23,8 +24,6 @@ namespace Sigil.Controllers
 
     public class NotificationController : Controller
     {
-        private static SigilDBDataContext dc = new SigilDBDataContext();
-
         public static void Notification_Check(string text, string user, int issueID, int orgID, int commentID)
         {
             string to_user = null;

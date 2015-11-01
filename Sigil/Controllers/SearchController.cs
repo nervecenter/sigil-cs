@@ -12,12 +12,7 @@ namespace Sigil.Controllers
 {
     public class SearchController : Controller
     {
-        private SigilDBDataContext dc;
-
-        public SearchController()
-        {
-            dc = new SigilDBDataContext();
-        }
+      
         // GET: Search
         public ActionResult Index()
         {

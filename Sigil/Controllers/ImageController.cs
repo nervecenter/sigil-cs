@@ -14,7 +14,7 @@ namespace Sigil.Controllers
 {
     public class ImageUploaderController : Controller
     {
-        private SigilDBDataContext dc;
+      
 
         enum imgType
         {
@@ -26,10 +26,6 @@ namespace Sigil.Controllers
         private static string tmp_upload_path = "C:/Sigil/Sigil/Images/TMP/";
         private static string default_folder_path = "C:/Sigil/Sigil/Images/Default/";
 
-        public ImageUploaderController()
-        {
-            dc = new SigilDBDataContext();
-        }
 
         public ActionResult Index(bool result)
         {

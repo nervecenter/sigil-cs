@@ -17,11 +17,12 @@ namespace Sigil
         public DbSet<Category> Categories { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<OfficialResponse> OfficialResponses { get; set; }
         public DbSet<Count> CountData { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
-
+        public DbSet<Error> Errors { get; set; }
 
         public virtual void Commit()
         {

@@ -10,29 +10,16 @@ using System.Data.SqlTypes;
 
 namespace Sigil.Controllers
 {
-    enum VoteState {
-        NotLoggedIn,
-        Voted,
-        NotVoted
-    }
+    //need to move this to models
+    //enum VoteState {
+    //    NotLoggedIn,
+    //    Voted,
+    //    NotVoted
+    //}
 
     public class IssueController : Controller
     {
-        // GET: Issue
-               private SigilDBDataContext dc;
-
-        /* 
-        ==================== 
-        IssueController
-  
-            Constructor for our Issue controller; creates our persistent data context object 
-        ==================== 
-        */
-
-        public IssueController() {
-            dc = new SigilDBDataContext();
-        }
-
+      
         /* 
         ==================== 
         IssuePage

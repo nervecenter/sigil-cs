@@ -5,18 +5,16 @@ using System.Web;
 using System.Web.Mvc;
 using Sigil.Models;
 using System.Threading;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     public class CommentController : Controller
     {
-        private SigilDBDataContext dc;
-
-
-        public CommentController()
-        {
-            dc = new SigilDBDataContext();
-        }
+        private readonly ICommentService commentService;
+        private readonly IOfficialResponseRepository officialresponseService;
+        private readonly ICountService countDataService;
+        private readonly IErrorService errorService;
 
         public void Comment_Handler(HttpRequestBase request, Issue thisIssue, string userID)
         {
@@ -54,14 +52,18 @@ namespace Sigil.Controllers
 
             try
             {
-                dc.Comments.InsertOnSubmit(newComment);
+                commentService.CreateComment(newComment);
+                commentService.SaveComment();
+                //dc.Comments.InsertOnSubmit(newComment);
 
-                dc.SubmitChanges();
+                //dc.SubmitChanges();
             }
             catch (Exception e)
             {
                 //WRITE TO ERROR FILE
-                ErrorHandler.Log_Error(newComment, e, dc);
+                errorService.CreateError(newError);
+                errorService.SaveError();
+                //ErrorHandler.Log_Error(newComment, e, dc);
                 //ErrorHandler.Log_Error(commentData, e);
 
             }
@@ -84,14 +86,15 @@ namespace Sigil.Controllers
 
             try
             {
-                dc.OfficialResponses.InsertOnSubmit(newOff);
+                officialresponseService.CreateOfficialResponse(newOff);
+                //dc.OfficialResponses.InsertOnSubmit(newOff);
 
-                dc.SubmitChanges();
+                officialresponseService.SaveOfficialResponse();
             }
             catch (Exception e)
             {
                 //WRITE TO ERROR FILE
-                ErrorHandler.Log_Error(newOff, e, dc);
+                //ErrorHandler.Log_Error(newOff, e, dc);
                 //ErrorHandler.Log_Error(commentData, e);
 
             }
@@ -109,8 +112,8 @@ namespace Sigil.Controllers
         {
 
             CommentCountCol comCol;
-            var commentData = dc.CommentCounts.SingleOrDefault(c => c.OrgId == orgId && c.IssueId == issueId);
-            if (commentData == default(CommentCount))
+            var commentData = countDataService.GetIssueCommentCount(issueId, orgId);//dc.CommentCounts.SingleOrDefault(c => c.OrgId == orgId && c.IssueId == issueId);
+            if (commentData == default(CommentCountCol))
             {
                 CommentCount newCount = new CommentCount();
                 comCol = new CommentCountCol();
@@ -120,29 +123,32 @@ namespace Sigil.Controllers
                 newCount.OrgId = orgId;
                 try
                 {
-                    dc.CommentCounts.InsertOnSubmit(newCount);
+                    countDataService.CreateCommentCount(newCount);
+                    //dc.CommentCounts.InsertOnSubmit(newCount);
                 }
                 catch (Exception e)
                 {
-                    ErrorHandler.Log_Error(newCount, e, dc);
+                    //ErrorHandler.Log_Error(newCount, e, dc);
                 }
             }
             else
             {
 
-                comCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
-                comCol.Update();
-                commentData.count = CountXML<CommentCountCol>.DATAtoXML(comCol);
+                //comCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
+                
+                commentData.Update();
+                countDataService.SaveCountChanges(commentData, orgId, issueId);
+                //commentData.count = CountXML<CommentCountCol>.DATAtoXML(comCol);
             }
 
-            try
-            {
-                dc.SubmitChanges();
-            }
-            catch (Exception e)
-            {
-                ErrorHandler.Log_Error(comCol, e, dc);
-            }
+            //try
+            //{
+            //    dc.SubmitChanges();
+            //}
+            //catch (Exception e)
+            //{
+            //    ErrorHandler.Log_Error(comCol, e, dc);
+            //}
         }
     }
 }

@@ -11,7 +11,11 @@ namespace Sigil.Services
     public interface ICountService
     {
         void CreateCount(Count countTable, ViewCount viewC, VoteCount voteC, SubCount subC, CommentCount comC);
+        
         void SaveCount();
+
+        //void UpdateCount(CountCol count);
+        void SaveCountChanges(CountCol count, int orgid, int issueId);
 
         ViewCountCol GetIssueViewCount(int issueId, int orgId);
         VoteCountCol GetIssueVoteCount(int issueId, int orgId);
@@ -22,6 +26,9 @@ namespace Sigil.Services
         IEnumerable<VoteCountCol> GetOrgVoteCount(int orgId);
         IEnumerable<SubCountCol> GetOrgSubscriptionCount(int orgId);
         IEnumerable<CommentCountCol> GetOrgCommentCount(int orgId);
+
+        UserVoteCol GetUserVotes(string userId);
+
     }
 
     public class CountService : ICountService

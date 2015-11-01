@@ -11,25 +11,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Globalization;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     public class OrgController : Controller
     {
-        private SigilDBDataContext dc;
-
-        /* 
-        ==================== 
-        OrgController
-  
-            Constructor for our Org controller; creates our persistent data context object 
-        ==================== 
-        */
-
-        public OrgController()
-        {
-            dc = new SigilDBDataContext();
-        }
+        private readonly IOrgService orgService;
+        private readonly ICountService countDataService;
+        private readonly IIssueService issueService;
+        private readonly ICommentService commentService;
 
         /* 
         ==================== 
@@ -42,7 +33,7 @@ namespace Sigil.Controllers
         public ActionResult OrgPage(string orgURL, int? page)
         {
             // Get the org
-            Org thisOrg = dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
             // If the org doesn't exist, redirect to 404
             if (thisOrg == default(Org))
@@ -57,22 +48,24 @@ namespace Sigil.Controllers
             if (userId != null)
             {
                 // Get the user's votes on this org
-                userVotes = CountXML<UserVoteCol>.XMLtoDATA(dc.AspNetUsers.Single(u => u.Id == userId).votes);
+                userVotes = countDataService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA();
             }
 
             ViewBag.userVotes = userVotes;
 
             // Get the issues of the org
             // TODO: Grab issues chosen by an algorithm based on age and weight
-            IQueryable<Issue> issueList = from issue in dc.Issues
-                                          where issue.OrgId == thisOrg.Id
-                                          orderby issue.votes descending
-                                          select issue;
+            //IQueryable<Issue> issueList = from issue in dc.Issues
+            //                              where issue.OrgId == thisOrg.Id
+            //                              orderby issue.votes descending
+            //                              select issue;
+
+            var OrgIssues = issueService.GetOrgIssues(thisOrg.Id);
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
             int num_results_per_page = 3;
             int pageNumber = (page ?? 1);
-            Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, issueList.ToPagedList(pageNumber, num_results_per_page));
+            Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
 
             // This may not actually be necessary.
             //ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
@@ -91,7 +84,7 @@ namespace Sigil.Controllers
 
         public ActionResult OrgResponsesPage( string orgURL ) {
             // Get the org
-            Org thisOrg = dc.Orgs.FirstOrDefault( o => o.orgURL == orgURL );
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault( o => o.orgURL == orgURL );
 
             // If the org doesn't exist, redirect to 404
             if ( thisOrg == default( Org ) ) {
@@ -104,23 +97,25 @@ namespace Sigil.Controllers
 
             if ( userId != null ) {
                 // Get the user's votes on this org
-                userVotes = CountXML<UserVoteCol>.XMLtoDATA( dc.AspNetUsers.Single( u => u.Id == userId ).votes );
+                userVotes = countDataService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA( countDataService.GetUserVotes(userId))//dc.AspNetUsers.Single( u => u.Id == userId ).votes );
             }
 
             ViewBag.userVotes = userVotes;
 
             // Get the issues of the org
             // TODO: Grab issues chosen by an algorithm based on age and weight
-            IQueryable<Issue> issueList = from issue in dc.Issues
-                                          where issue.OrgId == thisOrg.Id && issue.responded == true
-                                          select issue;
+            //IQueryable<Issue> issueList = from issue in dc.Issues
+            //                              where issue.OrgId == thisOrg.Id && issue.responded == true
+            //                              select issue;
 
-            if (issueList.Count<Issue>() > 0) {
-                issueList.OrderBy( i => i.OfficialResponses.ToList()[ 0 ].createTime );
+            var OrgComments = commentService.GetOfficialResponses(thisOrg.Id);
+
+            if (OrgComments.Count > 0) {
+                OrgComments.OrderBy( i => i.createTime);
             }
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
-            Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, issueList );
+            Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, OrgComments );
 
             // Again, might not actually be necessary.
             //ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
@@ -139,14 +134,15 @@ namespace Sigil.Controllers
 
         public JsonResult DefaultData(string orgURL)
         {
-            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
-            var orgIssueViews = (from vc in dc.ViewCounts
-                                 where vc.OrgId == thisOrg.Id
-                                 select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+            //var orgIssueViews = (from vc in dc.ViewCounts
+            //                     where vc.OrgId == thisOrg.Id
+            //                     select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
 
+            var orgIssueViewData = countDataService.GetOrgViewCount(thisOrg.Id);
 
-            var View_Data = DataVisualization.Data_to_Google_Graph_Format(orgIssueViews, DateTime.Now.AddDays(-7), DateTime.Now);
+            var View_Data = DataVisualization.Data_to_Google_Graph_Format(orgIssueViewData, DateTime.Now.AddDays(-7), DateTime.Now);
 
             return Json(View_Data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
         }
@@ -154,7 +150,7 @@ namespace Sigil.Controllers
 
         public JsonResult CustomData(string orgURL, string dataType, string start, string stop)
         {
-            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
             DateTime startDate = DateTimeConversion.FromJSms(start);
 
@@ -166,25 +162,25 @@ namespace Sigil.Controllers
             {
                 case "Views":
                     {
-                        var data = dc.ViewCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<ViewCountCol>.XMLtoDATA(v.count)); 
+                        var data = countDataService.GetOrgViewCount(thisOrg.Id);//dc.ViewCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<ViewCountCol>.XMLtoDATA(v.count)); 
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Votes":
                     {
-                        var data = dc.VoteCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<VoteCountCol>.XMLtoDATA(v.count));
+                        var data = countDataService.GetOrgVoteCount(thisOrg.Id);//dc.VoteCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<VoteCountCol>.XMLtoDATA(v.count));
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Comments":
                     {
-                        var data = dc.CommentCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<CommentCountCol>.XMLtoDATA(v.count));
+                        var data = countDataService.GetOrgCommentCount(thisOrg.Id);//dc.CommentCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<CommentCountCol>.XMLtoDATA(v.count));
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Subscriptions":
                     {
-                        var data = dc.SubCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<SubCountCol>.XMLtoDATA(v.count));
+                        var data = countDataService.GetOrgSubscriptionCount(thisOrg.Id);//dc.SubCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<SubCountCol>.XMLtoDATA(v.count));
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
@@ -200,7 +196,7 @@ namespace Sigil.Controllers
         public ActionResult OrgData(string orgURL)
         {
             // Get the org
-            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL); //dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
 
             /*

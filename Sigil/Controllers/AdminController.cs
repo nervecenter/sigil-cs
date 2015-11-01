@@ -8,11 +8,7 @@ namespace Sigil.Controllers
 {
     public class AdminController : Controller
     {
-        private SigilDBDataContext dc;
-        public AdminController()
-        {
-            dc = new SigilDBDataContext();
-        }
+
 
         // GET: Admin
         public ActionResult Index()

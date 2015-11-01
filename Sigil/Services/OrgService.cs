@@ -22,7 +22,7 @@ namespace Sigil.Services
         /// <param name="org">Either the orgURL or name</param>
         /// <param name="name">if True then only looks by name</param>
         /// <returns></returns>
-        Org GetOrg(string org, bool name);
+        Org GetOrg(string org, bool name = false);
         IEnumerable<Org> GetTopicOrgs(int topicId);
 
     }
@@ -37,7 +37,47 @@ namespace Sigil.Services
         private readonly IUserRepository userRespository;
         private readonly IUnitOfWork unitOfWork;
 
+        public OrgService(IOrgRepository orgRepo, IUnitOfWork unitofwork)
+        {
+            this.OrgsRepository = orgRepo;
+            this.unitOfWork = unitofwork;
+        }
 
+        public Org GetOrg(string orgstr, bool name)
+        {
+            Org org = default(Org);
+            if (!name)
+                org = OrgsRepository.GetByName(orgstr);
+
+            if (org != default(Org))
+                return org;
+
+            org = OrgsRepository.GetByURL(orgstr);
+            return org;
+        }
+
+        public Org GetOrg(int id)
+        {
+            var org = OrgsRepository.GetById(id);
+
+            return org;
+        }
+
+        public IEnumerable<Org> GetTopicOrgs(int topicId)
+        {
+            var orgs = OrgsRepository.GetMany(o => o.topicid == topicId);
+            return orgs;
+        }
+
+        public void CreateOrg(Org org)
+        {
+            OrgsRepository.Add(org);
+        }
+
+        public void SaveOrg()
+        {
+            unitOfWork.Commit();
+        }
 
 
     }

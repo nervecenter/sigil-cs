@@ -11,11 +11,7 @@ namespace Sigil.Controllers
 {
     public class SubscriptionsController : Controller
     {
-        private SigilDBDataContext dc;
-        public SubscriptionsController()
-        {
-            dc = new SigilDBDataContext();
-        }
+       
         // GET: Subscriptions
         [Authorize]
         public ActionResult Index()
