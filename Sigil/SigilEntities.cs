@@ -18,7 +18,10 @@ namespace Sigil
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<OfficialResponse> OfficialResponses { get; set; }
-        public DbSet<Count> CountData { get; set; }
+        public DbSet<ViewCount> ViewCountData { get; set; }
+        public DbSet<VoteCount> VoteCountData { get; set; }
+        public DbSet<SubCount> SubscriptionCountData { get; set; }
+        public DbSet<CommentCount> CommentCountData { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
