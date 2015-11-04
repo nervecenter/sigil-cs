@@ -12,7 +12,7 @@ namespace Sigil.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentService commentService;
-        private readonly IOfficialResponseRepository officialresponseService;
+        private readonly IOfficialResponseService officialresponseService;
         private readonly ICountService countDataService;
         private readonly IErrorService errorService;
 
@@ -61,7 +61,7 @@ namespace Sigil.Controllers
             catch (Exception e)
             {
                 //WRITE TO ERROR FILE
-                errorService.CreateError(newError);
+                errorService.CreateError(newComment, e);
                 errorService.SaveError();
                 //ErrorHandler.Log_Error(newComment, e, dc);
                 //ErrorHandler.Log_Error(commentData, e);
@@ -93,6 +93,9 @@ namespace Sigil.Controllers
             }
             catch (Exception e)
             {
+
+                errorService.CreateError(newOff, e);
+                errorService.SaveError();
                 //WRITE TO ERROR FILE
                 //ErrorHandler.Log_Error(newOff, e, dc);
                 //ErrorHandler.Log_Error(commentData, e);
@@ -111,35 +114,35 @@ namespace Sigil.Controllers
         private void CommentCountRoutine(int orgId, int issueId)
         {
 
-            CommentCountCol comCol;
+            //CommentCountCol comCol;
             var commentData = countDataService.GetIssueCommentCount(issueId, orgId);//dc.CommentCounts.SingleOrDefault(c => c.OrgId == orgId && c.IssueId == issueId);
-            if (commentData == default(CommentCountCol))
-            {
-                CommentCount newCount = new CommentCount();
-                comCol = new CommentCountCol();
-                comCol.Update();
-                newCount.count = CountXML<CommentCountCol>.DATAtoXML(comCol);
-                newCount.IssueId = issueId;
-                newCount.OrgId = orgId;
-                try
-                {
-                    countDataService.CreateCommentCount(newCount);
-                    //dc.CommentCounts.InsertOnSubmit(newCount);
-                }
-                catch (Exception e)
-                {
-                    //ErrorHandler.Log_Error(newCount, e, dc);
-                }
-            }
-            else
-            {
+            //if (commentData == default(CommentCountCol))
+            //{
+            //    CommentCount newCount = new CommentCount();
+            //    comCol = new CommentCountCol();
+            //    comCol.Update();
+            //    newCount.count = CountXML<CommentCountCol>.DATAtoXML(comCol);
+            //    newCount.IssueId = issueId;
+            //    newCount.OrgId = orgId;
+            //    try
+            //    {
+            //        countDataService.CreateCommentCount(newCount);
+            //        //dc.CommentCounts.InsertOnSubmit(newCount);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        //ErrorHandler.Log_Error(newCount, e, dc);
+            //    }
+            //}
+            //else
+            //{
 
                 //comCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
                 
                 commentData.Update();
                 countDataService.SaveCountChanges(commentData, orgId, issueId);
                 //commentData.count = CountXML<CommentCountCol>.DATAtoXML(comCol);
-            }
+            //}
 
             //try
             //{

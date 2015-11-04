@@ -26,7 +26,6 @@
       <Column Name="TopicId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="issueId" Type="Comment" />
       <Association Name="Issue_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="issueId" Type="OfficialResponse" />
-      <Association Name="Issue_Count" Member="Counts" ThisKey="Id" OtherKey="IssueId" Type="Count" />
       <Association Name="Topic_Issue" Member="Topic" ThisKey="TopicId" OtherKey="Id" Type="Topic" IsForeignKey="true" />
       <Association Name="Category_Issue" Member="Category" ThisKey="CatId" OtherKey="Id" Type="Category" IsForeignKey="true" />
       <Association Name="Org_Issue" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
@@ -65,7 +64,6 @@
       <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="count" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="Count_ViewCount" Member="Count1" ThisKey="Id" OtherKey="ViewCountId" Type="Count" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.VoteCounts" Member="VoteCounts">
@@ -74,7 +72,6 @@
       <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="count" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="Count_VoteCount" Member="Count1" ThisKey="Id" OtherKey="VoteCountId" Type="Count" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Category" Member="Categories">
@@ -87,7 +84,6 @@
       <Association Name="Category_Issue" Member="Issues" ThisKey="Id" OtherKey="CatId" Type="Issue" />
       <Association Name="Category_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="CatId" Type="Subscription" />
       <Association Name="Category_Image" Member="Images" ThisKey="Id" OtherKey="CatId" Type="Image" />
-      <Association Name="Category_Count" Member="Counts" ThisKey="Id" OtherKey="CategoryId" Type="Count" />
       <Association Name="Org_Category" Member="Org" ThisKey="orgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
     </Type>
   </Table>
@@ -106,7 +102,6 @@
       <Association Name="Org_Image" Member="Images" ThisKey="Id" OtherKey="OrgId" Type="Image" />
       <Association Name="Org_Comment" Member="Comments" ThisKey="Id" OtherKey="OrgId" Type="Comment" />
       <Association Name="Org_OfficialResponse" Member="OfficialResponses" ThisKey="Id" OtherKey="OrgId" Type="OfficialResponse" />
-      <Association Name="Org_Count" Member="Counts" ThisKey="Id" OtherKey="OrgId" Type="Count" />
       <Association Name="Topic_Org" Member="Topic" ThisKey="topicid" OtherKey="Id" Type="Topic" IsForeignKey="true" />
     </Type>
   </Table>
@@ -116,7 +111,6 @@
       <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="count" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="Count_CommentCount" Member="Count1" ThisKey="Id" OtherKey="CommentCountId" Type="Count" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.SubCount" Member="SubCounts">
@@ -124,7 +118,6 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="count" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="Count_SubCount" Member="Count1" ThisKey="Id" OtherKey="SubCountId" Type="Count" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.OrgApp" Member="OrgApps">
@@ -240,25 +233,6 @@
       <Association Name="Org_OfficialResponse" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
       <Association Name="Issue_OfficialResponse" Member="Issue" ThisKey="issueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
       <Association Name="AspNetUser_OfficialResponse" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Counts" Member="Counts">
-    <Type Name="Count">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="VoteCountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ViewCountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CommentCountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="SubCountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="OrgId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Count_ViewCount" Member="ViewCounts" ThisKey="ViewCountId" OtherKey="Id" Type="ViewCount" />
-      <Association Name="Count_VoteCount" Member="VoteCounts" ThisKey="VoteCountId" OtherKey="Id" Type="VoteCount" />
-      <Association Name="Count_CommentCount" Member="CommentCounts" ThisKey="CommentCountId" OtherKey="Id" Type="CommentCount" />
-      <Association Name="Count_SubCount" Member="SubCounts" ThisKey="SubCountId" OtherKey="Id" Type="SubCount" />
-      <Association Name="Org_Count" Member="Org" ThisKey="OrgId" OtherKey="Id" Type="Org" IsForeignKey="true" />
-      <Association Name="Issue_Count" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
-      <Association Name="Category_Count" Member="Category" ThisKey="CategoryId" OtherKey="Id" Type="Category" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

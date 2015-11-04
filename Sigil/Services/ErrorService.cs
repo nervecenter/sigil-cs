@@ -1,4 +1,5 @@
 ﻿using Sigil.Models;
+using Sigil.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface IErrorService
     {
+        IEnumerable<Error> GetAllErrors();
+        void CreateError(object errorObj, Exception e, string msg = "");
+        void SaveError();
 
     }
 

@@ -16,7 +16,9 @@ namespace Sigil.Services
 
         IEnumerable<Comment> GetUserComments(string id);
 
-        Tuple<IEnumerable<Issue>, IEnumerable<Comment>> GetUserVotes(string id);
+        void CreateUserVotes(string userId);
+        void SaveUserVotes();
+        UserVoteCol GetUserVotes(string userId);
     }
 
     public class UserService : IUserService

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using Sigil.Models;
 
-namespace Sigil.Models
+namespace Sigil.Repository
 {
     public class UserRepository : RepositoryBase<AspNetUser>, IUserRepository
     {

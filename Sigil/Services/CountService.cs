@@ -10,10 +10,10 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface ICountService
     {
-        void CreateCount(Count countTable, ViewCount viewC, VoteCount voteC, SubCount subC, CommentCount comC);
-        
-        void SaveCount();
-
+        void CreateOrgCountData(ViewCount viewC, SubCount subC);
+        void CreateIssueCountData(ViewCount viewC, VoteCount voteC, CommentCount comC);
+        void SaveOrgCountData();
+        void SaveIssueCouteData();
         //void UpdateCount(CountCol count);
         void SaveCountChanges(CountCol count, int orgid, int issueId);
 

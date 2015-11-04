@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Sigil.Models;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
@@ -19,11 +20,12 @@ namespace Sigil.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private SigilDBDataContext dc;
-        public AccountController()
-        {
-            dc = new SigilDBDataContext();
-        }
+
+        private readonly IOrgService orgService;
+        private readonly ICountService countDataService;
+        private readonly IErrorService errorService;
+        private readonly IUserService userService;
+        private readonly IImageService imageService;
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
@@ -183,7 +185,11 @@ namespace Sigil.Controllers
         /// </summary>
         private void Create_User_Extras(string userID)
         {
-            ImageController<AspNetUser>.Assign_Default_Icon(userID);
+            //ImageController<AspNetUser>.Assign_Default_Icon(userID);
+            imageService.AssignDefaultImage(userID);
+            imageService.SaveImage();
+            userService.CreateUserVotes(userID);
+            userService.SaveUserVotes();
         }
 
         [AllowAnonymous]
@@ -213,12 +219,16 @@ namespace Sigil.Controllers
             newOrg.AdminName = model.orgAdminName;
             try
             {
-                dc.OrgApps.InsertOnSubmit(newOrg);
-                dc.SubmitChanges();
+                orgService.CreateOrgApp(newOrg);
+                orgService.SaveOrgApp();
+                //dc.OrgApps.InsertOnSubmit(newOrg);
+                //dc.SubmitChanges();
             }
             catch(Exception e)
             {
-                ErrorHandler.Log_Error(newOrg, e, dc);
+                errorService.CreateError(newOrg, e);
+                errorService.SaveError();
+                //ErrorHandler.Log_Error(newOrg, e, dc);
             }
 
             return View("LandingPage");
@@ -227,7 +237,7 @@ namespace Sigil.Controllers
         //need to protect this so that sigil is the only role allowed to call
         public async Task<ActionResult> OrgConfirmed(int norgID)
         {
-            OrgApp verifiedOrg = dc.OrgApps.Single(o => o.Id == norgID);
+            OrgApp verifiedOrg = orgService.ApproveOrgApp(norgID);//dc.OrgApps.Single(o => o.Id == norgID);
 
 
 
@@ -247,17 +257,21 @@ namespace Sigil.Controllers
             newOrg.lastView = DateTime.UtcNow;
             try
             {
-                dc.Orgs.InsertOnSubmit(newOrg);
-                dc.SubmitChanges();
+                orgService.CreateOrg(newOrg);
+                orgService.SaveOrg();
+                //dc.Orgs.InsertOnSubmit(newOrg);
+               // dc.SubmitChanges();
             }
             catch(Exception e)
             {
-                ErrorHandler.Log_Error(newOrg, e, dc);
+                errorService.CreateError(newOrg, e);
+                errorService.SaveError();
+                //ErrorHandler.Log_Error(newOrg, e, dc);
                 //need to kick back to a new screen to have them try again
             }
 
             //Setup Org data collection db entries
-            int orgID = dc.Orgs.Single(o => o.orgName == newOrg.orgName).Id;
+            int orgID = orgService.GetOrg(newOrg.orgURL).Id;
             SubCount newSubs = new SubCount();
             newSubs.OrgId = orgID;
             newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
@@ -268,15 +282,18 @@ namespace Sigil.Controllers
             newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
 
             try {
-                dc.SubCounts.InsertOnSubmit(newSubs);
-                dc.ViewCounts.InsertOnSubmit(newVCount);
-                dc.SubmitChanges();
+                countDataService.CreateOrgCountData(newVCount, newSubs);
+                countDataService.SaveOrgCountData();
+                
+                //dc.SubCounts.InsertOnSubmit(newSubs);
+                //dc.ViewCounts.InsertOnSubmit(newVCount);
+                //dc.SubmitChanges();
             }
             catch(Exception e)
             {
-                ErrorHandler.Log_Error(newSubs, e, dc);
-                ErrorHandler.Log_Error(newVCount, e, dc);
-
+                errorService.CreateError(newSubs, e);
+                errorService.CreateError(newVCount, e);
+                errorService.SaveError();
                 //need to figure out what to do this error and the before one
             }
 
@@ -602,35 +619,35 @@ namespace Sigil.Controllers
         }
         #endregion
 
-        public static AspNetUser GetLoggedInUser( System.Security.Principal.IPrincipal user ) {
-            string id = user.Identity.GetUserId();
+        //public static AspNetUser GetLoggedInUser( System.Security.Principal.IPrincipal user ) {
+        //    string id = user.Identity.GetUserId();
 
-            if ( id == null ) {
-                return default( AspNetUser );
-            } else {
-                using ( SigilDBDataContext dc = new SigilDBDataContext() ) {
-                    return dc.AspNetUsers.Single<AspNetUser>( u => u.Id ==  id );
-                }
-            }
-        }
+        //    if ( id == null ) {
+        //        return default( AspNetUser );
+        //    } else {
+        //        using ( SigilDBDataContext dc = new SigilDBDataContext() ) {
+        //            return dc.AspNetUsers.Single<AspNetUser>( u => u.Id ==  id );
+        //        }
+        //    }
+        //}
 
-        public static System.Collections.Generic.List<Subscription> userSubs( AspNetUser user ) {
-            System.Collections.Generic.List<Subscription> subs;
-            SigilDBDataContext dc = new SigilDBDataContext();
-            subs = ( from Subs in dc.Subscriptions
-                     where Subs.UserId == user.Id
-                     select Subs ).ToList();
-            return subs;
-        }
+        //public static System.Collections.Generic.List<Subscription> userSubs( AspNetUser user ) {
+        //    System.Collections.Generic.List<Subscription> subs;
+        //    SigilDBDataContext dc = new SigilDBDataContext();
+        //    subs = ( from Subs in dc.Subscriptions
+        //             where Subs.UserId == user.Id
+        //             select Subs ).ToList();
+        //    return subs;
+        //}
 
-        public static System.Collections.Generic.List<Subscription> userSubs( System.Security.Principal.IPrincipal user ) {
-            System.Collections.Generic.List<Subscription> subs;
-            SigilDBDataContext dc = new SigilDBDataContext();
-            subs = ( from Subs in dc.Subscriptions
-                     where Subs.UserId == user.Identity.GetUserId()
-                     select Subs ).ToList();
-            return subs;
-        }
+        //public static System.Collections.Generic.List<Subscription> userSubs( System.Security.Principal.IPrincipal user ) {
+        //    System.Collections.Generic.List<Subscription> subs;
+        //    SigilDBDataContext dc = new SigilDBDataContext();
+        //    subs = ( from Subs in dc.Subscriptions
+        //             where Subs.UserId == user.Identity.GetUserId()
+        //             select Subs ).ToList();
+        //    return subs;
+        //}
 
         private string Generate_Temp_Password()
         {
@@ -643,18 +660,18 @@ namespace Sigil.Controllers
         /// <param name="userId"> UserId of the user that is looking at the issue page</param>
         /// <param name="orgId">OrgId of the issue currently being viewed</param>
         /// <returns> Either True if the user is an admin of the org or False if not.</returns>
-        public static bool CheckUserRole(string userId, int orgId)
-        {
-            using (SigilDBDataContext dc = new SigilDBDataContext())
-            {
-                var user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userId && u.orgId == orgId);
-                if (user == default(AspNetUser))
-                    return false;
-                else if (user.AspNetUserRoles.SingleOrDefault(r => r.AspNetRole.Rank <= (int)Role.OrgAdmin) != default(AspNetUserRole))
-                    return true;
-                else
-                    return false;
-            }
-        }
+        //public static bool CheckUserRole(string userId, int orgId)
+        //{
+        //    using (SigilDBDataContext dc = new SigilDBDataContext())
+        //    {
+        //        var user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userId && u.orgId == orgId);
+        //        if (user == default(AspNetUser))
+        //            return false;
+        //        else if (user.AspNetUserRoles.SingleOrDefault(r => r.AspNetRole.Rank <= (int)Role.OrgAdmin) != default(AspNetUserRole))
+        //            return true;
+        //        else
+        //            return false;
+        //    }
+        //}
     }
 }

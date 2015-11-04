@@ -8,6 +8,7 @@ using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using PagedList;
+using Sigil.Services;
 
 namespace Sigil.Controllers {
 
@@ -16,31 +17,35 @@ namespace Sigil.Controllers {
         //Comparison Object for sorting
         private static Comparison<Issue> Rank = new Comparison<Issue>(Issue_Compare);
 
-        
+        private readonly ISubscriptionService subscriptionService;
+        private readonly IUserService userService;
+        private readonly IIssueService issueService;
+
+
         public ActionResult Index(int? page) {
             var userID = User.Identity.GetUserId();
 
             if (userID != null)
             {
                 //Get the users subscriptions
-                IQueryable<Subscription> userSubs = dc.Subscriptions.Where(s => s.UserId == userID);
+                var userSubs = subscriptionService.GetUserSubscriptions(userID);//dc.Subscriptions.Where(s => s.UserId == userID);
 
                 //get all the users issues based on their subscriptions
-                var userIssues = Get_User_Issues(userID, userSubs);
+                var userIssues = issueService.GetUserIssues(userID);//Get_User_Issues(userID, userSubs);
 
                 //sort the users issues by issue rank
 
                 userIssues.OrderBy(i => Rank);
 
                 //gather all the votes the user made 
-                var user = dc.AspNetUsers.Single(u => u.Id == userID);
+                var userVotes = userService.GetUserVotes(userID);//dc.AspNetUsers.Single(u => u.Id == userID);
 
                 //this needs to be created in the user registration !!!!!!
-                if (user.votes == null)
-                    user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
+                //if (user.votes == null)
+                //    user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
 
-                dc.SubmitChanges();
-                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+                //dc.SubmitChanges();
+                //var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
 
               
 
@@ -95,10 +100,10 @@ namespace Sigil.Controllers {
         /// <param name="userID">Users AspNetUser.Id</param>
         /// <param name="userSubs">Query of all subscriptions assocaited with the user.</param>
         /// <returns></returns>
-        private IQueryable<Issue> Get_User_Issues(string userID, IQueryable<Subscription> userSubs)
-        {
-            return dc.Issues.Where(i => userSubs.Any(s => s.OrgId == i.OrgId || (s.TopicId != 0 && s.TopicId == i.TopicId) || i.UserId == userID || (s.CatId != 0 && s.CatId == i.CatId)));
-        }
+        //private IQueryable<Issue> Get_User_Issues(string userID, IQueryable<Subscription> userSubs)
+        //{
+        //    return dc.Issues.Where(i => userSubs.Any(s => s.OrgId == i.OrgId || (s.TopicId != 0 && s.TopicId == i.TopicId) || i.UserId == userID || (s.CatId != 0 && s.CatId == i.CatId)));
+        //}
 
 
         /// <summary>
@@ -107,8 +112,7 @@ namespace Sigil.Controllers {
         /// <returns></returns>
         private List<IGrouping<Org,Issue>> Get_Trending_Issues_With_Topics()
         {
-            var pretrending = (from iss in dc.Issues
-                              select iss).ToList();
+            var pretrending = issueService.GetAllIssues().ToList();
 
             pretrending.Sort(Rank);
 

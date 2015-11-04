@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
-
+using Sigil.Repository;
 
 namespace Sigil.Services
 {
@@ -14,6 +14,7 @@ namespace Sigil.Services
         void SaveIssue();
 
         Issue GetIssue(int orgId, int issueId);
+        IEnumerable<Issue> GetAllIssues();
         IEnumerable<Issue> GetOrgIssues(int orgId);
         IEnumerable<Issue> GetTopicIssues(int topicId);
         IEnumerable<Issue> GetCategoryIssues(int catId);

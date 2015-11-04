@@ -84,9 +84,6 @@ namespace Sigil.Models
     partial void InsertOfficialResponse(OfficialResponse instance);
     partial void UpdateOfficialResponse(OfficialResponse instance);
     partial void DeleteOfficialResponse(OfficialResponse instance);
-    partial void InsertCount(Count instance);
-    partial void UpdateCount(Count instance);
-    partial void DeleteCount(Count instance);
     #endregion
 		
 		public SigilDBDataContext() : 
@@ -260,14 +257,6 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<OfficialResponse>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Count> Counts
-		{
-			get
-			{
-				return this.GetTable<Count>();
 			}
 		}
 	}
@@ -478,8 +467,6 @@ namespace Sigil.Models
 		
 		private EntitySet<OfficialResponse> _OfficialResponses;
 		
-		private EntitySet<Count> _Counts;
-		
 		private EntityRef<Topic> _Topic;
 		
 		private EntityRef<Category> _Category;
@@ -526,7 +513,6 @@ namespace Sigil.Models
 		{
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
-			this._Counts = new EntitySet<Count>(new Action<Count>(this.attach_Counts), new Action<Count>(this.detach_Counts));
 			this._Topic = default(EntityRef<Topic>);
 			this._Category = default(EntityRef<Category>);
 			this._Org = default(EntityRef<Org>);
@@ -856,19 +842,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Count", Storage="_Counts", ThisKey="Id", OtherKey="IssueId")]
-		public EntitySet<Count> Counts
-		{
-			get
-			{
-				return this._Counts;
-			}
-			set
-			{
-				this._Counts.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Issue", Storage="_Topic", ThisKey="TopicId", OtherKey="Id", IsForeignKey=true)]
 		public Topic Topic
 		{
@@ -1044,18 +1017,6 @@ namespace Sigil.Models
 		}
 		
 		private void detach_OfficialResponses(OfficialResponse entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = null;
-		}
-		
-		private void attach_Counts(Count entity)
-		{
-			this.SendPropertyChanging();
-			entity.Issue = this;
-		}
-		
-		private void detach_Counts(Count entity)
 		{
 			this.SendPropertyChanging();
 			entity.Issue = null;
@@ -1668,8 +1629,6 @@ namespace Sigil.Models
 		
 		private System.Xml.Linq.XElement _count;
 		
-		private EntityRef<Count> _Count1;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1686,7 +1645,6 @@ namespace Sigil.Models
 		
 		public ViewCount()
 		{
-			this._Count1 = default(EntityRef<Count>);
 			OnCreated();
 		}
 		
@@ -1701,10 +1659,6 @@ namespace Sigil.Models
 			{
 				if ((this._Id != value))
 				{
-					if (this._Count1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnIdChanging(value);
 					this.SendPropertyChanging();
 					this._Id = value;
@@ -1770,40 +1724,6 @@ namespace Sigil.Models
 					this._count = value;
 					this.SendPropertyChanged("count");
 					this.OncountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_ViewCount", Storage="_Count1", ThisKey="Id", OtherKey="ViewCountId", IsForeignKey=true)]
-		public Count Count1
-		{
-			get
-			{
-				return this._Count1.Entity;
-			}
-			set
-			{
-				Count previousValue = this._Count1.Entity;
-				if (((previousValue != value) 
-							|| (this._Count1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Count1.Entity = null;
-						previousValue.ViewCounts.Remove(this);
-					}
-					this._Count1.Entity = value;
-					if ((value != null))
-					{
-						value.ViewCounts.Add(this);
-						this._Id = value.ViewCountId;
-					}
-					else
-					{
-						this._Id = default(int);
-					}
-					this.SendPropertyChanged("Count1");
 				}
 			}
 		}
@@ -1843,8 +1763,6 @@ namespace Sigil.Models
 		
 		private System.Xml.Linq.XElement _count;
 		
-		private EntityRef<Count> _Count1;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1861,7 +1779,6 @@ namespace Sigil.Models
 		
 		public VoteCount()
 		{
-			this._Count1 = default(EntityRef<Count>);
 			OnCreated();
 		}
 		
@@ -1876,10 +1793,6 @@ namespace Sigil.Models
 			{
 				if ((this._Id != value))
 				{
-					if (this._Count1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnIdChanging(value);
 					this.SendPropertyChanging();
 					this._Id = value;
@@ -1945,40 +1858,6 @@ namespace Sigil.Models
 					this._count = value;
 					this.SendPropertyChanged("count");
 					this.OncountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_VoteCount", Storage="_Count1", ThisKey="Id", OtherKey="VoteCountId", IsForeignKey=true)]
-		public Count Count1
-		{
-			get
-			{
-				return this._Count1.Entity;
-			}
-			set
-			{
-				Count previousValue = this._Count1.Entity;
-				if (((previousValue != value) 
-							|| (this._Count1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Count1.Entity = null;
-						previousValue.VoteCounts.Remove(this);
-					}
-					this._Count1.Entity = value;
-					if ((value != null))
-					{
-						value.VoteCounts.Add(this);
-						this._Id = value.VoteCountId;
-					}
-					else
-					{
-						this._Id = default(int);
-					}
-					this.SendPropertyChanged("Count1");
 				}
 			}
 		}
@@ -2026,8 +1905,6 @@ namespace Sigil.Models
 		
 		private EntitySet<Image> _Images;
 		
-		private EntitySet<Count> _Counts;
-		
 		private EntityRef<Org> _Org;
 		
     #region Extensibility Method Definitions
@@ -2051,7 +1928,6 @@ namespace Sigil.Models
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._Images = new EntitySet<Image>(new Action<Image>(this.attach_Images), new Action<Image>(this.detach_Images));
-			this._Counts = new EntitySet<Count>(new Action<Count>(this.attach_Counts), new Action<Count>(this.detach_Counts));
 			this._Org = default(EntityRef<Org>);
 			OnCreated();
 		}
@@ -2199,19 +2075,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Count", Storage="_Counts", ThisKey="Id", OtherKey="CategoryId")]
-		public EntitySet<Count> Counts
-		{
-			get
-			{
-				return this._Counts;
-			}
-			set
-			{
-				this._Counts.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Category", Storage="_Org", ThisKey="orgId", OtherKey="Id", IsForeignKey=true)]
 		public Org Org
 		{
@@ -2301,18 +2164,6 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.Category = null;
 		}
-		
-		private void attach_Counts(Count entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = this;
-		}
-		
-		private void detach_Counts(Count entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = null;
-		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Orgs")]
@@ -2347,8 +2198,6 @@ namespace Sigil.Models
 		
 		private EntitySet<OfficialResponse> _OfficialResponses;
 		
-		private EntitySet<Count> _Counts;
-		
 		private EntityRef<Topic> _Topic;
 		
     #region Extensibility Method Definitions
@@ -2379,7 +2228,6 @@ namespace Sigil.Models
 			this._Images = new EntitySet<Image>(new Action<Image>(this.attach_Images), new Action<Image>(this.detach_Images));
 			this._Comments = new EntitySet<Comment>(new Action<Comment>(this.attach_Comments), new Action<Comment>(this.detach_Comments));
 			this._OfficialResponses = new EntitySet<OfficialResponse>(new Action<OfficialResponse>(this.attach_OfficialResponses), new Action<OfficialResponse>(this.detach_OfficialResponses));
-			this._Counts = new EntitySet<Count>(new Action<Count>(this.attach_Counts), new Action<Count>(this.detach_Counts));
 			this._Topic = default(EntityRef<Topic>);
 			OnCreated();
 		}
@@ -2606,19 +2454,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Count", Storage="_Counts", ThisKey="Id", OtherKey="OrgId")]
-		public EntitySet<Count> Counts
-		{
-			get
-			{
-				return this._Counts;
-			}
-			set
-			{
-				this._Counts.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Topic_Org", Storage="_Topic", ThisKey="topicid", OtherKey="Id", IsForeignKey=true)]
 		public Topic Topic
 		{
@@ -2744,18 +2579,6 @@ namespace Sigil.Models
 			this.SendPropertyChanging();
 			entity.Org = null;
 		}
-		
-		private void attach_Counts(Count entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = this;
-		}
-		
-		private void detach_Counts(Count entity)
-		{
-			this.SendPropertyChanging();
-			entity.Org = null;
-		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CommentCount")]
@@ -2771,8 +2594,6 @@ namespace Sigil.Models
 		private int _IssueId;
 		
 		private System.Xml.Linq.XElement _count;
-		
-		private EntityRef<Count> _Count1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2790,7 +2611,6 @@ namespace Sigil.Models
 		
 		public CommentCount()
 		{
-			this._Count1 = default(EntityRef<Count>);
 			OnCreated();
 		}
 		
@@ -2805,10 +2625,6 @@ namespace Sigil.Models
 			{
 				if ((this._Id != value))
 				{
-					if (this._Count1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnIdChanging(value);
 					this.SendPropertyChanging();
 					this._Id = value;
@@ -2878,40 +2694,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_CommentCount", Storage="_Count1", ThisKey="Id", OtherKey="CommentCountId", IsForeignKey=true)]
-		public Count Count1
-		{
-			get
-			{
-				return this._Count1.Entity;
-			}
-			set
-			{
-				Count previousValue = this._Count1.Entity;
-				if (((previousValue != value) 
-							|| (this._Count1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Count1.Entity = null;
-						previousValue.CommentCounts.Remove(this);
-					}
-					this._Count1.Entity = value;
-					if ((value != null))
-					{
-						value.CommentCounts.Add(this);
-						this._Id = value.CommentCountId;
-					}
-					else
-					{
-						this._Id = default(int);
-					}
-					this.SendPropertyChanged("Count1");
-				}
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2945,8 +2727,6 @@ namespace Sigil.Models
 		
 		private System.Xml.Linq.XElement _count;
 		
-		private EntityRef<Count> _Count1;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2961,7 +2741,6 @@ namespace Sigil.Models
 		
 		public SubCount()
 		{
-			this._Count1 = default(EntityRef<Count>);
 			OnCreated();
 		}
 		
@@ -2976,10 +2755,6 @@ namespace Sigil.Models
 			{
 				if ((this._Id != value))
 				{
-					if (this._Count1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnIdChanging(value);
 					this.SendPropertyChanging();
 					this._Id = value;
@@ -3025,40 +2800,6 @@ namespace Sigil.Models
 					this._count = value;
 					this.SendPropertyChanged("count");
 					this.OncountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_SubCount", Storage="_Count1", ThisKey="Id", OtherKey="SubCountId", IsForeignKey=true)]
-		public Count Count1
-		{
-			get
-			{
-				return this._Count1.Entity;
-			}
-			set
-			{
-				Count previousValue = this._Count1.Entity;
-				if (((previousValue != value) 
-							|| (this._Count1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Count1.Entity = null;
-						previousValue.SubCounts.Remove(this);
-					}
-					this._Count1.Entity = value;
-					if ((value != null))
-					{
-						value.SubCounts.Add(this);
-						this._Id = value.SubCountId;
-					}
-					else
-					{
-						this._Id = default(int);
-					}
-					this.SendPropertyChanged("Count1");
 				}
 			}
 		}
@@ -5575,471 +5316,6 @@ namespace Sigil.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Counts")]
-	public partial class Count : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _VoteCountId;
-		
-		private int _ViewCountId;
-		
-		private int _CommentCountId;
-		
-		private int _SubCountId;
-		
-		private int _OrgId;
-		
-		private int _IssueId;
-		
-		private int _CategoryId;
-		
-		private EntitySet<ViewCount> _ViewCounts;
-		
-		private EntitySet<VoteCount> _VoteCounts;
-		
-		private EntitySet<CommentCount> _CommentCounts;
-		
-		private EntitySet<SubCount> _SubCounts;
-		
-		private EntityRef<Org> _Org;
-		
-		private EntityRef<Issue> _Issue;
-		
-		private EntityRef<Category> _Category;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnVoteCountIdChanging(int value);
-    partial void OnVoteCountIdChanged();
-    partial void OnViewCountIdChanging(int value);
-    partial void OnViewCountIdChanged();
-    partial void OnCommentCountIdChanging(int value);
-    partial void OnCommentCountIdChanged();
-    partial void OnSubCountIdChanging(int value);
-    partial void OnSubCountIdChanged();
-    partial void OnOrgIdChanging(int value);
-    partial void OnOrgIdChanged();
-    partial void OnIssueIdChanging(int value);
-    partial void OnIssueIdChanged();
-    partial void OnCategoryIdChanging(int value);
-    partial void OnCategoryIdChanged();
-    #endregion
-		
-		public Count()
-		{
-			this._ViewCounts = new EntitySet<ViewCount>(new Action<ViewCount>(this.attach_ViewCounts), new Action<ViewCount>(this.detach_ViewCounts));
-			this._VoteCounts = new EntitySet<VoteCount>(new Action<VoteCount>(this.attach_VoteCounts), new Action<VoteCount>(this.detach_VoteCounts));
-			this._CommentCounts = new EntitySet<CommentCount>(new Action<CommentCount>(this.attach_CommentCounts), new Action<CommentCount>(this.detach_CommentCounts));
-			this._SubCounts = new EntitySet<SubCount>(new Action<SubCount>(this.attach_SubCounts), new Action<SubCount>(this.detach_SubCounts));
-			this._Org = default(EntityRef<Org>);
-			this._Issue = default(EntityRef<Issue>);
-			this._Category = default(EntityRef<Category>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VoteCountId", DbType="Int NOT NULL")]
-		public int VoteCountId
-		{
-			get
-			{
-				return this._VoteCountId;
-			}
-			set
-			{
-				if ((this._VoteCountId != value))
-				{
-					this.OnVoteCountIdChanging(value);
-					this.SendPropertyChanging();
-					this._VoteCountId = value;
-					this.SendPropertyChanged("VoteCountId");
-					this.OnVoteCountIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ViewCountId", DbType="Int NOT NULL")]
-		public int ViewCountId
-		{
-			get
-			{
-				return this._ViewCountId;
-			}
-			set
-			{
-				if ((this._ViewCountId != value))
-				{
-					this.OnViewCountIdChanging(value);
-					this.SendPropertyChanging();
-					this._ViewCountId = value;
-					this.SendPropertyChanged("ViewCountId");
-					this.OnViewCountIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CommentCountId", DbType="Int NOT NULL")]
-		public int CommentCountId
-		{
-			get
-			{
-				return this._CommentCountId;
-			}
-			set
-			{
-				if ((this._CommentCountId != value))
-				{
-					this.OnCommentCountIdChanging(value);
-					this.SendPropertyChanging();
-					this._CommentCountId = value;
-					this.SendPropertyChanged("CommentCountId");
-					this.OnCommentCountIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubCountId", DbType="Int NOT NULL")]
-		public int SubCountId
-		{
-			get
-			{
-				return this._SubCountId;
-			}
-			set
-			{
-				if ((this._SubCountId != value))
-				{
-					this.OnSubCountIdChanging(value);
-					this.SendPropertyChanging();
-					this._SubCountId = value;
-					this.SendPropertyChanged("SubCountId");
-					this.OnSubCountIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrgId", DbType="Int NOT NULL")]
-		public int OrgId
-		{
-			get
-			{
-				return this._OrgId;
-			}
-			set
-			{
-				if ((this._OrgId != value))
-				{
-					if (this._Org.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrgIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrgId = value;
-					this.SendPropertyChanged("OrgId");
-					this.OnOrgIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IssueId", DbType="Int NOT NULL")]
-		public int IssueId
-		{
-			get
-			{
-				return this._IssueId;
-			}
-			set
-			{
-				if ((this._IssueId != value))
-				{
-					if (this._Issue.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnIssueIdChanging(value);
-					this.SendPropertyChanging();
-					this._IssueId = value;
-					this.SendPropertyChanged("IssueId");
-					this.OnIssueIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryId", DbType="Int NOT NULL")]
-		public int CategoryId
-		{
-			get
-			{
-				return this._CategoryId;
-			}
-			set
-			{
-				if ((this._CategoryId != value))
-				{
-					if (this._Category.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCategoryIdChanging(value);
-					this.SendPropertyChanging();
-					this._CategoryId = value;
-					this.SendPropertyChanged("CategoryId");
-					this.OnCategoryIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_ViewCount", Storage="_ViewCounts", ThisKey="ViewCountId", OtherKey="Id")]
-		public EntitySet<ViewCount> ViewCounts
-		{
-			get
-			{
-				return this._ViewCounts;
-			}
-			set
-			{
-				this._ViewCounts.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_VoteCount", Storage="_VoteCounts", ThisKey="VoteCountId", OtherKey="Id")]
-		public EntitySet<VoteCount> VoteCounts
-		{
-			get
-			{
-				return this._VoteCounts;
-			}
-			set
-			{
-				this._VoteCounts.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_CommentCount", Storage="_CommentCounts", ThisKey="CommentCountId", OtherKey="Id")]
-		public EntitySet<CommentCount> CommentCounts
-		{
-			get
-			{
-				return this._CommentCounts;
-			}
-			set
-			{
-				this._CommentCounts.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Count_SubCount", Storage="_SubCounts", ThisKey="SubCountId", OtherKey="Id")]
-		public EntitySet<SubCount> SubCounts
-		{
-			get
-			{
-				return this._SubCounts;
-			}
-			set
-			{
-				this._SubCounts.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Org_Count", Storage="_Org", ThisKey="OrgId", OtherKey="Id", IsForeignKey=true)]
-		public Org Org
-		{
-			get
-			{
-				return this._Org.Entity;
-			}
-			set
-			{
-				Org previousValue = this._Org.Entity;
-				if (((previousValue != value) 
-							|| (this._Org.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Org.Entity = null;
-						previousValue.Counts.Remove(this);
-					}
-					this._Org.Entity = value;
-					if ((value != null))
-					{
-						value.Counts.Add(this);
-						this._OrgId = value.Id;
-					}
-					else
-					{
-						this._OrgId = default(int);
-					}
-					this.SendPropertyChanged("Org");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Issue_Count", Storage="_Issue", ThisKey="IssueId", OtherKey="Id", IsForeignKey=true)]
-		public Issue Issue
-		{
-			get
-			{
-				return this._Issue.Entity;
-			}
-			set
-			{
-				Issue previousValue = this._Issue.Entity;
-				if (((previousValue != value) 
-							|| (this._Issue.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Issue.Entity = null;
-						previousValue.Counts.Remove(this);
-					}
-					this._Issue.Entity = value;
-					if ((value != null))
-					{
-						value.Counts.Add(this);
-						this._IssueId = value.Id;
-					}
-					else
-					{
-						this._IssueId = default(int);
-					}
-					this.SendPropertyChanged("Issue");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Count", Storage="_Category", ThisKey="CategoryId", OtherKey="Id", IsForeignKey=true)]
-		public Category Category
-		{
-			get
-			{
-				return this._Category.Entity;
-			}
-			set
-			{
-				Category previousValue = this._Category.Entity;
-				if (((previousValue != value) 
-							|| (this._Category.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Category.Entity = null;
-						previousValue.Counts.Remove(this);
-					}
-					this._Category.Entity = value;
-					if ((value != null))
-					{
-						value.Counts.Add(this);
-						this._CategoryId = value.Id;
-					}
-					else
-					{
-						this._CategoryId = default(int);
-					}
-					this.SendPropertyChanged("Category");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = this;
-		}
-		
-		private void detach_ViewCounts(ViewCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = null;
-		}
-		
-		private void attach_VoteCounts(VoteCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = this;
-		}
-		
-		private void detach_VoteCounts(VoteCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = null;
-		}
-		
-		private void attach_CommentCounts(CommentCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = this;
-		}
-		
-		private void detach_CommentCounts(CommentCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = null;
-		}
-		
-		private void attach_SubCounts(SubCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = this;
-		}
-		
-		private void detach_SubCounts(SubCount entity)
-		{
-			this.SendPropertyChanging();
-			entity.Count1 = null;
 		}
 	}
 }

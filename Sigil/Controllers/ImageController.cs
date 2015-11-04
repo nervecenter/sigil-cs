@@ -14,7 +14,6 @@ namespace Sigil.Controllers
 {
     public class ImageUploaderController : Controller
     {
-      
 
         enum imgType
         {

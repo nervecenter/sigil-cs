@@ -26,6 +26,7 @@ namespace Sigil
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Error> Errors { get; set; }
+        public DbSet<OrgApp> OrgApplicants { get; set; }
 
         public virtual void Commit()
         {

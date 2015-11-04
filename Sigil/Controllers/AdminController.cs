@@ -4,11 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Sigil.Models;
+using Sigil.Services;
+
 namespace Sigil.Controllers
 {
     public class AdminController : Controller
     {
-
+        private readonly IOrgService orgService;
+        private readonly IErrorService errorService;
 
         // GET: Admin
         public ActionResult Index()
@@ -18,14 +21,14 @@ namespace Sigil.Controllers
 
         public ActionResult OrgApplicants()
         {
-            var newOrgs = dc.OrgApps.Select(o => o).ToList();
+            var newOrgs = orgService.GetAllOrgApplicants();//dc.OrgApps.Select(o => o).ToList();
 
             return View(newOrgs);
         }
 
         public ActionResult ErrorLog()
         {
-            var errors = dc.Errors.Select(e => e).ToList();
+            var errors = errorService.GetAllErrors();//dc.Errors.Select(e => e).ToList();
             return View(errors);
         }
     }

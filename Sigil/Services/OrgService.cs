@@ -10,12 +10,17 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface IOrgService
     {
+        void CreateOrgApp(OrgApp newOrg);
+        void SaveOrgApp();
+
+        OrgApp ApproveOrgApp(int orgAppId);
+
         void CreateOrg(Org org);
         void SaveOrg();
 
         Org GetOrg(int id);
 
-
+        IEnumerable<OrgApp> GetAllOrgApplicants();
         /// <summary>
         /// Get the category by orgURL or by orgName. Checks by looking for url first, if no results then checks by name. 
         /// </summary>
@@ -30,6 +35,7 @@ namespace Sigil.Services
     public class OrgService : IOrgService
     {
         private readonly IOrgRepository OrgsRepository;
+        private readonly IOrgAppRepository OrgAppRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
         private readonly ICountRepository countRespository;

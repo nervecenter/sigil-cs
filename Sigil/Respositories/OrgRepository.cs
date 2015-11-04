@@ -5,8 +5,14 @@ using System.Linq;
 using System.Web;
 using Sigil.Models;
 
-namespace Sigil.Models
+namespace Sigil.Repository
 {
+    public interface IOrgRepository : IRepository<Org>
+    {
+        Org GetByName(string orgName);
+        Org GetByURL(string orgURL);
+    }
+
     public class OrgRepository : RepositoryBase<Org>, IOrgRepository
     {
         public OrgRepository(IDbFactory dbFactory) : base(dbFactory) { }
@@ -24,9 +30,15 @@ namespace Sigil.Models
         }
     }
 
-    public interface IOrgRepository : IRepository<Org>
+    public interface IOrgAppRepository : IRepository<OrgApp>
     {
-        Org GetByName(string orgName);
-        Org GetByURL(string orgURL);
+
     }
+
+    public class OrgApplicantRepository : RepositoryBase<OrgApp>, IOrgAppRepository
+    {
+        public OrgApplicantRepository(IDbFactory dbFactory) : base(dbFactory) { }
+    }
+
+
 }

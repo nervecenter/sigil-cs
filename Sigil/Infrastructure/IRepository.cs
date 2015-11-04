@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 
-namespace Sigil.Models
+namespace Sigil.Repository
 {
     public interface IRepository<T> where T : class
     {

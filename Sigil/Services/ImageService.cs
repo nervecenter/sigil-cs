@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
-
+using Sigil.Repository;
 
 namespace Sigil.Services
 {
     //The operations we want to expose to the controllers
     public interface IImageService
     {
-        void CreateImage(Image img);
-        void SaveImage(Image img);
-
+        //void CreateImage(Image img);
+        void SaveImage();
+        void AssignDefaultImage(string userId);
         string GetIcon(string userId);
         string GetIcon(int orgId);
         string GetBanner(int orgId);

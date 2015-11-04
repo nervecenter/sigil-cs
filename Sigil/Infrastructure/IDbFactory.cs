@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Sigil.Models
+namespace Sigil.Repository
 {
     /// <summary>
     /// Parent DB factory for access the DB. Inherits from IDisposable explained below
