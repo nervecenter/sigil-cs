@@ -7,27 +7,46 @@ using Sigil.Models;
 
 namespace Sigil.Services
 {
-    //The operations we want to expose to the controllers
+    public enum CountDataType
+    {
+        View, Vote, Subscription, Comment
+    }
+
+    //The operations we want to expose to the controllers;
     public interface ICountService
     {
-        void CreateOrgCountData(ViewCount viewC, SubCount subC);
-        void CreateIssueCountData(ViewCount viewC, VoteCount voteC, CommentCount comC);
+        void CreateOrgCountData(int orgId);//ViewCount viewC, SubCount subC);
+        void CreateIssueCountData(string userId, int orgId, int issueId);//ViewCount viewC, VoteCount voteC, CommentCount comC);
         void SaveOrgCountData();
-        void SaveIssueCouteData();
-        //void UpdateCount(CountCol count);
-        void SaveCountChanges(CountCol count, int orgid, int issueId);
+        void SaveIssueCountData();
 
-        ViewCountCol GetIssueViewCount(int issueId, int orgId);
-        VoteCountCol GetIssueVoteCount(int issueId, int orgId);
-        SubCountCol GetIssueSubscriptionCount(int issueId, int orgId);
-        CommentCountCol GetIssueCommentCount(int issueId, int orgId);
+        void UpdateIssueViewCountData(Issue issue);
+        void UpdateIssueVoteCountData(Issue issue, bool upVote = true);
+        void SaveIssueDataChanges();
+
+        /// <summary>
+        /// Updated Orgs Subscription Data
+        /// </summary>
+        /// <param name="orgId">The orgs Id</param>
+        /// <param name="subed">True(default) if adding a subscription, False if removing a subscription</param>
+        void UpdateOrgSubscriptionCount(int orgId, bool subed = true);
+        void SaveOrgDataChanges();
+
+        void SaveCountChanges(CountCol count, CountDataType t, int orgId);
+        void SaveCountChanges(CountCol count, CountDataType t, int orgid, int issueId);
+
+
+        //I changed the order of the parameters half way through refactoring. Need to double check all calls to make sure parameters are in right order!!!!
+        ViewCountCol GetIssueViewCount(int orgId, int issueId);
+        VoteCountCol GetIssueVoteCount(int orgId, int issueId);
+        CommentCountCol GetIssueCommentCount(int orgId, int issueId);
 
         IEnumerable<ViewCountCol> GetOrgViewCount(int orgId);
         IEnumerable<VoteCountCol> GetOrgVoteCount(int orgId);
-        IEnumerable<SubCountCol> GetOrgSubscriptionCount(int orgId);
+        SubCountCol GetOrgSubscriptionCount(int orgId);
         IEnumerable<CommentCountCol> GetOrgCommentCount(int orgId);
 
-        UserVoteCol GetUserVotes(string userId);
+        //UserVoteCol GetUserVotes(string userId);
 
     }
 

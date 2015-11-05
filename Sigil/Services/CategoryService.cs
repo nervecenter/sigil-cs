@@ -15,7 +15,7 @@ namespace Sigil.Services
         IEnumerable<Category> GetCategoriesByOrg(int orgId);
         IEnumerable<Category> GetCategoriesByOrg(string org, bool name = false);
         Category GetCategory(int orgId, int catId);
-
+        Category GetCategory(int orgId, string cat);
     }
 
     public class CategoryService : ICategoryService

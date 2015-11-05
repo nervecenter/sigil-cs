@@ -21,6 +21,7 @@ namespace Sigil.Controllers
         private readonly ICountService countDataService;
         private readonly IIssueService issueService;
         private readonly ICommentService commentService;
+        private readonly IUserService userService;
 
         /* 
         ==================== 
@@ -48,7 +49,7 @@ namespace Sigil.Controllers
             if (userId != null)
             {
                 // Get the user's votes on this org
-                userVotes = countDataService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA();
+                userVotes = userService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA();
             }
 
             ViewBag.userVotes = userVotes;
@@ -82,47 +83,47 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult OrgResponsesPage( string orgURL ) {
-            // Get the org
-            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault( o => o.orgURL == orgURL );
+        //public ActionResult OrgResponsesPage( string orgURL ) {
+        //    // Get the org
+        //    Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault( o => o.orgURL == orgURL );
 
-            // If the org doesn't exist, redirect to 404
-            if ( thisOrg == default( Org ) ) {
-                Response.Redirect( "~/404" );
-            }
+        //    // If the org doesn't exist, redirect to 404
+        //    if ( thisOrg == default( Org ) ) {
+        //        Response.Redirect( "~/404" );
+        //    }
 
-            // Get the user and their subscriptions
-            var userId = User.Identity.GetUserId();
-            UserVoteCol userVotes = new UserVoteCol();
+        //    // Get the user and their subscriptions
+        //    var userId = User.Identity.GetUserId();
+        //    UserVoteCol userVotes = new UserVoteCol();
 
-            if ( userId != null ) {
-                // Get the user's votes on this org
-                userVotes = countDataService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA( countDataService.GetUserVotes(userId))//dc.AspNetUsers.Single( u => u.Id == userId ).votes );
-            }
+        //    if ( userId != null ) {
+        //        // Get the user's votes on this org
+        //        userVotes = userService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA( countDataService.GetUserVotes(userId))//dc.AspNetUsers.Single( u => u.Id == userId ).votes );
+        //    }
 
-            ViewBag.userVotes = userVotes;
+        //    ViewBag.userVotes = userVotes;
 
-            // Get the issues of the org
-            // TODO: Grab issues chosen by an algorithm based on age and weight
-            //IQueryable<Issue> issueList = from issue in dc.Issues
-            //                              where issue.OrgId == thisOrg.Id && issue.responded == true
-            //                              select issue;
+        //    // Get the issues of the org
+        //    // TODO: Grab issues chosen by an algorithm based on age and weight
+        //    //IQueryable<Issue> issueList = from issue in dc.Issues
+        //    //                              where issue.OrgId == thisOrg.Id && issue.responded == true
+        //    //                              select issue;
 
-            var OrgComments = commentService.GetOfficialResponses(thisOrg.Id);
+        //    var OrgComments = commentService.GetOrgsOfficialResponses(thisOrg.Id).ToList();
 
-            if (OrgComments.Count > 0) {
-                OrgComments.OrderBy( i => i.createTime);
-            }
+        //    if (OrgComments.Count > 0) {
+        //        OrgComments.OrderBy( i => i.createTime);
+        //    }
 
-            // MODEL: Put the org and the list of issues into a tuple as our page model
-            Tuple<Org, IQueryable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, OrgComments );
+        //    // MODEL: Put the org and the list of issues into a tuple as our page model
+        //    Tuple<Org, IEnumerable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, OrgComments );
 
-            // Again, might not actually be necessary.
-            //ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
+        //    // Again, might not actually be necessary.
+        //    //ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
 
-            // Pass our org and issues to the view as the model
-            return View( orgAndIssues );
-        }
+        //    // Pass our org and issues to the view as the model
+        //    return View( orgAndIssues );
+        //}
 
         /* 
         ==================== 

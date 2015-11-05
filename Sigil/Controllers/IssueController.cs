@@ -7,6 +7,8 @@ using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using System.Data.SqlTypes;
+using Sigil.Services;
+
 
 namespace Sigil.Controllers
 {
@@ -19,7 +21,16 @@ namespace Sigil.Controllers
 
     public class IssueController : Controller
     {
-      
+
+        private readonly IOrgService orgService;
+        private readonly IIssueService issueService;
+        private readonly ICommentService commentService;
+        private readonly IUserService userService;
+        private readonly ICountService countDataService;
+        private readonly IErrorService errorService;
+        private readonly ICategoryService categoryService;
+
+
         /* 
         ==================== 
         IssuePage
@@ -27,15 +38,16 @@ namespace Sigil.Controllers
             The main page for an issue in any org. Contains vote buttons, issue text, responses, comment section. 
         ==================== 
         */
-        public ActionResult IssuePage( string orgURL, long issueID )
+        public ActionResult IssuePage( string orgURL, int issueID )
         {
             // Grab the issue's org
-            Org thisOrg = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
 
             // Grab the issue for the page
-            Issue thisIssue = (from issue in dc.Issues
-                               where issue.Id == issueID
-                               select issue).SingleOrDefault();
+            Issue thisIssue = issueService.GetIssue(thisOrg.Id, issueID);
+            //Issue thisIssue = (from issue in dc.Issues
+            //                   where issue.Id == issueID
+            //                   select issue).SingleOrDefault();
 
             // If neither are valid, redirect to 404 page
             if (thisOrg == default(Org) || thisIssue == default(Issue))
@@ -56,29 +68,30 @@ namespace Sigil.Controllers
             if (Request.HttpMethod == "POST")
             {
                 // Create a new issue
-
-                using (var action = new CommentController())
-                {
-                    action.Comment_Handler(Request, thisIssue, userID);
-                };
+                this WILL Break !!!
+                //using (var action = new CommentController())
+                //{
+                //    action.Comment_Handler(Request, thisIssue, userID);
+                //};
             }
 
             // Get the user's vote on this issues if it exists
-            AspNetUser user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userID);
+            AspNetUser user = userService.GetUser(userID);//dc.AspNetUsers.SingleOrDefault(u => u.Id == userID);
             UserVoteCol userVote = (user != default(AspNetUser)) ? CountXML<UserVoteCol>.XMLtoDATA(user.votes) : new UserVoteCol();
 
             ViewBag.userVote = userVote;
 
 
+            var issueComments = commentService.GetIssueComments(thisOrg.Id, issueID);
 
-            IQueryable<Comment> issueComments = from comment in dc.Comments
-                                                where comment.issueId == thisIssue.Id
-                                                orderby comment.postDate descending
-                                                select comment;
+            //IQueryable<Comment> issueComments = from comment in dc.Comments
+            //                                    where comment.issueId == thisIssue.Id
+            //                                    orderby comment.postDate descending
+            //                                    select comment;
 
-            IQueryable<OfficialResponse> official = dc.OfficialResponses.Where(o => o.issueId == issueID && o.OrgId == thisOrg.Id).Select(o => o);
+            var official = commentService.GetIssuesOfficialResponses(thisOrg.Id, issueID);//dc.OfficialResponses.Where(o => o.issueId == issueID && o.OrgId == thisOrg.Id).Select(o => o);
             // MODEL: A tuple of the org and the issue are the model for the IssuePage
-            Tuple<Org, Issue, IQueryable<Comment>, IQueryable<OfficialResponse>> orgIssueComments = new Tuple<Org, Issue, IQueryable<Comment>, IQueryable<OfficialResponse>>(thisOrg, thisIssue, issueComments, official);
+            Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>> orgIssueComments = new Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>>(thisOrg, thisIssue, issueComments, official);
 
             // Pass the org and issue as the model to the view
             return View(orgIssueComments);
@@ -91,41 +104,42 @@ namespace Sigil.Controllers
         /// <param name="thisIssue">Issue object from the table</param>
         private void ViewCount_Routine(Org thisOrg, Issue thisIssue)
         {
-            ViewCount vc = dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& v.datetime.Date == DateTime.Today.Date);
-            if (vc == default(ViewCount))
+            ViewCountCol vc = countDataService.GetIssueViewCount(thisOrg.Id, thisIssue.Id);//dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& v.datetime.Date == DateTime.Today.Date);
+            //if (vc == default(ViewCount))
+            //{
+            //    try
+            //    {
+            //        vc = new ViewCount();
+            //        vc.OrgId = thisOrg.Id;
+            //        vc.IssueId = thisIssue.Id;
+            //        vc.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
+            //        dc.ViewCounts.InsertOnSubmit(vc);
+            //        dc.SubmitChanges();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        //WRITE TO ERROR FILE
+            //        ErrorHandler.Log_Error(vc, e, dc);
+            //        //Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
+            //    }
+            //}
+            //else
+            //{
+            try
             {
-                try
-                {
-                    vc = new ViewCount();
-                    vc.OrgId = thisOrg.Id;
-                    vc.IssueId = thisIssue.Id;
-                    vc.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
-                    dc.ViewCounts.InsertOnSubmit(vc);
-                    dc.SubmitChanges();
-                }
-                catch (Exception e)
-                {
-                    //WRITE TO ERROR FILE
-                    ErrorHandler.Log_Error(vc, e, dc);
-                    //Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
-                }
-            }
-            else
-            {
-                try
-                {
-                    var updatedVC = CountXML<ViewCountCol>.XMLtoDATA(vc.count);
-                    updatedVC.Update();
-                    vc.count = CountXML<ViewCountCol>.DATAtoXML(updatedVC);
-                    dc.SubmitChanges();
-                }
-                catch(Exception e)
-                {
-                    //WRITE TO ERROR FILE
-                    ErrorHandler.Log_Error(thisIssue, e, dc);
+                
 
-                }
+               
+                vc.Update();
+                countDataService.SaveCountChanges(vc, CountDataType.View,thisOrg.Id, thisIssue.Id);
             }
+            catch(Exception e)
+            {
+                //WRITE TO ERROR FILE
+                //ErrorHandler.Log_Error(thisIssue, e, dc);
+                errorService.CreateError(vc, e);
+            }
+            //}
         }
 
 
@@ -139,14 +153,16 @@ namespace Sigil.Controllers
             try
             {
                 issue.viewCount++;
-                dc.SubmitChanges();
+                issueService.UpdateIssue(issue);
+                issueService.SaveChanges();
+                //dc.SubmitChanges();
 
             }
             catch (Exception e)
             {
                 //WILL WRITE TO ERROR FILE
-                ErrorHandler.Log_Error(issue, e, dc);
-
+                //ErrorHandler.Log_Error(issue, e, dc);
+                errorService.CreateError(issue, e);
             }
 
         }
@@ -161,9 +177,9 @@ namespace Sigil.Controllers
 
         public JsonResult DefaultData(string orgURL, int issueId)
         {
-            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
-            var issueViews = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+            var issueViews = countDataService.GetIssueViewCount(thisOrg.Id, issueId);//CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
 
             var View_Data = DataVisualization.Data_to_Google_Graph_Format(issueViews, DateTime.Now.AddDays(-7), DateTime.Now);
 
@@ -173,7 +189,7 @@ namespace Sigil.Controllers
 
         public JsonResult CustomData(string orgURL, int issueId ,string dataType, string start, string stop)
         {
-            Org thisOrg = dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
             DateTime startDate = DateTimeConversion.FromJSms(start);
 
@@ -185,19 +201,19 @@ namespace Sigil.Controllers
             {
                 case "Views":
                     {
-                        var data = CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        var data = countDataService.GetIssueViewCount(thisOrg.Id, issueId);//CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Votes":
                     {
-                        var data = CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        var data = countDataService.GetIssueVoteCount(thisOrg.Id, issueId);//CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Comments":
                     {
-                        var data = CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        var data = countDataService.GetIssueCommentCount(thisOrg.Id, issueId);//CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
@@ -211,10 +227,10 @@ namespace Sigil.Controllers
         }
 
         [Authorize]
-        public ActionResult IssueData(string orghandle, long issueID)
+        public ActionResult IssueData(string orgURL, int issueID)
         {
             // Get the issue
-            Issue thisIssue = dc.Issues.SingleOrDefault(i => i.Id == issueID);
+            Issue thisIssue = issueService.GetIssue(orgURL, issueID);//dc.Issues.SingleOrDefault(i => i.Id == issueID);
 
             // Get the org
             Org thisOrg = thisIssue.Org;
@@ -265,8 +281,8 @@ namespace Sigil.Controllers
                 category = temp[1];
             }
 
-            var org = dc.Orgs.Where(o => o.orgName == orgName).Single();
-            var catid = dc.Categories.SingleOrDefault(c => c.catName == category && c.orgId == org.Id);
+            var org = orgService.GetOrg(orgName, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
+            var catid = categoryService.GetCategory(org.Id, category);//dc.Categories.SingleOrDefault(c => c.catName == category && c.orgId == org.Id);
 
             //pass in creators userid, the org and possible category of the issue
             int issueId = Create_New_Issue(userId, org, catid);
@@ -276,47 +292,56 @@ namespace Sigil.Controllers
                 //this is where we need to redirect to a page if the issue posting failed in the previous function call
             }
 
-            New_Issue_Vote_Routine(userId, org, issueId);
+            New_Issue_Data_Routine(userId, org.Id, issueId);
 
             return Redirect("~/" + org.orgURL + "/" + issueId);
 
         }
 
-        private void New_Issue_Vote_Routine(string userId, Org org, int issueId)
+        private void New_Issue_Data_Routine(string userId, int orgId, int issueId)
         {
             //Create Vote count table entry
-            VoteCount newVote = new VoteCount();
-            newVote.IssueId = issueId;
-            newVote.OrgId = org.Id;
 
-            VoteCountCol newVoCol = new VoteCountCol();
-            newVoCol.Update();
-            newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoCol);
+            //VoteCount newVote = new VoteCount();
+            //newVote.IssueId = issueId;
+            //newVote.OrgId = org.Id;
+            //VoteCountCol newVoCol = new VoteCountCol();
+            //newVoCol.Update();
+            //newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoCol);
 
-            //Create Comment count table entry
-            CommentCount newCom = new CommentCount();
-            newCom.IssueId = issueId;
-            newCom.OrgId = org.Id;
-            newCom.count = CountXML<CommentCountCol>.DATAtoXML(new CommentCountCol());
-            
+            ////Create Comment count table entry
+
+            //CommentCount newCom = new CommentCount();
+            //newCom.IssueId = issueId;
+            //newCom.OrgId = org.Id;
+            //newCom.count = CountXML<CommentCountCol>.DATAtoXML(new CommentCountCol());
+            var user = userService.GetUser(userId);
+
+            countDataService.CreateIssueCountData(user.Id, orgId, issueId);
+            countDataService.SaveIssueCountData();
+
             //update the users votes xml ds because every user votes on the issue they make
-            var user = dc.AspNetUsers.Single(u => u.Id == userId);
-            var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-            userVotes.Add_Vote(issueId, org.Id);
-            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
+            userService.AddUserVote(user, orgId, issueId);
+            userService.UpdateUser(user);
 
-            try
-            {
-                dc.VoteCounts.InsertOnSubmit(newVote);
-                dc.CommentCounts.InsertOnSubmit(newCom);
-                dc.SubmitChanges();
+            //var user = userService.GetUser(userId);//dc.AspNetUsers.Single(u => u.Id == userId);
+            //var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            //userVotes.Add_Vote(issueId, org.Id);
+            //user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
 
-            }
-            catch (Exception e)
-            {
-                ErrorHandler.Log_Error(newVote, e, dc);
-                //Console.WriteLine("Could not write vote \"%s\" to database:\n%s", newVote, e.Message);
-            }
+            //try
+            //{
+                
+            //    //dc.VoteCounts.InsertOnSubmit(newVote);
+            //    //dc.CommentCounts.InsertOnSubmit(newCom);
+            //    //dc.SubmitChanges();
+
+            //}
+            //catch (Exception e)
+            //{
+            //    ErrorHandler.Log_Error(newVote, e, dc);
+            //    //Console.WriteLine("Could not write vote \"%s\" to database:\n%s", newVote, e.Message);
+            //}
         }
 
         private int Create_New_Issue(string userId, Org org, Category catid)
@@ -342,17 +367,20 @@ namespace Sigil.Controllers
             // Try to submit the issue and go to the issue page; otherwise, write an error
             try
             {
-                dc.Issues.InsertOnSubmit(newissue);
-                dc.SubmitChanges();
-
-                return dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
+                //dc.Issues.InsertOnSubmit(newissue);
+                //dc.SubmitChanges();
+                issueService.CreateIssue(newissue);
+                issueService.SaveChanges();
+                var createdIssue = issueService.GetLatestIssue(userId, org.Id);
+                return createdIssue.Id;//dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
 
 
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(newissue, e, dc);
-                return 0;
+
+                //ErrorHandler.Log_Error(newissue, e, dc);
+                return 0; //need to return a 404 or just rediret to another page that include an error message for the user
             }
         }
 
@@ -364,37 +392,45 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        public ActionResult VoteUp( int issueID) {
+        public ActionResult VoteUp(int orgId, int issueId) {
             // Find our issue object and create a new vote
-            Issue thisIssue = dc.Issues.First( i => i.Id == issueID );
-            Org thisOrg = dc.Orgs.First(o => o.Id == thisIssue.OrgId);
-            //Vote thisVote = new Vote();
-            var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
+            //Issue thisIssue = dc.Issues.First( i => i.Id == issueID );
+            //Org thisOrg = dc.Orgs.First(o => o.Id == thisIssue.OrgId);
+            ////Vote thisVote = new Vote();
+            //var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
 
             var userId = User.Identity.GetUserId();
-            // Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
-            var user = dc.AspNetUsers.Single(u => u.Id == userId);
-            // Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
+            //// Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
+            //var user = dc.AspNetUsers.Single(u => u.Id == userId);
+            //// Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
+            var issue = issueService.GetIssue(orgId, issueId);
+            var user = userService.GetUser(userId);
+            userService.AddUserVote(user, orgId, issueId);
 
             try
             {
-                thisIssue.votes++;
-                thisIssue.lastVoted = DateTime.UtcNow;
+                issue.votes++;
+                issue.lastVoted = DateTime.UtcNow;
+                issueService.UpdateIssue(issue);
+                //var issueVoteCol = countDataService.GetIssueVoteCount(orgId, issue.Id);
+                countDataService.UpdateIssueVoteCountData(issue);
+                userService.AddUserVote(user, orgId, issueId);
+                userService.UpdateUser(user);
+                //var newVC = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
+                //newVC.Update();
+                //VC.count = CountXML<VoteCountCol>.DATAtoXML(newVC);
 
-                var newVC = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
-                newVC.Update();
-                VC.count = CountXML<VoteCountCol>.DATAtoXML(newVC);
+                //var newUV = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+                //newUV.Add_Vote(thisIssue.Id, thisOrg.Id);
+                //user.votes = CountXML<UserVoteCol>.DATAtoXML(newUV);
 
-                var newUV = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-                newUV.Add_Vote(thisIssue.Id, thisOrg.Id);
-                user.votes = CountXML<UserVoteCol>.DATAtoXML(newUV);
-
-                dc.SubmitChanges();
+                
             }
             catch ( Exception e )
             {
-                ErrorHandler.Log_Error(VC, e, dc);
-                ErrorHandler.Log_Error(user, e, dc);
+                //ErrorHandler.Log_Error(VC, e, dc);
+                //ErrorHandler.Log_Error(user, e, dc);
+                errorService.CreateError(issue, e,"UserId ="+ user.Id);
                 //Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
             }
 
@@ -409,35 +445,42 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        public ActionResult UnVoteUp( int issueID) {
+        public ActionResult UnVoteUp(int orgId, int issueId) {
             // Find our issue object and vote object
-            Issue thisIssue = dc.Issues.Single(i => i.Id == issueID);
-            Org thisOrg = dc.Orgs.Single(o => o.Id == thisIssue.OrgId);
+            //Issue thisIssue = dc.Issues.Single(i => i.Id == issueID);
+            //Org thisOrg = dc.Orgs.Single(o => o.Id == thisIssue.OrgId);
             var userId = User.Identity.GetUserId();
-
+            var user = userService.GetUser(userId);
+            var issue = issueService.GetIssue(orgId, issueId);
             // Decrement vote counter for issue, delete a vote from the votecount entry for the issue, POST changes to server; otherwise, log an error
             try {
-                thisIssue.votes--;
-                thisIssue.lastVoted = DateTime.UtcNow;
+                issue.votes--;
+                issue.lastVoted = DateTime.UtcNow;
+                issueService.UpdateIssue(issue);
 
-                var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
-                var vcol = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
-                vcol.Remove_Vote();
-                VC.count = CountXML<VoteCountCol>.DATAtoXML(vcol);
+                countDataService.UpdateIssueVoteCountData(issue, false);
 
-                var user = dc.AspNetUsers.Single(u => u.Id == userId);
-                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-                userVotes.Delete_Vote(thisIssue.Id, thisOrg.Id);
+                //var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
+                //var vcol = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
+                //vcol.Remove_Vote();
+                //VC.count = CountXML<VoteCountCol>.DATAtoXML(vcol);
 
-                user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
+                userService.RemoveUserVote(user, orgId, issueId);
+                userService.UpdateUser(user);
+                //var user = dc.AspNetUsers.Single(u => u.Id == userId);
+                //var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+                //userVotes.Delete_Vote(thisIssue.Id, thisOrg.Id);
 
-                dc.SubmitChanges();
+                //user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
+
+                //dc.SubmitChanges();
 
             }
             catch ( Exception e )
             {
-                ErrorHandler.Log_Error(thisIssue, e, dc);
-                ErrorHandler.Log_Error(userId, e, dc);
+                //ErrorHandler.Log_Error(thisIssue, e, dc);
+                //ErrorHandler.Log_Error(userId, e, dc);
+                errorService.CreateError(issue, e, "UserId = " + user.Id);
             }
 
             return new EmptyResult();
@@ -453,27 +496,29 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public static string TimeSince(DateTime datePosted) {
-            DateTime now = DateTime.Now;
-            TimeSpan since = now - datePosted;
+        //!!!!!!!!! need to make this a JS function!!!
 
-            if ( since >= TimeSpan.FromDays( 365.0 ) ) {
-                int years = since.Days / 365;
-                return ( years > 1 ) ? years.ToString() + " years ago" : "1 year ago";
-            } else if ( since >= TimeSpan.FromDays( 30.0 ) ) {
-                int months = since.Days / 30;
-                return ( months > 1 ) ? months.ToString() + " months ago" : "1 month ago";
-            } else if ( since >= TimeSpan.FromDays( 1.0 ) ) {
-                return ( since.Days > 1 ) ? since.Days.ToString() + " days ago" : "1 day ago";
-            } else if ( since >= TimeSpan.FromHours( 1.0 ) ) {
-                return ( since.Hours > 1 ) ? since.Hours.ToString() + " hours ago" : "1 hour ago";
-            } else if ( since >= TimeSpan.FromMinutes( 1.0 ) ) {
-                return ( since.Minutes > 1 ) ? since.Minutes.ToString() + " minutes ago" : "1 minute ago";
-            } else {
-                return "Less than a minute ago";
-            }
+        //public static string TimeSince(DateTime datePosted) {
+        //    DateTime now = DateTime.Now;
+        //    TimeSpan since = now - datePosted;
 
-        }
+        //    if ( since >= TimeSpan.FromDays( 365.0 ) ) {
+        //        int years = since.Days / 365;
+        //        return ( years > 1 ) ? years.ToString() + " years ago" : "1 year ago";
+        //    } else if ( since >= TimeSpan.FromDays( 30.0 ) ) {
+        //        int months = since.Days / 30;
+        //        return ( months > 1 ) ? months.ToString() + " months ago" : "1 month ago";
+        //    } else if ( since >= TimeSpan.FromDays( 1.0 ) ) {
+        //        return ( since.Days > 1 ) ? since.Days.ToString() + " days ago" : "1 day ago";
+        //    } else if ( since >= TimeSpan.FromHours( 1.0 ) ) {
+        //        return ( since.Hours > 1 ) ? since.Hours.ToString() + " hours ago" : "1 hour ago";
+        //    } else if ( since >= TimeSpan.FromMinutes( 1.0 ) ) {
+        //        return ( since.Minutes > 1 ) ? since.Minutes.ToString() + " minutes ago" : "1 minute ago";
+        //    } else {
+        //        return "Less than a minute ago";
+        //    }
+
+        //}
 
         /*public static Tuple<VoteState, int> VoteButtonModel(HttpContext currentContext, int issueID) {
             if ( !currentContext.Request.IsAuthenticated ) {

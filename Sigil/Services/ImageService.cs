@@ -10,13 +10,16 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface IImageService
     {
-        //void CreateImage(Image img);
+        void CreateImage(Image img);
         void SaveImage();
         void AssignDefaultImage(string userId);
         string GetIcon(string userId);
         string GetIcon(int orgId);
         string GetBanner(int orgId);
-
+        Image GetUserImages(string userId);
+        Image GetOrgImages(int orgId);
+        Image GetTopicImages(int topicId);
+        Image GetCategoryImages(int catId);
     }
 
     public class ImageService : IImageService

@@ -11,9 +11,14 @@ namespace Sigil.Services
     public interface IIssueService
     {
         void CreateIssue(Issue issue);
-        void SaveIssue();
+        void UpdateIssue(Issue issue);
+        void SaveChanges();
 
         Issue GetIssue(int orgId, int issueId);
+        Issue GetIssue(string org, int issueId);
+
+        Issue GetLatestIssue(string userId, int orgId);
+
         IEnumerable<Issue> GetAllIssues();
         IEnumerable<Issue> GetOrgIssues(int orgId);
         IEnumerable<Issue> GetTopicIssues(int topicId);
@@ -33,7 +38,21 @@ namespace Sigil.Services
         private readonly IUnitOfWork unitOfWork;
 
 
+        public IssueService(IIssueRepository issueRepo, IUnitOfWork unitofwork)
+        {
+            this.issueRepository = issueRepo;
+            this.unitOfWork = unitofwork;
+        }
 
 
+        public void CreateIssue(Issue issue)
+        {
+            issueRepository.Add(issue);    
+        }
+
+        public void UpdateIssue(Issue issue)
+        {
+            issueRepository.Update(issue);
+        }
     }
 }

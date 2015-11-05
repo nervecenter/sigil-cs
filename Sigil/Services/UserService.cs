@@ -11,13 +11,37 @@ namespace Sigil.Services
     public interface IUserService
     {
         AspNetUser GetUser(string id);
+        AspNetUser GetUserByDisplayName(string name);
         string GetUserDisplayName(string id);
         void SetUserRole(AspNetRole role, string id);
 
         IEnumerable<Comment> GetUserComments(string id);
 
-        void CreateUserVotes(string userId);
+        /// <summary>
+        /// Returns list of users who voted on an issue.
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="issueId"></param>
+        /// <returns></returns>
+        IEnumerable<AspNetUser> GetUsersByVote(int orgId, int issueId);
+
+        /// <summary>
+        /// Returns list of users who commented on an issue.
+        /// </summary>
+        /// <param name="orgId"> Org Id of the issue.</param>
+        /// <param name="issueId"> Issue Id</param>
+        /// <returns></returns>
+        IEnumerable<AspNetUser> GetUsersByIssue(int orgId, int issueId);
+
+        void CreateUserVote(AspNetUser user);
         void SaveUserVotes();
+
+        void AddUserVote(AspNetUser user, int orgId, int issueId);
+        void AddUserVote(AspNetUser user, int orgId, int issueId, int commentId);
+        void RemoveUserVote(AspNetUser user, int orgId, int issueId);
+        void RemoveUserVote(AspNetUser user, int orgId, int issueId, int commentId);
+        void UpdateUser(AspNetUser user);
+
         UserVoteCol GetUserVotes(string userId);
     }
 

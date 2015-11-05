@@ -13,8 +13,12 @@ namespace Sigil.Services
         void CreateSubscription(Subscription sub);
         void SaveSubscription();
 
-        Tuple<IEnumerable<Org>, IEnumerable<Topic>, IEnumerable<Category>> GetUserSubscriptions(string userId);
+        void RemoveSubscription(Subscription sub);
 
+        Subscription GetUserSubscription(string userId, int orgId);
+
+        //Tuple<IEnumerable<Org>, IEnumerable<Topic>, IEnumerable<Category>> GetUserSubscriptions(string userId);
+        IEnumerable<Subscription> GetUserSubscriptions(string userId);
     }
 
     public class SubscriptionService : ISubscriptionService

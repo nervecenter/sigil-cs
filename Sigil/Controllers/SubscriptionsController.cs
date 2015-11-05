@@ -6,20 +6,27 @@ using System.Web.Mvc;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     public class SubscriptionsController : Controller
     {
-       
+
+        private readonly IOrgService orgService;
+        private readonly IIssueService issueService;
+        private readonly ISubscriptionService subscriptionService;
+        private readonly IErrorService errorService;
+        private readonly ICountService countDataService;
+
         // GET: Subscriptions
         [Authorize]
         public ActionResult Index()
         {
-            var userid = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
 
-            var orgs = dc.Orgs.ToList();
-            var subs = dc.Subscriptions.Where(s => s.UserId == userid).ToList();
+            var orgs = orgService.GetAllOrgs().ToList();//dc.Orgs.ToList();
+            var subs = subscriptionService.GetUserSubscriptions(userId).ToList();//dc.Subscriptions.Where(s => s.UserId == userid).ToList();
 
             Tuple<List<Org>, List<Subscription>> orgs_and_usersubs = new Tuple<List<Org>, List<Subscription>>(orgs, subs);
             return View(orgs_and_usersubs);
@@ -32,12 +39,14 @@ namespace Sigil.Controllers
         public ActionResult AddSubscription(string orgURL)
         {
             var userid = User.Identity.GetUserId();
-            var orgid = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
+            var org = orgService.GetOrg(orgURL);//dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
             Subscription new_sub = new Subscription();
-            new_sub.OrgId = orgid.Id;
+            new_sub.OrgId = org.Id;
             new_sub.UserId = userid;
             new_sub.CatId = 0;
             new_sub.TopicId = 0;
+
+            countDataService.UpdateOrgSubscriptionCount(org.Id);
 
             /*var subCs = dc.SubCounts.Single(s => s.OrgId == orgid.Id);
             var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
@@ -46,12 +55,16 @@ namespace Sigil.Controllers
             
             try
             {
-                dc.Subscriptions.InsertOnSubmit(new_sub);
-                dc.SubmitChanges();
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
+                countDataService.SaveOrgDataChanges();
+                //dc.Subscriptions.InsertOnSubmit(new_sub);
+                //dc.SubmitChanges();
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(new_sub, e, dc);
+                errorService.CreateError(new_sub, e);
+                //ErrorHandler.Log_Error(new_sub, e, dc);
                 //Console.WriteLine("Could not write new sub \"%s\" to database:\n%s", new_sub, e.Message);
             }
             return new EmptyResult();
@@ -61,10 +74,12 @@ namespace Sigil.Controllers
         [HttpPost]
         public ActionResult DeleteSubscription(string orgURL)
         {
-            var userid = User.Identity.GetUserId();
-            var org = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
-            var sub = dc.Subscriptions.SingleOrDefault<Subscription>(s => s.OrgId == org.Id && s.UserId == userid);
+            var userId = User.Identity.GetUserId();
+            var org = orgService.GetOrg(orgURL);//dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
+            var sub = subscriptionService.GetUserSubscription(userId, org.Id);//dc.Subscriptions.SingleOrDefault<Subscription>(s => s.OrgId == org.Id && s.UserId == userid);
 
+
+            countDataService.UpdateOrgSubscriptionCount(org.Id, false);
             /*var subCs = dc.SubCounts.Single(s => s.OrgId == org.Id);
             var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
             subData.Remove_Sub();
@@ -72,12 +87,15 @@ namespace Sigil.Controllers
 
             try {
 
-                dc.Subscriptions.DeleteOnSubmit(sub);
-                dc.SubmitChanges();
+                //dc.Subscriptions.DeleteOnSubmit(sub);
+                //dc.SubmitChanges();
+                subscriptionService.RemoveSubscription(sub);
+                countDataService.SaveOrgDataChanges();
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(sub, e, dc);
+                errorService.CreateError(sub, e);
+                //ErrorHandler.Log_Error(sub, e, dc);
                 //Console.WriteLine("Could not delete sub \"%s\" to database:\n%s", sub, e.Message);
             }
 

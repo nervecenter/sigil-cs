@@ -272,6 +272,7 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\OfficialResponseService.cs" />
     <Compile Include="Services\OrgService.cs" />
+    <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\SubscriptionService.cs" />
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\UserService.cs" />

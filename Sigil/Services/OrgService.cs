@@ -21,6 +21,7 @@ namespace Sigil.Services
         Org GetOrg(int id);
 
         IEnumerable<OrgApp> GetAllOrgApplicants();
+
         /// <summary>
         /// Get the category by orgURL or by orgName. Checks by looking for url first, if no results then checks by name. 
         /// </summary>
@@ -30,6 +31,7 @@ namespace Sigil.Services
         Org GetOrg(string org, bool name = false);
         IEnumerable<Org> GetTopicOrgs(int topicId);
 
+        IEnumerable<Org> GetAllOrgs();
     }
 
     public class OrgService : IOrgService

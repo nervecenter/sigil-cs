@@ -9,11 +9,16 @@ using ImageProcessor;
 using ImageProcessor.Imaging.Formats;
 using System.Drawing;
 using System.IO;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     public class ImageUploaderController : Controller
     {
+
+        private readonly IImageService imageService;
+        private readonly IUserService userService;
+        private readonly IErrorService errorService;
 
         enum imgType
         {
@@ -48,10 +53,11 @@ namespace Sigil.Controllers
             if (img != null && img.ContentLength > 0)
             {
                 var userid = User.Identity.GetUserId();
-                string user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).DisplayName;
+                string user = userService.GetUserDisplayName(userid);//dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).DisplayName;
                 if (userid == null)
                 {
-                    ErrorHandler.Log_Error(userid, "No user for Userid", dc);
+                    errorService.CreateError(userid, "No user for userId in ImageController");
+                    //ErrorHandler.Log_Error(userid, "No user for Userid", dc);
                     return Index(false);
                 }
 
@@ -62,7 +68,7 @@ namespace Sigil.Controllers
 
                 if (convertedImgPath != "")
                 {
-                    var userImg = dc.Images.SingleOrDefault(i => i.UserId == userid);
+                    var userImg = imageService.GetUserImages(userid);//dc.Images.SingleOrDefault(i => i.UserId == userid);
                     if (userImg == default(Sigil.Models.Image))
                     {
                         userImg = new Sigil.Models.Image();
@@ -72,13 +78,20 @@ namespace Sigil.Controllers
 
                         try
                         {
-                            dc.Images.InsertOnSubmit(userImg);
-                            dc.SubmitChanges();
+                            imageService.CreateImage(userImg);
+                            imageService.SaveImage();
+                            //dc.Images.InsertOnSubmit(userImg);
+                            //dc.SubmitChanges();
                         }
                         catch (Exception e)
                         {
-                            ErrorHandler.Log_Error(userImg, e, dc);
+                            errorService.CreateError(userImg, e);
+                            //ErrorHandler.Log_Error(userImg, e, dc);
                         }
+                    }
+                    else //user is changing their image
+                    {
+
                     }
 
                 }
@@ -146,7 +159,10 @@ namespace Sigil.Controllers
 
     public class ImageController<T> : Controller
     {
-        private static SigilDBDataContext dc = new SigilDBDataContext();
+
+        private readonly IImageService imageService;
+        private readonly IErrorService errorService;
+
         private static string default_folder_path = "/Images/Default/";
         private static string org_folder_path = "/Images/Org/";
         private static string user_folder_path = "/Images/User/";
@@ -156,23 +172,27 @@ namespace Sigil.Controllers
         /// Assigns randomly 1 of 5 possible default icons of size 100 to passed user
         /// </summary>
         /// <param name="userID">Id of user that is getting default image assigned.</param>
-        public static void Assign_Default_Icon(string userID)
+        public void Assign_Default_Icon(string userID)
         {
             int defaultIMG = RNG.RandomNumber(1, 6);
 
             string IMG_PATH = "default" + defaultIMG + ".png";
-
+            Sigil.Models.Image userImg = new Sigil.Models.Image();
             try
             {
-                Sigil.Models.Image userImg = new Sigil.Models.Image();
+                
                 userImg.UserId = userID;
                 userImg.icon_100 = IMG_PATH;
-                dc.Images.InsertOnSubmit(userImg);
-                dc.SubmitChanges();
+
+                imageService.CreateImage(userImg);
+                imageService.SaveImage();
+                //dc.Images.InsertOnSubmit(userImg);
+                //dc.SubmitChanges();
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(userID, e, dc);
+                errorService.CreateError(userImg, e);
+                //ErrorHandler.Log_Error(userID, e, dc);
             }
         }
 
@@ -180,23 +200,24 @@ namespace Sigil.Controllers
         /// Assigns randomly 1 of 5 possible default icons of size 100 to passed org
         /// </summary>
         /// <param name="orgID">Id of org that is getting defaut image assigned.</param>
-        public static void Assign_Default_Icon(int orgID)
+        public void Assign_Default_Icon(int orgID)
         {
             int defaultIMG = RNG.RandomNumber(1, 6);
 
             string IMG_PATH = "default" + defaultIMG + ".png";
-
+            Sigil.Models.Image Img = new Sigil.Models.Image();
             try
             {
-                Sigil.Models.Image Img = new Sigil.Models.Image();
+               
                 Img.OrgId = orgID;
                 Img.icon_100 = IMG_PATH;
-                dc.Images.InsertOnSubmit(Img);
-                dc.SubmitChanges();
+                imageService.CreateImage(Img);
+                imageService.SaveImage();
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(orgID, e, dc);
+                errorService.CreateError(Img, e);
+                //ErrorHandler.Log_Error(orgID, e, dc);
             }
         }
 
@@ -205,13 +226,12 @@ namespace Sigil.Controllers
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="caller">Either the Type Org or Topic</param>
-        public static void Assign_Default_Icon20(int ID, T caller)
+        public void Assign_Default_Icon20(int ID, T caller)
         {
             string IMG_PATH = "default20.png";
-
+            Sigil.Models.Image Img = new Sigil.Models.Image();
             try
             {
-                Sigil.Models.Image Img = new Sigil.Models.Image();
 
                 if (caller is Org)
                     Img.OrgId = ID;
@@ -222,12 +242,14 @@ namespace Sigil.Controllers
                     throw new Exception("Passed caller is not an Org or Topic");
                 }
                 Img.icon_20 = IMG_PATH;
-                dc.Images.InsertOnSubmit(Img);
-                dc.SubmitChanges();
+
+                imageService.CreateImage(Img);
+                imageService.SaveImage();
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(ID, e, dc);
+                errorService.CreateError(Img, e);
+                //ErrorHandler.Log_Error(ID, e, dc);
             }
         }
 
@@ -236,15 +258,15 @@ namespace Sigil.Controllers
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="caller"></param>
-        public static void Assign_Default_Banner(int ID, T caller)
+        public void Assign_Default_Banner(int ID, T caller)
         {
             int defaultIMG = RNG.RandomNumber(1, 3);
 
             string IMG_PATH = "default_Banner" + defaultIMG + ".png";
-
+            Sigil.Models.Image Img = new Sigil.Models.Image();
             try
             {
-                Sigil.Models.Image Img = new Sigil.Models.Image();
+               
 
                 if (caller is Org)
                     Img.OrgId = ID;
@@ -256,28 +278,31 @@ namespace Sigil.Controllers
                 }
 
                 Img.banner = IMG_PATH;
-                dc.Images.InsertOnSubmit(Img);
-                dc.SubmitChanges();
+
+                imageService.CreateImage(Img);
+                imageService.SaveImage();
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(ID, e, dc);
+                errorService.CreateError(Img, e);
+                //ErrorHandler.Log_Error(ID, e, dc);
             }
         }
 
         //=============================== User Icon Functions ==================================================//
 
-        public static string Get_Icon_100(string userId)
+        public string Get_Icon_100(string userId)
         {
             try
             {
-                return user_folder_path + dc.Images.Single(i => i.UserId == userId).icon_100;
+                return user_folder_path + imageService.GetUserImages(userId).icon_100;//dc.Images.Single(i => i.UserId == userId).icon_100;
             }
             catch (Exception e)
             {
                 if (!(e.InnerException is ArgumentNullException))
                 {
-                    ErrorHandler.Log_Error(userId, e, dc);
+                    errorService.CreateError(userId, e, "User didnt have an image set for icon_100");
+                    //ErrorHandler.Log_Error(userId, e, dc);
                 }
                 return default_folder_path + "default1.png";
             }
@@ -287,7 +312,7 @@ namespace Sigil.Controllers
         //============================= Org/Cat/Topic Functions ==============================================//
 
 
-        public static string Get_Icon_20(T caller)
+        public string Get_Icon_20(T caller)
         {
             try
             {
@@ -298,13 +323,14 @@ namespace Sigil.Controllers
             {
                 if (!(e is ArgumentNullException))
                 {
-                    ErrorHandler.Log_Error(caller, e, dc);
+                    errorService.CreateError(caller, e, "caller didnt have an image set for icon_20 so default was loaded");
+                    //ErrorHandler.Log_Error(caller, e, dc);
                 }
                 return default_folder_path + "default20.png";
             }
         }
 
-        public static string Get_Icon_100(T caller)
+        public string Get_Icon_100(T caller)
         {
             try
             {
@@ -315,13 +341,14 @@ namespace Sigil.Controllers
             {
                 if (!(e.InnerException is ArgumentNullException))
                 {
-                    ErrorHandler.Log_Error(caller, e, dc);
+                    errorService.CreateError(caller, e, "User didnt have an image set for icon_100 so default was loaded");
+                    //ErrorHandler.Log_Error(caller, e, dc);
                 }
                 return default_folder_path + "default2.png";
             }
         }
 
-        public static string Get_Banner(T caller)
+        public string Get_Banner(T caller)
         {
             try
             {
@@ -332,7 +359,8 @@ namespace Sigil.Controllers
             {
                 if (!(e.InnerException is ArgumentNullException))
                 {
-                    ErrorHandler.Log_Error(caller, e, dc);
+                    errorService.CreateError(caller, e, "User didnt have an image set for banner so default was loaded");
+                    //ErrorHandler.Log_Error(caller, e, dc);
                 }
                 return default_folder_path + "default_banner.png";
             }
@@ -340,22 +368,22 @@ namespace Sigil.Controllers
 
 
 
-        private static Sigil.Models.Image Get_DB_Entry(T caller)
+        private Sigil.Models.Image Get_DB_Entry(T caller)
         {
             if (caller is Org)
             {
                 Org c = (Org)Convert.ChangeType(caller, typeof(T));
-                return dc.Images.Single(i => i.OrgId == c.Id);
+                return imageService.GetOrgImages(c.Id);//dc.Images.Single(i => i.OrgId == c.Id);
             }
             else if (caller is Topic)
             {
                 Topic c = (Topic)Convert.ChangeType(caller, typeof(T));
-                return dc.Images.Single(i => i.TopicId == c.Id);
+                return imageService.GetTopicImages(c.Id);//dc.Images.Single(i => i.TopicId == c.Id);
             }
             else if (caller is Category)
             {
                 Category c = (Category)Convert.ChangeType(caller, typeof(T));
-                return dc.Images.Single(i => i.CatId == c.Id);
+                return imageService.GetCategoryImages(c.Id);//dc.Images.Single(i => i.CatId == c.Id);
             }
             throw new ArgumentNullException();
         }

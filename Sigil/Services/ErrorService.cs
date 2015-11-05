@@ -11,8 +11,11 @@ namespace Sigil.Services
     public interface IErrorService
     {
         IEnumerable<Error> GetAllErrors();
+        void CreateError(object errorObj, string msg);
         void CreateError(object errorObj, Exception e, string msg = "");
-        void SaveError();
+
+        //Creating an error automatically saves it as well
+        //void SaveError();
 
     }
 

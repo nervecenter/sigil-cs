@@ -6,14 +6,15 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Sigil.Models;
 using System.Threading.Tasks;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
-    //need to move this to models
-    //enum NotificationType
-    //{
-    //    Comment,OfficialResponse,
-    //}
+
+    enum NotificationType
+    {
+        Comment, OfficialResponse,
+    }
 
     struct NotificationPanel
     {
@@ -24,7 +25,12 @@ namespace Sigil.Controllers
 
     public class NotificationController : Controller
     {
-        public static void Notification_Check(string text, string user, int issueID, int orgID, int commentID)
+        private readonly IUserService userService;
+        private readonly INotificationService notificationService;
+        private readonly IErrorService errorService;
+        private readonly IIssueService issueService;
+
+        public void Notification_Check(string text, string FromUser, int issueID, int orgID, int commentID)
         {
             string to_user = null;
            
@@ -38,8 +44,9 @@ namespace Sigil.Controllers
             }
             if (to_user != null) //|| to_org != null)
             {
-                var to_user_id = dc.AspNetUsers.SingleOrDefault(u => u.DisplayName == to_user).Id;
-                CreateNotification(to_user_id, user, issueID, orgID, commentID, (int)NotificationType.Comment);
+                var ToUser = userService.GetUserByDisplayName(to_user);//dc.AspNetUsers.SingleOrDefault(u => u.DisplayName == to_user).Id;
+                CreateNotification(ToUser.Id, FromUser, issueID, orgID, commentID, (int)NotificationType.Comment);
+                notificationService.SaveNotification();
             }
         }
 
@@ -50,27 +57,29 @@ namespace Sigil.Controllers
         /// <param name="issueID"></param>
         /// <param name="orgID"></param>
         /// <param name="commentID"></param>
-        public static void OfficialResponseNotificationRoutine(string userId, int issueID, int orgID, int commentID)
+        public void OfficialResponseNotificationRoutine(string userId, int issueId, int orgId, int commentID)
         {
-            var VoteUsers = dc.AspNetUsers.Select(u => u).ToList();//Where(u => CountXML<UserVoteCol>.XMLtoDATA(u.votes).Check_Vote(issueID, orgID) == true).Select(u => u);
-            List<AspNetUser> finalVoteUsers = new List<AspNetUser>();
+            var VoteUsers = userService.GetUsersByVote(orgId, issueId);//dc.AspNetUsers.Select(u => u).ToList();//Where(u => CountXML<UserVoteCol>.XMLtoDATA(u.votes).Check_Vote(issueID, orgID) == true).Select(u => u);
+            //List<AspNetUser> finalVoteUsers = new List<AspNetUser>();
 
-            foreach (var user in VoteUsers)
-            {
-                if (CountXML<UserVoteCol>.XMLtoDATA(user.votes).Check_Vote(issueID, orgID))
-                {
-                    finalVoteUsers.Add(user);
-                }
-            }
+            //foreach (var user in VoteUsers)
+            //{
+            //    if (CountXML<UserVoteCol>.XMLtoDATA(user.votes).Check_Vote(issueID, orgID))
+            //    {
+            //        finalVoteUsers.Add(user);
+            //    }
+            //}
 
-            var CommentUsers = dc.Comments.Where(c => c.issueId == issueID && c.OrgId == orgID).Select(c => c.AspNetUser);
+            var CommentUsers = userService.GetUsersByIssue(orgId, issueId);//dc.Comments.Where(c => c.issueId == issueID && c.OrgId == orgID).Select(c => c.AspNetUser);
 
-            var allUsers = finalVoteUsers.Union(CommentUsers).ToList();
+            var allUsers = VoteUsers.Union(CommentUsers);//finalVoteUsers.Union(CommentUsers).ToList();
 
             foreach(var user in allUsers)
             {
-                CreateNotification(user.Id, userId, issueID, orgID, commentID, (int)NotificationType.OfficialResponse);
+                CreateNotification(user.Id, userId, issueId, orgId, commentID, (int)NotificationType.OfficialResponse);
             }
+
+            notificationService.SaveNotification();
         }
 
         /// <summary>
@@ -82,7 +91,7 @@ namespace Sigil.Controllers
         /// <param name="orgID"></param>
         /// <param name="commentID"></param>
         /// <param name="Note_Type"></param>
-        private static void CreateNotification(string ToUserId, string FromUserId, int issueID, int orgID, int commentID, int Note_Type)
+        private void CreateNotification(string ToUserId, string FromUserId, int issueID, int orgID, int commentID, int Note_Type)
         {
             Notification note = new Notification();
             try
@@ -94,16 +103,18 @@ namespace Sigil.Controllers
                 note.OrgId = orgID;
                 note.CommentId = commentID;
                 note.NoteType = Note_Type;
-                dc.Notifications.InsertOnSubmit(note);
-                dc.SubmitChanges();
+
+                notificationService.CreateNotification(note);
+                
+                //we don't save the notification inside here just incase this function is being called by OfficialResponseNotification routine and multiply notifications are called.
             }
             catch (Exception e)
             {
-                ErrorHandler.Log_Error(note, e, dc);
+                // ErrorHandler.Log_Error(note, e, dc);
+
+                errorService.CreateError(note, e);
             }
         }
-
-       
 
         public JsonResult Get_Notifications()
         {
@@ -111,7 +122,7 @@ namespace Sigil.Controllers
             string userID = User.Identity.GetUserId();
             if(userID != null)
             {
-                var notes = dc.Notifications.Where(n => n.To_UserId == userID).Select(n => n);
+                var notes = notificationService.GetUserNotifications(userID);//dc.Notifications.Where(n => n.To_UserId == userID).Select(n => n);
                 if(!notes.Any())
                 {
                     return Json("No Notifications");
@@ -121,7 +132,7 @@ namespace Sigil.Controllers
                 foreach(var n in notes)
                 {
                     NotificationPanel tmp = new NotificationPanel();
-                    var issue = dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
+                    var issue = issueService.GetIssue(n.OrgId, n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
                     tmp.From = n.From_UserId;
                     tmp.Title = issue.title;
                     tmp.URL = issue.Org.orgName + "/" + issue.Id;
@@ -134,8 +145,8 @@ namespace Sigil.Controllers
             else
             {
                 //We have a serious problem haha
-                ErrorHandler.Log_Error(userID, "No user id of when Get_Notifications was called.", dc);
-                
+                //ErrorHandler.Log_Error(userID, "No user id of when Get_Notifications was called.", dc);
+                errorService.CreateError(userID, "No user id of when Get_Notifications was called.");
             }
 
             return Json("No notifications, you're all caught up. :)");

@@ -17,6 +17,11 @@ namespace Sigil.Services
 
         Comment GetComment(int orgId, int issueId, int commentId);
 
+        IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int issueId);
+        IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId);
+        OfficialResponse GetIssueLatestOfficialResponse(int orgId, int issueId);
+
+
         IEnumerable<Comment> GetUserComments(string userId);
         IEnumerable<Comment> GetIssueComments(int orgId, int issueId);
         IEnumerable<Comment> GetOrgComments(int orgId);

@@ -7,20 +7,26 @@ using System.Data.Entity;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     public class SearchController : Controller
     {
-      
+
+
+        private readonly ICategoryService categoryService;
+        private readonly ISearchService searchService;
+         
         // GET: Search
         public ActionResult Index()
         {
             string term = Request.Form["searchTerm"];
 
-            var quUsers = dc.AspNetUsers.Where(u => u.DisplayName.StartsWith(term)).ToList();
-            var quOrgs = dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();
-            var quIssues = dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
+            var quUsers = searchService.MatchUsersByName(term).ToList();//dc.AspNetUsers.Where(u => u.DisplayName.StartsWith(term)).ToList();
+            var quOrgs = searchService.MatchOrgsByName(term).ToList();//dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();
+            var quIssues = searchService.MatchIssuesByTitle(term).ToList();//dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
+
 
             Tuple<List<AspNetUser>, List<Org>, List<Issue>> search_list = new Tuple<List<AspNetUser>, List<Org>, List<Issue>>(quUsers, quOrgs, quIssues);
             return View(search_list);
@@ -62,15 +68,6 @@ namespace Sigil.Controllers
             return Json(Final_search_list.Select(s => new { label = s.Key, value = s.Value }), JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult SearchOrgs(string term)
-        //{
-        //    List<string> search_list = new List<string>();
-        //    if (!string.IsNullOrEmpty(term) )
-        //    {
-        //        search_list.AddRange(search_orgs(term));
-        //    }
-        //    return Json(search_list, JsonRequestBehavior.AllowGet);
-        //}
 
         public JsonResult SearchOrgs_Cats(string term)
         {
@@ -94,20 +91,38 @@ namespace Sigil.Controllers
 
         private List<string> search_orgs_and_cats(string term)
         {
-            var qu = from org in dc.Orgs
-                     from cat in dc.Categories
-                     where org.orgName.StartsWith(term)
-                     where cat.orgId == org.Id 
-                     select (org.orgName + "-" + cat.catName);
-            return qu.ToList();
+            //var qu = from org in dc.Orgs
+            //         from cat in dc.Categories
+            //         where org.orgName.StartsWith(term)
+            //         where cat.orgId == org.Id 
+            //         select (org.orgName + "-" + cat.catName);
+
+            List<string> finalQuery = new List<string>();
+            var quOrgs = searchService.MatchOrgsByName(term);
+            
+            foreach(var o in quOrgs)
+            {
+                var orgCats = categoryService.GetCategoriesByOrg(o.Id).ToList();
+                if(orgCats.Count > 0)
+                {
+                    foreach(var c in orgCats)
+                    {
+                        finalQuery.Add(o.orgName + "-" + c.catName);
+                    }
+                }
+            }
+
+            return finalQuery;
         }
 
         private List<string> search_users(string term)
         {
 
-            var qu = from user in dc.AspNetUsers
-                          where user.DisplayName.StartsWith(term)
-                          select user;
+            //var qu = from user in dc.AspNetUsers
+            //              where user.DisplayName.StartsWith(term)
+            //              select user;
+
+            var qu = searchService.MatchUsersByName(term);
 
             return qu.Select(u => u.DisplayName).ToList();
 
@@ -116,23 +131,17 @@ namespace Sigil.Controllers
         private List<Org> search_orgs(string term)
         {
 
-            var qu = from org in dc.Orgs
-                          where org.orgName.StartsWith(term)
-                          select org;
+            var qu = searchService.MatchOrgsByName(term);
 
-            return qu.Select(o => o).ToList();
+            return qu.ToList();
 
         }
 
         private List<Issue> search_issues(string term)
         {
 
-            var qu = from iss in dc.Issues
-                          where iss.title.StartsWith(term)
-                          select iss;
-
-            return qu.Select(i => i).ToList();
-
+            var qu = searchService.MatchIssuesByTitle(term);
+            return qu.ToList();
         }
     }
 }

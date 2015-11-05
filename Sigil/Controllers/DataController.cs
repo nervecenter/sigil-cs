@@ -68,7 +68,7 @@ namespace Sigil
         /// <param name="start"> Date to start counting at</param>
         /// <param name="stop"> Date to end counting at</param>
         /// <returns> A tuple of total counts in the order views, votes, comments, subscriptions</returns>
-        public static Tuple<int, int, int, int> Get_Sums(IQueryable<ViewCountCol> views, IQueryable<VoteCountCol> votes, IQueryable<CommentCountCol> comms, IQueryable<SubCountCol> subs, DateTime start, DateTime stop)
+        public static Tuple<int, int, int, int> Get_Sums(IEnumerable<ViewCountCol> views, IEnumerable<VoteCountCol> votes, IEnumerable<CommentCountCol> comms, IEnumerable<SubCountCol> subs, DateTime start, DateTime stop)
         {
             int total_views = 0;
             int total_votes = 0;
@@ -91,7 +91,7 @@ namespace Sigil
             return new Tuple<int, int, int, int>(total_views, total_votes, total_comms, total_subs);
         }
 
-        public static List<Tuple<long, int>> Data_to_Google_Graph_Format(IQueryable<CountCol> data, DateTime start, DateTime stop)
+        public static List<Tuple<long, int>> Data_to_Google_Graph_Format(IEnumerable<CountCol> data, DateTime start, DateTime stop)
         {
             List<Tuple<long, int>> formatted_data = new List<Tuple<long, int>>();
             TimeSpan duriation = stop.Date - start.Date;
@@ -127,7 +127,7 @@ namespace Sigil
         /// <param name="start">Start datetime</param>
         /// <param name="stop">End datetime</param>
         /// <returns>Returns and interger that is the total number of unique commentors.</returns>
-        internal static int Get_Unique_Count(IQueryable<Comment> allComments, DateTime start, DateTime stop)
+        internal static int Get_Unique_Count(IEnumerable<Comment> allComments, DateTime start, DateTime stop)
         {
             Dictionary<Tuple<string, int>, int> unique_users = new Dictionary<Tuple<string, int>, int>();
             int total = 0;
@@ -144,7 +144,7 @@ namespace Sigil
         }
 
         
-        internal static List<Issue> Get_Under_Issues(IQueryable<Issue> allIssues, DateTime start, DateTime stop, int v)
+        internal static List<Issue> Get_Under_Issues(IEnumerable<Issue> allIssues, DateTime start, DateTime stop, int v)
         {
             //underdog issues are the newest issues for now
 
@@ -167,15 +167,11 @@ namespace Sigil
 
         }
 
-        internal static List<Issue> Get_Top_Issues(IQueryable<Issue> allIssues, DateTime start, DateTime stop, int v)
+        internal static List<Issue> Get_Top_Issues(IEnumerable<Issue> allIssues, DateTime start, DateTime stop, int v)
         {
             return allIssues.Where(i => i.createTime.Date >= start.Date && i.createTime.Date <= stop.Date).OrderByDescending(i => i.votes).ThenByDescending(i => i.viewCount).Take(v).ToList();
         }
 
     }
 
-    namespace Controllers
-    {
-       
-    }
 }
