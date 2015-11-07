@@ -17,5 +17,7 @@ namespace Sigil.Repository
     public interface IIssueRepository : IRepository<Issue>
     {
         //Methods for how when we need to get issues
+
+        Issue GetById(int orgId, int issueId);
     }
 }

@@ -365,7 +365,12 @@ namespace Sigil.Models
         {
             uvArray.Add(new UserVote(issueID, orgID));
         }
-        
+
+        public void Add_Vote(int commentId, int issueID, int orgID)
+        {
+            uvArray.Add(new UserVote(issueID, orgID, commentId));
+        }
+
         /// <summary>
         /// Deletes a vote of the user.
         /// </summary>
@@ -376,7 +381,20 @@ namespace Sigil.Models
         {
             foreach(UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID)
+                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == 0)
+                {
+                    uvArray.Remove(uv);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Delete_Vote(int commentID, int issueID, int orgID)
+        {
+            foreach (UserVote uv in uvArray)
+            {
+                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == commentID)
                 {
                     uvArray.Remove(uv);
                     return true;
@@ -398,7 +416,19 @@ namespace Sigil.Models
         {
             foreach (UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID)
+                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Check_Vote(int commentId, int issueID, int orgID)
+        {
+            foreach (UserVote uv in uvArray)
+            {
+                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == commentId)
                 {
                     return true;
                 }
@@ -415,13 +445,22 @@ namespace Sigil.Models
     {
         public int IssueID;
         public int OrgID;
+        public int CommentId;
 
         public UserVote() { }
         public UserVote(int issueID, int orgID)
         {
             IssueID = issueID;
             OrgID = orgID;
+            CommentId = 0;
         }
+        public UserVote(int issueId, int orgId, int commentId)
+        {
+            IssueID = issueId;
+            OrgID = orgId;
+            CommentId = commentId;
+        }
+
     }
 
 

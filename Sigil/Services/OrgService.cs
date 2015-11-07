@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
+using Sigil.Repository;
 
 
 namespace Sigil.Services
@@ -37,18 +38,18 @@ namespace Sigil.Services
     public class OrgService : IOrgService
     {
         private readonly IOrgRepository OrgsRepository;
-        private readonly IOrgAppRepository OrgAppRepository;
+        private readonly IOrgAppRepository orgAppRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
-        private readonly ICountRepository countRespository;
         private readonly ICommentRepository commentRespository;
         private readonly IUserRepository userRespository;
         private readonly IUnitOfWork unitOfWork;
 
-        public OrgService(IOrgRepository orgRepo, IUnitOfWork unitofwork)
+        public OrgService(IOrgRepository orgRepo, IOrgAppRepository orgAppRepo,IUnitOfWork unitofwork)
         {
-            this.OrgsRepository = orgRepo;
-            this.unitOfWork = unitofwork;
+            OrgsRepository = orgRepo;
+            orgAppRepository = orgAppRepo;
+            unitOfWork = unitofwork;
         }
 
         public Org GetOrg(string orgstr, bool name)
@@ -87,6 +88,29 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
+        public void CreateOrgApp(OrgApp newOrg)
+        {
+            orgAppRepository.Add(newOrg);
+        }
 
+        public void SaveOrgApp()
+        {
+            unitOfWork.Commit();
+        }
+
+        public OrgApp ApproveOrgApp(int orgAppId)
+        {
+            return orgAppRepository.GetById(orgAppId);
+        }
+
+        public IEnumerable<OrgApp> GetAllOrgApplicants()
+        {
+            return orgAppRepository.GetAll();
+        }
+
+        public IEnumerable<Org> GetAllOrgs()
+        {
+            return OrgsRepository.GetAll();
+        }
     }
 }

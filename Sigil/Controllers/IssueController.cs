@@ -67,8 +67,8 @@ namespace Sigil.Controllers
             // If the page is in POST, we're posting a comment; get form data and POST it
             if (Request.HttpMethod == "POST")
             {
-                // Create a new issue
-                this WILL Break !!!
+                commentService.Comment_POST_Handler(Request, thisIssue, userID);
+                
                 //using (var action = new CommentController())
                 //{
                 //    action.Comment_Handler(Request, thisIssue, userID);

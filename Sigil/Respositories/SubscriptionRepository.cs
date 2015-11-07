@@ -7,6 +7,11 @@ using Sigil.Models;
 
 namespace Sigil.Repository
 {
+    public interface ISubscriptionRepository : IRepository<Subscription>
+    {
+        Subscription GetUserSubscriptionToOrg(string userId, int orgId);
+    }
+
     public class SubscriptionRepository : RepositoryBase<Subscription>, ISubscriptionRepository
     {
         public SubscriptionRepository(IDbFactory dbFactory) : base(dbFactory) { }
@@ -14,8 +19,5 @@ namespace Sigil.Repository
         //where we define the Subscription methods created below
     }
 
-    public interface ISubscriptionRepository : IRepository<Subscription>
-    {
-        //Methods for how when we need to get Subscriptions
-    }
+    
 }

@@ -7,6 +7,14 @@ using Sigil.Models;
 
 namespace Sigil.Repository
 {
+
+    public interface ICategoryRepository : IRepository<Category>
+    {
+        //Methods for how when we need to get Categorys
+        Category GetCategoryById(int orgid, int catid);
+        Category GetCategoryByName(int orgId, string catName);
+    }
+
     public class CategoryRepository : RepositoryBase<Category>, ICategoryRepository
     {
         public CategoryRepository(IDbFactory dbFactory) : base(dbFactory) { }
@@ -17,11 +25,14 @@ namespace Sigil.Repository
             var cat = this.DbContext.Categories.Where(c => c.orgId == orgId && c.Id == catId).FirstOrDefault();
             return cat;
         }
+
+        public Category GetCategoryByName(int orgId, string catName)
+        {
+            var cat = this.DbContext.Categories.Where(c => c.orgId == orgId && c.catName == catName).FirstOrDefault();
+            return cat;
+        }
+
     }
 
-    public interface ICategoryRepository : IRepository<Category>
-    {
-        //Methods for how when we need to get Categorys
-        Category GetCategoryById(int orgid, int catid);
-    }
+   
 }

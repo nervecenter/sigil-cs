@@ -7,15 +7,36 @@ using Sigil.Models;
 
 namespace Sigil.Repository
 {
+
+    public interface ICommentRepository : IRepository<Comment>
+    {
+        //Methods for how when we need to get Comments
+
+        Comment GetById(int orgId, int issueId, int commentId);
+        IEnumerable<Comment> GetIssueComments(int orgId, int issueId);
+
+    }
+
     public class CommentRepository : RepositoryBase<Comment>, ICommentRepository
     {
         public CommentRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
         //where we define the Comment methods created below
-    }
 
-    public interface ICommentRepository : IRepository<Comment>
-    {
-        //Methods for how when we need to get Comments
+        public Comment GetById(int orgId, int issueId, int commentId)
+        {
+            var com = this.DbContext.Comments.Where(c => c.OrgId == orgId && c.issueId == issueId && c.Id == commentId).FirstOrDefault();
+            return com;
+        }
+
+        public IEnumerable<Comment> GetIssueComments(int orgId, int issueId)
+        {
+            var com = this.DbContext.Comments.Where(c => c.OrgId == orgId && c.issueId == issueId).Select(c => c);
+            return com;
+        }
+
+       
+
+
     }
 }

@@ -26,13 +26,40 @@ namespace Sigil.Services
         private readonly IOrgRepository OrgsRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
-        private readonly ICountRepository countRespository;
+        private readonly ISubscriptionRepository subscriptionRepository;
         private readonly ICommentRepository commentRespository;
         private readonly IUserRepository userRespository;
         private readonly IUnitOfWork unitOfWork;
 
+        public SubscriptionService(IUnitOfWork unit, ISubscriptionRepository subRepo)
+        {
+            unitOfWork = unit;
+            subscriptionRepository = subRepo;
+        }
 
+        public void CreateSubscription(Subscription sub)
+        {
+            subscriptionRepository.Add(sub);
+        }
 
+        public void SaveSubscription()
+        {
+            unitOfWork.Commit();
+        }
 
+        public void RemoveSubscription(Subscription sub)
+        {
+            subscriptionRepository.Delete(sub);
+        }
+
+        public Subscription GetUserSubscription(string userId, int orgId)
+        {
+            return subscriptionRepository.GetUserSubscriptionToOrg(userId, orgId);
+        }
+
+        public IEnumerable<Subscription> GetUserSubscriptions(string userId)
+        {
+            return subscriptionRepository.GetMany(s => s.UserId == userId);
+        }
     }
 }

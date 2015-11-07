@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
-
+using Sigil.Repository;
 
 namespace Sigil.Services
 {
@@ -18,16 +18,26 @@ namespace Sigil.Services
 
     public class TopicService : ITopicService
     {
-        private readonly IOrgRepository OrgsRepository;
-        private readonly ICategoryRepository categoryRepository;
-        private readonly IIssueRepository issueRepository;
-        private readonly ICountRepository countRespository;
-        private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
+
+        private readonly ITopicRepository topicRepository;
+
         private readonly IUnitOfWork unitOfWork;
 
 
+        public TopicService(IUnitOfWork unit, ITopicRepository topRepo)
+        {
+            unitOfWork = unit;
+            topicRepository = topRepo;
+        }
 
+        public void CreateTopic(Topic top)
+        {
+            topicRepository.Add(top);
+        }
 
+        public void SaveTopic()
+        {
+            unitOfWork.Commit();
+        }
     }
 }

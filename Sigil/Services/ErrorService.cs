@@ -21,16 +21,43 @@ namespace Sigil.Services
 
     public class ErrorService : IErrorService
     {
-        private readonly IOrgRepository OrgsRepository;
-        private readonly ICategoryRepository categoryRepository;
-        private readonly IIssueRepository issueRepository;
-        private readonly ICountRepository countRespository;
-        private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
+        private readonly IErrorRepository errorRepository;
         private readonly IUnitOfWork unitOfWork;
 
 
+        public ErrorService(IUnitOfWork unit, IErrorRepository errorRepo)
+        {
+            unitOfWork = unit;
+            errorRepository = errorRepo;
+        }
 
+        public IEnumerable<Error> GetAllErrors()
+        {
+            return errorRepository.GetAll();
+        }
 
+        public void CreateError(object errorObj, string msg)
+        {
+            Error newErr = new Error();
+            newErr.error_date = DateTime.UtcNow;
+            newErr.error_object = errorObj.ToString();
+            newErr.error_exception = msg;
+
+            errorRepository.Add(newErr);
+
+            unitOfWork.Commit();
+        }
+
+        public void CreateError(object errorObj, Exception e, string msg = "")
+        {
+            Error newErr = new Error();
+            newErr.error_date = DateTime.UtcNow;
+            newErr.error_object = errorObj.ToString();
+            newErr.error_exception = e.Message + '\n'+ msg;
+
+            errorRepository.Add(newErr);
+
+            unitOfWork.Commit();
+        }
     }
 }

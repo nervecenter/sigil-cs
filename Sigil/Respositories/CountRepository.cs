@@ -12,53 +12,80 @@ namespace Sigil.Repository
         VoteCount, ViewCount, SubCount, CommentCount
     }
 
-    public interface ICountRepository : IRepository<Count>
+    public interface IViewCountRepository : IRepository<ViewCount>
     {
 
-        IEnumerable<ViewCountCol> GetOrgsViewCounts(int orgId);
-        IEnumerable<VoteCountCol> GetOrgsVoteCounts(int orgId);
-        IEnumerable<SubCountCol> GetOrgsSubscriptionCounts(int orgId);
-        IEnumerable<CommentCountCol> GetOrgsCommentCounts(int orgId);
+        IEnumerable<ViewCount> GetOrgsViewCounts(int orgId);
 
-        ViewCountCol GetIssueViewCount(int orgId, int issueId);
-        VoteCountCol GetIssueVoteCount(int orgId, int issueId);
-        CommentCountCol GetIssueCommentCount(int orgId, int issueId);
-
-        void UpdateCount(CountType type, CountCol count, int orgId);
-        void UpdateCount(CountType type, CountCol count, int orgId, int issueId);
+        ViewCount GetIssueViewCount(int orgId, int issueId);
 
     }
 
-    public class CountRepository : RepositoryBase<Count>, ICountRepository
+    public interface IVoteCountRepository : IRepository<VoteCount>
     {
-        public CountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+        IEnumerable<VoteCount> GetOrgsVoteCounts(int orgId);
+        VoteCount GetIssueVoteCount(int orgId, int issueId);
+
+        
+    }
+
+    public interface ISubscriptionCountRepository : IRepository<SubCount>
+    {
+        SubCount GetOrgsSubscriptionCount(int orgId);
+
+        //void UpdateCount(CountType type, CountCol count, int orgId);
+
+    }
+
+    public interface ICommentCountRepository : IRepository<CommentCount>
+    {
+        IEnumerable<CommentCount> GetOrgsCommentCounts(int orgId);
+        CommentCount GetIssueCommentCount(int orgId, int issueId);
+
+
+       // void UpdateCount(CountType type, CountCol count, int orgId, int issueId);
+    }
+
+    public class ViewCountRepository : RepositoryBase<ViewCount>, IViewCountRepository
+    {
+        public ViewCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+
+        public ViewCount GetIssueViewCount(int orgId, int issueId)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ViewCount> IViewCountRepository.GetOrgsViewCounts(int orgId)
+        {
+            throw new NotImplementedException();
+        }
 
         //where we define the Count methods created above
 
-        IEnumerable<ViewCountCol> GetOrgsViewCounts(int orgId)
+        IEnumerable<ViewCount> GetOrgsViewCounts(int orgId)
         {
-            var counts = this.DbContext.ViewCountData.Where(vc => vc.OrgId == orgId).Select(vc => CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+            var counts = this.DbContext.ViewCountData.Where(vc => vc.OrgId == orgId).Select(vc => vc);
             return counts;
         }
 
-        IEnumerable<ViewCountCol> GetOrgsViewCounts(int orgId)
-        {
-            var counts = this.DbContext.ViewCountData.Where(vc => vc.OrgId == orgId).Select(vc => CountXML<ViewCountCol>.XMLtoDATA(vc.count));
-            return counts;
-        }
-
-        IEnumerable<ViewCountCol> GetOrgsViewCounts(int orgId)
-        {
-            var counts = this.DbContext.ViewCountData.Where(vc => vc.OrgId == orgId).Select(vc => CountXML<ViewCountCol>.XMLtoDATA(vc.count));
-            return counts;
-        }
-
-        IEnumerable<ViewCountCol> GetOrgsViewCounts(int orgId)
-        {
-            var counts = this.DbContext.ViewCountData.Where(vc => vc.OrgId == orgId).Select(vc => CountXML<ViewCountCol>.XMLtoDATA(vc.count));
-            return counts;
-        }
+    
     }
 
    
+    public class VoteCountRepository : RepositoryBase<VoteCount>, IVoteCountRepository
+    {
+        public VoteCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+    }    
+
+    public class SubscriptionCountRepository: RepositoryBase<SubCount>, ISubscriptionCountRepository
+    {
+        public SubscriptionCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+    }
+
+    public class CommentCountRepository : RepositoryBase<CommentCount>, ICommentCountRepository
+    {
+        public CommentCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+
+    }
+
 }

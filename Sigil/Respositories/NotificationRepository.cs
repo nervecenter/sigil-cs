@@ -6,7 +6,15 @@ using System.Web;
 using Sigil.Models;
 
 namespace Sigil.Repository
-{
+{ 
+    public interface INotificationRepository : IRepository<Notification>
+    {
+        //Methods for how when we need to get Notifications
+
+        IEnumerable<Notification> GetUsersNotifications(string userId);
+        IEnumerable<Notification> GetOrgsNotifications(int orgId);
+    }
+
     public class NotificationRepository : RepositoryBase<Notification>, INotificationRepository
     {
         public NotificationRepository(IDbFactory dbFactory) : base(dbFactory) { }
@@ -14,8 +22,4 @@ namespace Sigil.Repository
         //where we define the Notification methods created below
     }
 
-    public interface INotificationRepository : IRepository<Notification>
-    {
-        //Methods for how when we need to get Notifications
-    }
 }

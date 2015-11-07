@@ -24,6 +24,8 @@ namespace Sigil.Repository
         //Methods for how when we need to get Users
 
         string GetDisplayName(string userId);
-        
+        AspNetUser GetById(string id);
+        AspNetUser GetByDisplayName(string name);
+
     }
 }

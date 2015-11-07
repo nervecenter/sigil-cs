@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
-
+using Sigil.Repository;
 
 namespace Sigil.Services
 {
@@ -50,13 +50,117 @@ namespace Sigil.Services
         private readonly IOrgRepository OrgsRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
-        private readonly ICountRepository countRespository;
+        
         private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
+        private readonly IUserRepository userRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public UserService(IUserRepository userRepo, )
+        public UserService(IUnitOfWork unit, IUserRepository userRepo, ICommentRepository comRepo)
+        {
+            unitOfWork = unit;
+            userRepository = userRepo;
+            commentRespository = comRepo;
+        }
 
+        public AspNetUser GetUser(string id)
+        {
+            return userRepository.GetById(id);
+        }
 
+        public AspNetUser GetUserByDisplayName(string name)
+        {
+            return userRepository.GetByDisplayName(name);
+        }
+
+        public string GetUserDisplayName(string id)
+        {
+            return userRepository.GetDisplayName(id);
+        }
+
+        public void SetUserRole(AspNetRole role, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Comment> GetUserComments(string id)
+        {
+            return commentRespository.GetMany(c => c.UserId == id);
+        }
+
+        public IEnumerable<AspNetUser> GetUsersByVote(int orgId, int issueId)
+        {
+            var users = userRepository.GetAll();
+
+            List<AspNetUser> votedUsers = new List<AspNetUser>();
+            foreach(var u in users)
+            {
+                if(CountXML<UserVoteCol>.XMLtoDATA(u.votes).Check_Vote(issueId, orgId))
+                {
+                    votedUsers.Add(u);   
+                }
+            }
+
+            return votedUsers.AsEnumerable();
+        }
+
+        public IEnumerable<AspNetUser> GetUsersByIssue(int orgId, int issueId)
+        {
+            var issueComments = commentRespository.GetIssueComments(orgId, issueId);
+
+            return issueComments.Select(c => c.AspNetUser);
+        }
+
+        public void CreateUserVote(AspNetUser user)
+        {
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
+            userRepository.Update(user);
+        }
+
+        public void SaveUserVotes()
+        {
+            unitOfWork.Commit();
+        }
+
+        public void AddUserVote(AspNetUser user, int orgId, int issueId)
+        {
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            userVoteCol.Add_Vote(issueId, orgId);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            userRepository.Update(user);
+        }
+
+        public void AddUserVote(AspNetUser user, int orgId, int issueId, int commentId)
+        {
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            userVoteCol.Add_Vote(commentId, issueId, orgId);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            userRepository.Update(user);
+        }
+
+        public void RemoveUserVote(AspNetUser user, int orgId, int issueId)
+        {
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            userVoteCol.Delete_Vote(issueId, orgId);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            userRepository.Update(user);
+        }
+
+        public void RemoveUserVote(AspNetUser user, int orgId, int issueId, int commentId)
+        {
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            userVoteCol.Delete_Vote(commentId, issueId, orgId);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            userRepository.Update(user);
+        }
+
+        public void UpdateUser(AspNetUser user)
+        {
+            userRepository.Update(user);
+        }
+
+        public UserVoteCol GetUserVotes(string userId)
+        {
+            return CountXML<UserVoteCol>.XMLtoDATA(userRepository.GetById(userId).votes);
+        }
     }
 }

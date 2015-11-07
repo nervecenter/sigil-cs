@@ -270,7 +270,6 @@
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\IssueService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Services\OfficialResponseService.cs" />
     <Compile Include="Services\OrgService.cs" />
     <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\SubscriptionService.cs" />

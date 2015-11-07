@@ -272,17 +272,10 @@ namespace Sigil.Controllers
 
             //Setup Org data collection db entries
             int orgID = orgService.GetOrg(newOrg.orgURL).Id;
-            SubCount newSubs = new SubCount();
-            newSubs.OrgId = orgID;
-            newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
 
-            ViewCount newVCount = new ViewCount();
-            newVCount.OrgId = orgID;
-            newVCount.IssueId = 0;
-            newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
 
             try {
-                countDataService.CreateOrgCountData(newVCount, newSubs);
+                countDataService.CreateOrgCountData(orgID);
                 countDataService.SaveOrgCountData();
                 
                 //dc.SubCounts.InsertOnSubmit(newSubs);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
-
+using Sigil.Repository;
 
 namespace Sigil.Services
 {
@@ -20,12 +20,8 @@ namespace Sigil.Services
 
     public class CategoryService : ICategoryService
     {
-        private readonly IOrgRepository OrgsRepository;
+
         private readonly ICategoryRepository categoryRepository;
-        private readonly IIssueRepository issueRepository;
-        private readonly ICountRepository countRespository;
-        private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
         private readonly IUnitOfWork unitOfWork;
 
         public CategoryService(ICategoryRepository catRepo, IUnitOfWork unit)
@@ -67,5 +63,9 @@ namespace Sigil.Services
             return cat;
         }
 
+        public Category GetCategory(int orgId, string cat)
+        {
+            return categoryRepository.GetCategoryByName(orgId, cat);
+        }
     }
 }
