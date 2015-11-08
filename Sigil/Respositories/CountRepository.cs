@@ -19,14 +19,14 @@ namespace Sigil.Repository
 
         ViewCount GetIssueViewCount(int orgId, int issueId);
 
+        ViewCount GetOrgsViewCount(int orgid);
+
     }
 
     public interface IVoteCountRepository : IRepository<VoteCount>
     {
         IEnumerable<VoteCount> GetOrgsVoteCounts(int orgId);
         VoteCount GetIssueVoteCount(int orgId, int issueId);
-
-        
     }
 
     public interface ISubscriptionCountRepository : IRepository<SubCount>
@@ -50,17 +50,27 @@ namespace Sigil.Repository
     {
         public ViewCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
+        //where we define the Count methods created above
+
         public ViewCount GetIssueViewCount(int orgId, int issueId)
         {
-            throw new NotImplementedException();
+            var vc = this.DbContext.ViewCountData.Where(v => v.OrgId == orgId && v.IssueId == issueId).FirstOrDefault();
+            return vc;
+        }
+
+        public ViewCount GetOrgsViewCount(int orgid)
+        {
+            var vc = this.DbContext.ViewCountData.Where(v => v.OrgId == orgid && v.IssueId == 0).FirstOrDefault();
+            return vc;
         }
 
         IEnumerable<ViewCount> IViewCountRepository.GetOrgsViewCounts(int orgId)
         {
-            throw new NotImplementedException();
+            var vc = this.DbContext.ViewCountData.Where(v => v.OrgId == orgId).Select(v => v);
+            return vc;
         }
 
-        //where we define the Count methods created above
+        
 
         IEnumerable<ViewCount> GetOrgsViewCounts(int orgId)
         {
@@ -75,17 +85,46 @@ namespace Sigil.Repository
     public class VoteCountRepository : RepositoryBase<VoteCount>, IVoteCountRepository
     {
         public VoteCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+
+        public VoteCount GetIssueVoteCount(int orgId, int issueId)
+        {
+            var vc = this.DbContext.VoteCountData.Where(v => v.OrgId == orgId && v.IssueId == issueId).FirstOrDefault();
+            return vc;
+        }
+
+        public IEnumerable<VoteCount> GetOrgsVoteCounts(int orgId)
+        {
+            var vc = this.DbContext.VoteCountData.Where(v => v.OrgId == orgId).Select(v => v);
+            return vc;
+        }
     }    
 
     public class SubscriptionCountRepository: RepositoryBase<SubCount>, ISubscriptionCountRepository
     {
         public SubscriptionCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
+
+        public SubCount GetOrgsSubscriptionCount(int orgId)
+        {
+            var vc = this.DbContext.SubscriptionCountData.Where(v => v.OrgId == orgId).FirstOrDefault();
+            return vc;
+        }
     }
 
     public class CommentCountRepository : RepositoryBase<CommentCount>, ICommentCountRepository
     {
         public CommentCountRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
+        public CommentCount GetIssueCommentCount(int orgId, int issueId)
+        {
+            var vc = this.DbContext.CommentCountData.Where(v => v.OrgId == orgId && v.IssueId == issueId).FirstOrDefault();
+            return vc;
+        }
+
+        public IEnumerable<CommentCount> GetOrgsCommentCounts(int orgId)
+        {
+            var vc = this.DbContext.CommentCountData.Where(v => v.OrgId == orgId).Select(v => v);
+            return vc;
+        }
     }
 
 }

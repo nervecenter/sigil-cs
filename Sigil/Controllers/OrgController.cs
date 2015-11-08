@@ -61,7 +61,7 @@ namespace Sigil.Controllers
             //                              orderby issue.votes descending
             //                              select issue;
 
-            var OrgIssues = issueService.GetOrgIssues(thisOrg.Id);
+            var OrgIssues = issueService.GetAllOrgIssues(thisOrg.Id);
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
             int num_results_per_page = 3;
@@ -141,7 +141,7 @@ namespace Sigil.Controllers
             //                     where vc.OrgId == thisOrg.Id
             //                     select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
 
-            var orgIssueViewData = countDataService.GetOrgViewCount(thisOrg.Id);
+            var orgIssueViewData = countDataService.GetOrgViewCountCols(thisOrg.Id);
 
             var View_Data = DataVisualization.Data_to_Google_Graph_Format(orgIssueViewData, DateTime.Now.AddDays(-7), DateTime.Now);
 
@@ -163,19 +163,19 @@ namespace Sigil.Controllers
             {
                 case "Views":
                     {
-                        var data = countDataService.GetOrgViewCount(thisOrg.Id);//dc.ViewCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<ViewCountCol>.XMLtoDATA(v.count)); 
+                        var data = countDataService.GetOrgViewCountCols(thisOrg.Id);//dc.ViewCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<ViewCountCol>.XMLtoDATA(v.count)); 
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Votes":
                     {
-                        var data = countDataService.GetOrgVoteCount(thisOrg.Id);//dc.VoteCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<VoteCountCol>.XMLtoDATA(v.count));
+                        var data = countDataService.GetOrgVoteCountCols(thisOrg.Id);//dc.VoteCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<VoteCountCol>.XMLtoDATA(v.count));
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Comments":
                     {
-                        var data = countDataService.GetOrgCommentCount(thisOrg.Id);//dc.CommentCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<CommentCountCol>.XMLtoDATA(v.count));
+                        var data = countDataService.GetOrgCommentCountCols(thisOrg.Id);//dc.CommentCounts.Where(vc => vc.OrgId == thisOrg.Id).Select(v => CountXML<CommentCountCol>.XMLtoDATA(v.count));
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }

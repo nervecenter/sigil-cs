@@ -33,7 +33,7 @@ namespace Sigil.Services
         /// <returns></returns>
         IEnumerable<AspNetUser> GetUsersByIssue(int orgId, int issueId);
 
-        void CreateUserVote(AspNetUser user);
+        void CreateUserVote(string userId);
         void SaveUserVotes();
 
         void AddUserVote(AspNetUser user, int orgId, int issueId);
@@ -110,8 +110,10 @@ namespace Sigil.Services
             return issueComments.Select(c => c.AspNetUser);
         }
 
-        public void CreateUserVote(AspNetUser user)
+        public void CreateUserVote(string userid)
         {
+            var user = userRepository.GetById(userid);
+
             user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
             userRepository.Update(user);
         }

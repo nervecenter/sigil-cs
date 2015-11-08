@@ -19,6 +19,18 @@ namespace Sigil.Repository
     {
         public NotificationRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
+        public IEnumerable<Notification> GetOrgsNotifications(int orgId)
+        {
+            var notes = this.DbContext.Notifications.Where(i => i.To_OrgId == orgId).Select(i => i);
+            return notes;
+        }
+
+        public IEnumerable<Notification> GetUsersNotifications(string userId)
+        {
+            var notes = this.DbContext.Notifications.Where(i => i.To_UserId == userId).Select(i => i);
+            return notes;
+        }
+
         //where we define the Notification methods created below
     }
 

@@ -383,7 +383,7 @@ namespace Sigil.Controllers
             else if (caller is Category)
             {
                 Category c = (Category)Convert.ChangeType(caller, typeof(T));
-                return imageService.GetCategoryImages(c.Id);//dc.Images.Single(i => i.CatId == c.Id);
+                return imageService.GetCategoryImages(c.orgId, c.Id);//dc.Images.Single(i => i.CatId == c.Id);
             }
             throw new ArgumentNullException();
         }

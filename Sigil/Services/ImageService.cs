@@ -19,7 +19,7 @@ namespace Sigil.Services
         Image GetUserImages(string userId);
         Image GetOrgImages(int orgId);
         Image GetTopicImages(int topicId);
-        Image GetCategoryImages(int catId);
+        Image GetCategoryImages(int orgId, int catId);
     }
 
     public class ImageService : IImageService

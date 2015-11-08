@@ -14,13 +14,31 @@ namespace Sigil.Repository
 
         Image GetImageByUserId(string userId);
         Image GetImageByOrgId(int orgId, int catId=0);
-        
+
         Image GetImageByTopicId(int topId);
     }
 
     public class ImageRepository : RepositoryBase<Image>, IImageRepository
     {
         public ImageRepository(IDbFactory dbFactory) : base(dbFactory) { }
+
+        public Image GetImageByOrgId(int orgId, int catId = 0)
+        {
+            var img = this.DbContext.Images.Where(i => i.OrgId == orgId && i.CatId == catId).FirstOrDefault();
+            return img;
+        }
+
+        public Image GetImageByTopicId(int topId)
+        {
+            var img = this.DbContext.Images.Where(i => i.TopicId == topId).FirstOrDefault();
+            return img;
+        }
+
+        public Image GetImageByUserId(string userId)
+        {
+            var img = this.DbContext.Images.Where(i => i.UserId == userId).FirstOrDefault();
+            return img;
+        }
 
         //where we define the Image methods created below
     }

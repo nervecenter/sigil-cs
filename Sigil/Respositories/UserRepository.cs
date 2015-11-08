@@ -11,6 +11,18 @@ namespace Sigil.Repository
     {
         public UserRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
+        public AspNetUser GetByDisplayName(string name)
+        {
+            var user = this.DbContext.Users.Where(u => u.DisplayName == name).FirstOrDefault();
+            return user;
+        }
+
+        public AspNetUser GetById(string id)
+        {
+            var user = this.DbContext.Users.Where(u => u.Id == id).FirstOrDefault();
+            return user;
+        }
+
         public string GetDisplayName(string userId)
         {
             string displayName = this.DbContext.Users.SingleOrDefault(u => u.Id == userId).DisplayName;

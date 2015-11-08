@@ -31,7 +31,7 @@ namespace Sigil.Controllers {
                 var userSubs = subscriptionService.GetUserSubscriptions(userID);//dc.Subscriptions.Where(s => s.UserId == userID);
 
                 //get all the users issues based on their subscriptions
-                var userIssues = issueService.GetUserIssues(userID);//Get_User_Issues(userID, userSubs);
+                var userIssues = issueService.GetAllUserIssues(userID);//Get_User_Issues(userID, userSubs);
 
                 //sort the users issues by issue rank
 

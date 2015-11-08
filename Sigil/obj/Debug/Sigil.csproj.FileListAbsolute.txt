@@ -227,3 +227,15 @@ C:\Sigil\Sigil\bin\System.Web.WebPages.Razor.xml
 C:\Sigil\Sigil\obj\Debug\Sigil.dll
 C:\Sigil\Sigil\obj\Debug\Sigil.pdb
 C:\Sigil\Sigil\obj\Debug\Sigil.csprojResolveAssemblyReference.cache
+C:\Sigil\Sigil\bin\Autofac.dll
+C:\Sigil\Sigil\bin\Autofac.Integration.Mvc.dll
+C:\Sigil\Sigil\bin\AutoMapper.dll
+C:\Sigil\Sigil\bin\System.Net.Http.Formatting.dll
+C:\Sigil\Sigil\bin\System.Web.Http.dll
+C:\Sigil\Sigil\bin\System.Web.Http.WebHost.dll
+C:\Sigil\Sigil\bin\Autofac.xml
+C:\Sigil\Sigil\bin\Autofac.Integration.Mvc.xml
+C:\Sigil\Sigil\bin\AutoMapper.xml
+C:\Sigil\Sigil\bin\System.Net.Http.Formatting.xml
+C:\Sigil\Sigil\bin\System.Web.Http.xml
+C:\Sigil\Sigil\bin\System.Web.Http.WebHost.xml

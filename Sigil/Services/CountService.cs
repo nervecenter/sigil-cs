@@ -32,8 +32,8 @@ namespace Sigil.Services
         void UpdateOrgSubscriptionCount(int orgId, bool subed = true);
         void SaveOrgDataChanges();
 
-        //void SaveCountChanges(CountCol count, CountDataType t, int orgId);
-        //void SaveCountChanges(CountCol count, CountDataType t, int orgid, int issueId);
+        void SaveCountChanges(CountCol count, CountDataType t, int orgId);
+        void SaveCountChanges(CountCol count, CountDataType t, int orgid, int issueId);
 
 
         //I changed the order of the parameters half way through refactoring. Need to double check all calls to make sure parameters are in right order!!!!
@@ -57,9 +57,6 @@ namespace Sigil.Services
         private readonly IViewCountRepository viewCountRepository;
         private readonly ISubscriptionCountRepository subCountRepository;
         private readonly ICommentCountRepository commCountRepository;
-        private readonly IIssueRepository issueRepository;
-        private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
         private readonly IUnitOfWork unitOfWork;
 
         public CountService(IUnitOfWork unit, IVoteCountRepository voteRepo, IViewCountRepository viewRepo, ISubscriptionCountRepository subRepo, ICommentCountRepository commRepo, IOrgRepository orgRepo)
@@ -99,7 +96,7 @@ namespace Sigil.Services
             VoteCount newVote = new VoteCount();
             newVote.IssueId = issueId;
             newVote.OrgId = orgId;
-        
+
             VoteCountCol newVoteCol = new VoteCountCol();
             newVoteCol.Update();
             newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoteCol);
@@ -156,7 +153,7 @@ namespace Sigil.Services
 
             VoteCountCol voteCol = CountXML<VoteCountCol>.XMLtoDATA(voteC.count);
 
-            if(upVote)
+            if (upVote)
             {
                 voteCol.Update();
             }
@@ -181,7 +178,7 @@ namespace Sigil.Services
 
             SubCountCol subCol = CountXML<SubCountCol>.XMLtoDATA(subC.count);
 
-            if(subed)
+            if (subed)
             {
                 subCol.Update();
             }
@@ -201,7 +198,7 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-      
+
 
         public ViewCountCol GetIssueViewCountCol(int orgId, int issueId)
         {
@@ -255,5 +252,79 @@ namespace Sigil.Services
 
             return orgCommCol;
         }
+
+        public void SaveIssueDataChanges()
+        {
+            unitOfWork.Commit();
+        }
+
+        public SubCountCol GetOrgSubscriptionCount(int orgId)
+        {
+            var sub = subCountRepository.GetOrgsSubscriptionCount(orgId);
+            return CountXML<SubCountCol>.XMLtoDATA(sub.count);
+        }
+
+        public void SaveCountChanges(CountCol count, CountDataType t, int orgId)
+        {
+            switch (t)
+            {
+                case CountDataType.Subscription:
+                    {
+                        var col = count as SubCountCol;
+                        var commC = subCountRepository.GetOrgsSubscriptionCount(orgId);
+                        commC.count = CountXML<SubCountCol>.DATAtoXML(col);
+                        subCountRepository.Update(commC);
+                        break;
+                    }
+                case CountDataType.View:
+                    {
+                        var col = count as ViewCountCol;
+                        var viewC = viewCountRepository.GetOrgsViewCount(orgId);
+                        viewC.count = CountXML<ViewCountCol>.DATAtoXML(col);
+                        viewCountRepository.Update(viewC);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+
+        public void SaveCountChanges(CountCol count, CountDataType t, int orgid, int issueId)
+        {
+            switch (t)
+            {
+                case CountDataType.Vote:
+                    {
+                        var col = count as SubCountCol;
+                        var voteC = voteCountRepository.GetIssueVoteCount(orgid, issueId);
+                        voteC.count = CountXML<SubCountCol>.DATAtoXML(col);
+                        voteCountRepository.Update(voteC);
+                        break;
+                    }
+                case CountDataType.View:
+                    {
+                        var col = count as ViewCountCol;
+                        var viewC = viewCountRepository.GetIssueViewCount(orgid, issueId);
+                        viewC.count = CountXML<ViewCountCol>.DATAtoXML(col);
+                        viewCountRepository.Update(viewC);
+                        break;
+                    }
+                case CountDataType.Comment:
+                    {
+                        var col = count as CommentCountCol;
+                        var comC = commCountRepository.GetIssueCommentCount(orgid, issueId);
+                        comC.count = CountXML<CommentCountCol>.DATAtoXML(col);
+                        commCountRepository.Update(comC);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+
     }
 }

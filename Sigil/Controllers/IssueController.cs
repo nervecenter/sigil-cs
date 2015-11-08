@@ -104,7 +104,7 @@ namespace Sigil.Controllers
         /// <param name="thisIssue">Issue object from the table</param>
         private void ViewCount_Routine(Org thisOrg, Issue thisIssue)
         {
-            ViewCountCol vc = countDataService.GetIssueViewCount(thisOrg.Id, thisIssue.Id);//dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& v.datetime.Date == DateTime.Today.Date);
+            ViewCountCol vc = countDataService.GetIssueViewCountCol(thisOrg.Id, thisIssue.Id);//dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& v.datetime.Date == DateTime.Today.Date);
             //if (vc == default(ViewCount))
             //{
             //    try
@@ -179,7 +179,7 @@ namespace Sigil.Controllers
         {
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
 
-            var issueViews = countDataService.GetIssueViewCount(thisOrg.Id, issueId);//CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+            var issueViews = countDataService.GetIssueViewCountCol(thisOrg.Id, issueId);//CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
 
             var View_Data = DataVisualization.Data_to_Google_Graph_Format(issueViews, DateTime.Now.AddDays(-7), DateTime.Now);
 
@@ -201,19 +201,19 @@ namespace Sigil.Controllers
             {
                 case "Views":
                     {
-                        var data = countDataService.GetIssueViewCount(thisOrg.Id, issueId);//CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        var data = countDataService.GetIssueViewCountCol(thisOrg.Id, issueId);//CountXML<ViewCountCol>.XMLtoDATA(dc.ViewCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Votes":
                     {
-                        var data = countDataService.GetIssueVoteCount(thisOrg.Id, issueId);//CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        var data = countDataService.GetIssueVoteCountCol(thisOrg.Id, issueId);//CountXML<VoteCountCol>.XMLtoDATA(dc.VoteCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }
                 case "Comments":
                     {
-                        var data = countDataService.GetIssueCommentCount(thisOrg.Id, issueId);//CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
+                        var data = countDataService.GetIssueCommentCountCol(thisOrg.Id, issueId);//CountXML<CommentCountCol>.XMLtoDATA(dc.CommentCounts.Single(vc => vc.IssueId == issueId && vc.OrgId == thisOrg.Id).count);
                         view_data = DataVisualization.Data_to_Google_Graph_Format(data, startDate, stopDate);
                         break;
                     }

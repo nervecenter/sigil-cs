@@ -16,6 +16,12 @@ namespace Sigil.Repository
     {
         public SubscriptionRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
+        public Subscription GetUserSubscriptionToOrg(string userId, int orgId)
+        {
+            var sub = this.DbContext.Subscriptions.Where(s => s.UserId == userId && s.OrgId == orgId).FirstOrDefault();
+            return sub;
+        }
+
         //where we define the Subscription methods created below
     }
 

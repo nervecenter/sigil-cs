@@ -188,7 +188,7 @@ namespace Sigil.Controllers
             //ImageController<AspNetUser>.Assign_Default_Icon(userID);
             imageService.AssignDefaultImage(userID);
             imageService.SaveImage();
-            userService.CreateUserVotes(userID);
+            userService.CreateUserVote(userID);
             userService.SaveUserVotes();
         }
 
@@ -227,7 +227,7 @@ namespace Sigil.Controllers
             catch(Exception e)
             {
                 errorService.CreateError(newOrg, e);
-                errorService.SaveError();
+                
                 //ErrorHandler.Log_Error(newOrg, e, dc);
             }
 
@@ -265,8 +265,7 @@ namespace Sigil.Controllers
             catch(Exception e)
             {
                 errorService.CreateError(newOrg, e);
-                errorService.SaveError();
-                //ErrorHandler.Log_Error(newOrg, e, dc);
+                
                 //need to kick back to a new screen to have them try again
             }
 
@@ -284,9 +283,9 @@ namespace Sigil.Controllers
             }
             catch(Exception e)
             {
-                errorService.CreateError(newSubs, e);
-                errorService.CreateError(newVCount, e);
-                errorService.SaveError();
+                //errorService.CreateError(newSubs, e);
+                //errorService.CreateError(newVCount, e);
+                
                 //need to figure out what to do this error and the before one
             }
 
