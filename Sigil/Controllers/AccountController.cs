@@ -27,10 +27,16 @@ namespace Sigil.Controllers
         private readonly IUserService userService;
         private readonly IImageService imageService;
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS )
         {
             UserManager = userManager;
             SignInManager = signInManager;
+
+            orgService = orgS;
+            countDataService = countS;
+            errorService = errS;
+            userService = userS;
+            imageService = imgS;
         }
 
         public ApplicationSignInManager SignInManager

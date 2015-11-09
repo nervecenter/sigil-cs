@@ -22,6 +22,13 @@ namespace Sigil.Controllers {
         private readonly IIssueService issueService;
 
 
+        public HomeController(ISubscriptionService subS, IUserService userS, IIssueService issS)
+        {
+            subscriptionService = subS;
+            userService = userS;
+            issueService = issS;
+        }
+
         public ActionResult Index(int? page) {
             var userID = User.Identity.GetUserId();
 

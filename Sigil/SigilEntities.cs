@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
+using System.Xml.Linq;
 
 namespace Sigil
 {
@@ -11,6 +12,7 @@ namespace Sigil
     {
         public SigilEntities() : base("aspnet-Sigil-20150716011718") { }
 
+        //public DbSet<XElement> xele { get; set; }
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Issue> Issues { get; set; }
         public DbSet<AspNetUser> Users { get; set; }
@@ -33,6 +35,9 @@ namespace Sigil
 
         public DbSet<Error> Errors { get; set; }
         public DbSet<OrgApp> OrgApplicants { get; set; }
+
+        //public DbSet<AspNetUserRole> UserRoles { get; set; }
+        
 
         public virtual void Commit()
         {

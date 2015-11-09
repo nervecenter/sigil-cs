@@ -15,6 +15,7 @@ namespace Sigil.Mappings
                 m.AddProfile<DomainToViewModelMappingProfile>(); //<------------ Maps Domain models (db) to Viewmodels
 
                 m.AddProfile<ViewModelToDomainMappingProfile>(); //<------------ Maps ViewModels to Domain models(db)
+                
             });
         }
     }

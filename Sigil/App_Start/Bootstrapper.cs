@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Sigil.Repository;
+using System.Xml.Linq;
 
 namespace Sigil.App_Start
 {
@@ -18,7 +19,7 @@ namespace Sigil.App_Start
         public static void Run()
         {
             SetAutofacContainer();
-            AutoMapperConfiguration.Configure();
+            //AutoMapperConfiguration.Configure();
         }
 
         private static void SetAutofacContainer()
@@ -28,6 +29,7 @@ namespace Sigil.App_Start
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
+            builder.RegisterType<XElement>().As<XElement>().InstancePerRequest(); 
 
             //Repositories
             builder.RegisterAssemblyTypes(typeof(OrgRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
@@ -61,7 +63,10 @@ namespace Sigil.App_Start
             builder.RegisterAssemblyTypes(typeof(TopicService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(UserService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
 
+            
+
             IContainer container = builder.Build();
+           
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
     }

@@ -24,6 +24,10 @@ namespace Sigil.Models
         public bool userVoted;
     }
 
+
+
+    #region Helper Data Structures
+
     public static class CountXML<T>
     {
         /// <summary>
@@ -555,6 +559,7 @@ namespace Sigil.Models
 
     }
 
+    #endregion
 
     //============================= HighChart Helper Datastructure ===============================================================================//
 

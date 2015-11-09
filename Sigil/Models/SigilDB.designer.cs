@@ -30,9 +30,6 @@ namespace Sigil.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertAspNetUserRole(AspNetUserRole instance);
-    partial void UpdateAspNetUserRole(AspNetUserRole instance);
-    partial void DeleteAspNetUserRole(AspNetUserRole instance);
     partial void InsertIssue(Issue instance);
     partial void UpdateIssue(Issue instance);
     partial void DeleteIssue(Issue instance);
@@ -114,14 +111,6 @@ namespace Sigil.Models
 				base(connection, mappingSource)
 		{
 			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<AspNetUserRole> AspNetUserRoles
-		{
-			get
-			{
-				return this.GetTable<AspNetUserRole>();
-			}
 		}
 		
 		public System.Data.Linq.Table<Issue> Issues
@@ -257,174 +246,6 @@ namespace Sigil.Models
 			get
 			{
 				return this.GetTable<OfficialResponse>();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AspNetUserRoles")]
-	public partial class AspNetUserRole : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _UserId;
-		
-		private string _RoleId;
-		
-		private EntityRef<AspNetUser> _AspNetUser;
-		
-		private EntityRef<AspNetRole> _AspNetRole;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnUserIdChanging(string value);
-    partial void OnUserIdChanged();
-    partial void OnRoleIdChanging(string value);
-    partial void OnRoleIdChanged();
-    #endregion
-		
-		public AspNetUserRole()
-		{
-			this._AspNetUser = default(EntityRef<AspNetUser>);
-			this._AspNetRole = default(EntityRef<AspNetRole>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._AspNetUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string RoleId
-		{
-			get
-			{
-				return this._RoleId;
-			}
-			set
-			{
-				if ((this._RoleId != value))
-				{
-					if (this._AspNetRole.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRoleIdChanging(value);
-					this.SendPropertyChanging();
-					this._RoleId = value;
-					this.SendPropertyChanged("RoleId");
-					this.OnRoleIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserRole", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public AspNetUser AspNetUser
-		{
-			get
-			{
-				return this._AspNetUser.Entity;
-			}
-			set
-			{
-				AspNetUser previousValue = this._AspNetUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetUser.Entity = null;
-						previousValue.AspNetUserRoles.Remove(this);
-					}
-					this._AspNetUser.Entity = value;
-					if ((value != null))
-					{
-						value.AspNetUserRoles.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(string);
-					}
-					this.SendPropertyChanged("AspNetUser");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetRole_AspNetUserRole", Storage="_AspNetRole", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public AspNetRole AspNetRole
-		{
-			get
-			{
-				return this._AspNetRole.Entity;
-			}
-			set
-			{
-				AspNetRole previousValue = this._AspNetRole.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetRole.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetRole.Entity = null;
-						previousValue.AspNetUserRoles.Remove(this);
-					}
-					this._AspNetRole.Entity = value;
-					if ((value != null))
-					{
-						value.AspNetUserRoles.Add(this);
-						this._RoleId = value.Id;
-					}
-					else
-					{
-						this._RoleId = default(string);
-					}
-					this.SendPropertyChanged("AspNetRole");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}
@@ -3643,8 +3464,6 @@ namespace Sigil.Models
 		
 		private string _DisplayName;
 		
-		private EntitySet<AspNetUserRole> _AspNetUserRoles;
-		
 		private EntitySet<Issue> _Issues;
 		
 		private EntitySet<Subscription> _Subscriptions;
@@ -3693,7 +3512,6 @@ namespace Sigil.Models
 		
 		public AspNetUser()
 		{
-			this._AspNetUserRoles = new EntitySet<AspNetUserRole>(new Action<AspNetUserRole>(this.attach_AspNetUserRoles), new Action<AspNetUserRole>(this.detach_AspNetUserRoles));
 			this._Issues = new EntitySet<Issue>(new Action<Issue>(this.attach_Issues), new Action<Issue>(this.detach_Issues));
 			this._Subscriptions = new EntitySet<Subscription>(new Action<Subscription>(this.attach_Subscriptions), new Action<Subscription>(this.detach_Subscriptions));
 			this._Images = new EntitySet<Image>(new Action<Image>(this.attach_Images), new Action<Image>(this.detach_Images));
@@ -4002,19 +3820,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserRole", Storage="_AspNetUserRoles", ThisKey="Id", OtherKey="UserId")]
-		public EntitySet<AspNetUserRole> AspNetUserRoles
-		{
-			get
-			{
-				return this._AspNetUserRoles;
-			}
-			set
-			{
-				this._AspNetUserRoles.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Issue", Storage="_Issues", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<Issue> Issues
 		{
@@ -4098,18 +3903,6 @@ namespace Sigil.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_AspNetUserRoles(AspNetUserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = this;
-		}
-		
-		private void detach_AspNetUserRoles(AspNetUserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = null;
 		}
 		
 		private void attach_Issues(Issue entity)
@@ -4586,8 +4379,6 @@ namespace Sigil.Models
 		
 		private int _Rank;
 		
-		private EntitySet<AspNetUserRole> _AspNetUserRoles;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4602,7 +4393,6 @@ namespace Sigil.Models
 		
 		public AspNetRole()
 		{
-			this._AspNetUserRoles = new EntitySet<AspNetUserRole>(new Action<AspNetUserRole>(this.attach_AspNetUserRoles), new Action<AspNetUserRole>(this.detach_AspNetUserRoles));
 			OnCreated();
 		}
 		
@@ -4666,19 +4456,6 @@ namespace Sigil.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetRole_AspNetUserRole", Storage="_AspNetUserRoles", ThisKey="Id", OtherKey="RoleId")]
-		public EntitySet<AspNetUserRole> AspNetUserRoles
-		{
-			get
-			{
-				return this._AspNetUserRoles;
-			}
-			set
-			{
-				this._AspNetUserRoles.Assign(value);
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4697,18 +4474,6 @@ namespace Sigil.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_AspNetUserRoles(AspNetUserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetRole = this;
-		}
-		
-		private void detach_AspNetUserRoles(AspNetUserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetRole = null;
 		}
 	}
 	

@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="aspnet-Sigil-20150716011718" Class="SigilDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-Sigil-20150716011718.mdf;Initial Catalog=aspnet-Sigil-20150716011718;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.AspNetUserRoles" Member="AspNetUserRoles">
-    <Type Name="AspNetUserRole">
-      <Column Name="UserId" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="RoleId" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="AspNetRole_AspNetUserRole" Member="AspNetRole" ThisKey="RoleId" OtherKey="Id" Type="AspNetRole" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Issues" Member="Issues">
     <Type Name="Issue">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -174,7 +166,6 @@
       <Column Name="orgId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="votes" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="DisplayName" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" />
       <Association Name="AspNetUser_Issue" Member="Issues" ThisKey="Id" OtherKey="UserId" Type="Issue" />
       <Association Name="AspNetUser_Subscription" Member="Subscriptions" ThisKey="Id" OtherKey="UserId" Type="Subscription" />
       <Association Name="AspNetUser_Image" Member="Images" ThisKey="Id" OtherKey="UserId" Type="Image" />
@@ -204,7 +195,6 @@
       <Column Name="Id" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="Rank" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="AspNetRole_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="RoleId" Type="AspNetUserRole" />
     </Type>
   </Table>
   <Table Name="dbo.Notifications" Member="Notifications">
