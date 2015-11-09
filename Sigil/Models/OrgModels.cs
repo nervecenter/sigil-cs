@@ -65,7 +65,7 @@ namespace Sigil.Models
         public int viewCount { get; set; }
         public string website { get; set; }
         public DateTime lastView { get; set; }
-        public XElement UserID { get; set; }
+        public string UserID { get; set; }
 
         public virtual List<Issue> Issues { get; set; }
         public virtual List<Category> Categories { get; set; }

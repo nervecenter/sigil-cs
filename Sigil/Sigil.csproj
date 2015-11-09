@@ -218,6 +218,16 @@
     <Compile Include="App_Start\Random.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Configuration\CategoryConfiguration.cs" />
+    <Compile Include="Configuration\CommentConfiguration.cs" />
+    <Compile Include="Configuration\CountConfiguration.cs" />
+    <Compile Include="Configuration\ErrorConfiguration.cs" />
+    <Compile Include="Configuration\ImageConfiguration.cs" />
+    <Compile Include="Configuration\IssueConfiguration.cs" />
+    <Compile Include="Configuration\NotificationConfiguration.cs" />
+    <Compile Include="Configuration\OrgConfiguration.cs" />
+    <Compile Include="Configuration\SubscriptionConfiguration.cs" />
+    <Compile Include="Configuration\TopicConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
@@ -286,6 +296,7 @@
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="SigilEntities.cs" />
+    <Compile Include="SigilSeedData.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

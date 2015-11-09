@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Sigil.Models;
 using Sigil.Repository;
+using System.Xml.Linq;
 
 namespace Sigil.Services
 {
@@ -90,7 +91,7 @@ namespace Sigil.Services
             List<ApplicationUser> votedUsers = new List<ApplicationUser>();
             foreach(var u in users)
             {
-                if(CountXML<UserVoteCol>.XMLtoDATA(u.votes).Check_Vote(issueId, orgId))
+                if(CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(u.votes)).Check_Vote(issueId, orgId))
                 {
                     votedUsers.Add(u);   
                 }
@@ -110,7 +111,7 @@ namespace Sigil.Services
         {
             var user = userRepository.GetById(userid);
 
-            user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol()).ToString();
             userRepository.Update(user);
         }
 
@@ -121,33 +122,33 @@ namespace Sigil.Services
 
         public void AddUserVote(ApplicationUser user, int orgId, int issueId)
         {
-            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
             userVoteCol.Add_Vote(issueId, orgId);
-            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
         public void AddUserVote(ApplicationUser user, int orgId, int issueId, int commentId)
         {
-            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
             userVoteCol.Add_Vote(commentId, issueId, orgId);
-            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
         public void RemoveUserVote(ApplicationUser user, int orgId, int issueId)
         {
-            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
             userVoteCol.Delete_Vote(issueId, orgId);
-            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
         public void RemoveUserVote(ApplicationUser user, int orgId, int issueId, int commentId)
         {
-            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
+            var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
             userVoteCol.Delete_Vote(commentId, issueId, orgId);
-            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol);
+            user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
@@ -158,7 +159,7 @@ namespace Sigil.Services
 
         public UserVoteCol GetUserVotes(string userId)
         {
-            return CountXML<UserVoteCol>.XMLtoDATA(userRepository.GetById(userId).votes);
+            return CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(userRepository.GetById(userId).votes));
         }
     }
 }

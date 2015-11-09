@@ -5,6 +5,7 @@ using System.Web;
 using Sigil.Models;
 using Sigil.Repository;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace Sigil.Services
 {
@@ -201,9 +202,9 @@ namespace Sigil.Services
 
             var commentData = commentCountRepository.GetIssueCommentCount(orgId, issueId);//countDataService.GetIssueCommentCountCol(issueId, orgId);
 
-            var commentCol = CountXML<CommentCountCol>.XMLtoDATA(commentData.count);
+            var commentCol = CountXML<CommentCountCol>.XMLtoDATA(XElement.Parse(commentData.count));
             commentCol.Update();
-            commentData.count = CountXML<CommentCountCol>.DATAtoXML(commentCol);
+            commentData.count = CountXML<CommentCountCol>.DATAtoXML(commentCol).ToString();
 
             commentCountRepository.Update(commentData);
 

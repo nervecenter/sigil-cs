@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Sigil.Models;
 using Sigil.Repository;
+using System.Xml.Linq;
 
 namespace Sigil.Services
 {
@@ -75,14 +76,14 @@ namespace Sigil.Services
         {
             SubCount newSubs = new SubCount();
             newSubs.OrgId = orgId;
-            newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
+            newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol()).ToString();
 
             subCountRepository.Add(newSubs);
 
             ViewCount newVCount = new ViewCount();
             newVCount.OrgId = orgId;
             newVCount.IssueId = 0;
-            newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
+            newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol()).ToString();
 
             viewCountRepository.Add(newVCount);
 
@@ -99,7 +100,7 @@ namespace Sigil.Services
 
             VoteCountCol newVoteCol = new VoteCountCol();
             newVoteCol.Update();
-            newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoteCol);
+            newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoteCol).ToString();
 
             voteCountRepository.Add(newVote);
 
@@ -107,7 +108,7 @@ namespace Sigil.Services
             CommentCount newCom = new CommentCount();
             newCom.IssueId = issueId;
             newCom.OrgId = orgId;
-            newCom.count = CountXML<CommentCountCol>.DATAtoXML(new CommentCountCol());
+            newCom.count = CountXML<CommentCountCol>.DATAtoXML(new CommentCountCol()).ToString();
 
             commCountRepository.Add(newCom);
 
@@ -118,7 +119,7 @@ namespace Sigil.Services
 
             ViewCountCol newViewCol = new ViewCountCol();
             newViewCol.Update();
-            newView.count = CountXML<ViewCountCol>.DATAtoXML(newViewCol);
+            newView.count = CountXML<ViewCountCol>.DATAtoXML(newViewCol).ToString();
 
             viewCountRepository.Add(newView);
 
@@ -140,9 +141,9 @@ namespace Sigil.Services
         {
             ViewCount viewC = viewCountRepository.GetIssueViewCount(issue.OrgId, issue.Id);
 
-            ViewCountCol viewCol = CountXML<ViewCountCol>.XMLtoDATA(viewC.count);
+            ViewCountCol viewCol = CountXML<ViewCountCol>.XMLtoDATA(XElement.Parse(viewC.count));
             viewCol.Update();
-            viewC.count = CountXML<ViewCountCol>.DATAtoXML(viewCol);
+            viewC.count = CountXML<ViewCountCol>.DATAtoXML(viewCol).ToString();
 
             viewCountRepository.Update(viewC);
         }
@@ -151,7 +152,7 @@ namespace Sigil.Services
         {
             VoteCount voteC = voteCountRepository.GetIssueVoteCount(issue.OrgId, issue.Id);
 
-            VoteCountCol voteCol = CountXML<VoteCountCol>.XMLtoDATA(voteC.count);
+            VoteCountCol voteCol = CountXML<VoteCountCol>.XMLtoDATA(XElement.Parse(voteC.count));
 
             if (upVote)
             {
@@ -162,7 +163,7 @@ namespace Sigil.Services
                 voteCol.Remove_Vote();
             }
 
-            voteC.count = CountXML<VoteCountCol>.DATAtoXML(voteCol);
+            voteC.count = CountXML<VoteCountCol>.DATAtoXML(voteCol).ToString();
 
             voteCountRepository.Update(voteC);
         }
@@ -176,7 +177,7 @@ namespace Sigil.Services
         {
             SubCount subC = subCountRepository.GetOrgsSubscriptionCount(orgId);
 
-            SubCountCol subCol = CountXML<SubCountCol>.XMLtoDATA(subC.count);
+            SubCountCol subCol = CountXML<SubCountCol>.XMLtoDATA(XElement.Parse(subC.count));
 
             if (subed)
             {
@@ -187,7 +188,7 @@ namespace Sigil.Services
                 subCol.Remove_Sub();
             }
 
-            subC.count = CountXML<SubCountCol>.DATAtoXML(subCol);
+            subC.count = CountXML<SubCountCol>.DATAtoXML(subCol).ToString();
 
             subCountRepository.Update(subC);
 
@@ -204,7 +205,7 @@ namespace Sigil.Services
         {
             ViewCount viewC = viewCountRepository.GetIssueViewCount(orgId, issueId);
 
-            return CountXML<ViewCountCol>.XMLtoDATA(viewC.count);
+            return CountXML<ViewCountCol>.XMLtoDATA(XElement.Parse(viewC.count));
 
         }
 
@@ -212,21 +213,21 @@ namespace Sigil.Services
         {
             VoteCount voteC = voteCountRepository.GetIssueVoteCount(orgId, issueId);
 
-            return CountXML<VoteCountCol>.XMLtoDATA(voteC.count);
+            return CountXML<VoteCountCol>.XMLtoDATA(XElement.Parse(voteC.count));
         }
 
         public CommentCountCol GetIssueCommentCountCol(int orgId, int issueId)
         {
             CommentCount comC = commCountRepository.GetIssueCommentCount(orgId, issueId);
 
-            return CountXML<CommentCountCol>.XMLtoDATA(comC.count);
+            return CountXML<CommentCountCol>.XMLtoDATA(XElement.Parse(comC.count));
         }
 
         public IEnumerable<ViewCountCol> GetOrgViewCountCols(int orgId)
         {
             var viewC = viewCountRepository.GetOrgsViewCounts(orgId);
 
-            IEnumerable<ViewCountCol> orgViewsCol = viewC.Select(vc => CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+            IEnumerable<ViewCountCol> orgViewsCol = viewC.Select(vc => CountXML<ViewCountCol>.XMLtoDATA(XElement.Parse(vc.count)));
 
             return orgViewsCol;
         }
@@ -235,20 +236,20 @@ namespace Sigil.Services
         {
             var voteC = voteCountRepository.GetOrgsVoteCounts(orgId);
 
-            IEnumerable<VoteCountCol> orgVotesCol = voteC.Select(vc => CountXML<VoteCountCol>.XMLtoDATA(vc.count));
+            IEnumerable<VoteCountCol> orgVotesCol = voteC.Select(vc => CountXML<VoteCountCol>.XMLtoDATA(XElement.Parse(vc.count)));
             return orgVotesCol;
         }
 
         public SubCountCol GetOrgSubscriptionCountCol(int orgId)
         {
-            return CountXML<SubCountCol>.XMLtoDATA(subCountRepository.GetOrgsSubscriptionCount(orgId).count);
+            return CountXML<SubCountCol>.XMLtoDATA(XElement.Parse(subCountRepository.GetOrgsSubscriptionCount(orgId).count));
         }
 
         public IEnumerable<CommentCountCol> GetOrgCommentCountCols(int orgId)
         {
             var commC = commCountRepository.GetOrgsCommentCounts(orgId);
 
-            IEnumerable<CommentCountCol> orgCommCol = commC.Select(cc => CountXML<CommentCountCol>.XMLtoDATA(cc.count));
+            IEnumerable<CommentCountCol> orgCommCol = commC.Select(cc => CountXML<CommentCountCol>.XMLtoDATA(XElement.Parse(cc.count)));
 
             return orgCommCol;
         }
@@ -261,7 +262,7 @@ namespace Sigil.Services
         public SubCountCol GetOrgSubscriptionCount(int orgId)
         {
             var sub = subCountRepository.GetOrgsSubscriptionCount(orgId);
-            return CountXML<SubCountCol>.XMLtoDATA(sub.count);
+            return CountXML<SubCountCol>.XMLtoDATA(XElement.Parse(sub.count));
         }
 
         public void SaveCountChanges(CountCol count, CountDataType t, int orgId)
@@ -272,7 +273,7 @@ namespace Sigil.Services
                     {
                         var col = count as SubCountCol;
                         var commC = subCountRepository.GetOrgsSubscriptionCount(orgId);
-                        commC.count = CountXML<SubCountCol>.DATAtoXML(col);
+                        commC.count = CountXML<SubCountCol>.DATAtoXML(col).ToString();
                         subCountRepository.Update(commC);
                         break;
                     }
@@ -280,7 +281,7 @@ namespace Sigil.Services
                     {
                         var col = count as ViewCountCol;
                         var viewC = viewCountRepository.GetOrgsViewCount(orgId);
-                        viewC.count = CountXML<ViewCountCol>.DATAtoXML(col);
+                        viewC.count = CountXML<ViewCountCol>.DATAtoXML(col).ToString();
                         viewCountRepository.Update(viewC);
                         break;
                     }
@@ -299,7 +300,7 @@ namespace Sigil.Services
                     {
                         var col = count as SubCountCol;
                         var voteC = voteCountRepository.GetIssueVoteCount(orgid, issueId);
-                        voteC.count = CountXML<SubCountCol>.DATAtoXML(col);
+                        voteC.count = CountXML<SubCountCol>.DATAtoXML(col).ToString();
                         voteCountRepository.Update(voteC);
                         break;
                     }
@@ -307,7 +308,7 @@ namespace Sigil.Services
                     {
                         var col = count as ViewCountCol;
                         var viewC = viewCountRepository.GetIssueViewCount(orgid, issueId);
-                        viewC.count = CountXML<ViewCountCol>.DATAtoXML(col);
+                        viewC.count = CountXML<ViewCountCol>.DATAtoXML(col).ToString();
                         viewCountRepository.Update(viewC);
                         break;
                     }
@@ -315,7 +316,7 @@ namespace Sigil.Services
                     {
                         var col = count as CommentCountCol;
                         var comC = commCountRepository.GetIssueCommentCount(orgid, issueId);
-                        comC.count = CountXML<CommentCountCol>.DATAtoXML(col);
+                        comC.count = CountXML<CommentCountCol>.DATAtoXML(col).ToString();
                         commCountRepository.Update(comC);
                         break;
                     }

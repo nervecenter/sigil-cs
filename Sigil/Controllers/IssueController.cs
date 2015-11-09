@@ -8,7 +8,7 @@ using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using System.Data.SqlTypes;
 using Sigil.Services;
-
+using System.Xml.Linq;
 
 namespace Sigil.Controllers
 {
@@ -77,7 +77,7 @@ namespace Sigil.Controllers
 
             // Get the user's vote on this issues if it exists
             ApplicationUser user = userService.GetUser(userID);//dc.AspNetUsers.SingleOrDefault(u => u.Id == userID);
-            UserVoteCol userVote = (user != default(ApplicationUser)) ? CountXML<UserVoteCol>.XMLtoDATA(user.votes) : new UserVoteCol();
+            UserVoteCol userVote = (user != default(ApplicationUser)) ? CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes)) : new UserVoteCol();
 
             ViewBag.userVote = userVote;
 

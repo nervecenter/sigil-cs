@@ -4,20 +4,37 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
+using Sigil.Configuration;
 using System.Xml.Linq;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Sigil
 {
-    public class SigilEntities : DbContext
+    public class SigilEntities : IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
-        public SigilEntities() : base("aspnet-Sigil-20150716011718")
+        public SigilEntities() : base("SigilEntites")
         {
-
+            Database.SetInitializer<SigilEntities>(null);//new CreateDatabaseIfNotExists<SigilEntities>());// Remove default initializer
+            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = false;
         }
+
+        public static SigilEntities Create()
+        {
+            return new SigilEntities();
+        }
+
+        public DbSet<IdentityUserLogin> UserLogins { get; set; }
+        public DbSet<IdentityUserClaim> UserClaims { get; set; }
+        public DbSet<IdentityUserRole> UserRoles { get; set; }
+
+        // ... your custom DbSets
+        //public DbSet<IdentityRoleOperation> RoleOperations { get; set; }
 
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Issue> Issues { get; set; }
-        public DbSet<ApplicationUser> Users { get; set; }
+        //public DbSet<ApplicationUser> Users { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Topic> Topics { get; set; }
@@ -39,7 +56,43 @@ namespace Sigil
         public DbSet<OrgApp> OrgApplicants { get; set; }
 
         //public DbSet<AspNetUserRole> UserRoles { get; set; }
-        
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Configurations.Add(new CategoryConfiguration());
+            modelBuilder.Configurations.Add(new OrgConfiguration());
+            modelBuilder.Configurations.Add(new IssueConfiguration());
+            modelBuilder.Configurations.Add(new TopicConfiguration());
+            modelBuilder.Configurations.Add(new ViewCountConfiguration());
+            modelBuilder.Configurations.Add(new VoteCountConfiguration());
+            modelBuilder.Configurations.Add(new SubscriptionCountConfiguration());
+            modelBuilder.Configurations.Add(new CommentCountConfiguration());
+            modelBuilder.Configurations.Add(new CommentConfiguration());
+            modelBuilder.Configurations.Add(new OrgAppConfiguration());
+            modelBuilder.Configurations.Add(new ErrorConfiguration());
+            modelBuilder.Configurations.Add(new ImageConfiguration());
+            modelBuilder.Configurations.Add(new NotificationConfiguration());
+            modelBuilder.Configurations.Add(new SubscriptionConfiguration());
+            modelBuilder.Configurations.Add(new OfficialResponseConfiguration());
+
+            // Configure Asp Net Identity Tables
+            modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+            //modelBuilder.Entity<XElement>().HasKey(x => x.Value);
+            //modelBuilder.Entity<ApplicationUser>().Property(u => u.PasswordHash).HasMaxLength(500);
+            //modelBuilder.Entity<ApplicationUser>().Property(u => u.Stamp).HasMaxLength(500);
+            //modelBuilder.Entity<ApplicationUser>().Property(u => u.PhoneNumber).HasMaxLength(50);
+
+            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
+            modelBuilder.Entity<IdentityUserRole>().ToTable("AspNetUserRoles");
+            modelBuilder.Entity<IdentityUserLogin>().ToTable("AspNetUserLogins");
+            modelBuilder.Entity<IdentityUserClaim>().ToTable("AspNetUserClaims");
+            modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimType).HasMaxLength(150);
+            modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimValue).HasMaxLength(500);
+        }
 
         public virtual void Commit()
         {

@@ -16,7 +16,7 @@ namespace Sigil.Models
         public int orgId { get; set; }
         public Org Org { get; set; }
 
-        public XElement votes { get; set; }
+        public string votes { get; set; }
         public DateTime lastLogon { get; set; }
 
 

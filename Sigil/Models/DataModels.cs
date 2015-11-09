@@ -29,7 +29,7 @@ namespace Sigil.Models
         public int Id { get; set; }
         public int OrgId { get; set; }
         public int IssueId { get; set; }
-        public XElement count { get; set; }
+        public string count { get; set; }
     }
 
     public class CommentCount
@@ -37,7 +37,7 @@ namespace Sigil.Models
         public int Id { get; set; }
         public int OrgId { get; set; }
         public int IssueId { get; set; }
-        public XElement count { get; set; }
+        public string count { get; set; }
     }
 
     public class SubCount
@@ -45,7 +45,7 @@ namespace Sigil.Models
         public int Id { get; set; }
         public int OrgId { get; set; }
         public int IssueId { get; set; }
-        public XElement count { get; set; }
+        public string count { get; set; }
     }
 
     public class VoteCount
@@ -53,7 +53,7 @@ namespace Sigil.Models
         public int Id { get; set; }
         public int OrgId { get; set; }
         public int IssueId { get; set; }
-        public XElement count { get; set; }
+        public string count { get; set; }
     }
 
     #region Helper Data Structures
