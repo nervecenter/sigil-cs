@@ -116,12 +116,12 @@ namespace Sigil.Services
 
         public IEnumerable<Comment> GetIssueComments(int orgId, int issueId)
         {
-            return commentRespository.GetMany(c => c.OrgId == orgId && c.issueId == issueId);
+            return commentRespository.GetMany(c => c.Issue.OrgId == orgId && c.issueId == issueId);
         }
 
         public IEnumerable<Comment> GetOrgComments(int orgId)
         {
-            return commentRespository.GetMany(c => c.OrgId == orgId);
+            return commentRespository.GetMany(c => c.Issue.OrgId == orgId);
         }
 
         public void Comment_POST_Handler(HttpRequestBase request, Issue thisIssue, string userID)
@@ -148,11 +148,11 @@ namespace Sigil.Services
             // Increment Id, drop in current user and date, set default weight, drop in the form text
             newComment.issueId = thisIssue.Id;
             newComment.UserId = userID;
-            newComment.postDate = DateTime.UtcNow;
+            newComment.createTime = DateTime.UtcNow;
             newComment.editTime = DateTime.UtcNow;
             newComment.lastVoted = DateTime.UtcNow;
             newComment.votes = 1;
-            newComment.IsOfficialResponse = false;
+            
             newComment.text = request.Form["text"];
 
             Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.OrgId, thisIssue.Id));
@@ -271,7 +271,7 @@ namespace Sigil.Services
                 note.To_UserId = ToUserId;
                 note.createTime = DateTime.UtcNow;
                 note.issueId = issueID;
-                note.OrgId = orgID;
+                note.orgId = orgID;
                 note.CommentId = commentID;
                 note.NoteType = Note_Type;
 

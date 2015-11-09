@@ -16,7 +16,7 @@ namespace Sigil.Mappings
 
         protected override void Configure()
         {
-            Mapper.CreateMap<Org, OrgViewModel>();
+            //Mapper.CreateMap<Org, OrgViewModel>();
             //Mapper.CreateMap<>
         }
 

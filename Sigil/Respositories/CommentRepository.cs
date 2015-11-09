@@ -25,13 +25,13 @@ namespace Sigil.Repository
 
         public Comment GetById(int orgId, int issueId, int commentId)
         {
-            var com = this.DbContext.Comments.Where(c => c.OrgId == orgId && c.issueId == issueId && c.Id == commentId).FirstOrDefault();
+            var com = this.DbContext.Comments.Where(c => c.Issue.OrgId == orgId && c.issueId == issueId && c.Id == commentId).FirstOrDefault();
             return com;
         }
 
         public IEnumerable<Comment> GetIssueComments(int orgId, int issueId)
         {
-            var com = this.DbContext.Comments.Where(c => c.OrgId == orgId && c.issueId == issueId).Select(c => c);
+            var com = this.DbContext.Comments.Where(c => c.Issue.OrgId == orgId && c.issueId == issueId).Select(c => c);
             return com;
         }
 

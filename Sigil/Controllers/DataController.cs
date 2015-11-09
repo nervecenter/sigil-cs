@@ -134,7 +134,7 @@ namespace Sigil
             foreach (var com in allComments)
             {
                 var com_key = new Tuple<string, int>(com.UserId, com.issueId);
-                if(com.postDate.Date >= start.Date && com.postDate.Date <= stop.Date && !unique_users.ContainsKey(com_key)) 
+                if(com.createTime.Date >= start.Date && com.createTime.Date <= stop.Date && !unique_users.ContainsKey(com_key)) 
                 {
                     unique_users.Add(com_key, 1);
                     total++;

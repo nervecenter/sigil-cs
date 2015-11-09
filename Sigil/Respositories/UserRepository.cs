@@ -7,17 +7,17 @@ using Sigil.Models;
 
 namespace Sigil.Repository
 {
-    public class UserRepository : RepositoryBase<AspNetUser>, IUserRepository
+    public class UserRepository : RepositoryBase<ApplicationUser>, IUserRepository
     {
         public UserRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
-        public AspNetUser GetByDisplayName(string name)
+        public ApplicationUser GetByDisplayName(string name)
         {
             var user = this.DbContext.Users.Where(u => u.DisplayName == name).FirstOrDefault();
             return user;
         }
 
-        public AspNetUser GetById(string id)
+        public ApplicationUser GetById(string id)
         {
             var user = this.DbContext.Users.Where(u => u.Id == id).FirstOrDefault();
             return user;
@@ -31,13 +31,13 @@ namespace Sigil.Repository
         //where we define the User methods created below
     }
 
-    public interface IUserRepository : IRepository<AspNetUser>
+    public interface IUserRepository : IRepository<ApplicationUser>
     {
         //Methods for how when we need to get Users
 
         string GetDisplayName(string userId);
-        AspNetUser GetById(string id);
-        AspNetUser GetByDisplayName(string name);
+        ApplicationUser GetById(string id);
+        ApplicationUser GetByDisplayName(string name);
 
     }
 }

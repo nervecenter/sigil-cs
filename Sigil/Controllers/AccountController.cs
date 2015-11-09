@@ -216,7 +216,7 @@ namespace Sigil.Controllers
         {
             OrgApp newOrg = new OrgApp();
             newOrg.orgName = model.orgName;
-            newOrg.orgUrl = model.orgURL;
+            newOrg.orgURL = model.orgURL;
             newOrg.username = model.DisplayName;
             newOrg.website = model.orgWebsite;
             newOrg.contact = model.orgContact;
@@ -258,7 +258,7 @@ namespace Sigil.Controllers
 
             var newOrg = new Org();
             newOrg.orgName = verifiedOrg.orgName;
-            newOrg.orgURL = verifiedOrg.orgUrl;
+            newOrg.orgURL = verifiedOrg.orgURL;
             newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id));
             newOrg.lastView = DateTime.UtcNow;
             try

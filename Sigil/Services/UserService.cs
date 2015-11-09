@@ -10,10 +10,10 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface IUserService
     {
-        AspNetUser GetUser(string id);
-        AspNetUser GetUserByDisplayName(string name);
+        ApplicationUser GetUser(string id);
+        ApplicationUser GetUserByDisplayName(string name);
         string GetUserDisplayName(string id);
-        void SetUserRole(AspNetRole role, string id);
+        //void SetUserRole(AspNetRole role, string id);
 
         IEnumerable<Comment> GetUserComments(string id);
 
@@ -23,7 +23,7 @@ namespace Sigil.Services
         /// <param name="orgId"></param>
         /// <param name="issueId"></param>
         /// <returns></returns>
-        IEnumerable<AspNetUser> GetUsersByVote(int orgId, int issueId);
+        IEnumerable<ApplicationUser> GetUsersByVote(int orgId, int issueId);
 
         /// <summary>
         /// Returns list of users who commented on an issue.
@@ -31,16 +31,16 @@ namespace Sigil.Services
         /// <param name="orgId"> Org Id of the issue.</param>
         /// <param name="issueId"> Issue Id</param>
         /// <returns></returns>
-        IEnumerable<AspNetUser> GetUsersByIssue(int orgId, int issueId);
+        IEnumerable<ApplicationUser> GetUsersByIssue(int orgId, int issueId);
 
         void CreateUserVote(string userId);
         void SaveUserVotes();
 
-        void AddUserVote(AspNetUser user, int orgId, int issueId);
-        void AddUserVote(AspNetUser user, int orgId, int issueId, int commentId);
-        void RemoveUserVote(AspNetUser user, int orgId, int issueId);
-        void RemoveUserVote(AspNetUser user, int orgId, int issueId, int commentId);
-        void UpdateUser(AspNetUser user);
+        void AddUserVote(ApplicationUser user, int orgId, int issueId);
+        void AddUserVote(ApplicationUser user, int orgId, int issueId, int commentId);
+        void RemoveUserVote(ApplicationUser user, int orgId, int issueId);
+        void RemoveUserVote(ApplicationUser user, int orgId, int issueId, int commentId);
+        void UpdateUser(ApplicationUser user);
 
         UserVoteCol GetUserVotes(string userId);
     }
@@ -62,12 +62,12 @@ namespace Sigil.Services
             commentRespository = comRepo;
         }
 
-        public AspNetUser GetUser(string id)
+        public ApplicationUser GetUser(string id)
         {
             return userRepository.GetById(id);
         }
 
-        public AspNetUser GetUserByDisplayName(string name)
+        public ApplicationUser GetUserByDisplayName(string name)
         {
             return userRepository.GetByDisplayName(name);
         }
@@ -77,21 +77,17 @@ namespace Sigil.Services
             return userRepository.GetDisplayName(id);
         }
 
-        public void SetUserRole(AspNetRole role, string id)
-        {
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<Comment> GetUserComments(string id)
         {
             return commentRespository.GetMany(c => c.UserId == id);
         }
 
-        public IEnumerable<AspNetUser> GetUsersByVote(int orgId, int issueId)
+        public IEnumerable<ApplicationUser> GetUsersByVote(int orgId, int issueId)
         {
             var users = userRepository.GetAll();
 
-            List<AspNetUser> votedUsers = new List<AspNetUser>();
+            List<ApplicationUser> votedUsers = new List<ApplicationUser>();
             foreach(var u in users)
             {
                 if(CountXML<UserVoteCol>.XMLtoDATA(u.votes).Check_Vote(issueId, orgId))
@@ -103,11 +99,11 @@ namespace Sigil.Services
             return votedUsers.AsEnumerable();
         }
 
-        public IEnumerable<AspNetUser> GetUsersByIssue(int orgId, int issueId)
+        public IEnumerable<ApplicationUser> GetUsersByIssue(int orgId, int issueId)
         {
             var issueComments = commentRespository.GetIssueComments(orgId, issueId);
 
-            return issueComments.Select(c => c.AspNetUser);
+            return issueComments.Select(c => c.User);
         }
 
         public void CreateUserVote(string userid)
@@ -123,7 +119,7 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-        public void AddUserVote(AspNetUser user, int orgId, int issueId)
+        public void AddUserVote(ApplicationUser user, int orgId, int issueId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
             userVoteCol.Add_Vote(issueId, orgId);
@@ -131,7 +127,7 @@ namespace Sigil.Services
             userRepository.Update(user);
         }
 
-        public void AddUserVote(AspNetUser user, int orgId, int issueId, int commentId)
+        public void AddUserVote(ApplicationUser user, int orgId, int issueId, int commentId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
             userVoteCol.Add_Vote(commentId, issueId, orgId);
@@ -139,7 +135,7 @@ namespace Sigil.Services
             userRepository.Update(user);
         }
 
-        public void RemoveUserVote(AspNetUser user, int orgId, int issueId)
+        public void RemoveUserVote(ApplicationUser user, int orgId, int issueId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
             userVoteCol.Delete_Vote(issueId, orgId);
@@ -147,7 +143,7 @@ namespace Sigil.Services
             userRepository.Update(user);
         }
 
-        public void RemoveUserVote(AspNetUser user, int orgId, int issueId, int commentId)
+        public void RemoveUserVote(ApplicationUser user, int orgId, int issueId, int commentId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
             userVoteCol.Delete_Vote(commentId, issueId, orgId);
@@ -155,7 +151,7 @@ namespace Sigil.Services
             userRepository.Update(user);
         }
 
-        public void UpdateUser(AspNetUser user)
+        public void UpdateUser(ApplicationUser user)
         {
             userRepository.Update(user);
         }

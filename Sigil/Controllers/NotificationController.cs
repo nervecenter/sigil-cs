@@ -38,7 +38,7 @@ namespace Sigil.Controllers
                 foreach(var n in notes)
                 {
                     NotificationPanel tmp = new NotificationPanel();
-                    var issue = issueService.GetIssue(n.OrgId, n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
+                    var issue = issueService.GetIssue(n.orgId, n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
                     tmp.From = n.From_UserId;
                     tmp.Title = issue.title;
                     tmp.URL = issue.Org.orgName + "/" + issue.Id;

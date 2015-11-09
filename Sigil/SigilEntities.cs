@@ -10,12 +10,14 @@ namespace Sigil
 {
     public class SigilEntities : DbContext
     {
-        public SigilEntities() : base("aspnet-Sigil-20150716011718") { }
+        public SigilEntities() : base("aspnet-Sigil-20150716011718")
+        {
 
-        //public DbSet<XElement> xele { get; set; }
+        }
+
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Issue> Issues { get; set; }
-        public DbSet<AspNetUser> Users { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Topic> Topics { get; set; }

@@ -29,7 +29,7 @@ namespace Sigil.App_Start
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
-            builder.RegisterType<XElement>().As<XElement>().InstancePerRequest(); 
+           
 
             //Repositories
             builder.RegisterAssemblyTypes(typeof(OrgRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();

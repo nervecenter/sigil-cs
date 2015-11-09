@@ -28,7 +28,7 @@ namespace Sigil.Controllers
             var quIssues = searchService.MatchIssuesByTitle(term).ToList();//dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
 
 
-            Tuple<List<AspNetUser>, List<Org>, List<Issue>> search_list = new Tuple<List<AspNetUser>, List<Org>, List<Issue>>(quUsers, quOrgs, quIssues);
+            Tuple<List<ApplicationUser>, List<Org>, List<Issue>> search_list = new Tuple<List<ApplicationUser>, List<Org>, List<Issue>>(quUsers, quOrgs, quIssues);
             return View(search_list);
 
         }

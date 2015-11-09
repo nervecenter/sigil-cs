@@ -24,7 +24,37 @@ namespace Sigil.Models
         public bool userVoted;
     }
 
+    public class ViewCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public XElement count { get; set; }
+    }
 
+    public class CommentCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public XElement count { get; set; }
+    }
+
+    public class SubCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public XElement count { get; set; }
+    }
+
+    public class VoteCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public XElement count { get; set; }
+    }
 
     #region Helper Data Structures
 

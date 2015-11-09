@@ -11,7 +11,7 @@ namespace Sigil.Services
     {
         IEnumerable<Org> MatchOrgsByName(string term);
         
-        IEnumerable<AspNetUser> MatchUsersByName(string term);
+        IEnumerable<ApplicationUser> MatchUsersByName(string term);
 
         IEnumerable<Issue> MatchIssuesByTitle(string term);
     }
@@ -41,7 +41,7 @@ namespace Sigil.Services
             return orgRepository.GetMany(o => o.orgName.StartsWith(term));
         }
 
-        public IEnumerable<AspNetUser> MatchUsersByName(string term)
+        public IEnumerable<ApplicationUser> MatchUsersByName(string term)
         {
             return userRepository.GetMany(u => u.DisplayName.StartsWith(term));
         }
