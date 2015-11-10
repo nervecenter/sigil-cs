@@ -13,7 +13,8 @@ namespace Sigil.Configuration
         {
             ToTable("Issues");
             Property(i => i.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
-            Property(i => i.OrgId).IsRequired();
+            //Property(i => i.OrgId).IsOptional();
+            Property(i => i.CatId).IsOptional();
             Property(i => i.UserId).IsRequired();
             Property(i => i.createTime).IsRequired();
             Property(i => i.editTime).IsRequired();
@@ -23,8 +24,8 @@ namespace Sigil.Configuration
             Property(i => i.votes).IsRequired();
             Property(i => i.lastVoted).IsRequired();
             Property(i => i.viewCount).IsRequired();
-            Property(i => i.CatId).IsOptional();
-            Property(i => i.TopicId).IsOptional();
+            
+            //Property(i => i.TopicId).IsOptional();
             
         }
     }

@@ -97,17 +97,17 @@ namespace Sigil.Services
 
         public IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.OrgId == orgId && o.issueId == issueId);
+            return officialResponseRepository.GetMany(o => o.Issue.Category.OrgId == orgId && o.issueId == issueId);
         }
 
         public IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId)
         {
-            return officialResponseRepository.GetMany(o => o.OrgId == orgId);
+            return officialResponseRepository.GetMany(o => o.Issue.Category.OrgId == orgId);
         }
 
         public OfficialResponse GetIssueLatestOfficialResponse(int orgId, int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.OrgId == orgId && o.issueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault();
+            return officialResponseRepository.GetMany(o => o.Issue.Category.OrgId == orgId && o.issueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault();
         }
 
         public IEnumerable<Comment> GetUserComments(string userId)
@@ -117,12 +117,12 @@ namespace Sigil.Services
 
         public IEnumerable<Comment> GetIssueComments(int orgId, int issueId)
         {
-            return commentRespository.GetMany(c => c.Issue.OrgId == orgId && c.issueId == issueId);
+            return commentRespository.GetMany(c => c.Issue.Category.OrgId == orgId && c.IssueId == issueId);
         }
 
         public IEnumerable<Comment> GetOrgComments(int orgId)
         {
-            return commentRespository.GetMany(c => c.Issue.OrgId == orgId);
+            return commentRespository.GetMany(c => c.Issue.Category.OrgId == orgId);
         }
 
         public void Comment_POST_Handler(HttpRequestBase request, Issue thisIssue, string userID)
@@ -147,7 +147,7 @@ namespace Sigil.Services
             Comment newComment = new Comment();
 
             // Increment Id, drop in current user and date, set default weight, drop in the form text
-            newComment.issueId = thisIssue.Id;
+            newComment.IssueId = thisIssue.Id;
             newComment.UserId = userID;
             newComment.createTime = DateTime.UtcNow;
             newComment.editTime = DateTime.UtcNow;
@@ -156,7 +156,7 @@ namespace Sigil.Services
             
             newComment.text = request.Form["text"];
 
-            Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.OrgId, thisIssue.Id));
+            Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.Category.OrgId, thisIssue.Id));
             CommCountThread.Start();
 
             CreateComment(newComment);
@@ -164,7 +164,7 @@ namespace Sigil.Services
 
            
 
-            Thread NotificationThread = new Thread(() => Notification_Check(newComment.text, userID, thisIssue.Id, thisIssue.OrgId, newComment.Id));
+            Thread NotificationThread = new Thread(() => Notification_Check(newComment.text, userID, thisIssue.Id, thisIssue.Category.OrgId, newComment.Id));
             NotificationThread.Start();
         }
 
@@ -176,7 +176,7 @@ namespace Sigil.Services
             newOff.downVotes = 0;
             newOff.upVotes = 1;
             newOff.issueId = thisIssue.Id;
-            newOff.OrgId = thisIssue.OrgId;
+            //newOff.OrgId = thisIssue.OrgId;
             newOff.text = request.Form["text"];
             newOff.UserId = userID;
 
@@ -185,11 +185,11 @@ namespace Sigil.Services
             
 
             //Checking to see of the official response mentions any users specifically
-            Thread NotificationThread = new Thread(() => Notification_Check(newOff.text, userID, thisIssue.Id, thisIssue.OrgId, newOff.Id));
+            Thread NotificationThread = new Thread(() => Notification_Check(newOff.text, userID, thisIssue.Id, thisIssue.Category.OrgId, newOff.Id));
             NotificationThread.Start();
 
             //Notifies every user who has commented and or voted on the issue that an official response has been made
-            Thread NotificationThread2 = new Thread(() => OfficialResponseNotificationRoutine(userID, thisIssue.Id, thisIssue.OrgId, newOff.Id));
+            Thread NotificationThread2 = new Thread(() => OfficialResponseNotificationRoutine(userID, thisIssue.Id, thisIssue.Category.OrgId, newOff.Id));
             NotificationThread2.Start();
 
         }

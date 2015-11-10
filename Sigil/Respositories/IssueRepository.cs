@@ -22,7 +22,7 @@ namespace Sigil.Repository
 
         public Issue GetById(int orgId, int issueId)
         {
-            return this.DbContext.Issues.Where(i => i.OrgId == orgId && i.Id == issueId).FirstOrDefault();
+            return this.DbContext.Issues.Where(i => i.Category.OrgId == orgId && i.Id == issueId).FirstOrDefault();
         }
 
         //where we define the issue methods created below

@@ -17,7 +17,7 @@ namespace Sigil.Configuration
             Property(c => c.createTime).IsRequired();
             Property(c => c.editTime).IsOptional();
             Property(c => c.text).IsRequired();
-            Property(c => c.issueId).IsRequired();
+            Property(c => c.IssueId).IsRequired();
             Property(c => c.votes).IsRequired();
             Property(c => c.lastVoted).IsRequired();
             
@@ -33,7 +33,6 @@ namespace Sigil.Configuration
             Property(o => o.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(o => o.upVotes).IsRequired();
             Property(o => o.downVotes).IsRequired();
-            Property(o => o.OrgId).IsRequired();
             Property(o => o.UserId).IsRequired();
             Property(o => o.createTime).IsRequired();
             Property(o => o.text).IsRequired();

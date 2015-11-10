@@ -73,7 +73,7 @@ namespace Sigil.Services
         {
             var userIssues = GetAllUserIssues(userId);
 
-            return userIssues.Where(i => i.OrgId == orgId).OrderByDescending(i => i.createTime).FirstOrDefault();
+            return userIssues.Where(i => i.Category.OrgId == orgId).OrderByDescending(i => i.createTime).FirstOrDefault();
         }
 
         public IEnumerable<Issue> GetAllIssues()
@@ -83,17 +83,18 @@ namespace Sigil.Services
 
         public IEnumerable<Issue> GetAllOrgIssues(int orgId)
         {
-            return issueRepository.GetMany(i => i.OrgId == orgId);
+            return issueRepository.GetMany(i => i.Category.OrgId == orgId);
         }
 
         public IEnumerable<Issue> GetAllTopicIssues(int topicId)
         {
-            return issueRepository.GetMany(i => i.TopicId == topicId);
+            throw new NotImplementedException();
+            //return issueRepository.GetMany(i => i.TopicId == topicId);
         }
 
         public IEnumerable<Issue> GetAllCategoryIssues(int orgId, int catId)
         {
-            return issueRepository.GetMany(i => i.OrgId == orgId && i.CatId == catId);
+            return issueRepository.GetMany(i => i.Category.OrgId == orgId && i.CatId == catId);
         }
 
         public IEnumerable<Issue> GetAllUserIssues(string userId)

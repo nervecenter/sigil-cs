@@ -15,8 +15,9 @@ namespace Sigil.Configuration
             Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.catName).IsRequired().HasMaxLength(128);
             Property(c => c.catURL).IsRequired().HasMaxLength(30);
-            Property(c => c.orgId).IsRequired();
-            Property(c => c.topicId).IsRequired();
+            Property(c => c.OrgId).IsRequired();
+            //Property(c => c.TopicId).IsOptional();
+            Property(c => c.ImageId).IsOptional();
         }
     }
 }

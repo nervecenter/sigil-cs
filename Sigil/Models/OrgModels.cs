@@ -59,15 +59,26 @@ namespace Sigil.Models
     {
         [Key]
         public int Id { get; set; }
+
         public string orgName { get; set; }
         public string orgURL { get; set; }
-        public int topicid { get; set; }
+
+        public int ImageId { get; set; }
+        public Image Image { get; set; }
+
+        public int Topicid { get; set; }
+        //public Topic Topic { get; set; }
+
         public int viewCount { get; set; }
         public string website { get; set; }
         public DateTime lastView { get; set; }
+
+        /// <summary>
+        /// Is an xml string of UserIds
+        /// </summary>
         public string UserID { get; set; }
 
-        public virtual List<Issue> Issues { get; set; }
+        //public virtual List<Issue> Issues { get; set; }
         public virtual List<Category> Categories { get; set; }
     }
 

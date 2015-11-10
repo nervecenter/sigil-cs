@@ -139,7 +139,7 @@ namespace Sigil.Services
 
         public void UpdateIssueViewCountData(Issue issue)
         {
-            ViewCount viewC = viewCountRepository.GetIssueViewCount(issue.OrgId, issue.Id);
+            ViewCount viewC = viewCountRepository.GetIssueViewCount(issue.Category.OrgId, issue.Id);
 
             ViewCountCol viewCol = CountXML<ViewCountCol>.XMLtoDATA(XElement.Parse(viewC.count));
             viewCol.Update();
@@ -150,7 +150,7 @@ namespace Sigil.Services
 
         public void UpdateIssueVoteCountData(Issue issue, bool upVote = true)
         {
-            VoteCount voteC = voteCountRepository.GetIssueVoteCount(issue.OrgId, issue.Id);
+            VoteCount voteC = voteCountRepository.GetIssueVoteCount(issue.Category.OrgId, issue.Id);
 
             VoteCountCol voteCol = CountXML<VoteCountCol>.XMLtoDATA(XElement.Parse(voteC.count));
 

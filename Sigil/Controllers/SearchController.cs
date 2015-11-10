@@ -60,7 +60,7 @@ namespace Sigil.Controllers
                     List<Issue> found_orgs = (List<Issue>)search_list[k];
                     foreach (Issue i in found_orgs)
                     {
-                        Final_search_list[i.title] = "/" + i.Org.orgName + "/" + i.Id;
+                        Final_search_list[i.title] = "/" + i.Category.Org.orgName + "/" + i.Id;
                     }
                 }
             }

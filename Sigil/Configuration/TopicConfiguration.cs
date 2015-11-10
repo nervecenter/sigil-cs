@@ -17,6 +17,7 @@ namespace Sigil.Configuration
             Property(t => t.topicName).IsRequired();
             Property(t => t.lastAdded).IsOptional();
             Property(t => t.views).IsRequired();
+            Property(t => t.ImageId).IsOptional();
         }
     }
 }

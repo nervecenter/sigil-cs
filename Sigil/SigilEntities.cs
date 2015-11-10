@@ -13,9 +13,9 @@ namespace Sigil
 {
     public class SigilEntities : IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
-        public SigilEntities() : base("SigilEntites")
+        public SigilEntities() : base("SigilDB")
         {
-            Database.SetInitializer<SigilEntities>(null);//new CreateDatabaseIfNotExists<SigilEntities>());// Remove default initializer
+            Database.SetInitializer<SigilEntities>(new DropCreateDatabaseIfModelChanges<SigilEntities>());//new CreateDatabaseIfNotExists<SigilEntities>());// 
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
         }
@@ -78,6 +78,10 @@ namespace Sigil
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new SubscriptionConfiguration());
             modelBuilder.Configurations.Add(new OfficialResponseConfiguration());
+
+
+            //modelBuilder.Entity<Topic>().HasRequired(t => t.Orgs).WithMany().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<Org>().HasOptional(o => o.ImageId).WithOptionalPrincipal().WillCascadeOnDelete(false)
 
             // Configure Asp Net Identity Tables
             modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");

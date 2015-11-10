@@ -141,6 +141,8 @@
       <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -191,6 +193,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -208,6 +211,7 @@
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Bootstrapper.cs" />
@@ -260,14 +264,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
-    <Compile Include="Models\SigilDB.cs">
-      <DependentUpon>SigilDB.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SigilDB.designer.cs">
-      <DependentUpon>SigilDB.dbml</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Models\SubscriptionModels.cs" />
     <Compile Include="Models\TopicModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -298,11 +294,15 @@
     <Compile Include="SigilEntities.cs" />
     <Compile Include="SigilSeedData.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CommentViewModels.cs" />
+    <Compile Include="ViewModels\IssueViewModels.cs" />
+    <Compile Include="ViewModels\OrgViewModels.cs" />
+    <Compile Include="ViewModels\TopicViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\aspnet-Sigil-20150716011718.mdf" />
-    <Content Include="App_Data\aspnet-Sigil-20150716011718_log.ldf">
-      <DependentUpon>aspnet-Sigil-20150716011718.mdf</DependentUpon>
+    <Content Include="App_Data\SigilDb.mdf" />
+    <Content Include="App_Data\SigilDb_log.ldf">
+      <DependentUpon>SigilDb.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
@@ -386,11 +386,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\SigilDB.dbml">
-      <SubType>Designer</SubType>
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>SigilDB.designer.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\addissueform.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -403,9 +398,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="Models\SigilDB.dbml.layout">
-      <DependentUpon>SigilDB.dbml</DependentUpon>
-    </None>
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -487,7 +479,6 @@
     <Content Include="Views\Home\FeaturesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage - Copy.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
@@ -499,6 +490,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

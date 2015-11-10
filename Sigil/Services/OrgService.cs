@@ -74,7 +74,7 @@ namespace Sigil.Services
 
         public IEnumerable<Org> GetTopicOrgs(int topicId)
         {
-            var orgs = OrgsRepository.GetMany(o => o.topicid == topicId);
+            var orgs = OrgsRepository.GetMany(o => o.Topicid == topicId);
             return orgs;
         }
 

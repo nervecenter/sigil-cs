@@ -133,7 +133,7 @@ namespace Sigil
             int total = 0;
             foreach (var com in allComments)
             {
-                var com_key = new Tuple<string, int>(com.UserId, com.issueId);
+                var com_key = new Tuple<string, int>(com.UserId, com.IssueId);
                 if(com.createTime.Date >= start.Date && com.createTime.Date <= stop.Date && !unique_users.ContainsKey(com_key)) 
                 {
                     unique_users.Add(com_key, 1);

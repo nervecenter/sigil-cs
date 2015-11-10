@@ -7,25 +7,26 @@ using System.Collections.Generic;
 using System;
 using System.Xml.Linq;
 
+
 namespace Sigil.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
         public string DisplayName { get; set; }
-        public int orgId { get; set; }
-        public Org Org { get; set; }
+
+        public int OrgId { get; set; }
+        //public Org Org { get; set; }
 
         public string votes { get; set; }
         public DateTime lastLogon { get; set; }
 
+        public int ImageId { get; set; }
+        public Image Image { get; set; }
 
         public virtual List<Subscription> Subscriptions { get; set; }
-        public virtual List<Issue> Issues { get; set; }
-        public virtual List<Comment> Comments { get; set; }
-
-        
-
+        //public virtual List<Issue> Issues { get; set; }
+        //public virtual List<Comment> Comments { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

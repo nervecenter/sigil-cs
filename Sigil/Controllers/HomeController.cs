@@ -123,7 +123,7 @@ namespace Sigil.Controllers {
 
             pretrending.Sort(Rank);
 
-            var trending = pretrending.GroupBy(i => i.Org).ToList();
+            var trending = pretrending.GroupBy(i => i.Category.Org).ToList();
 
             return trending;
         }

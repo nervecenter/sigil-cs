@@ -22,13 +22,13 @@ namespace Sigil.Repository
         //where we define the Category methods created below
         public Category GetCategoryById(int orgId, int catId)
         {
-            var cat = this.DbContext.Categories.Where(c => c.orgId == orgId && c.Id == catId).FirstOrDefault();
+            var cat = this.DbContext.Categories.Where(c => c.OrgId == orgId && c.Id == catId).FirstOrDefault();
             return cat;
         }
 
         public Category GetCategoryByName(int orgId, string catName)
         {
-            var cat = this.DbContext.Categories.Where(c => c.orgId == orgId && c.catName == catName).FirstOrDefault();
+            var cat = this.DbContext.Categories.Where(c => c.OrgId == orgId && c.catName == catName).FirstOrDefault();
             return cat;
         }
 

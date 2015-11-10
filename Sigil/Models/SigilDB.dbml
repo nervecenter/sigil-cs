@@ -1,3 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="aspnet-Sigil-20150716011718" Class="SigilDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-Sigil-20150716011718.mdf;Initial Catalog=aspnet-Sigil-20150716011718;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
-</Database>

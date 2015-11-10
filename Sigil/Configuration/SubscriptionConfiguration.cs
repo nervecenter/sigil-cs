@@ -13,9 +13,9 @@ namespace Sigil.Configuration
         {
             ToTable("Subscriptions");
             Property(s => s.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
-            Property(s => s.OrgId).IsRequired();
-            Property(s => s.TopicId).IsRequired();
-            Property(s => s.CatId).IsRequired();
+            Property(s => s.OrgId).IsOptional();
+            Property(s => s.TopicId).IsOptional();
+            Property(s => s.CatId).IsOptional();
             Property(s => s.UserId).IsRequired();
         }
     }

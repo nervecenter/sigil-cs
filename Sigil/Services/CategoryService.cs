@@ -22,11 +22,13 @@ namespace Sigil.Services
     {
 
         private readonly ICategoryRepository categoryRepository;
+        private readonly IOrgRepository orgRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public CategoryService(ICategoryRepository catRepo, IUnitOfWork unit)
+        public CategoryService(ICategoryRepository catRepo,IOrgRepository orgRepo, IUnitOfWork unit)
         {
             this.categoryRepository = catRepo;
+            orgRepository = orgRepo;
             this.unitOfWork = unit;
         }
 
@@ -42,18 +44,24 @@ namespace Sigil.Services
 
         public IEnumerable<Category> GetCategoriesByOrg(int orgId)
         {
-            var cats = categoryRepository.GetMany(c => c.orgId == orgId);
+            var cats = categoryRepository.GetMany(c => c.OrgId == orgId);
             return cats;
         }
 
-        public IEnumerable<Category> GetCategoriesByOrg(string org, bool name)
+        public IEnumerable<Category> GetCategoriesByOrg(string orgS, bool name)
         {
+            
             IEnumerable<Category> cats;
-            if(name)
-                cats = categoryRepository.GetMany(c => c.Org.orgName == org);
+            if (name)
+            {
+                var org = orgRepository.GetByName(orgS);
+                cats = categoryRepository.GetMany(c => c.OrgId == org.Id);
+            }
             else
-                cats = categoryRepository.GetMany(c => c.Org.orgURL == org || c.Org.orgName == org);
-
+            {
+                var org = orgRepository.GetByURL(orgS);
+                cats = categoryRepository.GetMany(c => c.OrgId == org.Id);
+            }
             return cats;
         }
 

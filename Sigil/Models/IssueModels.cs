@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -11,14 +12,16 @@ namespace Sigil.Models
         [Key]
         public int Id { get; set;}
 
-        public int OrgId { get; set; }
-        public Org Org { get; set; }
+        //public int OrgId { get; set; }
+        //[ForeignKey("OrgId")]
+        //public Org Org { get; set; }
 
         public int CatId { get; set; }
+        [ForeignKey("CatId")]
         public Category Category { get; set; }
 
-        public int TopicId { get; set; }
-        public Topic Topic { get; set; }
+        //public int TopicId { get; set; }
+        //public Topic Topic { get; set; }
 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }

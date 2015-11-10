@@ -52,7 +52,7 @@ namespace Sigil.Services
             Image userImg = new Sigil.Models.Image();
 
 
-            userImg.UserId = userId;
+            //userImg.UserId = userId;
             userImg.icon_100 = IMG_PATH;
 
             CreateImage(userImg);

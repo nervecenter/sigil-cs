@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Sigil.Models;
+using Sigil.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Sigil.Mappings
 
         protected override void Configure()
         {
+            Mapper.CreateMap<Comment, CommentViewModel>();
             //Mapper.CreateMap<Org, OrgViewModel>();
             //Mapper.CreateMap<>
         }

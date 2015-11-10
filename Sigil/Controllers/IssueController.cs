@@ -233,7 +233,7 @@ namespace Sigil.Controllers
             Issue thisIssue = issueService.GetIssue(orgURL, issueID);//dc.Issues.SingleOrDefault(i => i.Id == issueID);
 
             // Get the org
-            Org thisOrg = thisIssue.Org;
+            Org thisOrg = thisIssue.Category.Org;
             /*
              * VIEWBAG
              */
@@ -350,8 +350,8 @@ namespace Sigil.Controllers
             Issue newissue = new Issue();
 
             // Increment Id, drop in current user and date, set default weight, drop in the form text
-            newissue.Org = org;
-            newissue.OrgId = org.Id;
+            //newissue.Org = org;
+            //newissue.OrgId = org.Id;
             newissue.UserId = userId;
             newissue.createTime = DateTime.UtcNow;
             newissue.editTime = DateTime.UtcNow;
@@ -361,7 +361,7 @@ namespace Sigil.Controllers
             newissue.title = Request.Form["title"];
             newissue.text = Request.Form["text"];
             newissue.CatId = catid == default(Category) ? 0 : catid.Id;
-            newissue.TopicId = catid == default(Category) ? org.topicid : catid.topicId;
+            //newissue.TopicId = catid == default(Category) ? org.Topicid : catid.TopicId;
             if (catid != null)
                 newissue.CatId = catid.Id;
             // Try to submit the issue and go to the issue page; otherwise, write an error

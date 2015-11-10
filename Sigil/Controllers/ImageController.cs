@@ -72,7 +72,7 @@ namespace Sigil.Controllers
                     if (userImg == default(Sigil.Models.Image))
                     {
                         userImg = new Sigil.Models.Image();
-                        userImg.UserId = userid;
+                        //userImg.UserId = userid;
                         userImg.icon_100 = user + "_100.png";
 
 
@@ -181,7 +181,7 @@ namespace Sigil.Controllers
             try
             {
                 
-                userImg.UserId = userID;
+                //userImg.UserId = userID;
                 userImg.icon_100 = IMG_PATH;
 
                 imageService.CreateImage(userImg);
@@ -209,7 +209,7 @@ namespace Sigil.Controllers
             try
             {
                
-                Img.OrgId = orgID;
+                //Img.OrgId = orgID;
                 Img.icon_100 = IMG_PATH;
                 imageService.CreateImage(Img);
                 imageService.SaveImage();
@@ -233,14 +233,14 @@ namespace Sigil.Controllers
             try
             {
 
-                if (caller is Org)
-                    Img.OrgId = ID;
-                else if (caller is Topic)
-                    Img.TopicId = ID;
-                else
-                {
-                    throw new Exception("Passed caller is not an Org or Topic");
-                }
+                //if (caller is Org)
+                //    Img.OrgId = ID;
+                //else if (caller is Topic)
+                //    Img.TopicId = ID;
+                //else
+                //{
+                //    throw new Exception("Passed caller is not an Org or Topic");
+                //}
                 Img.icon_20 = IMG_PATH;
 
                 imageService.CreateImage(Img);
@@ -268,14 +268,14 @@ namespace Sigil.Controllers
             {
                
 
-                if (caller is Org)
-                    Img.OrgId = ID;
-                else if (caller is Topic)
-                    Img.TopicId = ID;
-                else
-                {
-                    throw new Exception("Passed caller is not an Org or Topic");
-                }
+                //if (caller is Org)
+                //    Img.OrgId = ID;
+                //else if (caller is Topic)
+                //    Img.TopicId = ID;
+                //else
+                //{
+                //    throw new Exception("Passed caller is not an Org or Topic");
+                //}
 
                 Img.banner = IMG_PATH;
 
@@ -383,7 +383,7 @@ namespace Sigil.Controllers
             else if (caller is Category)
             {
                 Category c = (Category)Convert.ChangeType(caller, typeof(T));
-                return imageService.GetCategoryImages(c.orgId, c.Id);//dc.Images.Single(i => i.CatId == c.Id);
+                return imageService.GetCategoryImages(c.OrgId, c.Id);//dc.Images.Single(i => i.CatId == c.Id);
             }
             throw new ArgumentNullException();
         }
