@@ -1,4 +1,4 @@
-﻿using Sigil.App_Start;
+﻿//using Sigil.App_Start;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace Sigil
 
 
             //Autofac and AutoMapper Configurations
-            Bootstrapper.Run();
+            //Bootstrapper.Run();
         }
     }
 }

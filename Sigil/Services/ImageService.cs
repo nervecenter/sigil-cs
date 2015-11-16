@@ -24,7 +24,11 @@ namespace Sigil.Services
 
     public class ImageService : IImageService
     {
-        
+        private static string default_folder_path = "/Images/Default/";
+        private static string org_folder_path = "/Images/Org/";
+        private static string user_folder_path = "/Images/User/";
+
+
         private readonly IImageRepository imageRepository;
         private readonly IUnitOfWork unitOfWork;
 
@@ -63,6 +67,10 @@ namespace Sigil.Services
         public string GetIcon(string userId)
         {
             var userImg = imageRepository.GetImageByUserId(userId);
+            if (userImg == default(Image))
+            {
+                return default_folder_path + "default1.png";
+            }
             return userImg.icon_100;
 
         }
@@ -70,12 +78,20 @@ namespace Sigil.Services
         public string GetIcon(int orgId)
         {
             var orgImg = imageRepository.GetImageByOrgId(orgId);
+            if(orgImg == default(Image))
+            {
+                return default_folder_path + "default1.png";
+            }
             return orgImg.icon_100;
         }
 
         public string GetBanner(int orgId)
         {
             var orgImg = imageRepository.GetImageByOrgId(orgId);
+            if(orgImg == default(Image))
+            {
+                return default_folder_path + "default_banner.png";
+            }
             return orgImg.banner;
         }
 

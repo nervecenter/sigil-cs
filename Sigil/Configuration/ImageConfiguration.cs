@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public ImageConfiguration()
         {
             ToTable("Images");
-            Property(i => i.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(i => i.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             //Property(i => i.OrgId).IsOptional();
             //Property(i => i.UserId).IsOptional();
            // Property(i => i.TopicId).IsOptional();

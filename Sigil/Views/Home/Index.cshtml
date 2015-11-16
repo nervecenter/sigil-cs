@@ -16,7 +16,7 @@
     @if ( issueList.Count > 0 ) {
         foreach ( Issue issue in issueList ) {
             var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false, showUser = true,
-                                                                                                 userVoted = voteList.Check_Vote( issue.Id, issue.OrgId ) }, 
+                                                                                                 userVoted = voteList.Check_Vote( issue.Id, issue.Category.OrgId ) }, 
                                                                        issue );
             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         }
@@ -29,4 +29,4 @@
         <h4>There's nothing here. :( Search for a company, person, or topic to subscribe to!</h4>
     }
 </div>
-@Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )
+@*@Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )*@

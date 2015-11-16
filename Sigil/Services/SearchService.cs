@@ -22,7 +22,6 @@ namespace Sigil.Services
         private readonly ICategoryRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
         private readonly ITopicRepository topicRepository;
-        //private readonly ICommentRepository commentRepository;
         private readonly IUserRepository userRepository;
         private readonly IUnitOfWork unitOfWork;
 

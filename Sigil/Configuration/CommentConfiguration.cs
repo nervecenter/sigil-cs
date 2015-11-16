@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public CommentConfiguration()
         {
             ToTable("Comments");
-            Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.UserId).IsRequired();
             Property(c => c.createTime).IsRequired();
             Property(c => c.editTime).IsOptional();
@@ -30,7 +30,7 @@ namespace Sigil.Configuration
         public OfficialResponseConfiguration()
         {
             ToTable("OfficialResponse");
-            Property(o => o.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(o => o.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(o => o.upVotes).IsRequired();
             Property(o => o.downVotes).IsRequired();
             Property(o => o.UserId).IsRequired();

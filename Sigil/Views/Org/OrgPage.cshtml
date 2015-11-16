@@ -1,6 +1,7 @@
 ﻿@using Sigil.Models
+@using Sigil.ViewModels
 @using Microsoft.AspNet.Identity
-@model Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>
+@model Tuple<Org, UserViewModel,PagedList.IPagedList<Sigil.Models.Issue>>
 @using PagedList.Mvc;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,12 +9,12 @@
     Org thisOrg = Model.Item1;
     ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
-    UserVoteCol userVotes = ViewBag.userVotes;
-    List<Subscription> userSubs = Sigil.Controllers.AccountController.userSubs( User );
+    UserVoteCol userVotes = Model.Item2.UserVotes;//ViewBag.userVotes;
+    List<Subscription> userSubs = Model.Item2.UserSubscriptions.ToList();//Sigil.Controllers.AccountController.userSubs( User );
 }
 
 <div class="col-md-9 col-lg-9">
-    <img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">
+    @*<img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">*@
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-default active">Main feed</a>
         <a class="btn btn-info" href="/@thisOrg.orgURL/responses">Responses</a>
@@ -28,14 +29,14 @@
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>
         }
     </div>
-    @foreach ( Issue issue in Model.Item2 ) {
+    @foreach ( Issue issue in Model.Item3 ) {
         var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
-                                                                                             userVoted = userVotes.Check_Vote( issue.Id, issue.OrgId )}, 
+                                                                                             userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )}, 
                                                                    issue );
         @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
     }
     @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
 
-    @Html.PagedListPager(Model.Item2, page => Url.Action("OrgPage","Org", new { page}))
+    @Html.PagedListPager(Model.Item3, page => Url.Action("OrgPage","Org", new { page}))
 </div>
 @Html.Partial( "../Shared/_SideBar", userSubs )

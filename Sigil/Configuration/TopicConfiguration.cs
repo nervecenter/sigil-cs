@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public TopicConfiguration()
         {
             ToTable("Topics");
-            Property(t => t.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(t => t.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(t => t.topicURL).IsRequired();
             Property(t => t.topicName).IsRequired();
             Property(t => t.lastAdded).IsOptional();

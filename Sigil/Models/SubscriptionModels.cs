@@ -17,14 +17,14 @@ namespace Sigil.Models
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        public int OrgId { get; set; }
-        //public Org Org { get; set; }
+        public int? OrgId { get; set; }
+        public Org Org { get; set; }
 
-        public int TopicId { get; set; }
-        //public Topic Topic { get; set; }
+        public int? TopicId { get; set; }
+        public Topic Topic { get; set; }
 
-        public int CatId { get; set; }  
-        //public Category Category { get; set; }
+        public int? CatId { get; set; }  
+        public Category Category { get; set; }
 
     }
 }

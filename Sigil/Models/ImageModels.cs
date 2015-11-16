@@ -8,6 +8,8 @@ namespace Sigil.Models
 {
     public class Image
     {
+        
+
         [Key]
         public int Id { get; set; }
 

@@ -12,6 +12,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Globalization;
 using Sigil.Services;
+using Sigil.ViewModels;
+using AutoMapper;
 
 namespace Sigil.Controllers
 {
@@ -22,7 +24,8 @@ namespace Sigil.Controllers
         private readonly IIssueService issueService;
         private readonly ICommentService commentService;
         private readonly IUserService userService;
-
+        private readonly IImageService imageService;
+        private readonly ISubscriptionService subscriptionService;
         /* 
         ==================== 
         OrgPage
@@ -30,6 +33,17 @@ namespace Sigil.Controllers
             Returns a page listing the latest issues specific to an org 
         ==================== 
         */
+
+        public OrgController(IOrgService orgS, ICountService countS, IIssueService issueS, ICommentService commS, IUserService userS, IImageService imgS, ISubscriptionService subS)
+        {
+            orgService = orgS;
+            countDataService = countS;
+            issueService = issueS;
+            commentService = commS;
+            userService = userS;
+            imageService = imgS;
+            subscriptionService = subS;
+        }
 
         public ActionResult OrgPage(string orgURL, int? page)
         {
@@ -51,22 +65,20 @@ namespace Sigil.Controllers
                 // Get the user's votes on this org
                 userVotes = userService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA();
             }
-
-            ViewBag.userVotes = userVotes;
-
-            // Get the issues of the org
-            // TODO: Grab issues chosen by an algorithm based on age and weight
-            //IQueryable<Issue> issueList = from issue in dc.Issues
-            //                              where issue.OrgId == thisOrg.Id
-            //                              orderby issue.votes descending
-            //                              select issue;
+            //ViewBag.userVotes = userVotes;
 
             var OrgIssues = issueService.GetAllOrgIssues(thisOrg.Id);
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
             int num_results_per_page = 3;
             int pageNumber = (page ?? 1);
-            Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
+
+            UserViewModel userView = new UserViewModel();
+            userView.User = userService.GetUser(userId);
+            userView.UserSubscriptions = (ICollection<SubscriptionViewModel>)subscriptionService.GetUserSubscriptions(userId).Select<Subscription, SubscriptionViewModel>(s => new SubscriptionViewModel(s));
+            userView.UserVotes = userVotes;
+            
+            Tuple<Org, UserViewModel,PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, userView, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
 
             // This may not actually be necessary.
             //ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);

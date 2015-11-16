@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public IssueConfiguration()
         {
             ToTable("Issues");
-            Property(i => i.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(i => i.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             //Property(i => i.OrgId).IsOptional();
             Property(i => i.CatId).IsOptional();
             Property(i => i.UserId).IsRequired();

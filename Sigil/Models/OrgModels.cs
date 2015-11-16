@@ -63,10 +63,10 @@ namespace Sigil.Models
         public string orgName { get; set; }
         public string orgURL { get; set; }
 
-        public int ImageId { get; set; }
+        public int? ImageId { get; set; }
         public Image Image { get; set; }
 
-        public int Topicid { get; set; }
+        public int? Topicid { get; set; }
         //public Topic Topic { get; set; }
 
         public int viewCount { get; set; }

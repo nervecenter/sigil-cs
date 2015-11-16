@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public CategoryConfiguration()
         {
             ToTable("Category");
-            Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.catName).IsRequired().HasMaxLength(128);
             Property(c => c.catURL).IsRequired().HasMaxLength(30);
             Property(c => c.OrgId).IsRequired();

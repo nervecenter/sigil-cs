@@ -18,8 +18,9 @@ namespace Sigil.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly IAuthenticationManager _authManager;
 
         private readonly IOrgService orgService;
         private readonly ICountService countDataService;
@@ -27,10 +28,14 @@ namespace Sigil.Controllers
         private readonly IUserService userService;
         private readonly IImageService imageService;
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,IAuthenticationManager authManager ,IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS )
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            //UserManager = userManager;
+            //SignInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _authManager = authManager;
+
 
             orgService = orgS;
             countDataService = countS;
@@ -45,10 +50,10 @@ namespace Sigil.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
-            }
+            //private set 
+            //{ 
+            //    _signInManager = value; 
+            //}
         }
 
         public ApplicationUserManager UserManager
@@ -57,9 +62,17 @@ namespace Sigil.Controllers
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
-            private set
+            //private set
+            //{
+            //    _userManager = value;
+            //}
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
             {
-                _userManager = value;
+                return _authManager;
             }
         }
 
@@ -538,37 +551,37 @@ namespace Sigil.Controllers
             return View();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        if (_userManager != null)
+        //        {
+        //            _userManager.Dispose();
+        //            _userManager = null;
+        //        }
 
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
+        //        if (_signInManager != null)
+        //        {
+        //            _signInManager.Dispose();
+        //            _signInManager = null;
+        //        }
+        //    }
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
 
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+        //private IAuthenticationManager AuthenticationManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().Authentication;
+        //    }
+        //}
 
         private void AddErrors(IdentityResult result)
         {

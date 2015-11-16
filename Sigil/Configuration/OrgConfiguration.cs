@@ -12,14 +12,14 @@ namespace Sigil.Configuration
         public OrgConfiguration()
         {
             ToTable("Orgs");
-            Property(o => o.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(o => o.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(o => o.orgName).IsRequired();
             Property(o => o.UserID).IsOptional();
             Property(o => o.viewCount).IsRequired();
             Property(o => o.website).IsOptional();
             Property(o => o.orgURL).IsRequired().HasMaxLength(30);
             Property(o => o.ImageId).IsOptional();
-            //Property(o => o.Topicid).IsRequired();
+            Property(o => o.Topicid).IsOptional();
 
 
         }

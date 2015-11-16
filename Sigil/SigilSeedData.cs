@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sigil.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -10,11 +11,61 @@ namespace Sigil
     {
         protected override void Seed(SigilEntities context)
         {
-            base.Seed(context);
+            GetOrgs().ForEach(o => context.Orgs.Add(o));
+            GetCats().ForEach(c => context.Categories.Add(c));
+
+            //base.Seed(context);
+
+
             context.Commit();
 
+
+            
         }
 
         //This is where we can add initial data 
+
+        private static List<Org> GetOrgs()
+        {
+            return new List<Org>
+            {
+                new Org
+                {
+                    Categories = GetCats(),
+                    orgName = "Micro",
+                    orgURL = "mic",
+                    lastView = DateTime.UtcNow,
+                    viewCount = 1,
+                    //Topicid = 0,
+                },
+                new Org
+                {
+                    Categories = GetCats(),
+                    orgName = "Star",
+                    orgURL = "star",
+                    lastView = DateTime.UtcNow,
+                    viewCount = 1,
+                    //Topicid = 0,
+                }
+            };
+        }
+
+        private static List<Category> GetCats()
+        {
+            return new List<Category>
+            {
+                new Category
+                {
+                    catName = "Coffee",
+                    catURL = "coffee",
+                },
+                new Category
+                {
+                    catName = "Software",
+                    catURL = "soft",
+
+                }
+            };
+        }
     }
 }

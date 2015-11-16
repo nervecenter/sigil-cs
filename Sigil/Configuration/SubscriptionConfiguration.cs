@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public SubscriptionConfiguration()
         {
             ToTable("Subscriptions");
-            Property(s => s.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(s => s.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(s => s.OrgId).IsOptional();
             Property(s => s.TopicId).IsOptional();
             Property(s => s.CatId).IsOptional();

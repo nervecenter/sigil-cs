@@ -239,3 +239,7 @@ C:\Sigil\Sigil\bin\System.Web.WebPages.Razor.xml
 C:\Sigil\Sigil\obj\Debug\Sigil.dll
 C:\Sigil\Sigil\obj\Debug\Sigil.pdb
 C:\Sigil\Sigil\obj\Debug\Sigil.csprojResolveAssemblyReference.cache
+C:\Sigil\Sigil\bin\Autofac.Integration.Mvc.Owin.dll
+C:\Sigil\Sigil\bin\Autofac.Integration.Owin.dll
+C:\Sigil\Sigil\bin\Autofac.Integration.Mvc.Owin.xml
+C:\Sigil\Sigil\bin\Autofac.Integration.Owin.xml

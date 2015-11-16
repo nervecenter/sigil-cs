@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public CommentCountConfiguration()
         {
             ToTable("CommentCounts");
-            Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.OrgId).IsRequired();
             Property(c => c.IssueId).IsRequired();
             Property(c => c.count).IsRequired();
@@ -24,7 +24,7 @@ namespace Sigil.Configuration
         public SubscriptionCountConfiguration()
         {
             ToTable("SubCounts");
-            Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.OrgId).IsRequired();
             Property(c => c.IssueId).IsRequired();
             Property(c => c.count).IsRequired();
@@ -36,7 +36,7 @@ namespace Sigil.Configuration
         public ViewCountConfiguration()
         {
             ToTable("ViewCounts");
-            Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.OrgId).IsRequired();
             Property(c => c.IssueId).IsRequired();
             Property(c => c.count).IsRequired();
@@ -48,7 +48,7 @@ namespace Sigil.Configuration
         public VoteCountConfiguration()
         {
             ToTable("VoteCounts");
-            Property(c => c.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(c => c.OrgId).IsRequired();
             Property(c => c.IssueId).IsRequired();
             Property(c => c.count).IsRequired();

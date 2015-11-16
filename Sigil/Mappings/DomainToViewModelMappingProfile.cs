@@ -20,6 +20,7 @@ namespace Sigil.Mappings
             Mapper.CreateMap<Comment, CommentViewModel>();
             Mapper.CreateMap<Issue, IssueViewModel>();
             Mapper.CreateMap<Org, OrgViewModel>();
+            
             //Mapper.CreateMap<Org, OrgViewModel>();
             //Mapper.CreateMap<>
         }

@@ -12,7 +12,7 @@ namespace Sigil.Configuration
         public NotificationConfiguration()
         {
             ToTable("Notifications");
-            Property(n => n.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
+            Property(n => n.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(n => n.From_UserId).IsRequired();
             Property(n => n.To_UserId).IsOptional();
             Property(n => n.To_OrgId).IsOptional();
