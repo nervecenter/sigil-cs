@@ -18,6 +18,8 @@ namespace Sigil.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<Comment, CommentViewModel>();
+            Mapper.CreateMap<Issue, IssueViewModel>();
+            Mapper.CreateMap<Org, OrgViewModel>();
             //Mapper.CreateMap<Org, OrgViewModel>();
             //Mapper.CreateMap<>
         }

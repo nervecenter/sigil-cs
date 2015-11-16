@@ -11,6 +11,8 @@ using System.Web;
 using System.Web.Mvc;
 using Sigil.Repository;
 using System.Xml.Linq;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace Sigil.App_Start
 {
@@ -29,8 +31,9 @@ namespace Sigil.App_Start
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
-           
-
+            builder.RegisterType<UserManager<ApplicationUser>>();
+            //builder.RegisterType(typeof(ApplicationUserManager));//(c => HttpContext.Current.GetOwinContext().GetUserManager).As<ApplicationUserManager>();
+            //builder.Register(c => HttpContext.Current.GetOwinContext().GetUserManager).As<ApplicationUserManager>();
             //Repositories
             builder.RegisterAssemblyTypes(typeof(OrgRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(IssueRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();

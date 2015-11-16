@@ -11,7 +11,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Sigil
 {
-    public class SigilEntities : IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
+    public class SigilEntities : IdentityDbContext<ApplicationUser>//IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
         public SigilEntities() : base("SigilDB")
         {
@@ -25,16 +25,16 @@ namespace Sigil
             return new SigilEntities();
         }
 
-        public DbSet<IdentityUserLogin> UserLogins { get; set; }
-        public DbSet<IdentityUserClaim> UserClaims { get; set; }
-        public DbSet<IdentityUserRole> UserRoles { get; set; }
+        //public DbSet<IdentityUserLogin> UserLogins { get; set; }
+        //public DbSet<IdentityUserClaim> UserClaims { get; set; }
+        //public DbSet<IdentityUserRole> UserRoles { get; set; }
 
         // ... your custom DbSets
         //public DbSet<IdentityRoleOperation> RoleOperations { get; set; }
 
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Issue> Issues { get; set; }
-        //public DbSet<ApplicationUser> Users { get; set; }
+        //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Topic> Topics { get; set; }
@@ -78,24 +78,24 @@ namespace Sigil
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new SubscriptionConfiguration());
             modelBuilder.Configurations.Add(new OfficialResponseConfiguration());
-
+           
 
             //modelBuilder.Entity<Topic>().HasRequired(t => t.Orgs).WithMany().WillCascadeOnDelete(false);
             //modelBuilder.Entity<Org>().HasOptional(o => o.ImageId).WithOptionalPrincipal().WillCascadeOnDelete(false)
 
             // Configure Asp Net Identity Tables
-            modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
-            //modelBuilder.Entity<XElement>().HasKey(x => x.Value);
-            //modelBuilder.Entity<ApplicationUser>().Property(u => u.PasswordHash).HasMaxLength(500);
-            //modelBuilder.Entity<ApplicationUser>().Property(u => u.Stamp).HasMaxLength(500);
-            //modelBuilder.Entity<ApplicationUser>().Property(u => u.PhoneNumber).HasMaxLength(50);
+            //modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+            ////modelBuilder.Entity<XElement>().HasKey(x => x.Value);
+            ////modelBuilder.Entity<ApplicationUser>().Property(u => u.PasswordHash).HasMaxLength(500);
+            ////modelBuilder.Entity<ApplicationUser>().Property(u => u.Stamp).HasMaxLength(500);
+            ////modelBuilder.Entity<ApplicationUser>().Property(u => u.PhoneNumber).HasMaxLength(50);
 
-            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
-            modelBuilder.Entity<IdentityUserRole>().ToTable("AspNetUserRoles");
-            modelBuilder.Entity<IdentityUserLogin>().ToTable("AspNetUserLogins");
-            modelBuilder.Entity<IdentityUserClaim>().ToTable("AspNetUserClaims");
-            modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimType).HasMaxLength(150);
-            modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimValue).HasMaxLength(500);
+            //modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
+            //modelBuilder.Entity<IdentityUserRole>().ToTable("AspNetUserRoles");
+            //modelBuilder.Entity<IdentityUserLogin>().ToTable("AspNetUserLogins");
+            //modelBuilder.Entity<IdentityUserClaim>().ToTable("AspNetUserClaims");
+            //modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimType).HasMaxLength(150);
+            //modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimValue).HasMaxLength(500);
         }
 
         public virtual void Commit()

@@ -16,7 +16,7 @@ namespace Sigil.Mappings
 
         protected override void Configure()
         {
-            
+            //Mapper.CreateMap
             //Mapper.CreateMap<OrgViewModel, Org>()
             //    .ForMember(o => o.orgName, map => map.MapFrom(vm => vm.OrgName))
             //    .ForMember(o => o.orgURL, map => map.MapFrom(vm => vm.OrgUrl))
