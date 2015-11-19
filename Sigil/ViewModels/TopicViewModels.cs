@@ -5,8 +5,5 @@ using System.Web;
 
 namespace Sigil.ViewModels
 {
-    public class TopicViewModels
-    {
 
-    }
 }

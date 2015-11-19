@@ -1,32 +1,31 @@
 ﻿@using Sigil.Models
+@using Sigil.ViewModels
 @using Microsoft.AspNet.Identity
 @using Microsoft.Owin.Security
 @using PagedList.Mvc;
-@model Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>
+@model Home_IndexViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Sigil";
-    PagedList.IPagedList<Sigil.Models.Issue> issueList = Model.Item1;
-    UserVoteCol voteList = Model.Item2;
+    //PagedList.IPagedList<IssueViewModel> issueList = Model.UserIssues;
+    //UserVoteCol voteList = Model.UserVM.UserVotes;
 }
 
 <div class="col-md-9 col-lg-9">
-    <h3>@User.Identity.GetUserName()'s feed</h3>
-    @if ( issueList.Count > 0 ) {
-        foreach ( Issue issue in issueList ) {
-            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false, showUser = true,
-                                                                                                 userVoted = voteList.Check_Vote( issue.Id, issue.Category.OrgId ) }, 
-                                                                       issue );
+    <h3>@'s feed</h3>
+    @if (Model.UserIssues.Count > 0 ) {
+        foreach ( IssueViewModel issue in Model.UserIssues) {
+            var issuePanelModel = new Tuple<IssuePanelOptions, IssueViewModel>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false, showUser = true }, issue);
             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
         }
         <br />
         @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
 
-        @Html.PagedListPager(Model.Item1, page => Url.Action("Index","Home", new {page}))
+        @Html.PagedListPager(Model.UserIssues, page => Url.Action("Index","Home", new {page}))
     } else {
         <br />
         <h4>There's nothing here. :( Search for a company, person, or topic to subscribe to!</h4>
     }
 </div>
-@*@Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )*@
+@Html.Partial( "../Shared/_SideBar", Model.UserVM.UserSubscriptions)

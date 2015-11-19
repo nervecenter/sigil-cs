@@ -1,8 +1,9 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Sigil.Models
+@using Sigil.ViewModels
+@using System;
 
-@model List<IGrouping<Org, Issue>>
-
+@model Home_LandingPageViewModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -86,13 +87,13 @@
     </section>
     <div class="container landing-container">
         <div class="row">
-            @foreach ( var group in Model ) {
+            @foreach ( IGrouping<OrgViewModel, IssueViewModel> group in Model.TrendingIssues) {
                 <div class="col-md-4 col-lg-4">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><a href="/@group.Key.orgURL">@*<img src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(group.Key))" style="margin-right:5px;"/>*@@group.Key.orgName</a></div>
+                        <div class="panel-heading"><a href="/@group.Key.OrgURL"><img src="@(group.Key.OrgImage.icon_20)" style="margin-right:5px;"/>@group.Key.OrgName</a></div>
                         @*<div class="panel-body"></div>*@
-                        @foreach ( Issue issue in group ) {
-                            var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = false, showOrg = false, showCat = false, showTopic = false, showUser = false, userVoted = false }, issue );
+                        @foreach ( IssueViewModel issue in group ) {
+                            var issuePanelModel = new Tuple<IssuePanelOptions, IssueViewModel>( new IssuePanelOptions() { inPanel = false, showOrg = false, showCat = false, showTopic = false, showUser = false}, issue );
                             @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel)
                         }
                     </div>

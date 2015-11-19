@@ -21,7 +21,6 @@ namespace Sigil.Models
         public bool showCat;
         public bool showTopic;
         public bool showUser;
-        public bool userVoted;
     }
 
     public class ViewCount

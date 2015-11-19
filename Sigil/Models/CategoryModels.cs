@@ -19,9 +19,6 @@ namespace Sigil.Models
         [ForeignKey("OrgId")]
         public Org Org { get; set; }
 
-        //public int TopicId { get; set; }
-        //public Topic Topic { get; set; }
-
         public int ImageId { get; set; }
         public Image Image { get; set; }
 

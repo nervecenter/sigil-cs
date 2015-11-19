@@ -302,11 +302,11 @@
     <Compile Include="SigilEntities.cs" />
     <Compile Include="SigilSeedData.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\CommentViewModels.cs" />
+    <Compile Include="ViewModels\HomeViewModels.cs" />
     <Compile Include="ViewModels\IssueViewModels.cs" />
     <Compile Include="ViewModels\OrgViewModels.cs" />
+    <Compile Include="ViewModels\SharedViewModels.cs" />
     <Compile Include="ViewModels\TopicViewModels.cs" />
-    <Compile Include="ViewModels\UserViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\SigilDb.mdf" />

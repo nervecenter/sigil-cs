@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using Sigil.Models;
+using Sigil.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using PagedList;
@@ -20,13 +21,14 @@ namespace Sigil.Controllers {
         private readonly ISubscriptionService subscriptionService;
         private readonly IUserService userService;
         private readonly IIssueService issueService;
+        private readonly INotificationService notificationService;
 
-
-        public HomeController(ISubscriptionService subS, IUserService userS, IIssueService issS)
+        public HomeController(ISubscriptionService subS, IUserService userS, IIssueService issS, INotificationService noteS)
         {
             subscriptionService = subS;
             userService = userS;
             issueService = issS;
+            notificationService = noteS;
         }
 
         public ActionResult Index(int? page) {
@@ -34,32 +36,36 @@ namespace Sigil.Controllers {
 
             if (userID != null)
             {
-                //Get the users subscriptions
-                var userSubs = subscriptionService.GetUserSubscriptions(userID);//dc.Subscriptions.Where(s => s.UserId == userID);
+
+                UserViewModel uservm = new UserViewModel();
+                uservm.User = userService.GetUser(userID);
+                //get the users notifications
+                uservm.UserNotifications = notificationService.GetUserNotifications(userID);
+                
+                //Get the users subscriptions and convert to SubscriptionViewModel(makes it easier to work with in the view)
+                uservm.UserSubscriptions = subscriptionService.GetUserSubscriptions(userID).Select(s => new SubscriptionViewModel(s));
+                
+                //gather all the votes the user made 
+                uservm.UserVotes = userService.GetUserVotes(userID);
+
+                Home_IndexViewModel vm = new Home_IndexViewModel();
+                vm.UserVM = uservm;
+
 
                 //get all the users issues based on their subscriptions
-                var userIssues = issueService.GetAllUserIssues(userID);//Get_User_Issues(userID, userSubs);
+                var userIssues = issueService.GetAllUserIssues(userID);
 
-                //sort the users issues by issue rank
+                //NEED TO SORT JUST GET THE SORTED ISSUES FROM THE ISSUE SERVICE!!!!!!!!
 
+                //sort the users issues by issue rank 
                 userIssues.OrderBy(i => Rank);
-
-                //gather all the votes the user made 
-                var userVotes = userService.GetUserVotes(userID);//dc.AspNetUsers.Single(u => u.Id == userID);
-
-                //this needs to be created in the user registration !!!!!!
-                //if (user.votes == null)
-                //    user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
-
-                //dc.SubmitChanges();
-                //var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-
-              
 
                 int num_results_per_page = 6;
                 int pageNumber = (page ?? 1);
-                Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol> issuesANDvotes = new Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>(userIssues.ToPagedList(pageNumber, num_results_per_page), userVotes);
-                return View(issuesANDvotes);
+                vm.UserIssues = userIssues.Select(i => new IssueViewModel(i, uservm.UserVotes.Check_Vote(i.Id, i.Category.OrgId))).ToPagedList(pageNumber, num_results_per_page);
+                
+                //Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol> issuesANDvotes = new Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>(, userVotes);
+                return View(vm);
             }
             else 
             {
@@ -70,9 +76,13 @@ namespace Sigil.Controllers {
 
         public ActionResult LandingPage()
         {
-            var trending_topics = Get_Trending_Issues_With_Topics();
+           
 
-            return View("LandingPage", trending_topics);
+            Home_LandingPageViewModel vm = new Home_LandingPageViewModel();
+            vm.TrendingIssues = Get_Trending_Issues_With_Topics();
+
+
+            return View("LandingPage", vm);
         }
 
         public ActionResult FeaturesPage() {
@@ -117,13 +127,13 @@ namespace Sigil.Controllers {
         /// Gets the Top 3 trending issues site wide. FOR THE LANDING PAGE ONLY
         /// </summary>
         /// <returns></returns>
-        private List<IGrouping<Org,Issue>> Get_Trending_Issues_With_Topics()
+        private IEnumerable<IGrouping<OrgViewModel,IssueViewModel>> Get_Trending_Issues_With_Topics()
         {
             var pretrending = issueService.GetAllIssues().ToList();
 
             pretrending.Sort(Rank);
 
-            var trending = pretrending.GroupBy(i => i.Category.Org).ToList();
+            var trending = pretrending.Select(i => new IssueViewModel(i, false)).GroupBy(i => i.IssueCategoryVM.OrgVM);
 
             return trending;
         }

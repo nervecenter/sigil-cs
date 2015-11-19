@@ -23,20 +23,11 @@ namespace Sigil.ViewModels
     }
 
 
-    public class IssueViewModel
+    public class IssueDataPageViewModel
     {
-        public int IssueId { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public int votes { get; set; }
-        public bool userVoted { get; set; }
-        public bool Responded { get; set; }
-        public string IssueUserDisplayName { get; set; }
-        public string IssueUserIcon { get; set; }
-        public string Title { get; set; }
-        //public string Text { get; set; }
-        public DateTime CreateDate { get; set; }
+
     }
+
 
 
 }

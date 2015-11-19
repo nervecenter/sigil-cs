@@ -1,6 +1,7 @@
 ﻿@using Sigil.Models
+@using Sigil.ViewModels
 
-@model Tuple<IssuePanelOptions, Issue>
+@model Tuple<IssuePanelOptions, IssueViewModel>
 
 @{
     bool inPanel = Model.Item1.inPanel;
@@ -12,7 +13,7 @@ bool showCat = Model.Item1.showCat;
 bool showTopic = Model.Item1.showTopic;
 bool showUser = Model.Item1.showUser;
 bool userVoted = Model.Item1.userVoted;
-Issue thisIssue = Model.Item2;
+IssueViewModel thisIssue = Model.Item2;
 
     <div class="panel-body">
         <div class="media">
@@ -20,26 +21,26 @@ Issue thisIssue = Model.Item2;
                 @if ( !Request.IsAuthenticated ) {
                     <img src="~/Content/Images/notvoted.png" class="voteup" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else if ( userVoted ) {
-                    <img src="~/Content/Images/voted.png" class="unvoteup" onclick="unvoteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/voted.png" class="unvoteup" onclick="unvoteup(this, @thisIssue.IssueId)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else {
-                    <img src="~/Content/Images/notvoted.png" class="voteup" onclick="voteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/notvoted.png" class="voteup" onclick="voteup(this, @thisIssue.IssueId)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 }
                 <br />
-                <span id="count-@thisIssue.Id" class="voteamount">@thisIssue.votes</span>
+                <span id="count-@thisIssue.IssueId" class="voteamount">@thisIssue.votes</span>
             </div>
             <div class="media-body">
                 <h4 class="media-heading">
-                    <a href="/@thisIssue.Org.orgURL/@thisIssue.Id">@thisIssue.title</a>
-                    @if ( thisIssue.responded ) { <small><i style="color:red;">Response!</i></small> }
+                    <a href="/@thisIssue..orgURL/@thisIssue.IssueId">@thisIssue.Title</a>
+                    @if ( thisIssue.Responded ) { <small><i style="color:red;">Response!</i></small> }
                 </h4>
                 <p class="pull-left">
-                    @if ( showOrg ) { <img class="issue-panel-icon" src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20( thisIssue.Org ))" /><span><a href="/@thisIssue.Org.orgURL">@thisIssue.Org.orgName</a></span> }
-                    @if ( showCat ) { <span>: @thisIssue.Category.catName</span> }
-                    @if ( showTopic ) { <span>in @thisIssue.Topic.topicName</span> }
+                    @if ( showOrg ) { <img class="issue-panel-icon" src="@*@(Sigil.Controllers.ImageController<Org>.Get_Icon_20( thisIssue.Org ))*@" /><span><a href="/@thisIssue.OrgURL">@thisIssue.OrgName</a></span> }
+                    @if ( showCat ) { <span>: @thisIssue.CategoryName</span> }
+                    @*@if ( showTopic ) { <span>in @thisIssue.Topic.topicName</span> }*@
                 </p>
                 <p class="pull-right">
-                    Posted @Sigil.Controllers.IssueController.TimeSince( thisIssue.createTime ) 
-                    @if ( showUser ) { <span>by @thisIssue.AspNetUser.UserName</span> }
+                    Posted @*@Sigil.Controllers.IssueController.TimeSince( thisIssue.CreateTime )*@ 
+                    <span>by @thisIssue.IssueUserDisplayName</span>
                 </p>
             </div>
         </div>
