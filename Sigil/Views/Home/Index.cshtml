@@ -13,11 +13,10 @@
 }
 
 <div class="col-md-9 col-lg-9">
-    <h3>@'s feed</h3>
+    <h3>@Model.UserVM.User.DisplayName's feed</h3>
     @if (Model.UserIssues.Count > 0 ) {
         foreach ( IssueViewModel issue in Model.UserIssues) {
-            var issuePanelModel = new Tuple<IssuePanelOptions, IssueViewModel>( new IssuePanelOptions() { inPanel = true, showOrg = true, showCat = false, showTopic = false, showUser = true }, issue);
-            @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
+            @Html.Partial( "../Shared/_IssuePanelPartial", issue)
         }
         <br />
         @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@

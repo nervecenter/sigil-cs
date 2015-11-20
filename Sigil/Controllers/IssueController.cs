@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Sigil.Models;
+using Sigil.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using System.Data.SqlTypes;
@@ -68,33 +69,26 @@ namespace Sigil.Controllers
             if (Request.HttpMethod == "POST")
             {
                 commentService.Comment_POST_Handler(Request, thisIssue, userID);
-                
-                //using (var action = new CommentController())
-                //{
-                //    action.Comment_Handler(Request, thisIssue, userID);
-                //};
             }
 
             // Get the user's vote on this issues if it exists
-            ApplicationUser user = userService.GetUser(userID);//dc.AspNetUsers.SingleOrDefault(u => u.Id == userID);
-            UserVoteCol userVote = (user != default(ApplicationUser)) ? CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes)) : new UserVoteCol();
-
-            ViewBag.userVote = userVote;
-
+            UserViewModel userVM = userService.GetUserViewModel(userID);
 
             var issueComments = commentService.GetIssueComments(thisOrg.Id, issueID);
 
-            //IQueryable<Comment> issueComments = from comment in dc.Comments
-            //                                    where comment.issueId == thisIssue.Id
-            //                                    orderby comment.postDate descending
-            //                                    select comment;
+            var official = commentService.GetIssuesOfficialResponses(thisOrg.Id, issueID);
 
-            var official = commentService.GetIssuesOfficialResponses(thisOrg.Id, issueID);//dc.OfficialResponses.Where(o => o.issueId == issueID && o.OrgId == thisOrg.Id).Select(o => o);
-            // MODEL: A tuple of the org and the issue are the model for the IssuePage
-            Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>> orgIssueComments = new Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>>(thisOrg, thisIssue, issueComments, official);
+            Issue_IssuePageViewModel viewModel = new Issue_IssuePageViewModel();
+            viewModel.UserVM = userVM;
+            viewModel.OfficialResponses = official.Select(o => new OfficialResponseViewModel(o));
+            viewModel.IssueVM = new IssueViewModel(thisIssue, userVM.UserVotes.Check_Vote(thisIssue.Id, thisOrg.Id));
+            viewModel.IssueComments = issueComments.Select(c => new CommentViewModel(c, userVM.UserVotes.Check_Vote(c.Id, c.IssueId, c.Issue.Category.OrgId)));
+            
+
+            //Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>> orgIssueComments = new Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>>(thisOrg, thisIssue, issueComments, official);
 
             // Pass the org and issue as the model to the view
-            return View(orgIssueComments);
+            return View(viewModel);
         }
 
         /// <summary>

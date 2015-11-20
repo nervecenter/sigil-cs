@@ -5,14 +5,14 @@
 @using Sigil.Models
 @{
     Org thisOrg = ViewBag.thisOrg;
-    Issue thisIssue = ViewBag.thisIssue;
+    IssueViewModel thisIssue = ViewBag.thisIssue;
 }
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="~/Scripts/Graph.js"></script>
 
 <div class="first-column">
-    <img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">
+    @*<img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">*@
     <section class="issue-data-body">
         <div class="issue-vote-area">
             <span class="issue-vote-amount" id="count-1">@thisIssue.votes</span>

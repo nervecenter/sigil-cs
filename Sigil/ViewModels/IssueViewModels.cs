@@ -5,25 +5,20 @@ using System.Web;
 
 namespace Sigil.ViewModels
 {
-    public class IssuePageViewModel
+    public class Issue_IssuePageViewModel
     {
-        public int IssueId { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public int votes { get; set; }
-        public bool userVoted { get; set; }
-        public bool Responded { get; set; }
-        public string IssueUserDisplayName { get; set; }
-        public string IssueUserIcon { get; set; }
-        public string Title { get; set; }
-        public string Text { get; set; }
-        public DateTime CreateDate { get; set; }
 
-        ICollection<CommentViewModel> IssueComments { get; set; }
+
+        public IssueViewModel IssueVM { get; set; }
+
+        public UserViewModel UserVM { get; set; }
+
+        public IEnumerable<CommentViewModel> IssueComments { get; set; }
+        public IEnumerable<OfficialResponseViewModel> OfficialResponses { get; set; }
     }
 
 
-    public class IssueDataPageViewModel
+    public class Issue_DataPageViewModel
     {
 
     }

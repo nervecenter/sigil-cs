@@ -20,6 +20,49 @@ namespace Sigil.ViewModels
         public string CommentUserIcon { get; set; }
         public string Text { get; set; }
         public DateTime CreateDate { get; set; }
+
+        public CommentViewModel(Comment c, bool voted)
+        {
+            CommentId = c.Id;
+            votes = c.votes;
+            userVoted = voted;
+            CommentUserDisplayName = c.User.DisplayName;
+            CommentUserIcon = c.User.Image.icon_100;
+            Text = c.text;
+            CreateDate = c.createTime;
+        }
+
+    }
+
+    /// <summary>
+    /// ViewModel for holding a OfficialResponse
+    /// </summary>
+    public class OfficialResponseViewModel
+    {
+        public int OfficialResponseId { get; set; }
+
+        public string OfficialUserDisplayName { get; set; }
+        public string OfficialUserIcon { get; set; }
+
+        public DateTime CreateTime { get; set; }
+        //public DateTime editTime { get; set; }
+
+        public string Text { get; set; }
+
+        public int upVotes { get; set; }
+        public int downVotes { get; set; }
+
+
+        public OfficialResponseViewModel(OfficialResponse o)
+        {
+            OfficialResponseId = o.Id;
+            OfficialUserDisplayName = o.User.DisplayName;
+            OfficialUserIcon = o.User.Image.icon_100;
+            CreateTime = o.createTime;
+            Text = o.text;
+            upVotes = o.upVotes;
+            downVotes = o.downVotes;
+        }
     }
 
     /// <summary>
@@ -32,6 +75,7 @@ namespace Sigil.ViewModels
         // need to replace category stuff with category vm
         public CategoryViewModel IssueCategoryVM { get; set; }
 
+        public bool InPanel { get; set; }
         public int votes { get; set; }
         public bool userVoted { get; set; }
 
@@ -39,9 +83,10 @@ namespace Sigil.ViewModels
         public string IssueUserDisplayName { get; set; }
         public Image IssueUserImage { get; set; }
         public string Title { get; set; }
+        public string Text { get; set; }
         public DateTime CreateDate { get; set; }
 
-        public IssueViewModel(Issue i, bool Voted)
+        public IssueViewModel(Issue i, bool Voted, bool inPanel = false)
         {
             IssueId = i.Id;
 
@@ -55,6 +100,7 @@ namespace Sigil.ViewModels
             IssueCategoryVM.OrgVM.OrgURL = i.Category.Org.orgURL;
             IssueCategoryVM.OrgVM.OrgImage = i.Category.Org.Image;
 
+            InPanel = inPanel;
 
             votes = i.votes;
             userVoted = Voted;
@@ -63,6 +109,7 @@ namespace Sigil.ViewModels
             IssueUserDisplayName = i.User.DisplayName;
             IssueUserImage = i.User.Image;
             Title = i.title;
+            Text = i.text;
             CreateDate = i.createTime;
         }
 

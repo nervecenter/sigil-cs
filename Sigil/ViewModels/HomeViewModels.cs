@@ -29,18 +29,19 @@ namespace Sigil.ViewModels
         {
             get; set;
         }
-
+    }
     public class Home_FeaturePageViewModel
     {
         public UserViewModel UserVm
         {
             get; set;
         }
-
+    }
     public class Home_LegalPageViewModel
     {
         public UserViewModel UserVm
         {
             get; set;
         }
+    }
 }

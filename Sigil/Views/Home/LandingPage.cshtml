@@ -93,8 +93,7 @@
                         <div class="panel-heading"><a href="/@group.Key.OrgURL"><img src="@(group.Key.OrgImage.icon_20)" style="margin-right:5px;"/>@group.Key.OrgName</a></div>
                         @*<div class="panel-body"></div>*@
                         @foreach ( IssueViewModel issue in group ) {
-                            var issuePanelModel = new Tuple<IssuePanelOptions, IssueViewModel>( new IssuePanelOptions() { inPanel = false, showOrg = false, showCat = false, showTopic = false, showUser = false}, issue );
-                            @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel)
+                            @Html.Partial( "../Shared/_IssuePanelPartial", issue)
                         }
                     </div>
                 </div>

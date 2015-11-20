@@ -37,17 +37,6 @@ namespace Sigil.Controllers {
             if (userID != null)
             {
 
-                //UserViewModel uservm = new UserViewModel();
-                //uservm.User = userService.GetUser(userID);
-                ////get the users notifications
-                //uservm.UserNotifications = notificationService.GetUserNotifications(userID);
-
-                ////Get the users subscriptions and convert to SubscriptionViewModel(makes it easier to work with in the view)
-                //uservm.UserSubscriptions = subscriptionService.GetUserSubscriptions(userID).Select(s => new SubscriptionViewModel(s));
-
-                ////gather all the votes the user made 
-                //uservm.UserVotes = userService.GetUserVotes(userID);
-
                 UserViewModel uservm = userService.GetUserViewModel(userID);
 
                 Home_IndexViewModel vm = new Home_IndexViewModel();
@@ -61,10 +50,10 @@ namespace Sigil.Controllers {
 
                 //sort the users issues by issue rank 
                 userIssues.OrderBy(i => Rank);
-
+                List<IssueViewModel> userIssuesVM = userIssues.Select(i => new IssueViewModel(i, uservm.UserVotes.Check_Vote(i.Id, i.Category.OrgId), true)).ToList();
                 int num_results_per_page = 6;
                 int pageNumber = (page ?? 1);
-                vm.UserIssues = userIssues.Select(i => new IssueViewModel(i, uservm.UserVotes.Check_Vote(i.Id, i.Category.OrgId))).ToPagedList(pageNumber, num_results_per_page);
+                vm.UserIssues = userIssuesVM.ToPagedList(pageNumber, num_results_per_page);
                 
                 //Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol> issuesANDvotes = new Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>(, userVotes);
                 return View(vm);
@@ -143,7 +132,7 @@ namespace Sigil.Controllers {
 
             pretrending.Sort(Rank);
 
-            var trending = pretrending.Select(i => new IssueViewModel(i, false)).GroupBy(i => i.IssueCategoryVM.OrgVM);
+            var trending = pretrending.Select(i => new IssueViewModel(i, false, true)).GroupBy(i => i.IssueCategoryVM.OrgVM);
 
             return trending;
         }
