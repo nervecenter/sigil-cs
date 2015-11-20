@@ -20,21 +20,27 @@ namespace Sigil.ViewModels
 
     public class Home_AboutPageViewModel
     {
-
+        public UserViewModel UserVm { get; set; }
     }
 
     public class Home_ContactPageViewModel
     {
-
-    }
+        public UserViewModel UserVm
+        {
+            get; set;
+        }
 
     public class Home_FeaturePageViewModel
     {
-
-    }
+        public UserViewModel UserVm
+        {
+            get; set;
+        }
 
     public class Home_LegalPageViewModel
     {
-
-    }
+        public UserViewModel UserVm
+        {
+            get; set;
+        }
 }

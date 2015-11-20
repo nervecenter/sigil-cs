@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Sigil.Models;
+using Sigil.ViewModels;
 using Sigil.Repository;
 using System.Xml.Linq;
 
@@ -43,6 +44,8 @@ namespace Sigil.Services
         void RemoveUserVote(ApplicationUser user, int orgId, int issueId, int commentId);
         void UpdateUser(ApplicationUser user);
 
+        UserViewModel GetUserViewModel(string userId);
+
         UserVoteCol GetUserVotes(string userId);
     }
 
@@ -51,16 +54,19 @@ namespace Sigil.Services
         private readonly IOrgRepository OrgsRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
-        
+        private readonly INotificationRepository notificationRepository;
+        private readonly ISubscriptionRepository subscriptionRepository;
         private readonly ICommentRepository commentRespository;
         private readonly IUserRepository userRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public UserService(IUnitOfWork unit, IUserRepository userRepo, ICommentRepository comRepo)
+        public UserService(IUnitOfWork unit, IUserRepository userRepo, ICommentRepository comRepo, INotificationRepository noteRepo, ISubscriptionRepository subRepo)
         {
             unitOfWork = unit;
             userRepository = userRepo;
             commentRespository = comRepo;
+            notificationRepository = noteRepo;
+            subscriptionRepository = subRepo;
         }
 
         public ApplicationUser GetUser(string id)
@@ -160,6 +166,17 @@ namespace Sigil.Services
         public UserVoteCol GetUserVotes(string userId)
         {
             return CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(userRepository.GetById(userId).votes));
+        }
+
+        public UserViewModel GetUserViewModel(string userId)
+        {
+            UserViewModel userVM = new UserViewModel();
+            userVM.User = GetUser(userId);
+            userVM.UserNotifications = notificationRepository.GetUsersNotifications(userId);
+            userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId).Select(s => new SubscriptionViewModel(s));
+            userVM.UserVotes = GetUserVotes(userId);
+
+            return userVM;
         }
     }
 }

@@ -37,16 +37,18 @@ namespace Sigil.Controllers {
             if (userID != null)
             {
 
-                UserViewModel uservm = new UserViewModel();
-                uservm.User = userService.GetUser(userID);
-                //get the users notifications
-                uservm.UserNotifications = notificationService.GetUserNotifications(userID);
-                
-                //Get the users subscriptions and convert to SubscriptionViewModel(makes it easier to work with in the view)
-                uservm.UserSubscriptions = subscriptionService.GetUserSubscriptions(userID).Select(s => new SubscriptionViewModel(s));
-                
-                //gather all the votes the user made 
-                uservm.UserVotes = userService.GetUserVotes(userID);
+                //UserViewModel uservm = new UserViewModel();
+                //uservm.User = userService.GetUser(userID);
+                ////get the users notifications
+                //uservm.UserNotifications = notificationService.GetUserNotifications(userID);
+
+                ////Get the users subscriptions and convert to SubscriptionViewModel(makes it easier to work with in the view)
+                //uservm.UserSubscriptions = subscriptionService.GetUserSubscriptions(userID).Select(s => new SubscriptionViewModel(s));
+
+                ////gather all the votes the user made 
+                //uservm.UserVotes = userService.GetUserVotes(userID);
+
+                UserViewModel uservm = userService.GetUserViewModel(userID);
 
                 Home_IndexViewModel vm = new Home_IndexViewModel();
                 vm.UserVM = uservm;
@@ -86,12 +88,20 @@ namespace Sigil.Controllers {
         }
 
         public ActionResult FeaturesPage() {
+
             return View( "FeaturesPage" );
         }
 
         public ActionResult Legal()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            UserViewModel userVM = default(UserViewModel);
+            if (userId != null)
+            {
+                userVM = userService.GetUserViewModel(userId);
+            }
+            
+            return View(userVM);
         }
 
         public ActionResult About()
