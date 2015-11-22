@@ -18,7 +18,7 @@ namespace Sigil.ViewModels
 
         public int NumVotes { get; set; }
         public bool userVoted { get; set; }
-
+        public bool InPanel { get; set; }
         public bool Responded { get; set; }
         public string IssueUserDisplayName { get; set; }
         public Image IssueUserImage { get; set; }
@@ -26,7 +26,7 @@ namespace Sigil.ViewModels
         public string Text { get; set; }
         public DateTime CreateDate { get; set; }
 
-        public IssueViewModel( Issue i, bool Voted, bool inpanel ) {
+        public IssueViewModel( Issue i, bool Voted, bool inpanel) {
             IssueId = i.Id;
 
             IssueCategoryVM.CategoryId = i.CatId;
@@ -41,30 +41,13 @@ namespace Sigil.ViewModels
 
             NumVotes = i.votes;
             userVoted = Voted;
-
+            InPanel = inpanel;
             Responded = i.responded;
             IssueUserDisplayName = i.User.DisplayName;
             IssueUserImage = i.User.Image;
             Title = i.title;
             Text = i.text;
             CreateDate = i.createTime;
-        }
-    }
-
-
-    /// <summary>
-    /// Model for the small issue panel which can appear all over the site
-    /// </summary>
-    public class IssuePanelModel {
-        public IssueViewModel issueVM;
-
-        public bool something;
-
-        public IssuePanelModel( Issue i, bool voted ) {
-            issueVM = new IssueViewModel(i, voted);
-            if ( issueVM.Responded == true) {
-                // Need to get the response
-            }
         }
     }
 
