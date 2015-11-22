@@ -7,6 +7,66 @@ using System.Threading.Tasks;
 
 namespace Sigil.ViewModels
 {
+    /// <summary>
+    /// ViewModel for holding an Issue
+    /// </summary>
+    public class IssueViewModel {
+        public int IssueId { get; set; }
+
+        // need to replace category stuff with category vm
+        public CategoryViewModel IssueCategoryVM { get; set; }
+
+        public int NumVotes { get; set; }
+        public bool userVoted { get; set; }
+
+        public bool Responded { get; set; }
+        public string IssueUserDisplayName { get; set; }
+        public Image IssueUserImage { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public DateTime CreateDate { get; set; }
+
+        public IssueViewModel( Issue i, bool Voted, bool inpanel ) {
+            IssueId = i.Id;
+
+            IssueCategoryVM.CategoryId = i.CatId;
+            IssueCategoryVM.CategoryName = i.Category.catName;
+            IssueCategoryVM.CategoryURL = i.Category.catURL;
+            IssueCategoryVM.CategoryImage = i.Category.Image;
+
+            IssueCategoryVM.OrgVM.OrgId = i.Category.OrgId;
+            IssueCategoryVM.OrgVM.OrgName = i.Category.Org.orgName;
+            IssueCategoryVM.OrgVM.OrgURL = i.Category.Org.orgURL;
+            IssueCategoryVM.OrgVM.OrgImage = i.Category.Org.Image;
+
+            NumVotes = i.votes;
+            userVoted = Voted;
+
+            Responded = i.responded;
+            IssueUserDisplayName = i.User.DisplayName;
+            IssueUserImage = i.User.Image;
+            Title = i.title;
+            Text = i.text;
+            CreateDate = i.createTime;
+        }
+    }
+
+
+    /// <summary>
+    /// Model for the small issue panel which can appear all over the site
+    /// </summary>
+    public class IssuePanelModel {
+        public IssueViewModel issueVM;
+
+        public bool something;
+
+        public IssuePanelModel( Issue i, bool voted ) {
+            issueVM = new IssueViewModel(i, voted);
+            if ( issueVM.Responded == true) {
+                // Need to get the response
+            }
+        }
+    }
 
     /// <summary>
     /// ViewModel for holding a Comment
@@ -65,55 +125,7 @@ namespace Sigil.ViewModels
         }
     }
 
-    /// <summary>
-    /// ViewModel for holding an Issue
-    /// </summary>
-    public class IssueViewModel
-    {
-        public int IssueId { get; set; }
-
-        // need to replace category stuff with category vm
-        public CategoryViewModel IssueCategoryVM { get; set; }
-
-        public bool InPanel { get; set; }
-        public int votes { get; set; }
-        public bool userVoted { get; set; }
-
-        public bool Responded { get; set; }
-        public string IssueUserDisplayName { get; set; }
-        public Image IssueUserImage { get; set; }
-        public string Title { get; set; }
-        public string Text { get; set; }
-        public DateTime CreateDate { get; set; }
-
-        public IssueViewModel(Issue i, bool Voted, bool inPanel = false)
-        {
-            IssueId = i.Id;
-
-            IssueCategoryVM.CategoryId = i.CatId;
-            IssueCategoryVM.CategoryName = i.Category.catName;
-            IssueCategoryVM.CategoryURL = i.Category.catURL;
-            IssueCategoryVM.CategoryImage = i.Category.Image;
-
-            IssueCategoryVM.OrgVM.OrgId = i.Category.OrgId;
-            IssueCategoryVM.OrgVM.OrgName = i.Category.Org.orgName;
-            IssueCategoryVM.OrgVM.OrgURL = i.Category.Org.orgURL;
-            IssueCategoryVM.OrgVM.OrgImage = i.Category.Org.Image;
-
-            InPanel = inPanel;
-
-            votes = i.votes;
-            userVoted = Voted;
-
-            Responded = i.responded;
-            IssueUserDisplayName = i.User.DisplayName;
-            IssueUserImage = i.User.Image;
-            Title = i.title;
-            Text = i.text;
-            CreateDate = i.createTime;
-        }
-
-    }
+    
 
     public class CategoryViewModel
     {

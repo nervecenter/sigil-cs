@@ -57,13 +57,13 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "Create Issue",
-                url: "create_issue/",
+                url: "createissue/",
                 defaults: new { controller = "Issue", action = "CreateIssue" }
             );
 
             routes.MapRoute(
                 name: "Add Issue",
-                url: "add_issue/",
+                url: "addissue/",
                 defaults: new { controller = "Issue", action = "AddIssue" }
             );
 

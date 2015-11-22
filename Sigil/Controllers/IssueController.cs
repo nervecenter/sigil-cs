@@ -81,7 +81,7 @@ namespace Sigil.Controllers
             Issue_IssuePageViewModel viewModel = new Issue_IssuePageViewModel();
             viewModel.UserVM = userVM;
             viewModel.OfficialResponses = official.Select(o => new OfficialResponseViewModel(o));
-            viewModel.IssueVM = new IssueViewModel(thisIssue, userVM.UserVotes.Check_Vote(thisIssue.Id, thisOrg.Id));
+            viewModel.IssueVM = new IssueViewModel(thisIssue, userVM.UserVotes.Check_Vote(thisIssue.Id, thisOrg.Id), true);
             viewModel.IssueComments = issueComments.Select(c => new CommentViewModel(c, userVM.UserVotes.Check_Vote(c.Id, c.IssueId, c.Issue.Category.OrgId)));
             
 
