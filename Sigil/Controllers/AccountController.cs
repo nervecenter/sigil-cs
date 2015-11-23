@@ -236,6 +236,7 @@ namespace Sigil.Controllers
             newOrg.comment = model.orgComment;
             newOrg.email = model.Email;
             newOrg.AdminName = model.orgAdminName;
+            newOrg.ApplyDate = DateTime.Now;
             try
             {
                 orgService.CreateOrgApp(newOrg);

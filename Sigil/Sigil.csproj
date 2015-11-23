@@ -487,6 +487,7 @@
     <Content Include="Views\Org\OrgResponsesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage - Copy.cshtml" />
+    <Content Include="Views\Shared\404.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

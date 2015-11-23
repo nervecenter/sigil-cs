@@ -51,9 +51,11 @@ namespace Sigil.Controllers
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
             // If the org doesn't exist, redirect to 404
-            if (thisOrg == default(Org))
+            // TODO: Need to set to default(Org) rather than null
+            if (thisOrg == null)
             {
-                Response.Redirect("~/404");
+                //Response.Redirect("~/404");
+                return View( "404" );
             }
 
             // Get the user and their subscriptions
