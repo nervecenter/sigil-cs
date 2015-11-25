@@ -268,7 +268,7 @@ namespace Sigil.Controllers
             //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
 
 
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
             var newOrg = new Org();
             newOrg.orgName = verifiedOrg.orgName;
