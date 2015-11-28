@@ -13,11 +13,15 @@ namespace Sigil.Controllers
 {
     public class SearchController : Controller
     {
-
-
         private readonly IProductService productService;
         private readonly ISearchService searchService;
          
+        public SearchController(IProductService prodS, ISearchService searchS)
+        {
+            productService = prodS;
+            searchService = searchS;
+        }
+
         // GET: Search
         public ActionResult Index()
         {

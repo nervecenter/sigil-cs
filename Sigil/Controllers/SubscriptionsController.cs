@@ -19,6 +19,15 @@ namespace Sigil.Controllers
         private readonly IErrorService errorService;
         private readonly ICountService countDataService;
 
+        public SubscriptionsController(IOrgService orgS, IIssueService issS, ISubscriptionService subS, IErrorService errS, ICountService countS)
+        {
+            orgService = orgS;
+            issueService = issS;
+            subscriptionService = subS;
+            errorService = errS;
+            countDataService = countS;
+        }
+
         // GET: Subscriptions
         [Authorize]
         public ActionResult Index()
