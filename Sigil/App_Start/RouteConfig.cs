@@ -134,6 +134,12 @@ namespace Sigil {
              );
 
             routes.MapRoute(
+                name: "Org App Approve",
+                url: "sadmin/orgapps/{norgID}",
+                defaults: new { controller = "Account", action = "OrgConfirmed" }
+            );
+
+            routes.MapRoute(
                 name: "Error Log",
                 url: "sadmin/errors",
                 defaults: new { controller = "Admin", action = "ErrorLog" }

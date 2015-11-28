@@ -52,7 +52,7 @@ namespace Sigil.ViewModels
                 subURL = "/" + s.Topic.topicURL;
                 subIcon = s.Topic.Image.icon_20;
             }
-            else if (s.CatId != null)
+            else if (s.ProductId != null)
             {
                 subName = s.Org.orgName + "-" + s.Product.ProductName;
                 subURL = "/" + s.Org.orgURL + "/" + s.Product.ProductURL;

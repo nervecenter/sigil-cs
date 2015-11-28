@@ -16,8 +16,8 @@ namespace Sigil
         public SigilEntities() : base("SigilDB")
         {
             Database.SetInitializer<SigilEntities>(new DropCreateDatabaseIfModelChanges<SigilEntities>());//new CreateDatabaseIfNotExists<SigilEntities>());// 
-            Configuration.ProxyCreationEnabled = false;
-            Configuration.LazyLoadingEnabled = false;
+        //    Configuration.ProxyCreationEnabled = false;
+        //    Configuration.LazyLoadingEnabled = false;
         }
 
         public static SigilEntities Create()
@@ -78,7 +78,8 @@ namespace Sigil
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new SubscriptionConfiguration());
             modelBuilder.Configurations.Add(new OfficialResponseConfiguration());
-           
+
+            modelBuilder.Entity<ApplicationUser>().HasOptional(u => u.Image).WithMany().HasForeignKey(u => u.ImageId).WillCascadeOnDelete(false);
 
             //modelBuilder.Entity<Topic>().HasRequired(t => t.Orgs).WithMany().WillCascadeOnDelete(false);
             //modelBuilder.Entity<Org>().HasOptional(o => o.ImageId).WithOptionalPrincipal().WillCascadeOnDelete(false)

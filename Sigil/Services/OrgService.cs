@@ -17,6 +17,7 @@ namespace Sigil.Services
         OrgApp ApproveOrgApp(int orgAppId);
 
         void CreateOrg(Org org);
+        void UpdateOrg(Org org);
         void SaveOrg();
 
         Org GetOrg(int id);
@@ -39,10 +40,10 @@ namespace Sigil.Services
     {
         private readonly IOrgRepository OrgsRepository;
         private readonly IOrgAppRepository orgAppRepository;
-        private readonly IProductRepository categoryRepository;
-        private readonly IIssueRepository issueRepository;
-        private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
+        //private readonly IProductRepository categoryRepository;
+        //private readonly IIssueRepository issueRepository;
+        //private readonly ICommentRepository commentRespository;
+        //private readonly IUserRepository userRespository;
         private readonly IUnitOfWork unitOfWork;
 
         public OrgService(IOrgRepository orgRepo, IOrgAppRepository orgAppRepo,IUnitOfWork unitofwork)
@@ -112,6 +113,12 @@ namespace Sigil.Services
         public IEnumerable<Org> GetAllOrgs()
         {
             return OrgsRepository.GetAll();
+        }
+
+        public void UpdateOrg(Org org)
+        {
+            OrgsRepository.Update(org);
+            unitOfWork.Commit();
         }
     }
 }

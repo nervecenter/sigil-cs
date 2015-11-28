@@ -24,7 +24,7 @@ namespace Sigil.Repository
 
         public Image GetOrgImage(int orgId)
         {
-            return DbContext.Images.Where(i => Convert.ToInt32(i.OwnerId) == orgId && i.imgType == (int)ImageType.Org).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == orgId.ToString() && i.imgType == (int)ImageType.Org).FirstOrDefault();
         }
 
         public Image GetProductImage(int productId)

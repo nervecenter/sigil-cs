@@ -11,8 +11,8 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface IProductService
     {
-        void CreateCategory(Product cat);
-        void SaveCategory();
+        void CreateProduct(Product prod);
+        void SaveProduct();
         IEnumerable<Product> GetProductsByOrg(int orgId);
         IEnumerable<Product> GetProductsByOrg(string org, bool name = false);
         Product GetProduct(int orgId, int catId);
@@ -36,12 +36,12 @@ namespace Sigil.Services
             unitOfWork = unit;
         }
 
-        public void CreateCategory(Product cat)
+        public void CreateProduct(Product prod)
         {
-            productRepository.Add(cat);
+            productRepository.Add(prod);
         }
 
-        public void SaveCategory()
+        public void SaveProduct()
         {
             unitOfWork.Commit();
         }

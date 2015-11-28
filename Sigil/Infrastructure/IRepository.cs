@@ -98,6 +98,7 @@ namespace Sigil.Repository
  
         public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
+            
             return dbSet.Where(where).ToList();
         }
  

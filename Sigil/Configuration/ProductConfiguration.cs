@@ -17,6 +17,7 @@ namespace Sigil.Configuration
             Property(c => c.ProductURL).IsRequired().HasMaxLength(30);
             Property(c => c.OrgId).IsRequired();
             Property(c => c.TopicId).IsOptional();
+            
             Property(c => c.ImageId).IsOptional();
         }
     }

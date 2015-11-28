@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -17,7 +18,8 @@ namespace Sigil.Models
         public int views { get; set; }
 
         public int ImageId { get; set; }
-        public Image Image { get; set; }
+        [ForeignKey("ImageId")]
+        public virtual Image Image { get; set; }
 
         //public virtual List<Org> Orgs { get; set; }
         //public virtual List<Product> Categories { get; set; }

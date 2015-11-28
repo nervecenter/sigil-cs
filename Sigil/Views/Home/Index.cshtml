@@ -28,7 +28,7 @@
         </div>
     </div>
     @if (Model.UserIssues.Count > 0 ) {
-        foreach ( IssueViewModel issue in Model.UserIssues) {
+        foreach ( IssuePanelPartialVM issue in Model.UserIssues) {
             @Html.Partial( "../Shared/_IssuePanelPartial", issue)
         }
         <br />

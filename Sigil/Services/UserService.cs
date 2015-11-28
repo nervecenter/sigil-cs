@@ -37,6 +37,8 @@ namespace Sigil.Services
         /// <returns></returns>
         IEnumerable<ApplicationUser> GetUsersByIssue(int orgId, int issueId);
 
+        void AssignUserImage(string userId, Image img);
+
         void CreateUserVote(string userId);
         void SaveUserVotes();
 
@@ -53,9 +55,9 @@ namespace Sigil.Services
 
     public class UserService : IUserService
     {
-        private readonly IOrgRepository OrgsRepository;
-        private readonly IProductRepository categoryRepository;
-        private readonly IIssueRepository issueRepository;
+        //private readonly IOrgRepository OrgsRepository;
+        //private readonly IProductRepository categoryRepository;
+        //private readonly IIssueRepository issueRepository;
         private readonly INotificationRepository notificationRepository;
         private readonly ISubscriptionRepository subscriptionRepository;
         private readonly ICommentRepository commentRespository;
@@ -218,11 +220,21 @@ namespace Sigil.Services
         {
             UserViewModel userVM = new UserViewModel();
             userVM.User = GetUser(userId);
+            
             userVM.UserNotifications = notificationRepository.GetUsersNotifications(userId);
             userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId).Select(s => new SubscriptionViewModel().Create(s));
             userVM.UserVotes = GetUserVotes(userId);
 
             return userVM;
+        }
+
+        public void AssignUserImage(string userId, Image img)
+        {
+            var user = GetUser(userId);
+            user.Image = img;
+            user.ImageId = img.Id;
+            userRepository.Update(user);
+            unitOfWork.Commit();
         }
     }
 }

@@ -11,11 +11,12 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Sigil.Models;
 using Sigil.Services;
+using Sigil.ViewModels;
 
 namespace Sigil.Controllers
 {
 
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         private readonly ApplicationSignInManager _signInManager;
@@ -27,8 +28,9 @@ namespace Sigil.Controllers
         private readonly IErrorService errorService;
         private readonly IUserService userService;
         private readonly IImageService imageService;
+        private readonly IProductService productService;
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,IAuthenticationManager authManager ,IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,IAuthenticationManager authManager ,IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS, IProductService prodS )
         {
             //UserManager = userManager;
             //SignInManager = signInManager;
@@ -42,6 +44,7 @@ namespace Sigil.Controllers
             errorService = errS;
             userService = userS;
             imageService = imgS;
+            productService = prodS;
         }
 
         public ApplicationSignInManager SignInManager
@@ -204,9 +207,10 @@ namespace Sigil.Controllers
         /// </summary>
         private void Create_User_Extras(string userID)
         {
-            //ImageController<AspNetUser>.Assign_Default_Icon(userID);
-            imageService.AssignDefaultImage(userID);
-            //imageService.SaveImage();
+
+            Image img = imageService.AssignDefaultImage(userID);
+            userService.AssignUserImage(userID, img);
+
             userService.CreateUserVote(userID);
             userService.SaveUserVotes();
         }
@@ -236,6 +240,7 @@ namespace Sigil.Controllers
             newOrg.comment = model.orgComment;
             newOrg.email = model.Email;
             newOrg.AdminName = model.orgAdminName;
+            newOrg.ApplyDate = DateTime.UtcNow;
             try
             {
                 orgService.CreateOrgApp(newOrg);
@@ -250,7 +255,7 @@ namespace Sigil.Controllers
                 //ErrorHandler.Log_Error(newOrg, e, dc);
             }
 
-            return View("LandingPage");
+            return View("LandingPage", "Home");
         }
 
         //need to protect this so that sigil is the only role allowed to call
@@ -286,13 +291,24 @@ namespace Sigil.Controllers
             }
 
             //Setup Org data collection db entries
-            int orgID = orgService.GetOrg(newOrg.orgURL).Id;
+            Org org = orgService.GetOrg(newOrg.orgURL);
+
             var orgProduct = new Product();
             orgProduct.ProductName = newOrg.orgName;
             orgProduct.ProductURL = "Default";
-            orgProduct.ImageId = imageService.AssignDefaultImage(orgID, ImageType.Org);
+            orgProduct.Image = imageService.AssignDefaultImage(org.Id, ImageType.Org);
+            orgProduct.ImageId = orgProduct.Image.Id;
+            orgProduct.OrgId = org.Id;
+            orgProduct.Org = org;
 
-            countDataService.CreateOrgCountData(orgID);
+            productService.CreateProduct(orgProduct);
+            productService.SaveProduct();
+
+            newOrg.Products.Add(orgProduct);
+
+            orgService.UpdateOrg(org);
+
+            countDataService.CreateOrgCountData(org.Id);
             countDataService.SaveOrgCountData();
             
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -556,6 +572,17 @@ namespace Sigil.Controllers
 
         //    base.Dispose(disposing);
         //}
+
+
+        public ActionResult _LoginPartial()
+        {
+            string userId = User.Identity.GetUserId();
+            if(userId == null)
+                return PartialView("_LoginPartial", new UserViewModel());
+            var VM = userService.GetUserViewModel(userId);
+
+            return PartialView("_LoginPartial", VM);
+        }
 
         #region Helpers
         // Used for XSRF protection when adding external logins

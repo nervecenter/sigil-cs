@@ -12,19 +12,13 @@ namespace Sigil.Models
         [Key]
         public int Id { get; set;}
 
-        //public int OrgId { get; set; }
-        //[ForeignKey("OrgId")]
-        //public Org Org { get; set; }
-
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
-
-        //public int TopicId { get; set; }
-        //public Topic Topic { get; set; }
+        public virtual Product Product { get; set; }
 
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser User { get; set; }
 
         public DateTime createTime { get; set; }
         public DateTime editTime { get; set; }
@@ -40,5 +34,11 @@ namespace Sigil.Models
 
         public virtual List<Comment> Comments { get; set; }
         public virtual List<OfficialResponse> OfficialResponses { get; set; }
+
+        public Issue()
+        {
+            Comments = new List<Comment>();
+            OfficialResponses = new List<OfficialResponse>();
+        }
     }
 }

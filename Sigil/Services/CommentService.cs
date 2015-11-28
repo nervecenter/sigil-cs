@@ -97,7 +97,7 @@ namespace Sigil.Services
 
         public IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int productId,int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.issueId == issueId) ?? new List<OfficialResponse>().AsEnumerable();
+            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.IssueId == issueId) ?? new List<OfficialResponse>().AsEnumerable();
         }
 
         public IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId)
@@ -107,7 +107,7 @@ namespace Sigil.Services
 
         public OfficialResponse GetIssueLatestOfficialResponse(int orgId, int productId,int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.Issue.Product.Id == productId && o.issueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault() ?? default(OfficialResponse);
+            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.Issue.Product.Id == productId && o.IssueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault() ?? default(OfficialResponse);
         }
 
         public IEnumerable<Comment> GetUserComments(string userId)
@@ -175,7 +175,7 @@ namespace Sigil.Services
             newOff.createTime = DateTime.UtcNow;
             newOff.downVotes = 0;
             newOff.upVotes = 1;
-            newOff.issueId = thisIssue.Id;
+            newOff.IssueId = thisIssue.Id;
             //newOff.OrgId = thisIssue.OrgId;
             newOff.text = request.Form["text"];
             newOff.UserId = userID;

@@ -31,7 +31,7 @@ namespace Sigil
             {
                 new Org
                 {
-                    Categories = GetCats(),
+                    Products = GetCats(),
                     orgName = "Micro",
                     orgURL = "mic",
                     lastView = DateTime.UtcNow,
@@ -40,7 +40,7 @@ namespace Sigil
                 },
                 new Org
                 {
-                    Categories = GetCats(),
+                    Products = GetCats(),
                     orgName = "Star",
                     orgURL = "star",
                     lastView = DateTime.UtcNow,

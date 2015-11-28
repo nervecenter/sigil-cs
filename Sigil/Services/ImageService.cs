@@ -12,8 +12,8 @@ namespace Sigil.Services
     {
         void CreateImage(Image img);
         void SaveImage();
-        int AssignDefaultImage(string userId);
-        int AssignDefaultImage(int id, ImageType imgtype);
+        Image AssignDefaultImage(string userId);
+        Image AssignDefaultImage(int id, ImageType imgtype);
         string GetIcon(string userId);
         string GetIcon(int orgId, ImageType imgtype);
         string GetBanner(int orgId, ImageType imgtype);
@@ -49,36 +49,36 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-        public int AssignDefaultImage(string userId)
+        public Image AssignDefaultImage(string userId)
         {
             int defaultIMG = RNG.RandomNumber(1, 6);
 
-            string IMG_PATH = "default" + defaultIMG + ".png";
+            string IMG_PATH = default_folder_path + "default" + defaultIMG + ".png";
             Image userImg = new Sigil.Models.Image();
 
             //userImg.UserId = userId;
             userImg.icon_100 = IMG_PATH;
-            userImg.icon_20 = "default20.png";
+            userImg.icon_20 = default_folder_path + "default20.png";
             userImg.OwnerId = userId;
             userImg.imgType = (int)ImageType.User;
 
             CreateImage(userImg);
             SaveImage();
             userImg = imageRepository.GetUserImage(userId);
-            return userImg.Id;
+            return userImg;
             
         }
 
-        public int AssignDefaultImage(int id, ImageType imgType)
+        public Image AssignDefaultImage(int id, ImageType imgType)
         {
             int defaultIMG = RNG.RandomNumber(1, 6);
 
-            string IMG_PATH = "default" + defaultIMG + ".png";
+            string IMG_PATH = default_folder_path + "default" + defaultIMG + ".png";
             Image Img = new Sigil.Models.Image();
 
             //userImg.UserId = userId;
             Img.icon_100 = IMG_PATH;
-            Img.icon_20 = "default20.png";
+            Img.icon_20 = default_folder_path + "default20.png";
             Img.OwnerId = id.ToString();
             Img.imgType = (int)imgType;
 
@@ -90,7 +90,7 @@ namespace Sigil.Services
                 Img = imageRepository.GetProductImage(id);
             else if (imgType == ImageType.Topic)
                 Img = imageRepository.GetTopicImage(id);
-            return Img.Id;
+            return Img;
         }
 
         public string GetIcon(string userId)

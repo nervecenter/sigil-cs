@@ -43,7 +43,7 @@ namespace Sigil.Controllers
             Subscription new_sub = new Subscription();
             new_sub.OrgId = org.Id;
             new_sub.UserId = userid;
-            new_sub.CatId = 0;
+            new_sub.ProductId = 0;
             new_sub.TopicId = 0;
 
             countDataService.UpdateOrgSubscriptionCount(org.Id);

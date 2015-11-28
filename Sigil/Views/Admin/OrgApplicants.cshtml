@@ -15,7 +15,7 @@
         <div class="panel panel-primary">
             <div class="panel-body">
                 Org Name: @applicant.orgName<br />
-                Requested OrgURL: @applicant.orgUrl<br />
+                Requested OrgURL: @applicant.orgURL<br />
                 Org's Website:<a href="https://@applicant.website">@applicant.website</a><br />
                 Requested Org Admin Username: @applicant.username<br />
                 Org Admin's Email: @applicant.email<br />
@@ -23,7 +23,7 @@
                 Org Admins Phone: @applicant.contact<br />
                 Org Admins Comment: @applicant.comment
                 <form>
-                    <button type="submit" class="btn btn-success">Approve</button>
+                    <button type="submit" class="btn btn-success" formaction="orgapps/@applicant.Id/">Approve</button>
                     <button type="submit" class="btn btn-danger">Disapprove</button>
                 </form>
             </div>

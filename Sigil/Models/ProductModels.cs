@@ -17,16 +17,22 @@ namespace Sigil.Models
 
         public int OrgId { get; set; }
         [ForeignKey("OrgId")]
-        public Org Org { get; set; }
+        public virtual Org Org { get; set; }
 
 
-        public int TopicId { get; set; }
+        public int? TopicId { get; set; }
         [ForeignKey("TopicId")]
-        public Topic Topic { get; set; }
+        public virtual Topic Topic { get; set; }
 
-        public int ImageId { get; set; }
-        public Image Image { get; set; }
+        public int? ImageId { get; set; }
+        [ForeignKey("ImageId")]
+        public virtual Image Image { get; set; }
 
         public virtual List<Issue> Issues { get; set; }
+
+        public Product()
+        {
+            Issues = new List<Issue>();
+        }
     }
 }

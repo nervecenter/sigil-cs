@@ -18,13 +18,16 @@ namespace Sigil.Models
         public ApplicationUser User { get; set; }
 
         public int? OrgId { get; set; }
-        public Org Org { get; set; }
+        [ForeignKey("OrgId")]
+        public virtual Org Org { get; set; }
 
         public int? TopicId { get; set; }
-        public Topic Topic { get; set; }
+        [ForeignKey("TopicId")]
+        public virtual Topic Topic { get; set; }
 
-        public int? CatId { get; set; }  
-        public Product Product { get; set; }
+        public int? ProductId { get; set; }  
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
 
     }
 }

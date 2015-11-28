@@ -266,7 +266,6 @@
     <Compile Include="Models\IssueModels.cs" />
     <Compile Include="Models\NotificationModels.cs" />
     <Compile Include="Models\OrgModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DataModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -301,6 +300,7 @@
     <Compile Include="SigilEntities.cs" />
     <Compile Include="SigilSeedData.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\HomeViewModels.cs" />
     <Compile Include="ViewModels\IssueViewModels.cs" />
     <Compile Include="ViewModels\OrgViewModels.cs" />

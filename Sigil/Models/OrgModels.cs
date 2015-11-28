@@ -1,59 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
 namespace Sigil.Models
 {
-    public class OrgRegisterViewModel
-    {
-        [Required]
-        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
-        [Display(Name = "Organization Name")]
-        public string orgName { get; set; }
-
-        [Required]
-        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
-        [Display(Name = "Requested Organization URL for Sigil")]
-        public string orgURL { get; set; }
-
-        [Required]
-        [StringLength(256)]
-        [Display(Name = "Organization's Website")]
-        public string orgWebsite { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        [Display(Name = "Organization's Phone Number")]
-        public string orgContact { get; set; }
-
-        [Required]
-        [StringLength(500)]
-        [Display(Name = "About your Organization")]
-        public string orgComment { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        [Display(Name = "Your Name")]
-        public string orgAdminName { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email Confirm")]
-        [Compare("Email", ErrorMessage = "The Email and confirmation email do not match.")]
-        public string Email_confirm { get; set; }
-
-        [Required]
-        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
-        [Display(Name = "Username")]
-        public string DisplayName { get; set; }
-
-    }
 
     public class Org
     {
@@ -64,7 +16,8 @@ namespace Sigil.Models
         public string orgURL { get; set; }
 
         public int? ImageId { get; set; }
-        public Image Image { get; set; }
+        [ForeignKey("ImageId")]
+        public virtual Image Image { get; set; }
 
         public int viewCount { get; set; }
         public string website { get; set; }
@@ -76,7 +29,13 @@ namespace Sigil.Models
         public string UserID { get; set; }
 
         //public virtual List<Issue> Issues { get; set; }
-        public virtual List<Product> Categories { get; set; }
+        public virtual List<Product> Products { get; set; }
+
+        public Org()
+        {
+            Products = new List<Product>();
+        }
+
     }
 
     public class OrgApp

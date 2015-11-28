@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System;
 using System.Xml.Linq;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sigil.Models
 {
@@ -23,9 +23,15 @@ namespace Sigil.Models
         //public DateTime lastLogon { get; set; }
 
         public int? ImageId { get; set; }
-        public Image Image { get; set; }
+        [ForeignKey("ImageId")]
+        public virtual Image Image { get; set; }
 
         public virtual List<Subscription> Subscriptions { get; set; }
+
+        public ApplicationUser()
+        {
+            Subscriptions = new List<Subscription>();
+        }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

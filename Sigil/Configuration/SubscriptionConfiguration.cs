@@ -15,7 +15,7 @@ namespace Sigil.Configuration
             Property(s => s.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(s => s.OrgId).IsOptional();
             Property(s => s.TopicId).IsOptional();
-            Property(s => s.CatId).IsOptional();
+            Property(s => s.ProductId).IsOptional();
             Property(s => s.UserId).IsRequired();
         }
     }

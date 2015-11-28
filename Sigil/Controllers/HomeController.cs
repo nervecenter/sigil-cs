@@ -67,11 +67,9 @@ namespace Sigil.Controllers {
 
         public ActionResult LandingPage()
         {
-           
-
             Home_LandingPageViewModel vm = new Home_LandingPageViewModel();
             vm.TrendingIssues = Get_Trending_Issues_With_Topics();
-
+            
 
             return View("LandingPage", vm);
         }

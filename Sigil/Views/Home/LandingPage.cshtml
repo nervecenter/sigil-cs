@@ -96,12 +96,12 @@
     </section>
     <div class="container landing-container">
         <div class="row">
-            @foreach ( IGrouping<OrgViewModel, IssueViewModel> group in Model.TrendingIssues) {
+            @foreach ( IGrouping<Org, IssuePanelPartialVM> group in Model.TrendingIssues) {
                 <div class="col-md-4 col-lg-4">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><a href="/@group.Key.OrgURL"><img src="@(group.Key.OrgImage.icon_20)" style="margin-right:5px;"/>@group.Key.OrgName</a></div>
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;"/>@group.Key.orgName</a></div>
                         @*<div class="panel-body"></div>*@
-                        @foreach ( IssueViewModel issue in group ) {
+                        @foreach ( IssuePanelPartialVM issue in group ) {
                             @Html.Partial( "../Shared/_IssuePanelPartial", issue)
                         }
                     </div>

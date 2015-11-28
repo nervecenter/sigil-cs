@@ -1,10 +1,10 @@
 ﻿@using Microsoft.AspNet.Identity
-@using Sigil.Models
-
-@if ( Request.IsAuthenticated ) {
+@using Sigil.ViewModels
+@model UserViewModel
+@if ( Request.IsAuthenticated && Model.User != null) {
 
     <li>
-        @*<img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(User.Identity.GetUserId()))">*@
+        <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@Model.User.Image.icon_100">
         @Html.ActionLink( User.Identity.Name, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right", style = "border-left:0;" } )
     </li>
     <li>

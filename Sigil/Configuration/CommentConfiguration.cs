@@ -37,7 +37,7 @@ namespace Sigil.Configuration
             Property(o => o.createTime).IsRequired();
             Property(o => o.text).IsRequired();
             Property(o => o.editTime).IsOptional();
-            Property(o => o.issueId).IsRequired();
+            Property(o => o.IssueId).IsRequired();
         }
     }
 
