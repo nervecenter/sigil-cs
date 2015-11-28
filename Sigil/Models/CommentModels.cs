@@ -22,9 +22,6 @@ namespace Sigil.Models
 
         public int votes { get; set; }
         public DateTime lastVoted { get; set; }
-
-        
-
     }
 
 

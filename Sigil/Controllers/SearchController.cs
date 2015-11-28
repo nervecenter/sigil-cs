@@ -15,7 +15,7 @@ namespace Sigil.Controllers
     {
 
 
-        private readonly ICategoryService categoryService;
+        private readonly IProductService productService;
         private readonly ISearchService searchService;
          
         // GET: Search
@@ -60,7 +60,7 @@ namespace Sigil.Controllers
                     List<Issue> found_orgs = (List<Issue>)search_list[k];
                     foreach (Issue i in found_orgs)
                     {
-                        Final_search_list[i.title] = "/" + i.Category.Org.orgName + "/" + i.Id;
+                        Final_search_list[i.title] = "/" + i.Product.Org.orgName + "/" + i.Id;
                     }
                 }
             }
@@ -102,12 +102,12 @@ namespace Sigil.Controllers
             
             foreach(var o in quOrgs)
             {
-                var orgCats = categoryService.GetCategoriesByOrg(o.Id).ToList();
+                var orgCats = productService.GetProductsByOrg(o.Id).ToList();
                 if(orgCats.Count > 0)
                 {
                     foreach(var c in orgCats)
                     {
-                        finalQuery.Add(o.orgName + "-" + c.catName);
+                        finalQuery.Add(o.orgName + "-" + c.ProductName);
                     }
                 }
             }

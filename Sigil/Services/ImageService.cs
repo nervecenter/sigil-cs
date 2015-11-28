@@ -12,14 +12,15 @@ namespace Sigil.Services
     {
         void CreateImage(Image img);
         void SaveImage();
-        void AssignDefaultImage(string userId);
+        int AssignDefaultImage(string userId);
+        int AssignDefaultImage(int id, ImageType imgtype);
         string GetIcon(string userId);
-        string GetIcon(int orgId);
-        string GetBanner(int orgId);
+        string GetIcon(int orgId, ImageType imgtype);
+        string GetBanner(int orgId, ImageType imgtype);
         Image GetUserImages(string userId);
         Image GetOrgImages(int orgId);
         Image GetTopicImages(int topicId);
-        Image GetCategoryImages(int orgId, int catId);
+        Image GetProductImages(int productId);
     }
 
     public class ImageService : IImageService
@@ -48,25 +49,53 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-        public void AssignDefaultImage(string userId)
+        public int AssignDefaultImage(string userId)
         {
             int defaultIMG = RNG.RandomNumber(1, 6);
 
             string IMG_PATH = "default" + defaultIMG + ".png";
             Image userImg = new Sigil.Models.Image();
 
-
             //userImg.UserId = userId;
             userImg.icon_100 = IMG_PATH;
+            userImg.icon_20 = "default20.png";
+            userImg.OwnerId = userId;
+            userImg.imgType = (int)ImageType.User;
 
             CreateImage(userImg);
             SaveImage();
+            userImg = imageRepository.GetUserImage(userId);
+            return userImg.Id;
             
+        }
+
+        public int AssignDefaultImage(int id, ImageType imgType)
+        {
+            int defaultIMG = RNG.RandomNumber(1, 6);
+
+            string IMG_PATH = "default" + defaultIMG + ".png";
+            Image Img = new Sigil.Models.Image();
+
+            //userImg.UserId = userId;
+            Img.icon_100 = IMG_PATH;
+            Img.icon_20 = "default20.png";
+            Img.OwnerId = id.ToString();
+            Img.imgType = (int)imgType;
+
+            CreateImage(Img);
+            SaveImage();
+            if (imgType == ImageType.Org)
+                Img = imageRepository.GetOrgImage(id);
+            else if (imgType == ImageType.Product)
+                Img = imageRepository.GetProductImage(id);
+            else if (imgType == ImageType.Topic)
+                Img = imageRepository.GetTopicImage(id);
+            return Img.Id;
         }
 
         public string GetIcon(string userId)
         {
-            var userImg = imageRepository.GetImageByUserId(userId);
+            var userImg = imageRepository.GetUserImage(userId);
             if (userImg == default(Image))
             {
                 return default_folder_path + "default1.png";
@@ -75,44 +104,58 @@ namespace Sigil.Services
 
         }
 
-        public string GetIcon(int orgId)
+        public string GetIcon(int id, ImageType imgType)
         {
-            var orgImg = imageRepository.GetImageByOrgId(orgId);
-            if(orgImg == default(Image))
+            Image Img = default(Image);
+            if (imgType == ImageType.Org)
+                Img = imageRepository.GetOrgImage(id);
+            else if (imgType == ImageType.Product)
+                Img = imageRepository.GetProductImage(id);
+            else if (imgType == ImageType.Topic)
+                Img = imageRepository.GetTopicImage(id);
+            if (Img == default(Image))
             {
                 return default_folder_path + "default1.png";
             }
-            return orgImg.icon_100;
+            return Img.icon_100;
         }
 
-        public string GetBanner(int orgId)
+        public string GetBanner(int id, ImageType imgType)
         {
-            var orgImg = imageRepository.GetImageByOrgId(orgId);
-            if(orgImg == default(Image))
+            Image Img = default(Image);
+            if (imgType == ImageType.Org)
+                Img = imageRepository.GetOrgImage(id);
+            else if (imgType == ImageType.Product)
+                Img = imageRepository.GetProductImage(id);
+            else if (imgType == ImageType.Topic)
+                Img = imageRepository.GetTopicImage(id);
+            if (Img == default(Image))
             {
-                return default_folder_path + "default_banner.png";
+                return default_folder_path + "default1.png";
             }
-            return orgImg.banner;
+            return Img.banner;
         }
 
         public Image GetUserImages(string userId)
         {
-            return imageRepository.GetImageByUserId(userId);
+            return imageRepository.GetUserImage(userId);
         }
 
         public Image GetOrgImages(int orgId)
         {
-            return imageRepository.GetImageByOrgId(orgId);
+            return imageRepository.GetOrgImage(orgId);
         }
 
         public Image GetTopicImages(int topicId)
         {
-            return imageRepository.GetImageByTopicId(topicId);
+            return imageRepository.GetTopicImage(topicId);
         }
 
-        public Image GetCategoryImages(int orgId, int catId)
+        public Image GetProductImages(int productId)
         {
-            return imageRepository.GetImageByOrgId(orgId, catId);
+            return imageRepository.GetProductImage(productId);
         }
+
+       
     }
 }

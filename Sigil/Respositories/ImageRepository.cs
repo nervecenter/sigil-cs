@@ -12,35 +12,34 @@ namespace Sigil.Repository
     {
         //Methods for how when we need to get Images
 
-        Image GetImageByUserId(string userId);
-        Image GetImageByOrgId(int orgId, int catId=0);
-
-        Image GetImageByTopicId(int topId);
+        Image GetUserImage(string userId);
+        Image GetOrgImage(int orgId);
+        Image GetProductImage(int productId);
+        Image GetTopicImage(int topId);
     }
 
     public class ImageRepository : RepositoryBase<Image>, IImageRepository
     {
         public ImageRepository(IDbFactory dbFactory) : base(dbFactory) { }
 
-        public Image GetImageByOrgId(int orgId, int catId = 0)
+        public Image GetOrgImage(int orgId)
         {
-            throw new NotImplementedException();
-            //var img = this.DbContext.Images.Where(i => i.OrgId == orgId && i.CatId == catId).FirstOrDefault();
-            //return img;
+            return DbContext.Images.Where(i => Convert.ToInt32(i.OwnerId) == orgId && i.imgType == (int)ImageType.Org).FirstOrDefault();
         }
 
-        public Image GetImageByTopicId(int topId)
+        public Image GetProductImage(int productId)
         {
-            throw new NotImplementedException();
-            //var img = this.DbContext.Images.Where(i => i.TopicId == topId).FirstOrDefault();
-            //return img;
+            return DbContext.Images.Where(i => Convert.ToInt32(i.OwnerId) == productId && i.imgType == (int)ImageType.Product).FirstOrDefault();
         }
 
-        public Image GetImageByUserId(string userId)
+        public Image GetTopicImage(int topId)
         {
-            throw new NotImplementedException();
-            //var img = this.DbContext.Images.Where(i => i.UserId == userId).FirstOrDefault();
-            //return img;
+            return DbContext.Images.Where(i => Convert.ToInt32(i.OwnerId) == topId && i.imgType == (int)ImageType.Topic).FirstOrDefault();
+        }
+
+        public Image GetUserImage(string userId)
+        {
+            return DbContext.Images.Where(i => i.OwnerId == userId && i.imgType == (int)ImageType.User).FirstOrDefault();
         }
 
         //where we define the Image methods created below

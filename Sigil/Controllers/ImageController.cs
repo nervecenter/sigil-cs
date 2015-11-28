@@ -56,7 +56,7 @@ namespace Sigil.Controllers
                 string user = userService.GetUserDisplayName(userid);//dc.AspNetUsers.SingleOrDefault(u => u.Id == userid).DisplayName;
                 if (userid == null)
                 {
-                    errorService.CreateError(userid, "No user for userId in ImageController");
+                    errorService.CreateError(userid, "No user for userId in ImageController", ErrorLevel.Minor);
                     //ErrorHandler.Log_Error(userid, "No user for Userid", dc);
                     return Index(false);
                 }
@@ -85,7 +85,7 @@ namespace Sigil.Controllers
                         }
                         catch (Exception e)
                         {
-                            errorService.CreateError(userImg, e);
+                            errorService.CreateError(userImg, e, ErrorLevel.Minor);
                             //ErrorHandler.Log_Error(userImg, e, dc);
                         }
                     }
@@ -301,7 +301,7 @@ namespace Sigil.Controllers
             {
                 if (!(e.InnerException is ArgumentNullException))
                 {
-                    errorService.CreateError(userId, e, "User didnt have an image set for icon_100");
+                    errorService.CreateError(userId, e, ErrorLevel.Minor,"User didnt have an image set for icon_100");
                     //ErrorHandler.Log_Error(userId, e, dc);
                 }
                 return default_folder_path + "default1.png";
@@ -323,7 +323,7 @@ namespace Sigil.Controllers
             {
                 if (!(e is ArgumentNullException))
                 {
-                    errorService.CreateError(caller, e, "caller didnt have an image set for icon_20 so default was loaded");
+                    errorService.CreateError(caller, e, ErrorLevel.Minor,"caller didnt have an image set for icon_20 so default was loaded");
                     //ErrorHandler.Log_Error(caller, e, dc);
                 }
                 return default_folder_path + "default20.png";
@@ -341,7 +341,7 @@ namespace Sigil.Controllers
             {
                 if (!(e.InnerException is ArgumentNullException))
                 {
-                    errorService.CreateError(caller, e, "User didnt have an image set for icon_100 so default was loaded");
+                    errorService.CreateError(caller, e, ErrorLevel.Minor,"User didnt have an image set for icon_100 so default was loaded");
                     //ErrorHandler.Log_Error(caller, e, dc);
                 }
                 return default_folder_path + "default2.png";
@@ -359,7 +359,7 @@ namespace Sigil.Controllers
             {
                 if (!(e.InnerException is ArgumentNullException))
                 {
-                    errorService.CreateError(caller, e, "User didnt have an image set for banner so default was loaded");
+                    errorService.CreateError(caller, e, ErrorLevel.Minor,"User didnt have an image set for banner so default was loaded");
                     //ErrorHandler.Log_Error(caller, e, dc);
                 }
                 return default_folder_path + "default_banner.png";
@@ -380,10 +380,10 @@ namespace Sigil.Controllers
                 Topic c = (Topic)Convert.ChangeType(caller, typeof(T));
                 return imageService.GetTopicImages(c.Id);//dc.Images.Single(i => i.TopicId == c.Id);
             }
-            else if (caller is Category)
+            else if (caller is Product)
             {
-                Category c = (Category)Convert.ChangeType(caller, typeof(T));
-                return imageService.GetCategoryImages(c.OrgId, c.Id);//dc.Images.Single(i => i.CatId == c.Id);
+                Product c = (Product)Convert.ChangeType(caller, typeof(T));
+                return imageService.GetProductImages(c.Id);//dc.Images.Single(i => i.CatId == c.Id);
             }
             throw new ArgumentNullException();
         }

@@ -16,9 +16,9 @@ namespace Sigil.Models
         //[ForeignKey("OrgId")]
         //public Org Org { get; set; }
 
-        public int CatId { get; set; }
-        [ForeignKey("CatId")]
-        public Category Category { get; set; }
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
 
         //public int TopicId { get; set; }
         //public Topic Topic { get; set; }

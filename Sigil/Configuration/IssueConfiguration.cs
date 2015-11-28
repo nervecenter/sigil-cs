@@ -14,7 +14,7 @@ namespace Sigil.Configuration
             ToTable("Issues");
             Property(i => i.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             //Property(i => i.OrgId).IsOptional();
-            Property(i => i.CatId).IsOptional();
+            Property(i => i.ProductId).IsOptional();
             Property(i => i.UserId).IsRequired();
             Property(i => i.createTime).IsRequired();
             Property(i => i.editTime).IsRequired();

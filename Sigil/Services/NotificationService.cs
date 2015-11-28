@@ -25,7 +25,7 @@ namespace Sigil.Services
     public class NotificationService : INotificationService
     {
         private readonly IOrgRepository orgRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly IProductRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
         private readonly INotificationRepository notificationRepository;
         private readonly ICommentRepository commentRespository;
@@ -61,12 +61,12 @@ namespace Sigil.Services
 
         public IEnumerable<Notification> GetUserNotifications(string userId)
         {
-            return notificationRepository.GetUsersNotifications(userId);
+            return notificationRepository.GetUsersNotifications(userId) ?? new List<Notification>().AsEnumerable();
         }
 
         public IEnumerable<Notification> GetOrgNotifications(int orgId)
         {
-            return notificationRepository.GetOrgsNotifications(orgId);
+            return notificationRepository.GetOrgsNotifications(orgId) ?? new List<Notification>().AsEnumerable();
         }
 
         public IEnumerable<Notification> GetOrgNotifications(string orgURL, bool name)

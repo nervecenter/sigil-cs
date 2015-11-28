@@ -26,8 +26,6 @@ namespace Sigil.Models
         public Image Image { get; set; }
 
         public virtual List<Subscription> Subscriptions { get; set; }
-        //public virtual List<Issue> Issues { get; set; }
-        //public virtual List<Comment> Comments { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

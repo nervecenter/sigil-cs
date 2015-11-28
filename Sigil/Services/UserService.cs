@@ -6,6 +6,8 @@ using Sigil.Models;
 using Sigil.ViewModels;
 using Sigil.Repository;
 using System.Xml.Linq;
+using System.Diagnostics;
+
 
 namespace Sigil.Services
 {
@@ -52,36 +54,61 @@ namespace Sigil.Services
     public class UserService : IUserService
     {
         private readonly IOrgRepository OrgsRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly IProductRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
         private readonly INotificationRepository notificationRepository;
         private readonly ISubscriptionRepository subscriptionRepository;
         private readonly ICommentRepository commentRespository;
         private readonly IUserRepository userRepository;
+        
         private readonly IUnitOfWork unitOfWork;
 
-        public UserService(IUnitOfWork unit, IUserRepository userRepo, ICommentRepository comRepo, INotificationRepository noteRepo, ISubscriptionRepository subRepo)
+        private readonly IErrorService errorService;
+
+        public UserService(IUnitOfWork unit, IUserRepository userRepo, ICommentRepository comRepo, INotificationRepository noteRepo, ISubscriptionRepository subRepo, IErrorService errS)
         {
             unitOfWork = unit;
             userRepository = userRepo;
             commentRespository = comRepo;
             notificationRepository = noteRepo;
             subscriptionRepository = subRepo;
+            errorService = errS;
         }
 
         public ApplicationUser GetUser(string id)
         {
-            return userRepository.GetById(id);
+            var user = userRepository.GetById(id);
+            if(user == null)
+            {
+                StackTrace stack = new StackTrace();
+                errorService.CreateError(id, "User not found by id./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Critical);
+            }
+
+            return user ?? default(ApplicationUser);
         }
 
         public ApplicationUser GetUserByDisplayName(string name)
         {
-            return userRepository.GetByDisplayName(name);
+            var user = userRepository.GetByDisplayName(name);
+            if (user == null)
+            {
+                StackTrace stack = new StackTrace();
+                errorService.CreateError(name, "User not found by displayname./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Critical);
+            }
+
+            return user ?? default(ApplicationUser);
         }
 
         public string GetUserDisplayName(string id)
         {
-            return userRepository.GetDisplayName(id);
+            var user = userRepository.GetDisplayName(id);
+            if (user == null)
+            {
+                StackTrace stack = new StackTrace();
+                errorService.CreateError(id, "User not found by id./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Critical);
+            }
+
+            return user ?? "";
         }
 
 
@@ -93,8 +120,14 @@ namespace Sigil.Services
         public IEnumerable<ApplicationUser> GetUsersByVote(int orgId, int issueId)
         {
             var users = userRepository.GetAll();
-
             List<ApplicationUser> votedUsers = new List<ApplicationUser>();
+
+            if (users.Count() == 0)
+            {
+                StackTrace stack = new StackTrace();
+                errorService.CreateError(issueId, "No users voted on issue./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Warning);
+                return votedUsers;
+            }
             foreach(var u in users)
             {
                 if(CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(u.votes)).Check_Vote(issueId, orgId))
@@ -110,13 +143,18 @@ namespace Sigil.Services
         {
             var issueComments = commentRespository.GetIssueComments(orgId, issueId);
 
-            return issueComments.Select(c => c.User);
+            return issueComments.Select(c => c.User) ?? new List<ApplicationUser>().AsEnumerable();
         }
 
         public void CreateUserVote(string userid)
         {
-            var user = userRepository.GetById(userid);
-
+            var user = GetUser(userid);
+            if (user == default(ApplicationUser))
+            {
+                StackTrace stack = new StackTrace();
+                errorService.CreateError(userid, "User not found by id. Could not create UserVote./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Critical);
+                return;
+            }
             user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol()).ToString();
             userRepository.Update(user);
         }
@@ -165,7 +203,15 @@ namespace Sigil.Services
 
         public UserVoteCol GetUserVotes(string userId)
         {
-            return CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(userRepository.GetById(userId).votes));
+            var user = userRepository.GetById(userId);
+            if (user == default(ApplicationUser))
+            {
+                StackTrace stack = new StackTrace();
+                errorService.CreateError(userId, "User not found by id. Could not retrieve user vote col./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Critical);
+                return new UserVoteCol();
+            }
+
+            return CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
         }
 
         public UserViewModel GetUserViewModel(string userId)
@@ -173,7 +219,7 @@ namespace Sigil.Services
             UserViewModel userVM = new UserViewModel();
             userVM.User = GetUser(userId);
             userVM.UserNotifications = notificationRepository.GetUsersNotifications(userId);
-            userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId).Select(s => new SubscriptionViewModel(s));
+            userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId).Select(s => new SubscriptionViewModel().Create(s));
             userVM.UserVotes = GetUserVotes(userId);
 
             return userVM;

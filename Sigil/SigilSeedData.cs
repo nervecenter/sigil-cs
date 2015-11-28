@@ -50,19 +50,19 @@ namespace Sigil
             };
         }
 
-        private static List<Category> GetCats()
+        private static List<Product> GetCats()
         {
-            return new List<Category>
+            return new List<Product>
             {
-                new Category
+                new Product
                 {
-                    catName = "Coffee",
-                    catURL = "coffee",
+                    ProductName = "Coffee",
+                    ProductURL = "coffee",
                 },
-                new Category
+                new Product
                 {
-                    catName = "Software",
-                    catURL = "soft",
+                    ProductName = "Software",
+                    ProductURL = "soft",
 
                 }
             };

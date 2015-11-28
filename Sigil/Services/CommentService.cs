@@ -31,14 +31,14 @@ namespace Sigil.Services
 
         Comment GetComment(int orgId, int issueId, int commentId);
 
-        IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int issueId);
+        IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int productId, int issueId);
         IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId);
-        OfficialResponse GetIssueLatestOfficialResponse(int orgId, int issueId);
+        OfficialResponse GetIssueLatestOfficialResponse(int orgId, int productId, int issueId);
 
         void Comment_POST_Handler(HttpRequestBase request, Issue thisIssue, string userID);
 
         IEnumerable<Comment> GetUserComments(string userId);
-        IEnumerable<Comment> GetIssueComments(int orgId, int issueId);
+        IEnumerable<Comment> GetIssueComments(int orgId, int productId, int issueId);
         IEnumerable<Comment> GetOrgComments(int orgId);
 
     }
@@ -46,7 +46,7 @@ namespace Sigil.Services
     public class CommentService : ICommentService
     {
         private readonly IOrgRepository OrgsRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly IProductRepository ProductRepository;
         private readonly IIssueRepository issueRepository;
         private readonly ICommentRepository commentRespository;
         private readonly ICommentCountRepository commentCountRepository;
@@ -60,9 +60,9 @@ namespace Sigil.Services
 
         public CommentService(IUnitOfWork unit, ICommentRepository commRepo, IOfficialResponseRepository offRepo, ICommentCountRepository comCRepo, IUserRepository userRepo)
         {
-            this.unitOfWork = unit;
-            this.commentRespository = commRepo;
-            this.officialResponseRepository = offRepo;
+            unitOfWork = unit;
+            commentRespository = commRepo;
+            officialResponseRepository = offRepo;
             commentCountRepository = comCRepo;
             userRepository = userRepo;
         }
@@ -92,37 +92,37 @@ namespace Sigil.Services
 
         public Comment GetComment(int orgId, int issueId, int commentId)
         {
-            return commentRespository.GetById(orgId, issueId, commentId);
+            return commentRespository.GetById(orgId, issueId, commentId) ?? default(Comment);
         }
 
-        public IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int issueId)
+        public IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int productId,int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Category.OrgId == orgId && o.issueId == issueId);
+            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.issueId == issueId) ?? new List<OfficialResponse>().AsEnumerable();
         }
 
         public IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Category.OrgId == orgId);
+            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId) ?? new List<OfficialResponse>().AsEnumerable();
         }
 
-        public OfficialResponse GetIssueLatestOfficialResponse(int orgId, int issueId)
+        public OfficialResponse GetIssueLatestOfficialResponse(int orgId, int productId,int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Category.OrgId == orgId && o.issueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault();
+            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.Issue.Product.Id == productId && o.issueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault() ?? default(OfficialResponse);
         }
 
         public IEnumerable<Comment> GetUserComments(string userId)
         {
-            return commentRespository.GetMany(c => c.UserId == userId);
+            return commentRespository.GetMany(c => c.UserId == userId) ?? new List<Comment>().AsEnumerable();
         }
 
-        public IEnumerable<Comment> GetIssueComments(int orgId, int issueId)
+        public IEnumerable<Comment> GetIssueComments(int orgId, int productId, int issueId)
         {
-            return commentRespository.GetMany(c => c.Issue.Category.OrgId == orgId && c.IssueId == issueId);
+            return commentRespository.GetMany(c => c.Issue.Product.OrgId == orgId && c.Issue.Product.Id == productId && c.IssueId == issueId) ?? new List<Comment>().AsEnumerable();
         }
 
         public IEnumerable<Comment> GetOrgComments(int orgId)
         {
-            return commentRespository.GetMany(c => c.Issue.Category.OrgId == orgId);
+            return commentRespository.GetMany(c => c.Issue.Product.OrgId == orgId) ?? new List<Comment>().AsEnumerable();
         }
 
         public void Comment_POST_Handler(HttpRequestBase request, Issue thisIssue, string userID)
@@ -156,7 +156,7 @@ namespace Sigil.Services
             
             newComment.text = request.Form["text"];
 
-            Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.Category.OrgId, thisIssue.Id));
+            Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.Product.OrgId, thisIssue.Id));
             CommCountThread.Start();
 
             CreateComment(newComment);
@@ -164,7 +164,7 @@ namespace Sigil.Services
 
            
 
-            Thread NotificationThread = new Thread(() => Notification_Check(newComment.text, userID, thisIssue.Id, thisIssue.Category.OrgId, newComment.Id));
+            Thread NotificationThread = new Thread(() => Notification_Check(newComment.text, userID, thisIssue.Id, thisIssue.Product.OrgId, newComment.Id));
             NotificationThread.Start();
         }
 
@@ -185,11 +185,11 @@ namespace Sigil.Services
             
 
             //Checking to see of the official response mentions any users specifically
-            Thread NotificationThread = new Thread(() => Notification_Check(newOff.text, userID, thisIssue.Id, thisIssue.Category.OrgId, newOff.Id));
+            Thread NotificationThread = new Thread(() => Notification_Check(newOff.text, userID, thisIssue.Id, thisIssue.Product.OrgId, newOff.Id));
             NotificationThread.Start();
 
             //Notifies every user who has commented and or voted on the issue that an official response has been made
-            Thread NotificationThread2 = new Thread(() => OfficialResponseNotificationRoutine(userID, thisIssue.Id, thisIssue.Category.OrgId, newOff.Id));
+            Thread NotificationThread2 = new Thread(() => OfficialResponseNotificationRoutine(userID, thisIssue.Id, thisIssue.Product.OrgId, newOff.Id));
             NotificationThread2.Start();
 
         }

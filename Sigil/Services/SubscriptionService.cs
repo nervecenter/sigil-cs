@@ -17,14 +17,14 @@ namespace Sigil.Services
 
         Subscription GetUserSubscription(string userId, int orgId);
 
-        //Tuple<IEnumerable<Org>, IEnumerable<Topic>, IEnumerable<Category>> GetUserSubscriptions(string userId);
+        //Tuple<IEnumerable<Org>, IEnumerable<Topic>, IEnumerable<Product>> GetUserSubscriptions(string userId);
         IEnumerable<Subscription> GetUserSubscriptions(string userId);
     }
 
     public class SubscriptionService : ISubscriptionService
     {
         private readonly IOrgRepository OrgsRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly IProductRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
         private readonly ISubscriptionRepository subscriptionRepository;
         private readonly ICommentRepository commentRespository;
@@ -54,12 +54,12 @@ namespace Sigil.Services
 
         public Subscription GetUserSubscription(string userId, int orgId)
         {
-            return subscriptionRepository.GetUserSubscriptionToOrg(userId, orgId);
+            return subscriptionRepository.GetUserSubscriptionToOrg(userId, orgId) ?? default(Subscription);
         }
 
         public IEnumerable<Subscription> GetUserSubscriptions(string userId)
         {
-            return subscriptionRepository.GetMany(s => s.UserId == userId);
+            return subscriptionRepository.GetMany(s => s.UserId == userId) ?? new List<Subscription>().AsEnumerable();
         }
     }
 }

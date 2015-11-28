@@ -24,7 +24,7 @@ namespace Sigil.Models
         public Topic Topic { get; set; }
 
         public int? CatId { get; set; }  
-        public Category Category { get; set; }
+        public Product Product { get; set; }
 
     }
 }

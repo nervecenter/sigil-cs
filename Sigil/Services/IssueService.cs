@@ -14,15 +14,15 @@ namespace Sigil.Services
         void UpdateIssue(Issue issue);
         void SaveChanges();
 
-        Issue GetIssue(int orgId, int issueId);
-        Issue GetIssue(string org, int issueId);
+        Issue GetIssue(int orgId, int productId, int issueId);
+        Issue GetIssue(string org, int productId, int issueId);
 
-        Issue GetLatestIssue(string userId, int orgId);
+        Issue GetLatestIssue(string userId, int orgId, int productId);
 
         IEnumerable<Issue> GetAllIssues();
         IEnumerable<Issue> GetAllOrgIssues(int orgId);
         IEnumerable<Issue> GetAllTopicIssues(int topicId);
-        IEnumerable<Issue> GetAllCategoryIssues(int orgId, int catId);
+        IEnumerable<Issue> GetAllProductIssues(int orgId, int catId);
         IEnumerable<Issue> GetAllUserIssues(string userId);
 
     }
@@ -58,32 +58,32 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-        public Issue GetIssue(int orgId, int issueId)
+        public Issue GetIssue(int orgId, int productId, int issueId)
         {
-            return issueRepository.GetById(orgId, issueId);
+            return issueRepository.GetById(orgId, productId, issueId) ?? default(Issue);
         }
 
-        public Issue GetIssue(string org, int issueId)
+        public Issue GetIssue(string org, int productId, int issueId)
         {
             var orgI = orgRepository.GetByName(org);
-            return issueRepository.GetById(orgI.Id, issueId);
+            return issueRepository.GetById(orgI.Id, productId,issueId) ?? default(Issue);
         }
 
-        public Issue GetLatestIssue(string userId, int orgId)
+        public Issue GetLatestIssue(string userId, int orgId, int productId)
         {
             var userIssues = GetAllUserIssues(userId);
 
-            return userIssues.Where(i => i.Category.OrgId == orgId).OrderByDescending(i => i.createTime).FirstOrDefault();
+            return userIssues.Where(i => i.Product.OrgId == orgId).OrderByDescending(i => i.createTime).FirstOrDefault();
         }
 
         public IEnumerable<Issue> GetAllIssues()
         {
-            return issueRepository.GetAll();
+            return issueRepository.GetAll() ?? new List<Issue>().AsEnumerable();
         }
 
         public IEnumerable<Issue> GetAllOrgIssues(int orgId)
         {
-            return issueRepository.GetMany(i => i.Category.OrgId == orgId);
+            return issueRepository.GetMany(i => i.Product.OrgId == orgId) ?? new List<Issue>().AsEnumerable();
         }
 
         public IEnumerable<Issue> GetAllTopicIssues(int topicId)
@@ -92,14 +92,14 @@ namespace Sigil.Services
             //return issueRepository.GetMany(i => i.TopicId == topicId);
         }
 
-        public IEnumerable<Issue> GetAllCategoryIssues(int orgId, int catId)
+        public IEnumerable<Issue> GetAllProductIssues(int orgId, int proId)
         {
-            return issueRepository.GetMany(i => i.Category.OrgId == orgId && i.CatId == catId);
+            return issueRepository.GetMany(i => i.Product.OrgId == orgId && i.ProductId == proId) ?? new List<Issue>().AsEnumerable();
         }
 
         public IEnumerable<Issue> GetAllUserIssues(string userId)
         {
-            return issueRepository.GetMany(i => i.UserId == userId);
+            return issueRepository.GetMany(i => i.UserId == userId) ?? new List<Issue>().AsEnumerable();
         }
     }
 }

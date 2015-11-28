@@ -47,7 +47,7 @@ namespace Sigil
             builder.RegisterAssemblyTypes(typeof(IssueRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(CommentRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(ErrorRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
-            builder.RegisterAssemblyTypes(typeof(CategoryRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(ProductRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(ViewCountRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(VoteCountRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(SubscriptionCountRepository).Assembly).Where(o => o.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerRequest();
@@ -64,7 +64,7 @@ namespace Sigil
             builder.RegisterAssemblyTypes(typeof(IssueService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(CommentService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(ErrorService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
-            builder.RegisterAssemblyTypes(typeof(CategoryService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(ProductService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
 
             builder.RegisterAssemblyTypes(typeof(CountService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(SubscriptionService).Assembly).Where(o => o.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerRequest();

@@ -16,6 +16,7 @@ namespace Sigil.Configuration
             Property(e => e.error_object).IsRequired();
             Property(e => e.error_date).IsRequired();
             Property(e => e.error_exception).IsRequired();
+            Property(e => e.error_lvl).IsRequired();
         }
     }
 }

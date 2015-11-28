@@ -15,12 +15,17 @@ namespace Sigil.Controllers
 
     public class NotificationController : Controller
     {
-        private readonly IUserService userService;
+        //private readonly IUserService userService;
         private readonly INotificationService notificationService;
         private readonly IErrorService errorService;
         private readonly IIssueService issueService;
 
-       
+       public NotificationController(INotificationService noteS, IIssueService issS, IErrorService errS)
+        {
+            notificationService = noteS;
+            issueService = issS;
+            errorService = errS;
+        }
 
         public JsonResult Get_Notifications()
         {
@@ -38,10 +43,10 @@ namespace Sigil.Controllers
                 foreach(var n in notes)
                 {
                     NotificationPanel tmp = new NotificationPanel();
-                    var issue = issueService.GetIssue(n.orgId, n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
+                    var issue = issueService.GetIssue(n.orgId, n.productId, n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
                     tmp.From = n.From_UserId;
                     tmp.Title = issue.title;
-                    tmp.URL = issue.Category.Org.orgName + "/" + issue.Id;
+                    tmp.URL = issue.Product.Org.orgName + "/" +issue.Product.ProductURL+ "/"+ issue.Id;
                     rNotes.Add(tmp);
                 }
 

@@ -116,7 +116,7 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-                name: "Search Orgs and Categories",
+                name: "Search Orgs and Products",
                 url: "search/Orgs_Cats/",
                 defaults: new { controller = "Search", action = "SearchOrgs_Cats" }
             );
@@ -154,9 +154,6 @@ namespace Sigil {
                 defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
 
-
-
-
             //========================= Org Controller ==================================================================
 
             routes.MapRoute(
@@ -167,21 +164,21 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "VoteUp",
-                url: "voteup/{IssueId}/",
+                url: "voteup/{orgId}/{productId}/{IssueId}/",
                 defaults: new { controller = "Issue", action = "VoteUp" }
             );
 
             routes.MapRoute(
                 name: "UnVoteUp",
-                url: "unvoteup/{IssueId}/",
+                url: "unvoteup/{orgId}/{productId}/{IssueId}/",
                 defaults: new { controller = "Issue", action = "UnVoteUp" }
             );
 
-            routes.MapRoute(
-                name: "Default Issue Data",
-                url: "default_graph/{orgURL}/{issueId}",
-                defaults: new { controller = "Issue", action = "DefaultData" }
-            );
+            //routes.MapRoute(
+            //    name: "Default Issue Data",
+            //    url: "default_graph/{orgURL}/{issueId}",
+            //    defaults: new { controller = "Issue", action = "DefaultData" }
+            //);
 
             routes.MapRoute(
                 name: "Custom Org Data",
@@ -214,7 +211,7 @@ namespace Sigil {
             );
 
             //routes.MapRoute(
-            //    name: "Org Category Page",
+            //    name: "Org Product Page",
             //    url: "{orgURL}/{catURL}/",
             //    defaults: new { controller = "Org", action = "CatPage" }
             //);
@@ -224,15 +221,15 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "Issue",
-                url: "{orgURL}/{IssueId}/",
+                url: "{orgURL}/{productURL}/{IssueId}/",
                 defaults: new { controller = "Issue", action = "IssuePage" }
             );
 
-            routes.MapRoute(
-                name: "IssueData",
-                url: "{orgURL}/{IssueId}/data/",
-                defaults: new { controller = "Issue", action = "IssueData" }
-            );
+            //routes.MapRoute(
+            //    name: "IssueData",
+            //    url: "{orgURL}/{pro{IssueId}/data/",
+            //    defaults: new { controller = "Issue", action = "IssueData" }
+            //);
 
        
 

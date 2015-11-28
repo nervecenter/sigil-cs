@@ -19,6 +19,8 @@ namespace Sigil.Models
         public int issueId { get; set; }
         //public Issue Issue { get; set; }
 
+        public int productId { get; set; }
+
         public int orgId { get; set; }
         //public Org Org { get; set; }
 

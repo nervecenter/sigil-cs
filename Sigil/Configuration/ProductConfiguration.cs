@@ -7,16 +7,16 @@ using System.Web;
 
 namespace Sigil.Configuration
 {
-    public class CategoryConfiguration : EntityTypeConfiguration<Category>
+    public class ProductConfiguration : EntityTypeConfiguration<Product>
     {
-        public CategoryConfiguration()
+        public ProductConfiguration()
         {
-            ToTable("Category");
+            ToTable("Product");
             Property(c => c.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
-            Property(c => c.catName).IsRequired().HasMaxLength(128);
-            Property(c => c.catURL).IsRequired().HasMaxLength(30);
+            Property(c => c.ProductName).IsRequired().HasMaxLength(128);
+            Property(c => c.ProductURL).IsRequired().HasMaxLength(30);
             Property(c => c.OrgId).IsRequired();
-            //Property(c => c.TopicId).IsOptional();
+            Property(c => c.TopicId).IsOptional();
             Property(c => c.ImageId).IsOptional();
         }
     }

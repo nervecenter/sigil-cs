@@ -50,7 +50,7 @@ namespace Sigil.Controllers {
 
                 //sort the users issues by issue rank 
                 userIssues.OrderBy(i => Rank);
-                List<IssueViewModel> userIssuesVM = userIssues.Select(i => new IssueViewModel(i, uservm.UserVotes.Check_Vote(i.Id, i.Category.OrgId), true)).ToList();
+                List<IssuePanelPartialVM> userIssuesVM = userIssues.Select(i => new IssuePanelPartialVM() { issue = i, UserVoted = uservm.UserVotes.Check_Vote(i.Id, i.Product.OrgId), InPanel = true }).ToList();
                 int num_results_per_page = 6;
                 int pageNumber = (page ?? 1);
                 vm.UserIssues = userIssuesVM.ToPagedList(pageNumber, num_results_per_page);
@@ -126,13 +126,13 @@ namespace Sigil.Controllers {
         /// Gets the Top 3 trending issues site wide. FOR THE LANDING PAGE ONLY
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IGrouping<OrgViewModel,IssueViewModel>> Get_Trending_Issues_With_Topics()
+        private IEnumerable<IGrouping<Org, IssuePanelPartialVM>> Get_Trending_Issues_With_Topics()
         {
             var pretrending = issueService.GetAllIssues().ToList();
 
             pretrending.Sort(Rank);
 
-            var trending = pretrending.Select(i => new IssueViewModel(i, false, true)).GroupBy(i => i.IssueCategoryVM.OrgVM);
+            var trending = pretrending.Select(i => new IssuePanelPartialVM(){ issue = i, InPanel = false, UserVoted = false }).GroupBy(i => i.issue.Product.Org);
 
             return trending;
         }

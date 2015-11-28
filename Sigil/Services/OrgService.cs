@@ -39,7 +39,7 @@ namespace Sigil.Services
     {
         private readonly IOrgRepository OrgsRepository;
         private readonly IOrgAppRepository orgAppRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly IProductRepository categoryRepository;
         private readonly IIssueRepository issueRepository;
         private readonly ICommentRepository commentRespository;
         private readonly IUserRepository userRespository;
@@ -74,8 +74,9 @@ namespace Sigil.Services
 
         public IEnumerable<Org> GetTopicOrgs(int topicId)
         {
-            var orgs = OrgsRepository.GetMany(o => o.Topicid == topicId);
-            return orgs;
+            //var orgs = OrgsRepository.GetMany(o => o == topicId);
+            //return orgs;
+            throw new NotImplementedException();
         }
 
         public void CreateOrg(Org org)

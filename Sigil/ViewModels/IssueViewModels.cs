@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sigil.Models;
 using System.Linq;
 using System.Web;
 
 namespace Sigil.ViewModels
 {
-    public class Issue_IssuePageViewModel
+    public struct IssuePageViewModel
     {
-
-
-        public IssueViewModel IssueVM { get; set; }
-
+        public IssuePanelPartialVM IssuePanelVM { get; set; }
+        
         public UserViewModel UserVM { get; set; }
 
-        public IEnumerable<CommentViewModel> IssueComments { get; set; }
-        public IEnumerable<OfficialResponseViewModel> OfficialResponses { get; set; }
+        public SideBarVM sideBar { get; set; }
+
+        public IEnumerable<Tuple<Comment, bool>> IssueComments { get; set; }
+
+        public IEnumerable<OfficialResponse> OfficialResponses { get; set; }
     }
 
 
-    public class Issue_DataPageViewModel
+    public struct Issue_DataPageViewModel
     {
 
     }

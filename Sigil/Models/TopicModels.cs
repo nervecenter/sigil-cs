@@ -20,7 +20,7 @@ namespace Sigil.Models
         public Image Image { get; set; }
 
         //public virtual List<Org> Orgs { get; set; }
-        //public virtual List<Category> Categories { get; set; }
+        //public virtual List<Product> Categories { get; set; }
 
     }
 }

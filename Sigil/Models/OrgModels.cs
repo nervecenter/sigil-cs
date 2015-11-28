@@ -66,9 +66,6 @@ namespace Sigil.Models
         public int? ImageId { get; set; }
         public Image Image { get; set; }
 
-        public int? Topicid { get; set; }
-        //public Topic Topic { get; set; }
-
         public int viewCount { get; set; }
         public string website { get; set; }
         public DateTime lastView { get; set; }
@@ -79,7 +76,7 @@ namespace Sigil.Models
         public string UserID { get; set; }
 
         //public virtual List<Issue> Issues { get; set; }
-        public virtual List<Category> Categories { get; set; }
+        public virtual List<Product> Categories { get; set; }
     }
 
     public class OrgApp

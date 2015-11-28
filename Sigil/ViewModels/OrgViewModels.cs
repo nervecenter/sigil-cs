@@ -6,24 +6,21 @@ using System.Web;
 
 namespace Sigil.ViewModels
 {
-    public class OrgPageViewModel
+    public struct OrgPageViewModel
     {
         //UserViewModel CurrentUser { get; set; }
 
-        public int OrgId { get; set; }
-        public string OrgName { get; set; }
-        public string OrgURL { get; set; }
-        public string OrgIcon { get; set; }
+        public Org thisOrg { get; set; }
 
-        ICollection<IssueViewModel> OrgIssues { get; set; }
+        ICollection<IssuePanelPartialVM> OrgIssues { get; set; }
     }
 
-    public class OrgDataPageViewModel
+    public struct OrgDataPageViewModel
     {
 
     }
 
-    public class OrgResponsePageViewModel
+    public struct OrgResponsePageViewModel
     {
 
     }

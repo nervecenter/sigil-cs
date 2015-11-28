@@ -36,7 +36,7 @@ namespace Sigil
         public DbSet<Issue> Issues { get; set; }
         //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Categories { get; set; }
         public DbSet<Topic> Topics { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
@@ -63,7 +63,7 @@ namespace Sigil
             base.OnModelCreating(modelBuilder);
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            modelBuilder.Configurations.Add(new CategoryConfiguration());
+            modelBuilder.Configurations.Add(new ProductConfiguration());
             modelBuilder.Configurations.Add(new OrgConfiguration());
             modelBuilder.Configurations.Add(new IssueConfiguration());
             modelBuilder.Configurations.Add(new TopicConfiguration());

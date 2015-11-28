@@ -206,7 +206,7 @@ namespace Sigil.Controllers
         {
             //ImageController<AspNetUser>.Assign_Default_Icon(userID);
             imageService.AssignDefaultImage(userID);
-            imageService.SaveImage();
+            //imageService.SaveImage();
             userService.CreateUserVote(userID);
             userService.SaveUserVotes();
         }
@@ -245,7 +245,7 @@ namespace Sigil.Controllers
             }
             catch(Exception e)
             {
-                errorService.CreateError(newOrg, e);
+                errorService.CreateError(newOrg, e, ErrorLevel.Critical);
                 
                 //ErrorHandler.Log_Error(newOrg, e, dc);
             }
@@ -266,9 +266,6 @@ namespace Sigil.Controllers
 
             //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
 
-
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
             var newOrg = new Org();
             newOrg.orgName = verifiedOrg.orgName;
             newOrg.orgURL = verifiedOrg.orgURL;
@@ -283,32 +280,21 @@ namespace Sigil.Controllers
             }
             catch(Exception e)
             {
-                errorService.CreateError(newOrg, e);
+                errorService.CreateError(newOrg, e, ErrorLevel.Critical);
                 
                 //need to kick back to a new screen to have them try again
             }
 
             //Setup Org data collection db entries
             int orgID = orgService.GetOrg(newOrg.orgURL).Id;
+            var orgProduct = new Product();
+            orgProduct.ProductName = newOrg.orgName;
+            orgProduct.ProductURL = "Default";
+            orgProduct.ImageId = imageService.AssignDefaultImage(orgID, ImageType.Org);
 
-
-            try {
-                countDataService.CreateOrgCountData(orgID);
-                countDataService.SaveOrgCountData();
-                
-                //dc.SubCounts.InsertOnSubmit(newSubs);
-                //dc.ViewCounts.InsertOnSubmit(newVCount);
-                //dc.SubmitChanges();
-            }
-            catch(Exception e)
-            {
-                //errorService.CreateError(newSubs, e);
-                //errorService.CreateError(newVCount, e);
-                
-                //need to figure out what to do this error and the before one
-            }
-
-
+            countDataService.CreateOrgCountData(orgID);
+            countDataService.SaveOrgCountData();
+            
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
             // Send an email with this link
             // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

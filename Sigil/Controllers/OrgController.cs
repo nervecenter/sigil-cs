@@ -75,7 +75,7 @@ namespace Sigil.Controllers
 
             UserViewModel userView = new UserViewModel();
             userView.User = userService.GetUser(userId);
-            userView.UserSubscriptions = (ICollection<SubscriptionViewModel>)subscriptionService.GetUserSubscriptions(userId).Select<Subscription, SubscriptionViewModel>(s => new SubscriptionViewModel(s));
+            userView.UserSubscriptions = (ICollection<SubscriptionViewModel>)subscriptionService.GetUserSubscriptions(userId).Select(s => new SubscriptionViewModel().Create(s));
             userView.UserVotes = userVotes;
             
             Tuple<Org, UserViewModel,PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, userView, OrgIssues.ToPagedList(pageNumber, num_results_per_page));

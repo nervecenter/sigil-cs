@@ -29,7 +29,7 @@ namespace Sigil.Controllers
         private readonly IUserService userService;
         private readonly ICountService countDataService;
         private readonly IErrorService errorService;
-        private readonly ICategoryService categoryService;
+        private readonly IProductService productService;
 
 
         /* 
@@ -39,13 +39,14 @@ namespace Sigil.Controllers
             The main page for an issue in any org. Contains vote buttons, issue text, responses, comment section. 
         ==================== 
         */
-        public ActionResult IssuePage( string orgURL, int issueID )
+        public ActionResult IssuePage( string orgURL, string productURL ,int issueID )
         {
             // Grab the issue's org
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
 
+            Product thisProduct = productService.GetProduct(thisOrg.Id, productURL);
             // Grab the issue for the page
-            Issue thisIssue = issueService.GetIssue(thisOrg.Id, issueID);
+            Issue thisIssue = issueService.GetIssue(thisOrg.Id, thisProduct.Id, issueID);
             //Issue thisIssue = (from issue in dc.Issues
             //                   where issue.Id == issueID
             //                   select issue).SingleOrDefault();
@@ -74,18 +75,22 @@ namespace Sigil.Controllers
             // Get the user's vote on this issues if it exists
             UserViewModel userVM = userService.GetUserViewModel(userID);
 
-            var issueComments = commentService.GetIssueComments(thisOrg.Id, issueID);
+            var issueComments = commentService.GetIssueComments(thisOrg.Id, thisIssue.ProductId, issueID);
 
-            var official = commentService.GetIssuesOfficialResponses(thisOrg.Id, issueID);
+            var official = commentService.GetIssuesOfficialResponses(thisOrg.Id, thisIssue.ProductId,issueID);
 
-            Issue_IssuePageViewModel viewModel = new Issue_IssuePageViewModel();
+            IssuePageViewModel viewModel = new IssuePageViewModel();
+
+           
+            viewModel.IssuePanelVM = new IssuePanelPartialVM() { issue = thisIssue, UserVoted = userVM.UserVotes.Check_Vote(thisIssue.Id, thisOrg.Id), InPanel = false };
+
             viewModel.UserVM = userVM;
-            viewModel.OfficialResponses = official.Select(o => new OfficialResponseViewModel(o));
-            viewModel.IssueVM = new IssueViewModel(thisIssue, userVM.UserVotes.Check_Vote(thisIssue.Id, thisOrg.Id), true);
-            viewModel.IssueComments = issueComments.Select(c => new CommentViewModel(c, userVM.UserVotes.Check_Vote(c.Id, c.IssueId, c.Issue.Category.OrgId)));
-            
 
-            //Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>> orgIssueComments = new Tuple<Org, Issue, IEnumerable<Comment>, IEnumerable<OfficialResponse>>(thisOrg, thisIssue, issueComments, official);
+            viewModel.sideBar = new SideBarVM() { thisOrg = thisOrg, Subscriptions = userVM.UserSubscriptions };
+
+            viewModel.OfficialResponses = official;
+            
+            viewModel.IssueComments = issueComments.Select(c => new Tuple<Comment, bool>(c, userVM.UserVotes.Check_Vote(c.Id, thisIssue.Id, thisOrg.Id)));
 
             // Pass the org and issue as the model to the view
             return View(viewModel);
@@ -131,7 +136,7 @@ namespace Sigil.Controllers
             {
                 //WRITE TO ERROR FILE
                 //ErrorHandler.Log_Error(thisIssue, e, dc);
-                errorService.CreateError(vc, e);
+                //errorService.CreateError(vc, e);
             }
             //}
         }
@@ -156,7 +161,7 @@ namespace Sigil.Controllers
             {
                 //WILL WRITE TO ERROR FILE
                 //ErrorHandler.Log_Error(issue, e, dc);
-                errorService.CreateError(issue, e);
+                //errorService.CreateError(issue, e);
             }
 
         }
@@ -221,20 +226,20 @@ namespace Sigil.Controllers
         }
 
         [Authorize]
-        public ActionResult IssueData(string orgURL, int issueID)
+        public ActionResult IssueData(string orgURL, string productURL,int issueID)
         {
             // Get the issue
-            Issue thisIssue = issueService.GetIssue(orgURL, issueID);//dc.Issues.SingleOrDefault(i => i.Id == issueID);
+            //Issue thisIssue = issueService.GetIssue(orgURL, , issueID);//dc.Issues.SingleOrDefault(i => i.Id == issueID);
 
-            // Get the org
-            Org thisOrg = thisIssue.Category.Org;
-            /*
-             * VIEWBAG
-             */
+            //// Get the org
+            //Org thisOrg = thisIssue.Product.Org;
+            ///*
+            // * VIEWBAG
+            // */
 
-            // Add the issue and org to the ViewBag
-            ViewBag.thisIssue = thisIssue;
-            ViewBag.thisOrg = thisOrg;
+            //// Add the issue and org to the ViewBag
+            //ViewBag.thisIssue = thisIssue;
+            //ViewBag.thisOrg = thisOrg;
 
 
             return View();
@@ -265,21 +270,26 @@ namespace Sigil.Controllers
             // Get the user
             var userId = User.Identity.GetUserId();
 
-            // check to see if they are posting to a specific org's category or just to the org itself
+            // check to see if they are posting to a specific org's Product or just to the org itself
             string orgName = Request.Form["orgName"];
-            string category = null;
+            string Product = "";
             if (orgName.Contains("-"))
             {
                 var temp = orgName.Split('-');
                 orgName = temp[0];
-                category = temp[1];
+                Product = temp[1];
+            }
+
+            if(Product == "")
+            {
+                Product = orgName;
             }
 
             var org = orgService.GetOrg(orgName, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
-            var catid = categoryService.GetCategory(org.Id, category);//dc.Categories.SingleOrDefault(c => c.catName == category && c.orgId == org.Id);
+            var productId = productService.GetProduct(org.Id, Product);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
 
-            //pass in creators userid, the org and possible category of the issue
-            int issueId = Create_New_Issue(userId, org, catid);
+            //pass in creators userid, the org and possible Product of the issue
+            int issueId = Create_New_Issue(userId, org, productId);
 
             if (issueId == 0)
             {
@@ -295,20 +305,6 @@ namespace Sigil.Controllers
         private void New_Issue_Data_Routine(string userId, int orgId, int issueId)
         {
             //Create Vote count table entry
-
-            //VoteCount newVote = new VoteCount();
-            //newVote.IssueId = issueId;
-            //newVote.OrgId = org.Id;
-            //VoteCountCol newVoCol = new VoteCountCol();
-            //newVoCol.Update();
-            //newVote.count = CountXML<VoteCountCol>.DATAtoXML(newVoCol);
-
-            ////Create Comment count table entry
-
-            //CommentCount newCom = new CommentCount();
-            //newCom.IssueId = issueId;
-            //newCom.OrgId = org.Id;
-            //newCom.count = CountXML<CommentCountCol>.DATAtoXML(new CommentCountCol());
             var user = userService.GetUser(userId);
 
             countDataService.CreateIssueCountData(user.Id, orgId, issueId);
@@ -317,35 +313,13 @@ namespace Sigil.Controllers
             //update the users votes xml ds because every user votes on the issue they make
             userService.AddUserVote(user, orgId, issueId);
             userService.UpdateUser(user);
-
-            //var user = userService.GetUser(userId);//dc.AspNetUsers.Single(u => u.Id == userId);
-            //var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-            //userVotes.Add_Vote(issueId, org.Id);
-            //user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
-
-            //try
-            //{
-                
-            //    //dc.VoteCounts.InsertOnSubmit(newVote);
-            //    //dc.CommentCounts.InsertOnSubmit(newCom);
-            //    //dc.SubmitChanges();
-
-            //}
-            //catch (Exception e)
-            //{
-            //    ErrorHandler.Log_Error(newVote, e, dc);
-            //    //Console.WriteLine("Could not write vote \"%s\" to database:\n%s", newVote, e.Message);
-            //}
         }
 
-        private int Create_New_Issue(string userId, Org org, Category catid)
+        private int Create_New_Issue(string userId, Org org, Product product)
         {
             // Create a new issue
             Issue newissue = new Issue();
 
-            // Increment Id, drop in current user and date, set default weight, drop in the form text
-            //newissue.Org = org;
-            //newissue.OrgId = org.Id;
             newissue.UserId = userId;
             newissue.createTime = DateTime.UtcNow;
             newissue.editTime = DateTime.UtcNow;
@@ -354,10 +328,10 @@ namespace Sigil.Controllers
             newissue.viewCount = 1;
             newissue.title = Request.Form["title"];
             newissue.text = Request.Form["text"];
-            newissue.CatId = catid == default(Category) ? 0 : catid.Id;
-            //newissue.TopicId = catid == default(Category) ? org.Topicid : catid.TopicId;
-            if (catid != null)
-                newissue.CatId = catid.Id;
+            newissue.ProductId = product == default(Product) ? 0 : product.Id;
+            //newissue.TopicId = catid == default(Product) ? org.Topicid : catid.TopicId;
+            if (product != null)
+                newissue.ProductId = product.Id;
             // Try to submit the issue and go to the issue page; otherwise, write an error
             try
             {
@@ -365,14 +339,11 @@ namespace Sigil.Controllers
                 //dc.SubmitChanges();
                 issueService.CreateIssue(newissue);
                 issueService.SaveChanges();
-                var createdIssue = issueService.GetLatestIssue(userId, org.Id);
+                var createdIssue = issueService.GetLatestIssue(userId, org.Id, product.Id);
                 return createdIssue.Id;//dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
-
-
             }
             catch (Exception e)
             {
-
                 //ErrorHandler.Log_Error(newissue, e, dc);
                 return 0; //need to return a 404 or just rediret to another page that include an error message for the user
             }
@@ -386,7 +357,7 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        public ActionResult VoteUp(int orgId, int issueId) {
+        public ActionResult VoteUp(int orgId, int productId, int issueId) {
             // Find our issue object and create a new vote
             //Issue thisIssue = dc.Issues.First( i => i.Id == issueID );
             //Org thisOrg = dc.Orgs.First(o => o.Id == thisIssue.OrgId);
@@ -397,7 +368,7 @@ namespace Sigil.Controllers
             //// Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
             //var user = dc.AspNetUsers.Single(u => u.Id == userId);
             //// Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
-            var issue = issueService.GetIssue(orgId, issueId);
+            var issue = issueService.GetIssue(orgId, productId, issueId);
             var user = userService.GetUser(userId);
             userService.AddUserVote(user, orgId, issueId);
 
@@ -424,7 +395,7 @@ namespace Sigil.Controllers
             {
                 //ErrorHandler.Log_Error(VC, e, dc);
                 //ErrorHandler.Log_Error(user, e, dc);
-                errorService.CreateError(issue, e,"UserId ="+ user.Id);
+                errorService.CreateError(issue, e, ErrorLevel.Minor,"UserId ="+ userId);
                 //Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
             }
 
@@ -439,13 +410,13 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        public ActionResult UnVoteUp(int orgId, int issueId) {
+        public ActionResult UnVoteUp(int orgId, int productId, int issueId) {
             // Find our issue object and vote object
             //Issue thisIssue = dc.Issues.Single(i => i.Id == issueID);
             //Org thisOrg = dc.Orgs.Single(o => o.Id == thisIssue.OrgId);
             var userId = User.Identity.GetUserId();
             var user = userService.GetUser(userId);
-            var issue = issueService.GetIssue(orgId, issueId);
+            var issue = issueService.GetIssue(orgId, productId, issueId);
             // Decrement vote counter for issue, delete a vote from the votecount entry for the issue, POST changes to server; otherwise, log an error
             try {
                 issue.votes--;
@@ -474,7 +445,7 @@ namespace Sigil.Controllers
             {
                 //ErrorHandler.Log_Error(thisIssue, e, dc);
                 //ErrorHandler.Log_Error(userId, e, dc);
-                errorService.CreateError(issue, e, "UserId = " + user.Id);
+                errorService.CreateError(issue, e, ErrorLevel.Minor,"UserId = " + user.Id);
             }
 
             return new EmptyResult();

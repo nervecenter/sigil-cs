@@ -12,17 +12,13 @@ namespace Sigil.Services
     {
         void CreateTopic(Topic top);
         void SaveTopic();
-
-
     }
 
     public class TopicService : ITopicService
     {
-
         private readonly ITopicRepository topicRepository;
 
         private readonly IUnitOfWork unitOfWork;
-
 
         public TopicService(IUnitOfWork unit, ITopicRepository topRepo)
         {

@@ -7,17 +7,22 @@ using System.Web;
 
 namespace Sigil.Models
 {
-    public class Category
+    public class Product
     {
         [Key]
         public int Id { get; set; }
 
-        public string catName { get; set; }
-        public string catURL { get; set; }
+        public string ProductName { get; set; }
+        public string ProductURL { get; set; }
 
         public int OrgId { get; set; }
         [ForeignKey("OrgId")]
         public Org Org { get; set; }
+
+
+        public int TopicId { get; set; }
+        [ForeignKey("TopicId")]
+        public Topic Topic { get; set; }
 
         public int ImageId { get; set; }
         public Image Image { get; set; }
