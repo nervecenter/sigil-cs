@@ -12,6 +12,20 @@ namespace Sigil.ViewModels
     {
         public Issue issue { get; set; }
 
+        //public string orgName { get; set; }
+
+        //public string orgIcon { get; set; }
+
+        //public string productName { get; set; }
+
+        //public string productIcon { get; set; }
+
+        //public string datePostedString { get; set; }
+
+        //public string userName { get; set; }
+
+        //public string userIcon { get; set; }
+
         public bool UserVoted { get; set; }
 
         public bool InPanel { get; set; }

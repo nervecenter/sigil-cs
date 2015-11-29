@@ -85,7 +85,12 @@ namespace Sigil.Controllers
             return Json(search_list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SearchIssuesByOrg( int id ) 
+        {
+            IEnumerable<Issue> issues = searchService.MatchIssuesByOrg( id ).OrderByDescending( i => i.votes );
 
+            return Json( issues, JsonRequestBehavior.AllowGet );
+        }
 
         /* 
         =============================================================================================================================================

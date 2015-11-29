@@ -14,6 +14,12 @@ namespace Sigil.Services
         IEnumerable<ApplicationUser> MatchUsersByName(string term);
 
         IEnumerable<Issue> MatchIssuesByTitle(string term);
+
+        IEnumerable<Issue> MatchIssuesByOrg( int id );
+
+        IEnumerable<Issue> MatchIssuesByProduct( int id );
+
+        IEnumerable<Issue> MatchIssuesByTopic( int id );
     }
 
     public class SearchService: ISearchService
@@ -48,6 +54,21 @@ namespace Sigil.Services
         public IEnumerable<Issue> MatchIssuesByTitle(string term)
         {
             return issueRepository.GetMany(i => i.title.StartsWith(term));
+        }
+
+        public IEnumerable<Issue> MatchIssuesByOrg( int id ) 
+        {
+            return issueRepository.GetMany( i => i.Product.OrgId.Equals( id ) );
+        }
+
+        public IEnumerable<Issue> MatchIssuesByProduct( int id ) 
+        {
+            return issueRepository.GetMany( i => i.ProductId.Equals( id ) );
+        }
+
+        public IEnumerable<Issue> MatchIssuesByTopic( int id ) 
+        {
+            return issueRepository.GetMany( i => i.Product.TopicId.Equals( id ) );
         }
     }
 }

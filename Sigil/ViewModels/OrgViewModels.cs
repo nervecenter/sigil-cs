@@ -1,8 +1,10 @@
 ﻿using Sigil.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PagedList;
 
 namespace Sigil.ViewModels
 {
@@ -11,8 +13,8 @@ namespace Sigil.ViewModels
         //UserViewModel CurrentUser { get; set; }
 
         public Org thisOrg { get; set; }
-
-        ICollection<IssuePanelPartialVM> OrgIssues { get; set; }
+        public UserViewModel thisUser { get; set; }
+        public IPagedList<IssuePanelPartialVM> orgIssues { get; set; }
     }
 
     public struct OrgDataPageViewModel

@@ -1,16 +1,18 @@
 ﻿@using Sigil.Models
 @using Sigil.ViewModels
 @using Microsoft.AspNet.Identity
-@model Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>
+@using PagedList;
 @using PagedList.Mvc;
+@model OrgPageViewModel
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    Org thisOrg = Model.Item1;
+    Org thisOrg = Model.thisOrg;
     ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
-    UserVoteCol userVotes = Model.Item2.UserVotes;//ViewBag.userVotes;
-    PagedList.IPagedList<Issue> userSubs = Model.Item3;//Sigil.Controllers.AccountController.userSubs( User );
+    UserVoteCol userVotes = Model.thisUser.UserVotes;//ViewBag.userVotes;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.thisUser.UserSubscriptions;//Sigil.Controllers.AccountController.userSubs( User );
 }
 
 <div class="col-md-9 col-lg-9">
@@ -23,7 +25,7 @@
         <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
         @if ( !Request.IsAuthenticated ) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
-        } else if ( userSubs.Any<Subscription>( s => s.OrgId == thisOrg.Id ) ) {
+        } else if ( userSubs.Any<SubscriptionViewModel>( s => s. == thisOrg.Id ) ) {
             <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL')">Unsubscribe from @thisOrg.orgName</a>
         } else {
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>
@@ -38,14 +40,14 @@
             <button type="submit" class="btn btn-primary">Submit as new feedback</button>
         </div>
     </form>
-    @foreach ( Issue issue in Model.Item3 ) {
-        var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
+    @foreach ( IssuePanelPartialVM issue in Model.orgIssues ) {
+        /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
                                                                                              userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )}, 
-                                                                   issue );
-        @Html.Partial( "../Shared/_IssuePanelPartial", issuePanelModel )
+                                                                   issue );*/
+        @Html.Partial( "../Shared/_IssuePanelPartial", issue )
     }
     @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
 
-    @Html.PagedListPager(Model.Item3, page => Url.Action("OrgPage","Org", new { page}))
+    @Html.PagedListPager(Model.orgIssues, page => Url.Action("OrgPage","Org", new { page }))
 </div>
 @Html.Partial( "../Shared/_SideBar", userSubs )
