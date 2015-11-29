@@ -13,7 +13,7 @@ namespace Sigil.ViewModels
         //UserViewModel CurrentUser { get; set; }
 
         public Org thisOrg { get; set; }
-        public UserViewModel thisUser { get; set; }
+        public UserViewModel UserVM { get; set; }
         public IPagedList<IssuePanelPartialVM> orgIssues { get; set; }
     }
 

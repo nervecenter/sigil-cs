@@ -16,6 +16,7 @@ namespace Sigil.Models
         [Key]
         public int Id { get; set; }
 
+
         public string OwnerId { get; set; }
 
         /// <summary>

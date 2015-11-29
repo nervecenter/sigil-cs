@@ -14,11 +14,16 @@ namespace Sigil.Configuration
             ToTable("Orgs");
             Property(o => o.Id).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(o => o.orgName).IsRequired();
-            Property(o => o.UserID).IsOptional();
-            Property(o => o.viewCount).IsRequired();
-            Property(o => o.website).IsOptional();
             Property(o => o.orgURL).IsRequired().HasMaxLength(30);
             Property(o => o.ImageId).IsOptional();
+            Property(o => o.viewCount).IsRequired();
+            Property(o => o.website).IsOptional();
+            Property(o => o.lastView).IsRequired();
+            Property(o => o.UserID).IsOptional();
+            
+            
+            
+            
         }
     }
 
@@ -29,12 +34,17 @@ namespace Sigil.Configuration
             ToTable("OrgApps");
             Property(o => o.Id).IsRequired().HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity);
             Property(o => o.orgName).IsRequired();
-            Property(o => o.AdminName).IsRequired();
-            Property(o => o.username).IsRequired();
-            Property(o => o.website).IsOptional();
             Property(o => o.orgURL).IsRequired().HasMaxLength(30);
-            Property(o => o.contact).IsRequired();
-            Property(o => o.contact).IsOptional();
+            Property(o => o.website).IsOptional();
+            Property(o => o.comment).IsOptional();
+
+            Property(o => o.DisplayName).IsRequired();
+            Property(o => o.AdminEmail).IsRequired();
+            Property(o => o.ContactNumber).IsRequired();
+            Property(o => o.AdminContactName).IsRequired();
+            Property(o => o.ApplyDate).IsRequired();
+            Property(o => o.OrgApproved).IsRequired();
+            
             
         }
     }

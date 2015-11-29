@@ -11,7 +11,7 @@ namespace Sigil.Models
         public int Id { get; set; }
 
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public DateTime createTime { get; set; }
         public DateTime editTime { get; set; }

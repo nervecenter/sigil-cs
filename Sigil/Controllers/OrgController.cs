@@ -67,24 +67,33 @@ namespace Sigil.Controllers
             }
             //ViewBag.userVotes = userVotes;
 
-            var OrgIssues = issueService.GetAllOrgIssues(thisOrg.Id);
+          
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
             int num_results_per_page = 3;
             int pageNumber = (page ?? 1);
 
-            UserViewModel userView = new UserViewModel();
-            userView.User = userService.GetUser(userId);
-            userView.UserSubscriptions = (ICollection<SubscriptionViewModel>)subscriptionService.GetUserSubscriptions(userId).Select(s => new SubscriptionViewModel().Create(s));
-            userView.UserVotes = userVotes;
-            
-            Tuple<Org, UserViewModel,PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, userView, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
+            UserViewModel userVM = userService.GetUserViewModel(userId);
+
+            OrgPageViewModel orgVM = new OrgPageViewModel();
+            orgVM.UserVM = userVM;
+            orgVM.thisOrg = thisOrg;
+
+            var OrgIssues = issueService.GetAllOrgIssues(thisOrg.Id).Select(i => new IssuePanelPartialVM()
+            {
+                issue = i,
+                InPanel = false,
+                UserVoted = userVM.UserVotes.Check_Vote(i.Id, thisOrg.Id)
+            }).ToList();
+
+            orgVM.orgIssues = OrgIssues.ToPagedList(pageNumber, num_results_per_page);
+            //Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, userView, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
 
             // This may not actually be necessary.
             //ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
 
             // Pass our org and issues to the view as the model
-            return View(orgAndIssues);
+            return View(orgVM);
         }
 
         /* 

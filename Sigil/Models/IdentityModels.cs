@@ -43,6 +43,8 @@ namespace Sigil.Models
         }
     }
 
+    //The commented out section below has been replaced by SigilEntities.cs file. Keep this here as a reference from where it started.
+
     //public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     //{
     //    public ApplicationDbContext()

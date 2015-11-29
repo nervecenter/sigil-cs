@@ -25,16 +25,9 @@ namespace Sigil
             return new SigilEntities();
         }
 
-        //public DbSet<IdentityUserLogin> UserLogins { get; set; }
-        //public DbSet<IdentityUserClaim> UserClaims { get; set; }
-        //public DbSet<IdentityUserRole> UserRoles { get; set; }
-
-        // ... your custom DbSets
-        //public DbSet<IdentityRoleOperation> RoleOperations { get; set; }
 
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Issue> Issues { get; set; }
-        //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<Product> Categories { get; set; }
         public DbSet<Topic> Topics { get; set; }
@@ -55,13 +48,10 @@ namespace Sigil
         public DbSet<Error> Errors { get; set; }
         public DbSet<OrgApp> OrgApplicants { get; set; }
 
-        //public DbSet<AspNetUserRole> UserRoles { get; set; }
-
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Configurations.Add(new ProductConfiguration());
             modelBuilder.Configurations.Add(new OrgConfiguration());
@@ -81,22 +71,6 @@ namespace Sigil
 
             modelBuilder.Entity<ApplicationUser>().HasOptional(u => u.Image).WithMany().HasForeignKey(u => u.ImageId).WillCascadeOnDelete(false);
 
-            //modelBuilder.Entity<Topic>().HasRequired(t => t.Orgs).WithMany().WillCascadeOnDelete(false);
-            //modelBuilder.Entity<Org>().HasOptional(o => o.ImageId).WithOptionalPrincipal().WillCascadeOnDelete(false)
-
-            // Configure Asp Net Identity Tables
-            //modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
-            ////modelBuilder.Entity<XElement>().HasKey(x => x.Value);
-            ////modelBuilder.Entity<ApplicationUser>().Property(u => u.PasswordHash).HasMaxLength(500);
-            ////modelBuilder.Entity<ApplicationUser>().Property(u => u.Stamp).HasMaxLength(500);
-            ////modelBuilder.Entity<ApplicationUser>().Property(u => u.PhoneNumber).HasMaxLength(50);
-
-            //modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
-            //modelBuilder.Entity<IdentityUserRole>().ToTable("AspNetUserRoles");
-            //modelBuilder.Entity<IdentityUserLogin>().ToTable("AspNetUserLogins");
-            //modelBuilder.Entity<IdentityUserClaim>().ToTable("AspNetUserClaims");
-            //modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimType).HasMaxLength(150);
-            //modelBuilder.Entity<IdentityUserClaim>().Property(u => u.ClaimValue).HasMaxLength(500);
         }
 
         public virtual void Commit()

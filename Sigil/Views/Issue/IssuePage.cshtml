@@ -1,42 +1,40 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Sigil.Models
 @using Sigil.ViewModels
-@model Issue_IssuePageViewModel
+@model IssuePageViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    OrgViewModel thisOrg = Model.IssueVM.IssueCategoryVM.OrgVM;
-    IssueViewModel thisIssue = Model.IssueVM;
-    IEnumerable<CommentViewModel> issueComments = Model.IssueComments;
-    IEnumerable<OfficialResponseViewModel> official = Model.OfficialResponses;
+    IEnumerable<Tuple<Comment,bool>> issueComments = Model.IssueComments;
+    IEnumerable<OfficialResponse> official = Model.OfficialResponses;
     IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;
 
     UserVoteCol userVote = ViewBag.userVote;
 
-    ViewBag.Title = "Sigil - " + thisIssue.Title;
+    ViewBag.Title = "Sigil - " + Model.IssuePanelVM.issue.title;
 
     bool pull = false;
 
 }
 
 <div class="col-md-9 col-lg-9">
-    @*<img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">*@
+    <img class="img-rounded img-responsive org-banner-small" src="@(Model.IssueOrg.Image.banner)">
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
-        <a class="btn btn-warning" href="/@thisOrg.OrgURL">Main feed</a>
-        <a class="btn btn-info" href="/@thisOrg.OrgURL/responses">Responses</a>
-        <a class="btn btn-success" href="/@thisOrg.OrgURL/@thisIssue.IssueId/data">Data</a>
+        <a class="btn btn-warning" href="/@Model.IssueOrg.orgURL">Main feed</a>
+        <a class="btn btn-info" href="/@Model.IssueOrg.orgURL/responses">Responses</a>
+        <a class="btn btn-success" href="/@Model.IssueOrg.orgURL/@Model.IssueProduct.ProductURL/@Model.IssuePanelVM.issue.Id/data">Data</a>
 
         @if ( !Request.IsAuthenticated ) {
-            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.OrgName</a>
-        } else if ( userSubs.Any<SubscriptionViewModel>( s => s.subName == thisOrg.OrgName ) ) {
-            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.OrgURL')">Unsubscribe from @thisOrg.OrgName</a>
+            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.IssueOrg.orgName</a>
+        } else if ( userSubs.Any<SubscriptionViewModel>( s => s.subName == Model.IssueOrg.orgName ) ) {
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.IssueOrg.orgURL')">Unsubscribe from @Model.IssueOrg.orgName</a>
         } else {
-            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.OrgURL')">Subscribe to @thisOrg.OrgName</a>
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.IssueOrg.orgURL')">Subscribe to @Model.IssueOrg.orgName</a>
         }
     </div>
     <article class="panel panel-default">
-        @Html.Partial( "../Shared/_IssuePanelPartial", thisIssue )
-        <div class="panel-body">@thisIssue.Text</div>
+        @Html.Partial( "../Shared/_IssuePanelPartial", Model.IssuePanelVM )
+        <div class="panel-body">@Model.IssuePanelVM.issue.text</div>
     </article>
     @if ( official.Count() > 0) {
         <div class="panel panel-primary">
@@ -46,12 +44,12 @@
                 <div class="panel-body">
                     <div class="media">
                         <a href="#" class="pull-left">
-                            <img src="@OfResponse.OfficialUserIcon" class="media-object" alt="Sample Image">
+                            <img src="@OfResponse.User.Image.icon_100" class="media-object" alt="Sample Image">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading">@OfResponse.OfficialUserDisplayName<small><i> Posted @*@Sigil.Controllers.IssueController.TimeSince(OfResponse.createTime)*@</i></small></h4>
+                            <h4 class="media-heading">@OfResponse.User.DisplayName<small><i> Posted @*@Sigil.Controllers.IssueController.TimeSince(OfResponse.createTime)*@</i></small></h4>
                             <p>
-                                @OfResponse.Text
+                                @OfResponse.text
                             </p>
                             <div class="btn-group glyphicon-position" data-toggle="buttons">
                                 <button type="button" class="btn btn-success btn-xs"><!--<span class="glyphicon glyphicon-ok"></span>--> Helpful</button>
@@ -66,21 +64,21 @@
     <div class="panel panel-default">
         <div class="panel-heading">Comments</div>
         <div class="panel-body">
-            @if (issueComments.Count<CommentViewModel>() == 0) 
+            @if (issueComments.Count() == 0) 
             {
                 <i>No comments yet.</i>
             } 
             else 
             {
-                foreach ( CommentViewModel comm in issueComments ) 
+                foreach ( var comment in issueComments ) 
                 {
                     <div class="media">
                         <a href="#" class=@((pull = !pull) ? "pull-left" : "pull-right")>
-                            <img src="@comm.CommentUserIcon" class="media-object" alt="Sample Image">
+                            <img src="@comment.Item1.User.Image.icon_100" class="media-object" alt="Sample Image">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading">@comm.CommentUserDisplayName<small><i>Posted @*@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )<*@/i></small></h4>
-                            <p>@comm.Text</p>
+                            <h4 class="media-heading">@comment.Item1.User.DisplayName<small><i>Posted @*@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )*@</i></small></h4>
+                            <p>@comment.Item1.text</p>
                         </div>
                     </div>
 

@@ -78,7 +78,7 @@ namespace Sigil.Controllers
             List<string> search_list = new List<string>();
             if (!string.IsNullOrEmpty(term))
             {
-                search_list.AddRange(search_orgs(term).Select(o => o.orgName));
+                //search_list.AddRange(search_orgs(term).Select(o => o.orgName));
                 search_list.AddRange(search_orgs_and_cats(term));
             }
 
@@ -116,7 +116,10 @@ namespace Sigil.Controllers
                 {
                     foreach(var c in orgCats)
                     {
-                        finalQuery.Add(o.orgName + "-" + c.ProductName);
+                        if (o.orgName == c.ProductName)
+                            finalQuery.Add(c.ProductName);
+                        else
+                            finalQuery.Add(o.orgName + "-" + c.ProductName);
                     }
                 }
             }

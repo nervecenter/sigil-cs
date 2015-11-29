@@ -42,15 +42,26 @@ namespace Sigil.Models
     {
         [Key]
         public int Id { get; set; }
+        //Org info
         public string orgName { get; set; }
         public string orgURL { get; set; }
-        
-        public string username { get; set; }
-        public string email { get; set; }
-        public string contact { get; set; }
         public string website { get; set; }
         public string comment { get; set; }
-        public string AdminName { get; set; }
+
+        //Org Admin info
+
+        public string DisplayName { get; set; }
+        public string AdminEmail { get; set; }
+        public string ContactNumber { get; set; }
+        public string AdminContactName { get; set; }
+
+        public bool OrgApproved { get; set; }
         public DateTime ApplyDate { get; set; }
+
+        public OrgApp()
+        {
+            OrgApproved = false;
+            ApplyDate = DateTime.UtcNow;
+        }
     }
 }

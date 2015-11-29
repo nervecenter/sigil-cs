@@ -12,7 +12,8 @@ namespace Sigil.Repository
     {
         //Methods for how when we need to get Products
         Product GetProductById(int orgid, int catid);
-        Product GetProductByName(int orgId, string catName);
+        Product GetProductByName(int orgId, string prodName);
+        Product GetProductByURL(int orgId, string prodURL);
     }
 
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
@@ -22,16 +23,21 @@ namespace Sigil.Repository
         //where we define the Product methods created below
         public Product GetProductById(int orgId, int catId)
         {
-            var cat = this.DbContext.Categories.Where(c => c.OrgId == orgId && c.Id == catId).FirstOrDefault();
+            var cat = DbContext.Categories.Where(c => c.OrgId == orgId && c.Id == catId).FirstOrDefault();
             return cat;
         }
 
         public Product GetProductByName(int orgId, string catName)
         {
-            var cat = this.DbContext.Categories.Where(c => c.OrgId == orgId && c.ProductName == catName).FirstOrDefault();
+            var cat = DbContext.Categories.Where(c => c.OrgId == orgId && c.ProductName == catName).FirstOrDefault();
             return cat;
         }
 
+        public Product GetProductByURL(int orgId, string prodURL)
+        {
+            var cat = DbContext.Categories.Where(c => c.OrgId == orgId && c.ProductURL == prodURL).FirstOrDefault();
+            return cat;
+        }
     }
 
    

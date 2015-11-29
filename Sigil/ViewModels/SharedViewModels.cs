@@ -55,8 +55,12 @@ namespace Sigil.ViewModels
     {
         public string subName { get; set; }
         public string subURL { get; set; }
-
         public string subIcon { get; set; }
+        
+        /// <summary>
+        /// The id of the entity that the user is subscribed too.
+        /// </summary>
+        public int subObjectId { get; set; }
 
         public SubscriptionViewModel Create(Subscription s)
         {
@@ -65,18 +69,21 @@ namespace Sigil.ViewModels
                 subName = s.Topic.topicName;
                 subURL = "/" + s.Topic.topicURL;
                 subIcon = s.Topic.Image.icon_20;
+                subObjectId = s.TopicId ?? 0;
             }
             else if (s.ProductId != null)
             {
                 subName = s.Org.orgName + "-" + s.Product.ProductName;
                 subURL = "/" + s.Org.orgURL + "/" + s.Product.ProductURL;
                 subIcon = s.Product.Image.icon_20;
+                subObjectId = s.ProductId ?? s.OrgId ?? 0;
             }
             else
             {
                 subName = s.Org.orgName;
                 subURL = "/" + s.Org.orgURL;
                 subIcon = s.Org.Image.icon_20;
+                subObjectId = s.OrgId ?? 0;
             }
 
             return this;

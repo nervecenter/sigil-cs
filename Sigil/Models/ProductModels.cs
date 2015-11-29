@@ -19,9 +19,11 @@ namespace Sigil.Models
         [ForeignKey("OrgId")]
         public virtual Org Org { get; set; }
 
+        bool isMainOrgCategory { get; set; }
 
         public int? TopicId { get; set; }
         [ForeignKey("TopicId")]
+        
         public virtual Topic Topic { get; set; }
 
         public int? ImageId { get; set; }
@@ -33,6 +35,7 @@ namespace Sigil.Models
         public Product()
         {
             Issues = new List<Issue>();
+            isMainOrgCategory = false;
         }
     }
 }

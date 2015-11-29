@@ -234,13 +234,12 @@ namespace Sigil.Controllers
             OrgApp newOrg = new OrgApp();
             newOrg.orgName = model.orgName;
             newOrg.orgURL = model.orgURL;
-            newOrg.username = model.DisplayName;
+            newOrg.DisplayName = model.DisplayName;
             newOrg.website = model.orgWebsite;
-            newOrg.contact = model.orgContact;
+            newOrg.ContactNumber = model.orgContact;
             newOrg.comment = model.orgComment;
-            newOrg.email = model.Email;
-            newOrg.AdminName = model.orgAdminName;
-            newOrg.ApplyDate = DateTime.UtcNow;
+            newOrg.AdminEmail = model.Email;
+            newOrg.AdminContactName = model.orgAdminName;
             try
             {
                 orgService.CreateOrgApp(newOrg);
@@ -255,20 +254,29 @@ namespace Sigil.Controllers
                 //ErrorHandler.Log_Error(newOrg, e, dc);
             }
 
-            return View("LandingPage", "Home");
+            return RedirectToAction("LandingPage", "Home", new { area = "" });
         }
 
         //need to protect this so that sigil is the only role allowed to call
         public async Task<ActionResult> OrgConfirmed(int norgID)
         {
             OrgApp verifiedOrg = orgService.ApproveOrgApp(norgID);//dc.OrgApps.Single(o => o.Id == norgID);
+            verifiedOrg.OrgApproved = true;
+            orgService.UpdateOrgApp(verifiedOrg);
 
 
-
-            var user = new ApplicationUser { UserName = verifiedOrg.username, Email = verifiedOrg.email };
+            var user = new ApplicationUser { UserName = verifiedOrg.AdminEmail, Email = verifiedOrg.AdminEmail, DisplayName = verifiedOrg.DisplayName };
             string tempPassword = Generate_Temp_Password();
             var result = await UserManager.CreateAsync(user, tempPassword);
-
+            if (result.Succeeded)
+            {
+                Create_User_Extras(user.Id);
+            }
+            else
+            {
+                //if this happens please let me(Dominic) know!!!!!!!
+                errorService.CreateError(user, "CreateAsync did not succeeded. Need to recreate admin user for org." + result.Errors.Select(e => e + " "), ErrorLevel.Critical);
+            }
             //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
 
             var newOrg = new Org();
@@ -276,39 +284,30 @@ namespace Sigil.Controllers
             newOrg.orgURL = verifiedOrg.orgURL;
             newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id)).ToString();
             newOrg.lastView = DateTime.UtcNow;
-            try
-            {
-                orgService.CreateOrg(newOrg);
-                orgService.SaveOrg();
-                //dc.Orgs.InsertOnSubmit(newOrg);
-               // dc.SubmitChanges();
-            }
-            catch(Exception e)
-            {
-                errorService.CreateError(newOrg, e, ErrorLevel.Critical);
-                
-                //need to kick back to a new screen to have them try again
-            }
 
-            //Setup Org data collection db entries
-            Org org = orgService.GetOrg(newOrg.orgURL);
+            orgService.CreateOrg(newOrg);
+            orgService.SaveOrg();
+
+            //need to save and commit org first before assigning image beause we need entity to fill in the org id for us
+            newOrg.Image = imageService.AssignDefaultImage(newOrg.Id, ImageType.Org);
 
             var orgProduct = new Product();
             orgProduct.ProductName = newOrg.orgName;
             orgProduct.ProductURL = "Default";
-            orgProduct.Image = imageService.AssignDefaultImage(org.Id, ImageType.Org);
-            orgProduct.ImageId = orgProduct.Image.Id;
-            orgProduct.OrgId = org.Id;
-            orgProduct.Org = org;
+            
+            orgProduct.OrgId = newOrg.Id;
+            orgProduct.Org = newOrg;
 
             productService.CreateProduct(orgProduct);
             productService.SaveProduct();
 
+            orgProduct.Image = imageService.AssignDefaultImage(orgProduct.Id, ImageType.Product);
+            orgProduct.ImageId = orgProduct.Image.Id;
             newOrg.Products.Add(orgProduct);
 
-            orgService.UpdateOrg(org);
+            orgService.UpdateOrg(newOrg);
 
-            countDataService.CreateOrgCountData(org.Id);
+            countDataService.CreateOrgCountData(newOrg.Id);
             countDataService.SaveOrgCountData();
             
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

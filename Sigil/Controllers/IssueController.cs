@@ -32,6 +32,17 @@ namespace Sigil.Controllers
         private readonly IProductService productService;
 
 
+        public IssueController(IOrgService orgS, IIssueService issS, ICommentService comS, IUserService userS, ICountService countS, IErrorService errS, IProductService prodS)
+        {
+            orgService = orgS;
+            issueService = issS;
+            commentService = comS;
+            userService = userS;
+            countDataService = countS;
+            errorService = errS;
+            productService = prodS;
+        }
+
         /* 
         ==================== 
         IssuePage
@@ -86,6 +97,10 @@ namespace Sigil.Controllers
 
             viewModel.UserVM = userVM;
 
+            viewModel.IssueOrg = thisOrg;
+
+            viewModel.IssueProduct = thisProduct;
+
             viewModel.sideBar = new SideBarVM() { thisOrg = thisOrg, Subscriptions = userVM.UserSubscriptions };
 
             viewModel.OfficialResponses = official;
@@ -103,45 +118,12 @@ namespace Sigil.Controllers
         /// <param name="thisIssue">Issue object from the table</param>
         private void ViewCount_Routine(Org thisOrg, Issue thisIssue)
         {
-            ViewCountCol vc = countDataService.GetIssueViewCountCol(thisOrg.Id, thisIssue.Id);//dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& v.datetime.Date == DateTime.Today.Date);
-            //if (vc == default(ViewCount))
-            //{
-            //    try
-            //    {
-            //        vc = new ViewCount();
-            //        vc.OrgId = thisOrg.Id;
-            //        vc.IssueId = thisIssue.Id;
-            //        vc.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
-            //        dc.ViewCounts.InsertOnSubmit(vc);
-            //        dc.SubmitChanges();
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        //WRITE TO ERROR FILE
-            //        ErrorHandler.Log_Error(vc, e, dc);
-            //        //Console.WriteLine("Could not add new view count object issue %d.", vc, e.Message);
-            //    }
-            //}
-            //else
-            //{
-            try
-            {
-                
+            ViewCountCol vc = countDataService.GetIssueViewCountCol(thisOrg.Id, thisIssue.Id);//dc.ViewCounts.FirstOrDefault<ViewCount>(v => v.IssueId == thisIssue.Id);//&& 
 
-               
-                vc.Update();
-                countDataService.SaveCountChanges(vc, CountDataType.View,thisOrg.Id, thisIssue.Id);
-            }
-            catch(Exception e)
-            {
-                //WRITE TO ERROR FILE
-                //ErrorHandler.Log_Error(thisIssue, e, dc);
-                //errorService.CreateError(vc, e);
-            }
-            //}
+            vc.Update();
+            countDataService.SaveCountChanges(vc, CountDataType.View,thisOrg.Id, thisIssue.Id);
+
         }
-
-
 
         /// <summary>
         /// Updates the total view count of the passed in issue.
@@ -149,20 +131,10 @@ namespace Sigil.Controllers
         /// <param name="issue"></param>
         private void Update_View_Count(Issue issue)
         {
-            try
-            {
-                issue.viewCount++;
-                issueService.UpdateIssue(issue);
-                issueService.SaveChanges();
-                //dc.SubmitChanges();
 
-            }
-            catch (Exception e)
-            {
-                //WILL WRITE TO ERROR FILE
-                //ErrorHandler.Log_Error(issue, e, dc);
-                //errorService.CreateError(issue, e);
-            }
+            issue.viewCount++;
+            issueService.UpdateIssue(issue);
+            issueService.SaveChanges();
 
         }
 
@@ -271,25 +243,25 @@ namespace Sigil.Controllers
             var userId = User.Identity.GetUserId();
 
             // check to see if they are posting to a specific org's Product or just to the org itself
-            string orgName = Request.Form["orgName"];
-            string Product = "";
+            string orgName = Request.Form["product"];
+            string issueproduct = "";
             if (orgName.Contains("-"))
             {
                 var temp = orgName.Split('-');
                 orgName = temp[0];
-                Product = temp[1];
+                issueproduct = temp[1];
             }
 
-            if(Product == "")
+            if(issueproduct == "")
             {
-                Product = orgName;
+                issueproduct = orgName;
             }
 
             var org = orgService.GetOrg(orgName, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
-            var productId = productService.GetProduct(org.Id, Product);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
+            var product = productService.GetProduct(org.Id, issueproduct);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
 
             //pass in creators userid, the org and possible Product of the issue
-            int issueId = Create_New_Issue(userId, org, productId);
+            int issueId = Create_New_Issue(userId, org, product);
 
             if (issueId == 0)
             {
@@ -298,7 +270,7 @@ namespace Sigil.Controllers
 
             New_Issue_Data_Routine(userId, org.Id, issueId);
 
-            return Redirect("~/" + org.orgURL + "/" + issueId);
+            return Redirect("~/" + org.orgURL+ "/"+ product.ProductURL + "/" + issueId);
 
         }
 
@@ -329,9 +301,8 @@ namespace Sigil.Controllers
             newissue.title = Request.Form["title"];
             newissue.text = Request.Form["text"];
             newissue.ProductId = product == default(Product) ? 0 : product.Id;
-            //newissue.TopicId = catid == default(Product) ? org.Topicid : catid.TopicId;
-            if (product != null)
-                newissue.ProductId = product.Id;
+            newissue.ProductId = product.Id;
+            
             // Try to submit the issue and go to the issue page; otherwise, write an error
             try
             {
@@ -339,8 +310,8 @@ namespace Sigil.Controllers
                 //dc.SubmitChanges();
                 issueService.CreateIssue(newissue);
                 issueService.SaveChanges();
-                var createdIssue = issueService.GetLatestIssue(userId, org.Id, product.Id);
-                return createdIssue.Id;//dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
+                
+                return newissue.Id;//dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
             }
             catch (Exception e)
             {

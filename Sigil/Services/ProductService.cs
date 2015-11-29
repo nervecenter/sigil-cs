@@ -87,9 +87,9 @@ namespace Sigil.Services
             return cat ?? default(Product);
         }
 
-        public Product GetProduct(int orgId, string cat)
+        public Product GetProduct(int orgId, string product)
         {
-            return productRepository.GetProductByName(orgId, cat) ?? default(Product);
+            return productRepository.GetProductByName(orgId, product) ?? productRepository.GetProductByURL(orgId, product);
         }
     }
 }

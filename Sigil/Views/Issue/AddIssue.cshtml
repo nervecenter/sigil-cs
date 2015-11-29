@@ -3,13 +3,13 @@
     ViewBag.Title = "Sigil - Submit new feedback";
 }
 
-@*<script type="text/javascript">
+<script type="text/javascript">
     $(function () {
         $('#orgBox').autocomplete({
             source: '@Url.Action("SearchOrgs_Cats", "Search")'
         });
     });
-</script>*@
+</script>
 
 @*<script type="text/javascript">
     function appendAddTextButton() {
@@ -72,7 +72,9 @@
 
 <div class="col-md-9 col-lg-9">
     <h2>Post new feedback</h2>
-    <form id="add-issue-form">
+    @using (Html.BeginForm("AddIssue", "Issue", FormMethod.Post, new { id = "add-issue-form" }))
+    {
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <label for="text">Company, person, or product:</label><br />
             <input id="orgBox" class="form-control" type="text" name="product" value="@Request.Form["product"]" placeholder="Enter a company, person, or product" />
@@ -86,9 +88,9 @@
             <textarea id="title-input" class="form-control" type="text" name="text" value="@Request.Form["text"]" placeholder="If you'd like, elaborate on your feedback in-depth"></textarea>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit new feedback</button>
+            <button type="submit" class="btn btn-primary" >Submit new feedback</button>
         </div>
-    </form>
+    }
 </div>
 
 

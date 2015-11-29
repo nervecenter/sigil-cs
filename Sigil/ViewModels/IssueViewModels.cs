@@ -10,6 +10,10 @@ namespace Sigil.ViewModels
     {
         public IssuePanelPartialVM IssuePanelVM { get; set; }
         
+        public Org IssueOrg { get; set; }
+        
+        public Product IssueProduct { get; set; }
+
         public UserViewModel UserVM { get; set; }
 
         public SideBarVM sideBar { get; set; }

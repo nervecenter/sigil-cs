@@ -10,9 +10,6 @@ using Sigil.Services;
 
 namespace Sigil.Controllers
 {
-
-
-
     public class NotificationController : Controller
     {
         //private readonly IUserService userService;

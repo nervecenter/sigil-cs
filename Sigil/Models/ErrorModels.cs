@@ -5,8 +5,6 @@ using System.Web;
 
 namespace Sigil.Models
 {
-
-
     public class Error
     {
         public int Id { get; set; }

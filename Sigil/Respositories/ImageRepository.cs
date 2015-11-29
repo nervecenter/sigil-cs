@@ -29,12 +29,12 @@ namespace Sigil.Repository
 
         public Image GetProductImage(int productId)
         {
-            return DbContext.Images.Where(i => Convert.ToInt32(i.OwnerId) == productId && i.imgType == (int)ImageType.Product).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == productId.ToString() && i.imgType == (int)ImageType.Product).FirstOrDefault();
         }
 
         public Image GetTopicImage(int topId)
         {
-            return DbContext.Images.Where(i => Convert.ToInt32(i.OwnerId) == topId && i.imgType == (int)ImageType.Topic).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == topId.ToString() && i.imgType == (int)ImageType.Topic).FirstOrDefault();
         }
 
         public Image GetUserImage(string userId)

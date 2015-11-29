@@ -21,11 +21,11 @@
             </div>
             <div class="media-body">
                 <h4 class="media-heading">
-                    <a href="/@Model.issue.Product.Org.orgName/@Model.issue.Id">@Model.issue.title</a>
+                    <a href="/@Model.issue.Product.Org.orgURL/@Model.issue.Product.ProductURL/@Model.issue.Id">@Model.issue.title</a>
                     @if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }
                 </h4>
                 <p class="pull-left">
-                    <img class="issue-panel-icon" src="@*@(Sigil.Controllers.ImageController<Org>.Get_Icon_20( thisIssue.Org ))*@" /><span><a href="/@Model.issue.Product.Org.orgURL">@Model.issue.Product.Org.orgName</a></span>
+                    <img class="issue-panel-icon" src="@(Model.issue.Product.Image.icon_20)" /><span><a href="/@Model.issue.Product.Org.orgURL">@Model.issue.Product.Org.orgName</a></span>
                     <span>: @Model.issue.Product.ProductName</span>
                     @*<span>in @thisIssue.Topic.topicName</span>*@
                 </p>

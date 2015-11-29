@@ -15,6 +15,7 @@ namespace Sigil.Services
         void SaveOrgApp();
 
         OrgApp ApproveOrgApp(int orgAppId);
+        void UpdateOrgApp(OrgApp org);
 
         void CreateOrg(Org org);
         void UpdateOrg(Org org);
@@ -56,7 +57,7 @@ namespace Sigil.Services
         public Org GetOrg(string orgstr, bool name)
         {
             Org org = default(Org);
-            if (!name)
+            if (name)
                 org = OrgsRepository.GetByName(orgstr);
 
             if (org != default(Org))
@@ -118,6 +119,12 @@ namespace Sigil.Services
         public void UpdateOrg(Org org)
         {
             OrgsRepository.Update(org);
+            unitOfWork.Commit();
+        }
+
+        public void UpdateOrgApp(OrgApp org)
+        {
+            orgAppRepository.Update(org);
             unitOfWork.Commit();
         }
     }

@@ -11,12 +11,12 @@
     Org thisOrg = Model.thisOrg;
     ViewBag.Title = "Sigil - " + thisOrg.orgName;
 
-    UserVoteCol userVotes = Model.thisUser.UserVotes;//ViewBag.userVotes;
-    IEnumerable<SubscriptionViewModel> userSubs = Model.thisUser.UserSubscriptions;//Sigil.Controllers.AccountController.userSubs( User );
+    UserVoteCol userVotes = Model.UserVM.UserVotes;//ViewBag.userVotes;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;//Sigil.Controllers.AccountController.userSubs( User );
 }
 
 <div class="col-md-9 col-lg-9">
-    @*<img class="img-rounded img-responsive org-banner-small" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">*@
+    <img class="img-rounded img-responsive org-banner-small" src="@(thisOrg.Image.banner)">
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-default active">Main feed</a>
         <a class="btn btn-info" href="/@thisOrg.orgURL/responses">Responses</a>
@@ -25,7 +25,7 @@
         <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
         @if ( !Request.IsAuthenticated ) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
-        } else if ( userSubs.Any<SubscriptionViewModel>( s => s. == thisOrg.Id ) ) {
+        } else if ( userSubs.Any<SubscriptionViewModel>( s => s.subObjectId == thisOrg.Id && s.subName == thisOrg.orgName ) ) {
             <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL')">Unsubscribe from @thisOrg.orgName</a>
         } else {
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>

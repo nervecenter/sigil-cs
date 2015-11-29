@@ -15,13 +15,15 @@
         <div class="panel panel-primary">
             <div class="panel-body">
                 Org Name: @applicant.orgName<br />
+                Org Apply Date: @applicant.ApplyDate
                 Requested OrgURL: @applicant.orgURL<br />
-                Org's Website:<a href="https://@applicant.website">@applicant.website</a><br />
-                Requested Org Admin Username: @applicant.username<br />
-                Org Admin's Email: @applicant.email<br />
-                Org Admin's Name: @applicant.AdminName<br />
-                Org Admins Phone: @applicant.contact<br />
+                Org's Website:<a href="https://@(applicant.website) ">@applicant.website</a><br />
+                Requested Org Admin Username: @applicant.DisplayName<br />
+                Org Admin's Email: @applicant.AdminEmail<br />
+                Org Admin's Name: @applicant.AdminContactName<br />
+                Org Admins Phone: @applicant.ContactNumber<br />
                 Org Admins Comment: @applicant.comment
+                
                 <form>
                     <button type="submit" class="btn btn-success" formaction="orgapps/@applicant.Id/">Approve</button>
                     <button type="submit" class="btn btn-danger">Disapprove</button>
