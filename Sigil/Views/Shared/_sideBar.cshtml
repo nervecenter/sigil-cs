@@ -1,27 +1,31 @@
 ﻿@using Sigil.ViewModels
+@using Sigil.Models
 
 @* Model is <Org, List of user subs *@
-@model IEnumerable<SubscriptionViewModel>
+@model SideBarVM
+
 @{ 
-    IEnumerable<SubscriptionViewModel> userSubs = Model;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
+    //string controller = Request.RequestContext.RouteData.Values[ "controller" ].ToString();
 }
 
 <div class="col-md-3 .col-lg-3">
     @*<form action="@Url.Action( "CreateIssue", "Issue" )">
         <button class="btn btn-info btn-block sidebar-button">Submit new feedback</button>
     </form>*@
-    <div class="panel panel-default">
-        @*<div class="panel-heading"><a href="/microsoft">Microsoft</a></div>*@
-        <div class="panel-body">
-            <a href="/microsoft" style="font-size:25px;"><img class="sub-org-icon" src="" />Microsoft</a><br />
-            Responsiveness: 69%<br />
-            <a href="/microsoft/data" style="font-size:25px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;">Data</div></a><br />
-            <a href="microsoft/windows" class="sub"><img class="sub-org-icon" src="" />Windows</a><br />
-            <a href="microsoft/surface" class="sub"><img class="sub-org-icon" src="" />Surface</a><br />
-            <a href="microsoft/xbox" class="sub"><img class="sub-org-icon" src="" />Xbox</a><br />
-            <a href="microsoft/bing" class="sub"><img class="sub-org-icon" src="" />Bing</a><br />
+    @if ( Model.showOrgBox ) {
+        <div class="panel panel-default">
+            @*<div class="panel-heading"><a href="/microsoft">Microsoft</a></div>*@
+            <div class="panel-body">
+                <a href="/@Model.thisOrg.orgURL" style="font-size:25px;"><img class="sub-org-icon" src="@Model.thisOrg.Image.icon_20" />@Model.thisOrg.orgName</a><br />
+                Responsiveness: 69%<br />
+                <a href="/@Model.thisOrg.orgURL/data" style="font-size:25px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;">Data</div></a><br />
+                @foreach ( Product p in Model.orgProducts ) {
+                    <a href="@Model.thisOrg.orgURL/@p.ProductURL" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
+                }
+            </div>
         </div>
-    </div>
+    }
     @if (Request.IsAuthenticated) {
         <div class="panel panel-default">
             <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>

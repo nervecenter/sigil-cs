@@ -31,15 +31,19 @@
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>
         }
     </div>
-    <form>
-        <div class="form-group">
-            <label for="text">Search for feedback or post your own:</label><br />
-            <input id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Search feedback or post your own" />
+    <div class="panel">
+        <div class="panel-body">
+            <form>
+                <div class="form-group">
+                    @*<label for="text">Text:</label><br />*@
+                    <textarea id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own" style="height:70px;min-height:70px;max-width:100%;min-width:100%;"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:0px;">
+                    <button type="submit" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit as new feedback</button>
-        </div>
-    </form>
+    </div>
     @foreach ( IssuePanelPartialVM issue in Model.orgIssues ) {
         /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
                                                                                              userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )}, 
