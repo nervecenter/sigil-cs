@@ -223,7 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\ErrorHandler.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Random.cs" />
@@ -486,6 +485,9 @@
     <Content Include="Views\Org\OrgResponsesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage - Copy.cshtml" />
+    <Content Include="Views\Admin\RolesIndex.cshtml" />
+    <Content Include="Views\Admin\CreateRoles.cshtml" />
+    <Content Include="Views\Admin\ManageUserRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -7,7 +7,7 @@ using Sigil.ViewModels;
 using Sigil.Repository;
 using System.Xml.Linq;
 using System.Diagnostics;
-
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Sigil.Services
 {
@@ -51,6 +51,15 @@ namespace Sigil.Services
         UserViewModel GetUserViewModel(string userId);
 
         UserVoteCol GetUserVotes(string userId);
+
+        //IdentityRole functions
+        void CreateRole(string roleName);
+        IEnumerable<IdentityRole> GetAllRoles();
+        void DeleteRole(string roleName);
+        void EditRole(string roleName, string newRoleName);
+        //void AssignUserToRole(string userId, string RoleName);
+        //IEnumerable<IdentityRole> GetUserRoles(string userId);
+        //void RemoveUserRole(string userId, string roleName);
     }
 
     public class UserService : IUserService
@@ -236,5 +245,46 @@ namespace Sigil.Services
             userRepository.Update(user);
             unitOfWork.Commit();
         }
+
+        public void CreateRole(string roleName)
+        {
+            IdentityRole newRole = new IdentityRole(roleName);
+            userRepository.CreateRole(newRole);
+            unitOfWork.Commit();
+        }
+
+        public IEnumerable<IdentityRole> GetAllRoles()
+        {
+            return userRepository.GetAllRoles();
+        }
+
+        public void DeleteRole(string roleName)
+        {
+            userRepository.DeleteRole(roleName);
+            unitOfWork.Commit();
+        }
+
+        public void EditRole(string roleName, string newRoleName)
+        {
+            userRepository.EditRole(roleName, newRoleName);
+            unitOfWork.Commit();
+        }
+
+        //public void AssignUserToRole(string userId, string RoleName)
+        //{
+        //    userRepository.AssignUserToRole(userId, RoleName);
+        //    unitOfWork.Commit();
+        //}
+
+        //public IEnumerable<IdentityRole> GetUserRoles(string userId)
+        //{
+        //    return userRepository.GetUserRoles(userId);
+        //}
+
+        //public void RemoveUserRole(string userId, string roleName)
+        //{
+        //    userRepository.RemoveUserRole(userId, roleName);
+        //    unitOfWork.Commit();
+        //}
     }
 }

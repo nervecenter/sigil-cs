@@ -169,6 +169,12 @@ namespace Sigil {
             //========================= Org Controller ==================================================================
 
             routes.MapRoute(
+                name: "Admin View Roles",
+                url: "sadmin/rolesIndex/",
+                defaults: new { controller = "Admin", action = "RolesIndex" }
+            );
+
+            routes.MapRoute(
                 name: "Default Org Data",
                 url: "default_graph/{orgURL}/",
                 defaults: new { controller = "Org", action = "DefaultData" }

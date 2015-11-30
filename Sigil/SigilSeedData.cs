@@ -13,17 +13,44 @@ namespace Sigil
         {
             GetOrgs().ForEach(o => context.Orgs.Add(o));
             GetCats().ForEach(c => context.Categories.Add(c));
-
+            CreateRoles().ForEach(r => context.Roles.Add(r));
             //base.Seed(context);
 
 
             context.Commit();
-
+            context.SaveChanges();
 
             
         }
 
         //This is where we can add initial data 
+
+        private static List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> CreateRoles()
+        {
+            return new List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+            {
+                new Microsoft.AspNet.Identity.EntityFramework.IdentityRole()
+                {
+                    Name = "SigilAdmin"
+                },
+                
+                new Microsoft.AspNet.Identity.EntityFramework.IdentityRole()
+                {
+                    Name = "OrgSuperAdmin"
+                },
+
+                new Microsoft.AspNet.Identity.EntityFramework.IdentityRole()
+                {
+                    Name = "OrgAdmin"
+                },
+
+                new Microsoft.AspNet.Identity.EntityFramework.IdentityRole()
+                {
+                    Name = "BasicUser"
+                }
+            };
+        }
+
 
         private static List<Org> GetOrgs()
         {
