@@ -88,8 +88,29 @@ namespace Sigil.Controllers
         public JsonResult SearchIssuesByOrg( int id ) 
         {
             IEnumerable<Issue> issues = searchService.MatchIssuesByOrg( id ).OrderByDescending( i => i.votes );
+            //List<IssuePanelPartialJsonVM> partialList = new List<IssuePanelPartialJsonVM>();
+            
+            /*foreach ( Issue i in issues ) {
+                partialList.Add(
+                    new IssuePanelPartialJsonVM{
+                        issueID = i.Id,
+                        votes = i.votes,
+                        title = i.title,
+                        text = i.text,
+                        orgName = i.Org.orgName,
+                        orgIcon = i.Org.Image.icon20, //might be an underscore
+                        productName = i.Product.productName,
+                        productIcon = i.Product.Image.icon20,
+                        datePostedString =  make some date string ,
+                        userName = i.User.displayName,
+                        userIcon = i.User.Image.icon20,
+                        UserVoted =  get the uservotecol ,
+                        
+                    }
+                );
+            }*/
 
-            return Json( issues, JsonRequestBehavior.AllowGet );
+            return Json( issues.Select(i => new {thisIssue = issue}, JsonRequestBehavior.AllowGet );
         }
 
         /* 

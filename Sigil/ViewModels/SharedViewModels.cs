@@ -12,19 +12,34 @@ namespace Sigil.ViewModels
     {
         public Issue issue { get; set; }
 
-        //public string orgName { get; set; }
+        public bool UserVoted { get; set; }
 
-        //public string orgIcon { get; set; }
+        public bool InPanel { get; set; }
+    }
+    
+    public struct IssuePanelPartialJsonVM
+    {   
+        public int issueID { get; set; }
+        
+        public int votes { get; set; }
+        
+        public string title { get; set; }
+        
+        public string text { get; set; }
 
-        //public string productName { get; set; }
+        public string orgName { get; set; }
 
-        //public string productIcon { get; set; }
+        public string orgIcon { get; set; }
 
-        //public string datePostedString { get; set; }
+        public string productName { get; set; }
 
-        //public string userName { get; set; }
+        public string productIcon { get; set; }
 
-        //public string userIcon { get; set; }
+        public string datePostedString { get; set; }
+
+        public string userName { get; set; }
+
+        public string userIcon { get; set; }
 
         public bool UserVoted { get; set; }
 
