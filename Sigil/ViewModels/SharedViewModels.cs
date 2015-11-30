@@ -53,6 +53,14 @@ namespace Sigil.ViewModels
 
         public IEnumerable<Notification> UserNotifications { get; set; }
         public IEnumerable<SubscriptionViewModel> UserSubscriptions { get; set; }
+
+        public UserViewModel emptyUser() {
+            return new UserViewModel {
+                UserVotes = new UserVoteCol(),
+                UserNotifications = new List<Notification>(),
+                UserSubscriptions = new List<SubscriptionViewModel>()
+            };
+        }
     }
 
     public struct SideBarVM
