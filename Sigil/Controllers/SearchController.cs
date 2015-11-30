@@ -16,6 +16,7 @@ namespace Sigil.Controllers
         private readonly IProductService productService;
         private readonly ISearchService searchService;
          
+
         public SearchController(IProductService prodS, ISearchService searchS)
         {
             productService = prodS;
@@ -72,6 +73,13 @@ namespace Sigil.Controllers
             return Json(Final_search_list.Select(s => new { label = s.Key, value = s.Value }), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SearchByUserDisplayName(string term)
+        {
+            var users = searchService.MatchUsersByName(term).Select(u => u.DisplayName).ToList();
+
+            return Json(users, JsonRequestBehavior.AllowGet);
+
+        }
 
         public JsonResult SearchOrgs_Cats(string term)
         {

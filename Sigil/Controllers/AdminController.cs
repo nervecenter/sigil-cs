@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sigil.Models;
 using Sigil.Services;
+using Microsoft.AspNet.Identity;
 
 namespace Sigil.Controllers
 {
@@ -13,13 +14,14 @@ namespace Sigil.Controllers
         private readonly IOrgService orgService;
         private readonly IErrorService errorService;
         private readonly IUserService userService;
+        private readonly ApplicationUserManager _userManager;
 
-
-        public AdminController(IOrgService orgS, IErrorService errS, IUserService userS)
+        public AdminController(IOrgService orgS, IErrorService errS, IUserService userS, ApplicationUserManager userM)
         {
             orgService = orgS;
             errorService = errS;
             userService = userS;
+            _userManager = userM;
         }
 
        public AdminController(IOrgService orgS, IErrorService errS) {
@@ -40,20 +42,54 @@ namespace Sigil.Controllers
             return View(roles);
         }
 
-        // POST: /Roles/Create
-        [HttpPost]
         public ActionResult CreateRole()
         {
-            string newRoleName = Request.Form["roleName"];
-            userService.CreateRole(newRoleName);
-
-            return RolesIndex();
+            if (Request.HttpMethod == "POST")
+            {
+                string newRoleName = Request.Form["roleName"];
+                userService.CreateRole(newRoleName);
+            }
+            return View();
         }
 
         public ActionResult DeleteRole(string roleName)
         {
             userService.DeleteRole(roleName);
             return RedirectToAction("RolesIndex");
+        }
+
+        public ActionResult AssignUserToRole(string userDisplayName, string roleName)
+        {
+            //var user = userService.GetUser(User.Identity.GetUserId());
+            var user = userService.GetUserByDisplayName(userDisplayName);
+            
+            _userManager.AddToRole(user.Id, roleName);
+
+            ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+
+
+            return View("ManageUserRoles");
+        }
+
+        public ActionResult DeleteUserFromRole(string userDisplayName, string roleName)
+        {
+            var user = userService.GetUserByDisplayName(userDisplayName);
+            _userManager.RemoveFromRole(user.Id, roleName);
+
+            ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+
+
+            return View("ManageUserRoles");
+        }
+
+        public ActionResult GetUserRoles(string userDisplayName)
+        {
+            var user = userService.GetUserByDisplayName(userDisplayName);
+            ViewBag.RolesForThisUser = _userManager.GetRoles(user.Id);
+            ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+
+            
+            return View("ManageUserRoles");
         }
 
         //

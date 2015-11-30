@@ -104,6 +104,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "User DisplayName Search",
+                url: "searchUsers/",
+                defaults: new { controller = "Search", action = "SearchByUserDisplayName" }
+            );
+
+            routes.MapRoute(
                 name: "Issue Search",
                 url: "issueSearch/{orgid}",
                 defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
@@ -170,9 +176,23 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "Admin View Roles",
-                url: "sadmin/rolesIndex/",
+                url: "sadmin/roles/",
                 defaults: new { controller = "Admin", action = "RolesIndex" }
             );
+
+            routes.MapRoute(
+                name: "Create Role",
+                url: "sadmin/roles/create/",
+                defaults: new { controller = "Admin", action = "CreateRole" }
+            );
+
+            routes.MapRoute(
+                name: "Role Manager",
+                url: "sadmin/roles/manage/",
+                defaults: new { controller = "Admin", action = "ManageUserRoles" }
+            );
+
+
 
             routes.MapRoute(
                 name: "Default Org Data",

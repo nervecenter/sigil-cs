@@ -30,3 +30,9 @@ $('#issuesByOrgBox').autocomplete({
         ui.item.value = ui.item.label;
     }
 });
+
+
+
+$('#UserSearch').autocomplete({
+    source: 'searchUsers/',
+});

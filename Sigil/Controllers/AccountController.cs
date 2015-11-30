@@ -202,36 +202,7 @@ namespace Sigil.Controllers
             return View(model);
         }
 
-        public ActionResult AssignUserToRole(string userId, string roleName)
-        {
-            //var user = userService.GetUser(User.Identity.GetUserId());
-
-            _userManager.AddToRole(userId, roleName);
-
-            var roleList = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-
-
-            return View("ManageUserRoles", "Admin", roleList);
-        }
-
-        public ActionResult DeleteUserFromRole(string userId, string roleName)
-        {
-            _userManager.RemoveFromRole(userId, roleName);
-
-            var roleList = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-
-
-            return View("ManageUserRoles", "Admin", roleList);
-        }
-
-        public ActionResult GetUserRoles(string userId)
-        {
-            ViewBag.RolesForThisUser = _userManager.GetRoles(userId);
-            var roleList = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-
-
-            return View("ManageUserRoles", "Admin", roleList);
-        }
+       
 
         /// <summary>
         /// Function that handles all setting up all the users extra database entries for the site.
