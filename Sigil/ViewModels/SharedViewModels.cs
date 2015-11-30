@@ -71,6 +71,8 @@ namespace Sigil.ViewModels
 
         public IEnumerable<Product> orgProducts { get; set; }
 
+        public bool showSubscriptions { get; set; }
+
         public IEnumerable<SubscriptionViewModel> Subscriptions { get; set; }
         
     }

@@ -54,4 +54,4 @@
 
     @Html.PagedListPager(Model.orgIssues, page => Url.Action("OrgPage","Org", new { page }))
 </div>
-@Html.Partial( "../Shared/_SideBar", userSubs )
+@Html.RenderAction("_SideBar", "Shared" )
