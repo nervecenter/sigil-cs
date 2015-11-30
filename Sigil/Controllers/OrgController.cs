@@ -58,22 +58,17 @@ namespace Sigil.Controllers
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
-            UserVoteCol userVotes = new UserVoteCol();
+            UserViewModel userVM = new UserViewModel().emptyUser();
 
             if (userId != null)
             {
-                // Get the user's votes on this org
-                userVotes = userService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA();
+                userVM = userService.GetUserViewModel( userId );
             }
             //ViewBag.userVotes = userVotes;
-
-          
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
             int num_results_per_page = 3;
             int pageNumber = (page ?? 1);
-
-            UserViewModel userVM = userService.GetUserViewModel(userId);
 
             OrgPageViewModel orgVM = new OrgPageViewModel();
             orgVM.UserVM = userVM;
@@ -82,7 +77,7 @@ namespace Sigil.Controllers
             var OrgIssues = issueService.GetAllOrgIssues(thisOrg.Id).Select(i => new IssuePanelPartialVM()
             {
                 issue = i,
-                InPanel = false,
+                InPanel = true,
                 UserVoted = userVM.UserVotes.Check_Vote(i.Id, thisOrg.Id)
             }).ToList();
 
