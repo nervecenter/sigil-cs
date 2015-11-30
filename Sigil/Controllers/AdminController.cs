@@ -22,6 +22,11 @@ namespace Sigil.Controllers
             userService = userS;
         }
 
+       public AdminController(IOrgService orgS, IErrorService errS) {
+            orgService = orgS;
+            errorService = errS;
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
