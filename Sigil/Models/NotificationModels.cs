@@ -14,18 +14,16 @@ namespace Sigil.Models
         
         public string To_UserId { get; set; }
         public int To_OrgId { get; set; }
+
         public DateTime createTime { get; set; }
 
         public int issueId { get; set; }
-        //public Issue Issue { get; set; }
 
         public int productId { get; set; }
 
         public int orgId { get; set; }
-        //public Org Org { get; set; }
 
         public int CommentId { get; set; }
-        //public Comment Comment { get; set; }
 
         public int NoteType { get; set; }
     }

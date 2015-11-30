@@ -110,7 +110,7 @@ namespace Sigil.Controllers
                 );
             }*/
 
-            return Json( issues.Select(i => new {thisIssue = issue}, JsonRequestBehavior.AllowGet );
+            return Json( issues.Select(i => new {thisIssue = i}), JsonRequestBehavior.AllowGet );
         }
 
         /* 

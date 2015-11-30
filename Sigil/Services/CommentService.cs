@@ -45,9 +45,9 @@ namespace Sigil.Services
 
     public class CommentService : ICommentService
     {
-        private readonly IOrgRepository OrgsRepository;
-        private readonly IProductRepository ProductRepository;
-        private readonly IIssueRepository issueRepository;
+        //private readonly IOrgRepository OrgsRepository;
+        //private readonly IProductRepository ProductRepository;
+        //private readonly IIssueRepository issueRepository;
         private readonly ICommentRepository commentRespository;
         private readonly ICommentCountRepository commentCountRepository;
         private readonly IUserRepository userRepository;
@@ -55,16 +55,19 @@ namespace Sigil.Services
         private readonly INotificationRepository notificationRepository;
         private readonly IOfficialResponseRepository officialResponseRepository;
         private readonly IUserService userService;
-        
+        private readonly IErrorService errorService;
         //private readonly ICountService countDataService;
 
-        public CommentService(IUnitOfWork unit, ICommentRepository commRepo, IOfficialResponseRepository offRepo, ICommentCountRepository comCRepo, IUserRepository userRepo)
+        public CommentService(IUnitOfWork unit, ICommentRepository commRepo, IOfficialResponseRepository offRepo, ICommentCountRepository comCRepo, IUserRepository userRepo, INotificationRepository noteRepo, IUserService userS, IErrorService errS)
         {
             unitOfWork = unit;
             commentRespository = commRepo;
             officialResponseRepository = offRepo;
             commentCountRepository = comCRepo;
             userRepository = userRepo;
+            notificationRepository = noteRepo;
+            userService = userS;
+            errorService = errS;
         }
 
         public void CreateComment(Comment comm)
@@ -156,16 +159,17 @@ namespace Sigil.Services
             
             newComment.text = request.Form["text"];
 
-            Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.Product.OrgId, thisIssue.Id));
-            CommCountThread.Start();
+            //Thread CommCountThread = new Thread(() => CommentCountRoutine(thisIssue.Product.OrgId, thisIssue.Id));
+            //CommCountThread.Start();
 
+            CommentCountRoutine(thisIssue.Product.OrgId, thisIssue.Id);
             CreateComment(newComment);
             SaveComment();
 
-           
 
-            Thread NotificationThread = new Thread(() => Notification_Check(newComment.text, userID, thisIssue.Id, thisIssue.Product.OrgId, newComment.Id));
-            NotificationThread.Start();
+            Notification_Check(newComment.text, userID, thisIssue, newComment.Id);
+            //Thread NotificationThread = new Thread(() => Notification_Check(newComment.text, userID, thisIssue, newComment.Id));
+            //NotificationThread.Start();
         }
 
         private void Create_Official_Response(HttpRequestBase request, Issue thisIssue, string userID)
@@ -185,11 +189,11 @@ namespace Sigil.Services
             
 
             //Checking to see of the official response mentions any users specifically
-            Thread NotificationThread = new Thread(() => Notification_Check(newOff.text, userID, thisIssue.Id, thisIssue.Product.OrgId, newOff.Id));
+            Thread NotificationThread = new Thread(() => Notification_Check(newOff.text, userID, thisIssue, newOff.Id));
             NotificationThread.Start();
 
             //Notifies every user who has commented and or voted on the issue that an official response has been made
-            Thread NotificationThread2 = new Thread(() => OfficialResponseNotificationRoutine(userID, thisIssue.Id, thisIssue.Product.OrgId, newOff.Id));
+            Thread NotificationThread2 = new Thread(() => OfficialResponseNotificationRoutine(userID, thisIssue, newOff.Id));
             NotificationThread2.Start();
 
         }
@@ -210,7 +214,7 @@ namespace Sigil.Services
 
         }
 
-        public void Notification_Check(string text, string FromUser, int issueID, int orgID, int commentID)
+        public void Notification_Check(string text, string FromUser, Issue issue, int commentID)
         {
             string to_user = null;
 
@@ -225,7 +229,7 @@ namespace Sigil.Services
             if (to_user != null) //|| to_org != null)
             {
                 var ToUser = userRepository.GetByDisplayName(to_user);//dc.AspNetUsers.SingleOrDefault(u => u.DisplayName == to_user).Id;
-                CreateNotification(ToUser.Id, FromUser, issueID, orgID, commentID, (int)NotificationType.Comment);
+                CreateNotification(ToUser.Id, FromUser, issue.Id, issue.ProductId, issue.Product.OrgId, commentID, (int)NotificationType.Comment);
                 unitOfWork.Commit();
             }
         }
@@ -237,17 +241,17 @@ namespace Sigil.Services
         /// <param name="issueID"></param>
         /// <param name="orgID"></param>
         /// <param name="commentID"></param>
-        public void OfficialResponseNotificationRoutine(string userId, int issueId, int orgId, int commentID)
+        public void OfficialResponseNotificationRoutine(string userId, Issue issue, int commentID)
         {
-            var VoteUsers = userService.GetUsersByVote(orgId, issueId);
+            var VoteUsers = userService.GetUsersByVote(issue.Product.OrgId, issue.Id);
 
-            var CommentUsers = userService.GetUsersByIssue(orgId, issueId);
+            var CommentUsers = userService.GetUsersByIssue(issue.Product.OrgId, issue.Id);
 
             var allUsers = VoteUsers.Union(CommentUsers);
 
             foreach (var user in allUsers)
             {
-                CreateNotification(user.Id, userId, issueId, orgId, commentID, (int)NotificationType.OfficialResponse);
+                CreateNotification(user.Id, userId, issue.Id, issue.ProductId, issue.Product.OrgId, commentID, (int)NotificationType.OfficialResponse);
             }
 
             unitOfWork.Commit();
@@ -263,7 +267,7 @@ namespace Sigil.Services
         /// <param name="orgID"></param>
         /// <param name="commentID"></param>
         /// <param name="Note_Type"></param>
-        private void CreateNotification(string ToUserId, string FromUserId, int issueID, int orgID, int commentID, int Note_Type)
+        private void CreateNotification(string ToUserId, string FromUserId, int issueID, int productId, int orgID, int commentID, int Note_Type)
         {
             Notification note = new Notification();
             try
@@ -272,10 +276,10 @@ namespace Sigil.Services
                 note.To_UserId = ToUserId;
                 note.createTime = DateTime.UtcNow;
                 note.issueId = issueID;
+                note.productId = productId;
                 note.orgId = orgID;
                 note.CommentId = commentID;
                 note.NoteType = Note_Type;
-
                 notificationRepository.Add(note);
                 //notificationService.CreateNotification(note);
 
@@ -283,9 +287,9 @@ namespace Sigil.Services
             }
             catch (Exception e)
             {
-                // ErrorHandler.Log_Error(note, e, dc);
 
-                //errorService.CreateError(note, e);
+
+                errorService.CreateError(note, e);
             }
         }
 

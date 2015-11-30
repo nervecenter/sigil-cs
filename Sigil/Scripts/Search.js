@@ -16,7 +16,7 @@ $('#searchBox').autocomplete({
 });
 
 $('#issuesByOrgBox').autocomplete({
-    source: 'search/',
+    source: 'issueSearch/',
     _renderItem: function (ul, item) {
         return $("<li>")
           .attr("data-value", item.label)
