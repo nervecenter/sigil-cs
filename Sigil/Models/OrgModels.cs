@@ -28,6 +28,9 @@ namespace Sigil.Models
         /// </summary>
         public string UserID { get; set; }
 
+
+
+
         //public virtual List<Issue> Issues { get; set; }
         public virtual List<Product> Products { get; set; }
 

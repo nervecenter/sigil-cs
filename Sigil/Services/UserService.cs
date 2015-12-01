@@ -221,7 +221,11 @@ namespace Sigil.Services
                 errorService.CreateError(userId, "User not found by id. Could not retrieve user vote col./n" + stack.GetFrame(1).GetMethod().Name, ErrorLevel.Critical);
                 return new UserVoteCol();
             }
-
+            if(user.votes == null) //should be able to remove this if check once we are sure the database seed data is making it correctly.
+            {
+                user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol()).ToString();
+                UpdateUser(user);
+            }
             return CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
         }
 

@@ -45,11 +45,23 @@ namespace Sigil.Migrations
 
             if (!(context.Users.Any(u => u.UserName == "dominic@sigil.tech")))
             {
+
+                
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 var userToInsert = new ApplicationUser { UserName = "dominic@sigil.tech", Email = "dominic@sigil.tech", DisplayName = "Dominic" };
                 userManager.Create(userToInsert, "s323232");
                 var user = context.Users.Where(u => u.UserName == "dominic@sigil.tech").FirstOrDefault();
+
+                Image userImg = new Image();
+                userImg.imgType = (int)ImageType.User;
+                userImg.OwnerId = user.Id;
+                context.Images.AddOrUpdate(userImg);
+                context.SaveChanges();
+                userImg = context.Images.Where(i => i.OwnerId == user.Id).FirstOrDefault();
+                user.ImageId = userImg.Id;
+                user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol()).ToString();
+                context.Users.AddOrUpdate(user);
                 userManager.AddToRole(user.Id, "SigilAdmin");
             }
 
@@ -61,9 +73,21 @@ namespace Sigil.Migrations
                 userManager.Create(userToInsert, "s323232");
 
                 var user = context.Users.Where(u => u.UserName == "nervecenter7@gmail.com").FirstOrDefault();
+
+                Image userImg = new Image();
+                userImg.imgType = (int)ImageType.User;
+                userImg.OwnerId = user.Id;
+                context.Images.AddOrUpdate(userImg);
+                context.SaveChanges();
+                userImg = context.Images.Where(i => i.OwnerId == user.Id).FirstOrDefault();
+                user.ImageId = userImg.Id;
+                user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol()).ToString();
+                context.Users.AddOrUpdate(user);
                 userManager.AddToRole(user.Id, "SigilAdmin");
 
             }
+
+            context.SaveChanges();
 
         }
 

@@ -1,6 +1,7 @@
 ﻿//using Sigil.App_Start;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,7 +15,7 @@ namespace Sigil
     {
         protected void Application_Start()
         {
-            //System.Data.Entity.Database.SetInitializer(new Sigil.Migrations.Configuration());
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<SigilEntities, Migrations.Configuration>());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

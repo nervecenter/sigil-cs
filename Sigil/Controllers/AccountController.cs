@@ -210,6 +210,8 @@ namespace Sigil.Controllers
         private void Create_User_Extras(string userID)
         {
 
+            _userManager.AddToRole(userID, "BasisUser");
+
             Image img = imageService.AssignDefaultImage(userID);
             userService.AssignUserImage(userID, img);
 
@@ -273,6 +275,7 @@ namespace Sigil.Controllers
             if (result.Succeeded)
             {
                 Create_User_Extras(user.Id);
+                _userManager.AddToRole(user.Id, "OrgSuperAdmin");
             }
             else
             {

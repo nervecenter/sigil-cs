@@ -51,19 +51,15 @@ namespace Sigil.Services
 
         public Image AssignDefaultImage(string userId)
         {
-            int defaultIMG = RNG.RandomNumber(1, 6);
-
-            string IMG_PATH = default_folder_path + "default" + defaultIMG + ".png";
+          
             Image userImg = new Sigil.Models.Image();
 
-            //userImg.UserId = userId;
-            userImg.icon_100 = IMG_PATH;
-            userImg.icon_20 = default_folder_path + "default20.png";
             userImg.OwnerId = userId;
             userImg.imgType = (int)ImageType.User;
 
             CreateImage(userImg);
             SaveImage();
+
             userImg = imageRepository.GetUserImage(userId);
             return userImg;
             
@@ -71,14 +67,9 @@ namespace Sigil.Services
 
         public Image AssignDefaultImage(int id, ImageType imgType)
         {
-            int defaultIMG = RNG.RandomNumber(1, 6);
-
-            string IMG_PATH = default_folder_path + "default" + defaultIMG + ".png";
             Image Img = new Sigil.Models.Image();
 
-            //userImg.UserId = userId;
-            Img.icon_100 = IMG_PATH;
-            Img.icon_20 = default_folder_path + "default20.png";
+            
             Img.OwnerId = id.ToString();
             Img.imgType = (int)imgType;
 
