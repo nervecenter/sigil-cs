@@ -15,4 +15,4 @@
         </div>
     </article>
 </div>
-@Html.Partial( "../Shared/_SideBar", Model.UserSubscriptions )
+@{Html.RenderAction("_SideBar", "Shared");}

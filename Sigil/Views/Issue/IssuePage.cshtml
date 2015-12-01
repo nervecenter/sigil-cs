@@ -104,4 +104,4 @@
         </div>
     </div>
 </div>
-@Html.Partial( "../Shared/_SideBar", userSubs )
+@{Html.RenderAction("_SideBar", "Shared");}

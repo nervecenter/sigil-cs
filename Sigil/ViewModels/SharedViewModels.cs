@@ -75,6 +75,20 @@ namespace Sigil.ViewModels
 
         public IEnumerable<SubscriptionViewModel> Subscriptions { get; set; }
         
+
+        public SideBarVM Init()
+        {
+            showOrgBox = false;
+            showSubscriptions = false;
+            
+            thisOrg = default(Org);
+
+            orgProducts = new List<Product>().AsEnumerable();
+            Subscriptions = new List<SubscriptionViewModel>().AsEnumerable();
+
+            return this;
+        }
+
     }
 
 

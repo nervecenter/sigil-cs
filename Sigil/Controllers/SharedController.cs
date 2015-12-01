@@ -31,28 +31,27 @@ namespace Sigil.Controllers
         }
 
         public ActionResult _SideBar() {
-            SideBarVM sidebarVM = new SideBarVM();
-            sidebarVM.showOrgBox = false;
-            sidebarVM.showSubscriptions = false;
-
+            SideBarVM sidebarVM = new SideBarVM().Init();
+            
             string controller = Request.RequestContext.RouteData.Values[ "controller" ].ToString();
 
             if (controller == "Org" || controller == "Issue" || controller == "Product") {
                 sidebarVM.showOrgBox = true;
+
+                var currentURL = Request.Url.AbsoluteUri.Split('/');
                 // Get the org
+                sidebarVM.thisOrg = orgService.GetOrg(currentURL[3]);
                 // Get the org's products
-                System.Web.Routing.RouteValueDictionary r = Request.RequestContext.RouteData.Values;
+                sidebarVM.orgProducts = productService.GetProductsByOrg(sidebarVM.thisOrg.Id);
+
+                //System.Web.Routing.RouteValueDictionary r = Request.RequestContext.RouteData.Values;
             }
 
             if (Request.IsAuthenticated) {
                 sidebarVM.showSubscriptions = true;
-                SubscriptionViewModel svm = new SubscriptionViewModel();
+                
                 List<Subscription> subs = subscriptionService.GetUserSubscriptions( User.Identity.GetUserId() ).ToList();
-                List<SubscriptionViewModel> subVMs = new List<SubscriptionViewModel>();
-
-                foreach (Subscription s in subs) {
-                    subVMs.Add( svm.Create( s ) );
-                }
+                sidebarVM.Subscriptions = subs.Select(s => new SubscriptionViewModel().Create(s));
             }
 
             return PartialView( sidebarVM );

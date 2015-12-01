@@ -49,4 +49,4 @@
         <h4>There don't appear to be any responses yet.</h4>
     }
 </div>
-@Html.Partial( "../Shared/_SideBar", userSubs )
+@{Html.RenderAction("_SideBar", "Shared");}

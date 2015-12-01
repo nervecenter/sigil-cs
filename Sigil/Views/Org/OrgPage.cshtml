@@ -23,9 +23,9 @@
         <a class="btn btn-success" href="/@thisOrg.orgURL/data">Data</a>
         @*<a class="btn btn-primary">Subscribe to @thisOrg.orgName</a>*@
         <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
-        @if ( !Request.IsAuthenticated ) {
+        @if (!Request.IsAuthenticated) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
-        } else if ( userSubs.Any<SubscriptionViewModel>( s => s.subObjectId == thisOrg.Id && s.subName == thisOrg.orgName ) ) {
+        } else if (userSubs.Any<SubscriptionViewModel>(s => s.subObjectId == thisOrg.Id && s.subName == thisOrg.orgName)) {
             <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL')">Unsubscribe from @thisOrg.orgName</a>
         } else {
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL')">Subscribe to @thisOrg.orgName</a>
@@ -44,14 +44,14 @@
             </form>
         </div>
     </div>
-    @foreach ( IssuePanelPartialVM issue in Model.orgIssues ) {
+    @foreach (IssuePanelPartialVM issue in Model.orgIssues) {
         /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
                                                                                              userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )}, 
                                                                    issue );*/
-        @Html.Partial( "../Shared/_IssuePanelPartial", issue )
+        @Html.Partial("../Shared/_IssuePanelPartial", issue)
     }
     @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
 
-    @Html.PagedListPager(Model.orgIssues, page => Url.Action("OrgPage","Org", new { page }))
+    @Html.PagedListPager(Model.orgIssues, page => Url.Action("OrgPage", "Org", new { page }))
 </div>
-@Html.RenderAction("_SideBar", "Shared" )
+@{Html.RenderAction("_SideBar", "Shared");}

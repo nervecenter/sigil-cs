@@ -40,4 +40,4 @@
         <h4>There's nothing here. :(<br /><br />Search for a company, person, or topic to subscribe to!</h4>
     }
 </div>
-@Html.Partial( "../Shared/_SideBar", Model.UserVM.UserSubscriptions)
+@{Html.RenderAction("_SideBar", "Shared");}
