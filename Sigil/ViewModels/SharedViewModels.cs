@@ -65,7 +65,13 @@ namespace Sigil.ViewModels
 
     public struct SideBarVM
     {
+        public bool showOrgBox { get; set; }
+
         public Org thisOrg { get; set; }
+
+        public IEnumerable<Product> orgProducts { get; set; }
+
+        public bool showSubscriptions { get; set; }
 
         public IEnumerable<SubscriptionViewModel> Subscriptions { get; set; }
         
