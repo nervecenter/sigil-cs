@@ -18,11 +18,8 @@ namespace Sigil.Controllers
         private readonly IOrgService orgService;
         private readonly IProductService productService;
 
-        public SharedController( IErrorService errS, 
-                                 IUserService userS, 
-                                 ISubscriptionService subS, 
-                                 IOrgService orgS, 
-                                 IProductService prodS ) {
+        public SharedController( IErrorService errS, IUserService userS, ISubscriptionService subS, IOrgService orgS, IProductService prodS )
+        {
             errorService = errS;
             userService = userS;
             subscriptionService = subS;
@@ -30,7 +27,8 @@ namespace Sigil.Controllers
             productService = prodS;
         }
 
-        public ActionResult _SideBar() {
+        public ActionResult _SideBar()
+        {
             SideBarVM sidebarVM = new SideBarVM().Init();
             
             string controller = Request.RequestContext.RouteData.Values[ "controller" ].ToString();
@@ -55,6 +53,16 @@ namespace Sigil.Controllers
             }
 
             return PartialView( sidebarVM );
+        }
+
+        public ActionResult _LoginPartial()
+        {
+            string userId = User.Identity.GetUserId();
+            if (userId == null || !Request.IsAuthenticated)
+                return PartialView("_LoginPartial", new UserViewModel());
+            var VM = userService.GetUserViewModel(userId);
+
+            return PartialView("_LoginPartial", VM);
         }
     }
 }

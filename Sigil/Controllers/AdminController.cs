@@ -35,6 +35,7 @@ namespace Sigil.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult RolesIndex()
         {
             var roles = userService.GetAllRoles();
@@ -42,6 +43,7 @@ namespace Sigil.Controllers
             return View(roles);
         }
 
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult CreateRole()
         {
             if (Request.HttpMethod == "POST")
@@ -52,12 +54,14 @@ namespace Sigil.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult DeleteRole(string roleName)
         {
             userService.DeleteRole(roleName);
             return RedirectToAction("RolesIndex");
         }
 
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult AssignUserToRole(string userDisplayName, string roleName)
         {
             //var user = userService.GetUser(User.Identity.GetUserId());
@@ -71,6 +75,7 @@ namespace Sigil.Controllers
             return View("ManageUserRoles");
         }
 
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult DeleteUserFromRole(string userDisplayName, string roleName)
         {
             var user = userService.GetUserByDisplayName(userDisplayName);
@@ -82,6 +87,7 @@ namespace Sigil.Controllers
             return View("ManageUserRoles");
         }
 
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult GetUserRoles(string userDisplayName)
         {
             var user = userService.GetUserByDisplayName(userDisplayName);

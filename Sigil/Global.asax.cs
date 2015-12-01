@@ -14,7 +14,7 @@ namespace Sigil
     {
         protected void Application_Start()
         {
-            System.Data.Entity.Database.SetInitializer(new SigilSeedData());
+            //System.Data.Entity.Database.SetInitializer(new Sigil.Migrations.Configuration());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

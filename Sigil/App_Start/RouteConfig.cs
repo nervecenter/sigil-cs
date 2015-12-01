@@ -157,8 +157,6 @@ namespace Sigil {
                 defaults: new { controller = "Admin", action = "ErrorLog" }
             );
 
-
-            //========================= Subscription Controller ==================================================================
        
             routes.MapRoute(
                 name: "Subscribe",
@@ -171,8 +169,6 @@ namespace Sigil {
                 url: "unsubscribe/{orgURL}/",
                 defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
-
-            //========================= Org Controller ==================================================================
 
             routes.MapRoute(
                 name: "Admin View Roles",
@@ -191,8 +187,6 @@ namespace Sigil {
                 url: "sadmin/roles/manage/",
                 defaults: new { controller = "Admin", action = "ManageUserRoles" }
             );
-
-
 
             routes.MapRoute(
                 name: "Default Org Data",
@@ -224,11 +218,6 @@ namespace Sigil {
                 defaults: new { controller = "Issue", action = "UnVoteUpComment" }
             );
 
-            //routes.MapRoute(
-            //    name: "Default Issue Data",
-            //    url: "default_graph/{orgURL}/{issueId}",
-            //    defaults: new { controller = "Issue", action = "DefaultData" }
-            //);
 
             routes.MapRoute(
                 name: "Custom Org Data",
@@ -255,31 +244,23 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-              name: "Org",
+              name: "Org Page",
               url: "{orgURL}/",
               defaults: new { controller = "Org", action = "OrgPage" }
             );
 
-            //routes.MapRoute(
-            //    name: "Org Product Page",
-            //    url: "{orgURL}/{catURL}/",
-            //    defaults: new { controller = "Org", action = "CatPage" }
-            //);
 
-            //========================= Issue Controller ==================================================================
-
+            routes.MapRoute(
+                name: "Product Page",
+                url: "{orgURL}/{productURL}/",
+                defaults: new { controller = "Product", action = "ProductPage" }
+            );
 
             routes.MapRoute(
                 name: "Issue",
                 url: "{orgURL}/{productURL}/{IssueId}/",
                 defaults: new { controller = "Issue", action = "IssuePage" }
             );
-
-            //routes.MapRoute(
-            //    name: "IssueData",
-            //    url: "{orgURL}/{pro{IssueId}/data/",
-            //    defaults: new { controller = "Issue", action = "IssueData" }
-            //);
 
        
 

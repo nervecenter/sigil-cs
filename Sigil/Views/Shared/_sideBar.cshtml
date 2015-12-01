@@ -21,7 +21,7 @@
                 Responsiveness: 69%<br />
                 <a href="/@Model.thisOrg.orgURL/data" style="font-size:25px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;">Data</div></a><br />
                 @foreach ( Product p in Model.orgProducts ) {
-                    <a href="@Model.thisOrg.orgURL/@p.ProductURL" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
+                    <a href="@Model.thisOrg.orgURL/@p.ProductURL/" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
                 }
             </div>
         </div>
@@ -30,15 +30,6 @@
         <div class="panel panel-default">
             <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>
             <div class="panel-body">
-                @*@foreach ( var sub in userSubs ) {
-                    if ( sub.OrgName != "" && sub.CatName == "" ) {
-                        <a href="/@sub.Org.orgURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Org>.Get_Icon_20(sub.Org))">@sub.Org.orgName</a><br>
-                    } else if ( sub.CatId != 0 ) {
-                        <a href="/@sub.Org.orgURL/c/@sub.Category.catURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Category>.Get_Icon_20(sub.Category))">@sub.Category.catName</a><br>
-                    } else {
-                        <a href="/@sub.Topic.topicURL" class="sub"><img class="sub-org-icon" src="@(Sigil.Controllers.ImageController<Topic>.Get_Icon_20(sub.Topic))">@sub.Topic.topicURL</a><br>
-                    }
-                }*@
                 @foreach(var sub in userSubs)
                 {
                     <a href="@sub.subURL" class="sub"><img class="sub-org-icon" src="@sub.subIcon" />@sub.subName</a><br />

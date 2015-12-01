@@ -55,7 +55,7 @@ namespace Sigil.Controllers
             // Grab the issue's org
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
 
-            Product thisProduct = productService.GetProduct(thisOrg.Id, productURL);
+            Product thisProduct = productService.GetProduct(productURL);
             // Grab the issue for the page
             Issue thisIssue = issueService.GetIssue(issueID);
             //Issue thisIssue = (from issue in dc.Issues
@@ -258,7 +258,7 @@ namespace Sigil.Controllers
             }
 
             var org = orgService.GetOrg(orgName, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
-            var product = productService.GetProduct(org.Id, issueproduct);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
+            var product = productService.GetProduct(issueproduct);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
 
             //pass in creators userid, the org and possible Product of the issue
             int issueId = Create_New_Issue(userId, org, product);

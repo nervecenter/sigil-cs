@@ -248,6 +248,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\OrgController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SubscriptionsController.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProductModels.cs" />
     <Compile Include="Models\CommentModels.cs" />
     <Compile Include="Models\ErrorModels.cs" />
@@ -304,6 +306,7 @@
     <Compile Include="ViewModels\HomeViewModels.cs" />
     <Compile Include="ViewModels\IssueViewModels.cs" />
     <Compile Include="ViewModels\OrgViewModels.cs" />
+    <Compile Include="ViewModels\ProductViewModels.cs" />
     <Compile Include="ViewModels\SharedViewModels.cs" />
     <Compile Include="ViewModels\TopicViewModels.cs" />
   </ItemGroup>
@@ -490,6 +493,7 @@
     <Content Include="Views\Admin\CreateRole.cshtml" />
     <Content Include="Views\Admin\ManageUserRoles.cshtml" />
     <Content Include="Views\Shared\404.cshtml" />
+    <Content Include="Views\Product\ProductPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -502,7 +506,9 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Topic\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -575,15 +575,7 @@ namespace Sigil.Controllers
         //}
 
 
-        public ActionResult _LoginPartial()
-        {
-            string userId = User.Identity.GetUserId();
-            if(userId == null)
-                return PartialView("_LoginPartial", new UserViewModel());
-            var VM = userService.GetUserViewModel(userId);
-
-            return PartialView("_LoginPartial", VM);
-        }
+        
 
         #region Helpers
         // Used for XSRF protection when adding external logins
@@ -644,59 +636,11 @@ namespace Sigil.Controllers
         }
         #endregion
 
-        //public static AspNetUser GetLoggedInUser( System.Security.Principal.IPrincipal user ) {
-        //    string id = user.Identity.GetUserId();
-
-        //    if ( id == null ) {
-        //        return default( AspNetUser );
-        //    } else {
-        //        using ( SigilDBDataContext dc = new SigilDBDataContext() ) {
-        //            return dc.AspNetUsers.Single<AspNetUser>( u => u.Id ==  id );
-        //        }
-        //    }
-        //}
-
-        //public static System.Collections.Generic.List<Subscription> userSubs( AspNetUser user ) {
-        //    System.Collections.Generic.List<Subscription> subs;
-        //    SigilDBDataContext dc = new SigilDBDataContext();
-        //    subs = ( from Subs in dc.Subscriptions
-        //             where Subs.UserId == user.Id
-        //             select Subs ).ToList();
-        //    return subs;
-        //}
-
-        //public static System.Collections.Generic.List<Subscription> userSubs( System.Security.Principal.IPrincipal user ) {
-        //    System.Collections.Generic.List<Subscription> subs;
-        //    SigilDBDataContext dc = new SigilDBDataContext();
-        //    subs = ( from Subs in dc.Subscriptions
-        //             where Subs.UserId == user.Identity.GetUserId()
-        //             select Subs ).ToList();
-        //    return subs;
-        //}
 
         private string Generate_Temp_Password()
         {
             return Membership.GeneratePassword(8, 2);
         }
 
-        /// <summary>
-        /// Used to determine whether or not to show the IsOfficial comment check box when making comments. ---- NEED TO REFACTOR as well as add support for SigilAdmins as well
-        /// </summary>
-        /// <param name="userId"> UserId of the user that is looking at the issue page</param>
-        /// <param name="orgId">OrgId of the issue currently being viewed</param>
-        /// <returns> Either True if the user is an admin of the org or False if not.</returns>
-        //public static bool CheckUserRole(string userId, int orgId)
-        //{
-        //    using (SigilDBDataContext dc = new SigilDBDataContext())
-        //    {
-        //        var user = dc.AspNetUsers.SingleOrDefault(u => u.Id == userId && u.orgId == orgId);
-        //        if (user == default(AspNetUser))
-        //            return false;
-        //        else if (user.AspNetUserRoles.SingleOrDefault(r => r.AspNetRole.Rank <= (int)Role.OrgAdmin) != default(AspNetUserRole))
-        //            return true;
-        //        else
-        //            return false;
-        //    }
-        //}
     }
 }

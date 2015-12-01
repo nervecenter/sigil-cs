@@ -29,7 +29,7 @@ namespace Sigil
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Issue> Issues { get; set; }
 
-        public DbSet<Product> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Topic> Topics { get; set; }
 
         public DbSet<Comment> Comments { get; set; }

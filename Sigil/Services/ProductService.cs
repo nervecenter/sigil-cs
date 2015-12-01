@@ -15,8 +15,8 @@ namespace Sigil.Services
         void SaveProduct();
         IEnumerable<Product> GetProductsByOrg(int orgId);
         IEnumerable<Product> GetProductsByOrg(string org, bool name = false);
-        Product GetProduct(int orgId, int catId);
-        Product GetProduct(int orgId, string cat);
+        Product GetProduct(int productId);
+        Product GetProduct(string productStr, bool name = false);
     }
 
     public class ProductService : IProductService
@@ -81,15 +81,28 @@ namespace Sigil.Services
             return pros ?? new List<Product>().AsEnumerable();
         }
 
-        public Product GetProduct(int orgId, int catId)
+        public Product GetProduct(int productId)
         {
-            var cat = productRepository.GetProductById(orgId, catId);
+            var cat = productRepository.GetById(productId);
             return cat ?? default(Product);
         }
 
-        public Product GetProduct(int orgId, string product)
+
+        /// <summary>
+        /// Gets product by either the products Name or the product URL
+        /// </summary>
+        /// <param name="productStr"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Product GetProduct(string productStr, bool name)
         {
-            return productRepository.GetProductByName(orgId, product) ?? productRepository.GetProductByURL(orgId, product);
+            Product product = default(Product);
+            if (name)
+                product = productRepository.GetProductByName(productStr);
+            else
+                product = productRepository.GetProductByURL(productStr);
+
+            return product;
         }
     }
 }

@@ -1,0 +1,57 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@using PagedList;
+@using PagedList.Mvc;
+@model ProductPageViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Title = "Sigil - " + Model.thisOrg.orgName + " - " + Model.thisProduct.ProductName;
+}
+
+<div class="col-md-9 col-lg-9">
+    <img class="img-rounded img-responsive org-banner-small" src="@(Model.thisProduct.Image.banner)">
+    <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
+        <a class="btn btn-default active">Main feed</a>
+        <a class="btn btn-info" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/responses">Responses</a>
+        <a class="btn btn-success" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/data">Data</a>
+        @if (!Request.IsAuthenticated)
+        {
+            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.thisOrg.orgName</a>
+        }
+        else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => s.subObjectId == Model.thisOrg.Id && s.subName == Model.thisOrg.orgName))
+        {
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisOrg.orgURL')">Unsubscribe from @Model.thisOrg.orgName</a>
+        }
+        else
+        {
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisOrg.orgURL')">Subscribe to @Model.thisOrg.orgName</a>
+        }
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <form>
+                <div class="form-group">
+                    @*<label for="text">Text:</label><br />*@
+                    <textarea id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own" style="height:70px;min-height:70px;max-width:100%;min-width:100%;"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:0px;">
+                    <button type="submit" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @foreach (IssuePanelPartialVM issue in Model.productIssues)
+    {
+        /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
+                                                                                             userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )},
+                                                                   issue );*/
+                                                                @Html.Partial("../Shared/_IssuePanelPartial", issue)
+    }
+    @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
+
+    @Html.PagedListPager(Model.productIssues, page => Url.Action("ProductPage", "Product", new { page }))
+</div>
+@{Html.RenderAction("_SideBar", "Shared");}
