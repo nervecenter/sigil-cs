@@ -35,17 +35,17 @@ namespace Sigil.Services
         /// <param name="orgId"> Org Id of the issue.</param>
         /// <param name="issueId"> Issue Id</param>
         /// <returns></returns>
-        IEnumerable<ApplicationUser> GetUsersByIssue(int orgId, int issueId);
+        IEnumerable<ApplicationUser> GetUsersByIssue(int issueId);
 
         void AssignUserImage(string userId, Image img);
 
         void CreateUserVote(string userId);
         void SaveUserVotes();
 
-        void AddUserVote(ApplicationUser user, int orgId, int issueId);
-        void AddUserVote(ApplicationUser user, int orgId, int issueId, int commentId);
-        void RemoveUserVote(ApplicationUser user, int orgId, int issueId);
-        void RemoveUserVote(ApplicationUser user, int orgId, int issueId, int commentId);
+        void AddUserVote(ApplicationUser user, int issueId);
+        void AddUserVote(ApplicationUser user, int issueId, int commentId);
+        void RemoveUserVote(ApplicationUser user, int issueId);
+        void RemoveUserVote(ApplicationUser user, int issueId, int commentId);
         void UpdateUser(ApplicationUser user);
 
         UserViewModel GetUserViewModel(string userId);
@@ -150,9 +150,9 @@ namespace Sigil.Services
             return votedUsers.AsEnumerable();
         }
 
-        public IEnumerable<ApplicationUser> GetUsersByIssue(int orgId, int issueId)
+        public IEnumerable<ApplicationUser> GetUsersByIssue(int issueId)
         {
-            var issueComments = commentRespository.GetIssueComments(orgId, issueId);
+            var issueComments = commentRespository.GetIssueComments(issueId);
 
             return issueComments.Select(c => c.User) ?? new List<ApplicationUser>().AsEnumerable();
         }
@@ -175,34 +175,34 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-        public void AddUserVote(ApplicationUser user, int orgId, int issueId)
+        public void AddUserVote(ApplicationUser user, int issueId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
-            userVoteCol.Add_Vote(issueId, orgId);
+            userVoteCol.Add_Vote(issueId);
             user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
-        public void AddUserVote(ApplicationUser user, int orgId, int issueId, int commentId)
+        public void AddUserVote(ApplicationUser user, int issueId, int commentId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
-            userVoteCol.Add_Vote(commentId, issueId, orgId);
+            userVoteCol.Add_Vote(issueId, commentId);
             user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
-        public void RemoveUserVote(ApplicationUser user, int orgId, int issueId)
+        public void RemoveUserVote(ApplicationUser user, int issueId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
-            userVoteCol.Delete_Vote(issueId, orgId);
+            userVoteCol.Delete_Vote(issueId);
             user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }
 
-        public void RemoveUserVote(ApplicationUser user, int orgId, int issueId, int commentId)
+        public void RemoveUserVote(ApplicationUser user, int issueId, int commentId)
         {
             var userVoteCol = CountXML<UserVoteCol>.XMLtoDATA(XElement.Parse(user.votes));
-            userVoteCol.Delete_Vote(commentId, issueId, orgId);
+            userVoteCol.Delete_Vote(issueId, commentId);
             user.votes = CountXML<UserVoteCol>.DATAtoXML(userVoteCol).ToString();
             userRepository.Update(user);
         }

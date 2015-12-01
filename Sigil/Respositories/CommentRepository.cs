@@ -12,8 +12,8 @@ namespace Sigil.Repository
     {
         //Methods for how when we need to get Comments
 
-        Comment GetById(int orgId, int issueId, int commentId);
-        IEnumerable<Comment> GetIssueComments(int orgId, int issueId);
+        
+        IEnumerable<Comment> GetIssueComments(int issueId);
 
     }
 
@@ -23,15 +23,9 @@ namespace Sigil.Repository
 
         //where we define the Comment methods created below
 
-        public Comment GetById(int orgId, int issueId, int commentId)
+        public IEnumerable<Comment> GetIssueComments(int issueId)
         {
-            var com = this.DbContext.Comments.Where(c => c.Issue.Product.OrgId == orgId && c.IssueId == issueId && c.Id == commentId).FirstOrDefault();
-            return com;
-        }
-
-        public IEnumerable<Comment> GetIssueComments(int orgId, int issueId)
-        {
-            var com = this.DbContext.Comments.Where(c => c.Issue.Product.OrgId == orgId && c.IssueId == issueId).Select(c => c);
+            var com = this.DbContext.Comments.Where(c => c.IssueId == issueId).Select(c => c);
             return com;
         }
     }

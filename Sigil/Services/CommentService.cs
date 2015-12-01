@@ -28,17 +28,18 @@ namespace Sigil.Services
         void EditComment(Comment comment, string newText);
         void SaveComment();
         void DeleteComment(Comment comment);
+        void UpdateComment(Comment comment);
 
-        Comment GetComment(int orgId, int issueId, int commentId);
+        Comment GetComment(int commentId);
 
-        IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int productId, int issueId);
+        IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int issueId);
         IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId);
-        OfficialResponse GetIssueLatestOfficialResponse(int orgId, int productId, int issueId);
+        OfficialResponse GetIssueLatestOfficialResponse(int issueId);
 
         void Comment_POST_Handler(HttpRequestBase request, Issue thisIssue, string userID);
 
         IEnumerable<Comment> GetUserComments(string userId);
-        IEnumerable<Comment> GetIssueComments(int orgId, int productId, int issueId);
+        IEnumerable<Comment> GetIssueComments(int issueId);
         IEnumerable<Comment> GetOrgComments(int orgId);
 
     }
@@ -93,14 +94,14 @@ namespace Sigil.Services
             SaveComment();
         }
 
-        public Comment GetComment(int orgId, int issueId, int commentId)
+        public Comment GetComment(int commentId)
         {
-            return commentRespository.GetById(orgId, issueId, commentId) ?? default(Comment);
+            return commentRespository.GetById(commentId) ?? default(Comment);
         }
 
-        public IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int orgId, int productId,int issueId)
+        public IEnumerable<OfficialResponse> GetIssuesOfficialResponses(int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.IssueId == issueId) ?? new List<OfficialResponse>().AsEnumerable();
+            return officialResponseRepository.GetMany(o => o.IssueId == issueId) ?? new List<OfficialResponse>().AsEnumerable();
         }
 
         public IEnumerable<OfficialResponse> GetOrgsOfficialResponses(int orgId)
@@ -108,9 +109,9 @@ namespace Sigil.Services
             return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId) ?? new List<OfficialResponse>().AsEnumerable();
         }
 
-        public OfficialResponse GetIssueLatestOfficialResponse(int orgId, int productId,int issueId)
+        public OfficialResponse GetIssueLatestOfficialResponse(int issueId)
         {
-            return officialResponseRepository.GetMany(o => o.Issue.Product.OrgId == orgId && o.Issue.Product.Id == productId && o.IssueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault() ?? default(OfficialResponse);
+            return officialResponseRepository.GetMany(o => o.IssueId == issueId).OrderByDescending(o => o.createTime).FirstOrDefault() ?? default(OfficialResponse);
         }
 
         public IEnumerable<Comment> GetUserComments(string userId)
@@ -118,9 +119,9 @@ namespace Sigil.Services
             return commentRespository.GetMany(c => c.UserId == userId) ?? new List<Comment>().AsEnumerable();
         }
 
-        public IEnumerable<Comment> GetIssueComments(int orgId, int productId, int issueId)
+        public IEnumerable<Comment> GetIssueComments(int issueId)
         {
-            return commentRespository.GetMany(c => c.Issue.Product.OrgId == orgId && c.Issue.Product.Id == productId && c.IssueId == issueId) ?? new List<Comment>().AsEnumerable();
+            return commentRespository.GetMany(c => c.IssueId == issueId) ?? new List<Comment>().AsEnumerable();
         }
 
         public IEnumerable<Comment> GetOrgComments(int orgId)
@@ -245,7 +246,7 @@ namespace Sigil.Services
         {
             var VoteUsers = userService.GetUsersByVote(issue.Product.OrgId, issue.Id);
 
-            var CommentUsers = userService.GetUsersByIssue(issue.Product.OrgId, issue.Id);
+            var CommentUsers = userService.GetUsersByIssue(issue.Id);
 
             var allUsers = VoteUsers.Union(CommentUsers);
 
@@ -293,5 +294,10 @@ namespace Sigil.Services
             }
         }
 
+        public void UpdateComment(Comment comment)
+        {
+            commentRespository.Update(comment);
+            unitOfWork.Commit();
+        }
     }
 }

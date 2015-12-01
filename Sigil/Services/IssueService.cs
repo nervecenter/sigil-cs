@@ -14,15 +14,14 @@ namespace Sigil.Services
         void UpdateIssue(Issue issue);
         void SaveChanges();
 
-        Issue GetIssue(int orgId, int productId, int issueId);
-        Issue GetIssue(string org, int productId, int issueId);
+        Issue GetIssue(int issueId);
 
-        Issue GetLatestIssue(string userId, int orgId, int productId);
+        Issue GetLatestIssue(string userId, int productId);
 
         IEnumerable<Issue> GetAllIssues();
         IEnumerable<Issue> GetAllOrgIssues(int orgId);
         IEnumerable<Issue> GetAllTopicIssues(int topicId);
-        IEnumerable<Issue> GetAllProductIssues(int orgId, int catId);
+        IEnumerable<Issue> GetAllProductIssues(int productId);
         IEnumerable<Issue> GetAllUserIssues(string userId);
 
     }
@@ -58,22 +57,16 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
-        public Issue GetIssue(int orgId, int productId, int issueId)
+        public Issue GetIssue(int issueId)
         {
-            return issueRepository.GetById(orgId, productId, issueId) ?? default(Issue);
+            return issueRepository.GetById(issueId) ?? default(Issue);
         }
 
-        public Issue GetIssue(string org, int productId, int issueId)
-        {
-            var orgI = orgRepository.GetByName(org);
-            return issueRepository.GetById(orgI.Id, productId,issueId) ?? default(Issue);
-        }
-
-        public Issue GetLatestIssue(string userId, int orgId, int productId)
+        public Issue GetLatestIssue(string userId, int productId)
         {
             var userIssues = GetAllUserIssues(userId);
 
-            return userIssues.Where(i => i.Product.OrgId == orgId).OrderByDescending(i => i.createTime).FirstOrDefault();
+            return userIssues.Where(i => i.ProductId == productId).OrderByDescending(i => i.createTime).FirstOrDefault();
         }
 
         public IEnumerable<Issue> GetAllIssues()
@@ -92,9 +85,9 @@ namespace Sigil.Services
             //return issueRepository.GetMany(i => i.TopicId == topicId);
         }
 
-        public IEnumerable<Issue> GetAllProductIssues(int orgId, int proId)
+        public IEnumerable<Issue> GetAllProductIssues(int proId)
         {
-            return issueRepository.GetMany(i => i.Product.OrgId == orgId && i.ProductId == proId) ?? new List<Issue>().AsEnumerable();
+            return issueRepository.GetMany(i => i.ProductId == proId) ?? new List<Issue>().AsEnumerable();
         }
 
         public IEnumerable<Issue> GetAllUserIssues(string userId)

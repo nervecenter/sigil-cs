@@ -384,14 +384,14 @@ namespace Sigil.Models
         /// </summary>
         /// <param name="issueID">Id of the issue that is being voted on.</param>
         /// <param name="orgID">ID of the Org the issues is associated with.</param>
-        public void Add_Vote(int issueID, int orgID)
+        public void Add_Vote(int issueID)
         {
-            uvArray.Add(new UserVote(issueID, orgID));
+            uvArray.Add(new UserVote(issueID));
         }
 
-        public void Add_Vote(int commentId, int issueID, int orgID)
+        public void Add_Vote(int issueID, int commentId)
         {
-            uvArray.Add(new UserVote(issueID, orgID, commentId));
+            uvArray.Add(new UserVote(issueID, commentId));
         }
 
         /// <summary>
@@ -400,11 +400,11 @@ namespace Sigil.Models
         /// <param name="issueID">Id f the issue the votes is being deleted from</param>
         /// <param name="orgID">Id of the org the issue is associated with</param>
         /// <returns>True if found and deleted, False if not found in list.</returns>
-        public bool Delete_Vote(int issueID, int orgID)
+        public bool Delete_Vote(int issueID)
         {
             foreach(UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == 0)
+                if (uv.IssueID == issueID && uv.CommentId == 0)
                 {
                     uvArray.Remove(uv);
                     return true;
@@ -413,11 +413,11 @@ namespace Sigil.Models
             return false;
         }
 
-        public bool Delete_Vote(int commentID, int issueID, int orgID)
+        public bool Delete_Vote(int issueID, int commentID)
         {
             foreach (UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == commentID)
+                if (uv.IssueID == issueID  && uv.CommentId == commentID)
                 {
                     uvArray.Remove(uv);
                     return true;
@@ -435,11 +435,11 @@ namespace Sigil.Models
             return uvArray;
         }
 
-        public bool Check_Vote(int issueID, int orgID)
+        public bool Check_Vote(int issueID)
         {
             foreach (UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == 0)
+                if (uv.IssueID == issueID && uv.CommentId == 0)
                 {
                     return true;
                 }
@@ -447,11 +447,11 @@ namespace Sigil.Models
             return false;
         }
 
-        public bool Check_Vote(int commentId, int issueID, int orgID)
+        public bool Check_Vote(int issueID, int commentId)
         {
             foreach (UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID && uv.CommentId == commentId)
+                if (uv.IssueID == issueID && uv.CommentId == commentId)
                 {
                     return true;
                 }
@@ -467,20 +467,17 @@ namespace Sigil.Models
     public class UserVote
     {
         public int IssueID;
-        public int OrgID;
         public int CommentId;
 
         public UserVote() { }
-        public UserVote(int issueID, int orgID)
+        public UserVote(int issueID)
         {
             IssueID = issueID;
-            OrgID = orgID;
             CommentId = 0;
         }
-        public UserVote(int issueId, int orgId, int commentId)
+        public UserVote(int issueId,  int commentId)
         {
             IssueID = issueId;
-            OrgID = orgId;
             CommentId = commentId;
         }
 

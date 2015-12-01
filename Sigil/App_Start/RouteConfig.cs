@@ -201,15 +201,27 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-                name: "VoteUp",
-                url: "voteup/{orgId}/{productId}/{IssueId}/",
+                name: "Issue VoteUp",
+                url: "voteup/{IssueId}/",
                 defaults: new { controller = "Issue", action = "VoteUp" }
             );
 
             routes.MapRoute(
-                name: "UnVoteUp",
-                url: "unvoteup/{orgId}/{productId}/{IssueId}/",
+                name: "Issue UnVoteUp",
+                url: "unvoteup/{IssueId}/",
                 defaults: new { controller = "Issue", action = "UnVoteUp" }
+            );
+
+            routes.MapRoute(
+                name: "Comment VoteUp",
+                url: "voteup/{IssueId}/{CommentId}",
+                defaults: new { controller = "Issue", action = "VoteUpComment" }
+            );
+
+            routes.MapRoute(
+                name: "Comment UnVoteUp",
+                url: "unvoteup/{IssueId}/{CommentId}/",
+                defaults: new { controller = "Issue", action = "UnVoteUpComment" }
             );
 
             //routes.MapRoute(

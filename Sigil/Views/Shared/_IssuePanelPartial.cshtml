@@ -12,9 +12,9 @@
                 @if ( !Request.IsAuthenticated ) {
                     <img src="~/Content/Images/notvoted.png" class="voteup" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else if ( Model.UserVoted ) {
-                    <img src="~/Content/Images/voted.png" class="unvoteup" onclick="unvoteup(this, @Model.issue.Id")" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/voted.png" class="unvoteup" onclick="unvoteup(this, @Model.issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 } else {
-                    <img src="~/Content/Images/notvoted.png" class="voteup" onclick="voteup(this, @Model.issue.Id")" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    <img src="~/Content/Images/notvoted.png" class="voteup" onclick="voteup(this, @Model.issue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
                 }
                 <br />
                 <span id="count-@Model.issue.Id" class="voteamount">@Model.issue.votes</span>

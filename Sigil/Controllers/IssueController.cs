@@ -57,7 +57,7 @@ namespace Sigil.Controllers
 
             Product thisProduct = productService.GetProduct(thisOrg.Id, productURL);
             // Grab the issue for the page
-            Issue thisIssue = issueService.GetIssue(thisOrg.Id, thisProduct.Id, issueID);
+            Issue thisIssue = issueService.GetIssue(issueID);
             //Issue thisIssue = (from issue in dc.Issues
             //                   where issue.Id == issueID
             //                   select issue).SingleOrDefault();
@@ -86,9 +86,9 @@ namespace Sigil.Controllers
             // Get the user's vote on this issues if it exists
             UserViewModel userVM = userService.GetUserViewModel(userID);
 
-            var issueComments = commentService.GetIssueComments(thisOrg.Id, thisIssue.ProductId, issueID);
+            var issueComments = commentService.GetIssueComments(issueID);
 
-            var official = commentService.GetIssuesOfficialResponses(thisOrg.Id, thisIssue.ProductId,issueID);
+            var official = commentService.GetIssuesOfficialResponses(issueID);
 
             IssuePageViewModel viewModel = new IssuePageViewModel();
 
@@ -105,7 +105,7 @@ namespace Sigil.Controllers
 
             viewModel.OfficialResponses = official;
             
-            viewModel.IssueComments = issueComments.Select(c => new Tuple<Comment, bool>(c, userVM.UserVotes.Check_Vote(c.Id, thisIssue.Id, thisOrg.Id)));
+            viewModel.IssueComments = issueComments.Select(c => new Tuple<Comment, bool>(c, userVM.UserVotes.Check_Vote(issueID, c.Id)));
 
             // Pass the org and issue as the model to the view
             return View(viewModel);
@@ -320,109 +320,109 @@ namespace Sigil.Controllers
             }
         }
 
-        /* 
-        ==================== 
-        VoteUp
-  
-            Action called by AJAX on click of a vote up button. Does not create a page, only increments vote counter and adds vote table entry. 
-        ==================== 
-        */
+        /// <summary>
+        /// Issue Vote up
+        /// </summary>
+        /// <param name="IssueId">Id of the issue that is being upvoted</param>
+        /// <returns>An empty action result ment to be handeled and called useing javascript and jquery.</returns>
         [Authorize]
-        public ActionResult VoteUp(int orgId, int productId, int issueId) {
-            // Find our issue object and create a new vote
-            //Issue thisIssue = dc.Issues.First( i => i.Id == issueID );
-            //Org thisOrg = dc.Orgs.First(o => o.Id == thisIssue.OrgId);
-            ////Vote thisVote = new Vote();
-            //var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
+        public ActionResult VoteUp(int IssueId) {
 
             var userId = User.Identity.GetUserId();
-            //// Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
-            //var user = dc.AspNetUsers.Single(u => u.Id == userId);
-            //// Increment issue's vote counter, initialize our new vote for the issue/user, POST both to server; otherwise, log an error
-            var issue = issueService.GetIssue(orgId, productId, issueId);
+
+            var issue = issueService.GetIssue(IssueId);
             var user = userService.GetUser(userId);
-            userService.AddUserVote(user, orgId, issueId);
 
-            try
-            {
-                issue.votes++;
-                issue.lastVoted = DateTime.UtcNow;
-                issueService.UpdateIssue(issue);
-                //var issueVoteCol = countDataService.GetIssueVoteCount(orgId, issue.Id);
-                countDataService.UpdateIssueVoteCountData(issue);
-                userService.AddUserVote(user, orgId, issueId);
-                userService.UpdateUser(user);
-                //var newVC = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
-                //newVC.Update();
-                //VC.count = CountXML<VoteCountCol>.DATAtoXML(newVC);
+            userService.AddUserVote(user, IssueId);
 
-                //var newUV = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-                //newUV.Add_Vote(thisIssue.Id, thisOrg.Id);
-                //user.votes = CountXML<UserVoteCol>.DATAtoXML(newUV);
-
-                
-            }
-            catch ( Exception e )
-            {
-                //ErrorHandler.Log_Error(VC, e, dc);
-                //ErrorHandler.Log_Error(user, e, dc);
-                errorService.CreateError(issue, e, ErrorLevel.Minor,"UserId ="+ userId);
-                //Console.WriteLine( "Could not vote on issue %s:\n%s", thisIssue.Id, e.Message );
-            }
+            issue.votes++;
+            issue.lastVoted = DateTime.UtcNow;
+            issueService.UpdateIssue(issue);
+               
+            countDataService.UpdateIssueVoteCountData(issue);
+            userService.UpdateUser(user);
+    
 
             return new EmptyResult();
         }
 
-        /* 
-        ==================== 
-        UnVoteUp
-  
-            Action called by AJAX on click of a unvote up button. Does not create a page, only decrements vote counter and deletes vote table entry. 
-        ==================== 
-        */
+        /// <summary>
+        /// Comment VoteUp
+        /// </summary>
+        /// <param name="IssueId">IssueId of that owns the comment.</param>
+        /// <param name="CommentId">Id of the comment being upvoted.</param>
+        /// <returns>An empty action result. Ment to be called using js and jquery.</returns>
         [Authorize]
-        public ActionResult UnVoteUp(int orgId, int productId, int issueId) {
-            // Find our issue object and vote object
-            //Issue thisIssue = dc.Issues.Single(i => i.Id == issueID);
-            //Org thisOrg = dc.Orgs.Single(o => o.Id == thisIssue.OrgId);
+        public ActionResult VoteUpComment(int IssueId, int CommentId)
+        {
+
             var userId = User.Identity.GetUserId();
+
+            var comment = commentService.GetComment(CommentId);
             var user = userService.GetUser(userId);
-            var issue = issueService.GetIssue(orgId, productId, issueId);
-            // Decrement vote counter for issue, delete a vote from the votecount entry for the issue, POST changes to server; otherwise, log an error
-            try {
-                issue.votes--;
-                issue.lastVoted = DateTime.UtcNow;
-                issueService.UpdateIssue(issue);
 
-                countDataService.UpdateIssueVoteCountData(issue, false);
+            userService.AddUserVote(user, IssueId, CommentId);
 
-                //var VC = dc.VoteCounts.Single(v => v.IssueId == thisIssue.Id && v.OrgId == thisOrg.Id);
-                //var vcol = CountXML<VoteCountCol>.XMLtoDATA(VC.count);
-                //vcol.Remove_Vote();
-                //VC.count = CountXML<VoteCountCol>.DATAtoXML(vcol);
+            comment.votes++;
+            comment.lastVoted = DateTime.UtcNow;
+            commentService.UpdateComment(comment);
 
-                userService.RemoveUserVote(user, orgId, issueId);
-                userService.UpdateUser(user);
-                //var user = dc.AspNetUsers.Single(u => u.Id == userId);
-                //var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-                //userVotes.Delete_Vote(thisIssue.Id, thisOrg.Id);
-
-                //user.votes = CountXML<UserVoteCol>.DATAtoXML(userVotes);
-
-                //dc.SubmitChanges();
-
-            }
-            catch ( Exception e )
-            {
-                //ErrorHandler.Log_Error(thisIssue, e, dc);
-                //ErrorHandler.Log_Error(userId, e, dc);
-                errorService.CreateError(issue, e, ErrorLevel.Minor,"UserId = " + user.Id);
-            }
+             
+            userService.UpdateUser(user);
 
             return new EmptyResult();
         }
 
-        
+
+        /// <summary>
+        /// Issue Remove Vote
+        /// </summary>
+        /// <param name="IssueId">Id of the issue that is having a vote removed.</param>
+        /// <returns>An empty action result. Ment to be called using js and jquery.</returns>
+        [Authorize]
+        public ActionResult UnVoteUp(int IssueId) {
+
+            var userId = User.Identity.GetUserId();
+            var user = userService.GetUser(userId);
+            var issue = issueService.GetIssue(IssueId);
+           
+
+            issue.votes--;
+            issue.lastVoted = DateTime.UtcNow;
+            issueService.UpdateIssue(issue);
+
+            countDataService.UpdateIssueVoteCountData(issue, false);
+
+            userService.RemoveUserVote(user, IssueId);
+            userService.UpdateUser(user);
+
+            return new EmptyResult();
+        }
+
+        /// <summary>
+        /// Issue Remove Vote
+        /// </summary>
+        /// <param name="IssueId">Id of the issue that is having a vote removed.</param>
+        /// <returns>An empty action result. Ment to be called using js and jquery.</returns>
+        [Authorize]
+        public ActionResult UnVoteUpComment(int IssueId, int CommentId)
+        {
+
+            var userId = User.Identity.GetUserId();
+            var user = userService.GetUser(userId);
+
+            var comment = commentService.GetComment(CommentId);
+
+            comment.votes--;
+            comment.lastVoted = DateTime.UtcNow;
+            commentService.UpdateComment(comment);
+
+            userService.RemoveUserVote(user, IssueId, CommentId);
+            userService.UpdateUser(user);
+
+
+            return new EmptyResult();
+        }
 
         /* 
         ==================== 
