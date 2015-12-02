@@ -32,6 +32,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "404",
+                url: "404/",
+                defaults: new { controller = "Shared", action = "_404" }
+            );
+
+            routes.MapRoute(
                 name: "About",
                 url: "about/",
                 defaults: new { controller = "Home", action = "About" }

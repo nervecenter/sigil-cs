@@ -492,7 +492,7 @@
     <Content Include="Views\Admin\RolesIndex.cshtml" />
     <Content Include="Views\Admin\CreateRole.cshtml" />
     <Content Include="Views\Admin\ManageUserRoles.cshtml" />
-    <Content Include="Views\Shared\404.cshtml" />
+    <Content Include="Views\Shared\_404.cshtml" />
     <Content Include="Views\Product\ProductPage.cshtml" />
   </ItemGroup>
   <ItemGroup>

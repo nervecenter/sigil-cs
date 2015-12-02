@@ -64,5 +64,9 @@ namespace Sigil.Controllers
 
             return PartialView("_LoginPartial", VM);
         }
+
+        public ActionResult _404() {
+            return PartialView( "_404" );
+        }
     }
 }
