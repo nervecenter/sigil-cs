@@ -258,7 +258,7 @@ namespace Sigil.Controllers
             }
 
             var org = orgService.GetOrg(orgName, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
-            var product = productService.GetProduct(issueproduct);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
+            var product = productService.GetProduct(issueproduct, true);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
 
             //pass in creators userid, the org and possible Product of the issue
             int issueId = Create_New_Issue(userId, org, product);

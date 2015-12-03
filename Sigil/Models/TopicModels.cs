@@ -17,7 +17,7 @@ namespace Sigil.Models
         public DateTime lastAdded { get; set; }
         public int views { get; set; }
 
-        public int ImageId { get; set; }
+        public int? ImageId { get; set; }
         [ForeignKey("ImageId")]
         public virtual Image Image { get; set; }
 

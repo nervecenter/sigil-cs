@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Sigil.Models;
 using Sigil.Services;
 using Microsoft.AspNet.Identity;
+using Sigil.ViewModels;
 
 namespace Sigil.Controllers
 {
@@ -14,14 +15,25 @@ namespace Sigil.Controllers
         private readonly IOrgService orgService;
         private readonly IErrorService errorService;
         private readonly IUserService userService;
+        private readonly IImageService imageService;
+        private readonly ITopicService topicService;
+        private readonly IIssueService issueService;
+        private readonly IProductService productService;
+
+
         private readonly ApplicationUserManager _userManager;
 
-        public AdminController(IOrgService orgS, IErrorService errS, IUserService userS, ApplicationUserManager userM)
+        public AdminController(IOrgService orgS, IErrorService errS, IUserService userS, ApplicationUserManager userM, IImageService imgS, ITopicService topS, IIssueService issS, IProductService prodS)
         {
             orgService = orgS;
             errorService = errS;
             userService = userS;
             _userManager = userM;
+
+            imageService = imgS;
+            topicService = topS;
+            issueService = issS;
+            productService = prodS;
         }
 
        public AdminController(IOrgService orgS, IErrorService errS) {
@@ -35,12 +47,86 @@ namespace Sigil.Controllers
             return View();
         }
 
+
+        //================================================ Topic Admin ================================================//
+
+        [Authorize(Roles = "SigilAdmin")]
+        public ActionResult TopicAdmin()
+        {
+            var allTopics = topicService.GetAllTopics();
+
+            ViewBag.AllTopics = allTopics.Select(t => new TopicInfoVM()
+            {
+                thisTopic = t,
+                numberOfChildProducts = issueService.GetAllTopicIssues(t.Id).Count()
+            });
+
+            return View("TopicAdmin");
+        }
+
+        [Authorize(Roles = "SigilAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTopic(TopicCreateViewModel model)
+        {
+           
+            Topic newTopic = new Topic();
+            newTopic.topicName = model.topicName;
+            newTopic.topicURL = model.topicURL;
+            newTopic.lastAdded = DateTime.UtcNow;
+            newTopic.views = 1;
+
+            topicService.CreateTopic(newTopic);
+            topicService.SaveTopic();
+
+            newTopic.Image = imageService.AssignDefaultImage(newTopic.Id, ImageType.Topic);
+            topicService.UpdateTopic(newTopic);
+
+            var allTopics = topicService.GetAllTopics();
+
+            ViewBag.AllTopics = allTopics.Select(t => new TopicInfoVM()
+            {
+                thisTopic = t,
+                numberOfChildProducts = issueService.GetAllTopicIssues(t.Id).Count()
+            });
+
+            return View("TopicAdmin");
+        }
+
+
+        [Authorize(Roles = "SigilAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssignProductToTopic(string OrgAndProductName, string topicId)
+        {
+            var orgProductPair = OrgAndProductName.Split('-');
+
+            var product = productService.GetProduct(orgProductPair[1], true);
+
+            product.TopicId = Convert.ToInt32(topicId);
+            productService.UpdateProduct(product);
+
+            var allTopics = topicService.GetAllTopics();
+
+            ViewBag.AllTopics = allTopics.Select(t => new TopicInfoVM()
+            {
+                thisTopic = t,
+                numberOfChildProducts = issueService.GetAllTopicIssues(t.Id).Count()
+            });
+
+            return View("TopicAdmin");
+        }
+
+
+        //====================================================== Roles Admin ======================================================//
+
         [Authorize(Roles = "SigilAdmin")]
         public ActionResult RolesIndex()
         {
-            var roles = userService.GetAllRoles();
+            ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
 
-            return View(roles);
+            ViewBag.AllRoles = userService.GetAllRoles();
+            return View("RolesAdmin");
         }
 
         [Authorize(Roles = "SigilAdmin")]
@@ -51,14 +137,16 @@ namespace Sigil.Controllers
                 string newRoleName = Request.Form["roleName"];
                 userService.CreateRole(newRoleName);
             }
-            return View();
+            ViewBag.AllRoles = userService.GetAllRoles();
+            return View("RoleAdmin");
         }
 
         [Authorize(Roles = "SigilAdmin")]
         public ActionResult DeleteRole(string roleName)
         {
             userService.DeleteRole(roleName);
-            return RedirectToAction("RolesIndex");
+            ViewBag.AllRoles = userService.GetAllRoles();
+            return RedirectToAction("RolesAdmin");
         }
 
         [Authorize(Roles = "SigilAdmin")]
@@ -71,8 +159,8 @@ namespace Sigil.Controllers
 
             ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
 
-
-            return View("ManageUserRoles");
+            ViewBag.AllRoles = userService.GetAllRoles();
+            return View("RolesAdmin");
         }
 
         [Authorize(Roles = "SigilAdmin")]
@@ -83,8 +171,8 @@ namespace Sigil.Controllers
 
             ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
 
-
-            return View("ManageUserRoles");
+            ViewBag.AllRoles = userService.GetAllRoles();
+            return View("RolesAdmin");
         }
 
         [Authorize(Roles = "SigilAdmin")]
@@ -94,82 +182,20 @@ namespace Sigil.Controllers
             ViewBag.RolesForThisUser = _userManager.GetRoles(user.Id);
             ViewBag.Roles = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
 
-            
-            return View("ManageUserRoles");
+            ViewBag.AllRoles = userService.GetAllRoles();
+            return View("RolesAdmin");
         }
 
-        //
-        // GET: /Roles/Edit/5
-        //public ActionResult EditRole(string roleName)
+        //public ActionResult ManageUserRoles()
         //{
-        //    var thisRole = context.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-
-        //    return View(thisRole);
-        //}
-
-        ////
-        //// POST: /Roles/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult EditRole(Microsoft.AspNet.Identity.EntityFramework.IdentityRole role)
-        //{
-        //    try
-        //    {
-        //        context.Entry(role).State = System.Data.Entity.EntityState.Modified;
-        //        context.SaveChanges();
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        public ActionResult ManageUserRoles()
-        {
-            // prepopulat roles for the view dropdown
-            var list = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-            ViewBag.Roles = list;
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult RoleAddToUser(string userId, string RoleName)
-        {
-            return RedirectToAction("ManageUserRoles");
-        }
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult GetUserRoles(string userId)
-        //{
-
-        //    var userRoles = userService.GetUserRoles(userId);
-
         //    // prepopulat roles for the view dropdown
         //    var list = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
         //    ViewBag.Roles = list;
-            
-
-        //    return View("ManageUserRoles", userRoles);
+        //    ViewBag.AllRoles = userService.GetAllRoles();
+        //    return View("RolesAdmin");
         //}
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteRoleForUser(string userId, string RoleName)
-        //{
-
-        //    //userService.RemoveUserRole(userId, RoleName);
-
-        //    // prepopulat roles for the view dropdown
-        //    var list = userService.GetAllRoles().ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
-        //    ViewBag.Roles = list;
-
-        //    return View("ManageUserRoles");
-        //}
+        //======================================== Org Apps Admin ==========================================//
 
         public ActionResult OrgApplicants()
         {

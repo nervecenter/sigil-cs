@@ -30,7 +30,11 @@
                     {
                     <span>: <a href="/@Model.issue.Product.Org.orgURL/@Model.issue.Product.ProductURL"> @Model.issue.Product.ProductName</a></span>
                     }
-                    @*<span>in @thisIssue.Topic.topicName</span>*@
+                    @if (Model.issue.Product.TopicId != null)
+                    {
+                        <span>in <a href="/t/@Model.issue.Product.Topic.topicURL">@Model.issue.Product.Topic.topicName</a></span>
+                    }
+
                 </p>
                 <p class="pull-right">
                     Posted @*@Sigil.Controllers.IssueController.TimeSince( thisIssue.CreateTime )*@ 

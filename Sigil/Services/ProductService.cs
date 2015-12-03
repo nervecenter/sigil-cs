@@ -12,7 +12,11 @@ namespace Sigil.Services
     public interface IProductService
     {
         void CreateProduct(Product prod);
+        void UpdateProduct(Product prod);
         void SaveProduct();
+
+        IEnumerable<Product> GetAllProducts();
+
         IEnumerable<Product> GetProductsByOrg(int orgId);
         IEnumerable<Product> GetProductsByOrg(string org, bool name = false);
         Product GetProduct(int productId);
@@ -103,6 +107,17 @@ namespace Sigil.Services
                 product = productRepository.GetProductByURL(productStr);
 
             return product;
+        }
+
+        public void UpdateProduct(Product prod)
+        {
+            productRepository.Update(prod);
+            unitOfWork.Commit();
+        }
+
+        public IEnumerable<Product> GetAllProducts()
+        {
+            return productRepository.GetAll();
         }
     }
 }

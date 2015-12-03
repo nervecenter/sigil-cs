@@ -119,7 +119,7 @@ namespace Sigil.ViewModels
                 subName = s.Org.orgName + "-" + s.Product.ProductName;
                 subURL = "/" + s.Org.orgURL + "/" + s.Product.ProductURL;
                 subIcon = s.Product.Image.icon_20;
-                subObjectId = s.ProductId ?? s.OrgId ?? 0;
+                subObjectId = s.ProductId ?? 0;
             }
             else
             {

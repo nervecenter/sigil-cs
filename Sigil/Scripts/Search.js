@@ -1,6 +1,6 @@
 ﻿
 $('#searchBox').autocomplete({
-    source: 'search/',
+    source: 'https://localhost:44301/search/',
     _renderItem: function( ul, item ) {
         return $( "<li>" )
           .attr( "data-value", item.label )
@@ -16,7 +16,7 @@ $('#searchBox').autocomplete({
 });
 
 $('#issuesByOrgBox').autocomplete({
-    source: 'issueSearch/',
+    source: 'https://localhost:44301/issueSearch/',
     _renderItem: function (ul, item) {
         return $("<li>")
           .attr("data-value", item.label)
@@ -31,8 +31,10 @@ $('#issuesByOrgBox').autocomplete({
     }
 });
 
-
+$('#AdminProductSearch').autocomplete({
+    source: 'https://localhost:44301/search/AdminProductSearch/'
+})
 
 $('#UserSearch').autocomplete({
-    source: 'searchUsers/',
+    source: 'https://localhost:44301/search/AdminUserSearch/',
 });

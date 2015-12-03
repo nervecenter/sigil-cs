@@ -81,8 +81,7 @@ namespace Sigil.Services
 
         public IEnumerable<Issue> GetAllTopicIssues(int topicId)
         {
-            throw new NotImplementedException();
-            //return issueRepository.GetMany(i => i.TopicId == topicId);
+            return issueRepository.GetMany(i => i.Product.TopicId == topicId);
         }
 
         public IEnumerable<Issue> GetAllProductIssues(int proId)

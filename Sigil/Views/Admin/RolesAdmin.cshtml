@@ -2,13 +2,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@using Microsoft.AspNet.Identity.EntityFramework
 @{
-    ViewBag.Title = "ManageUserRoles";
+    ViewBag.Title = "Roles Admin";
+    IEnumerable<IdentityRole> AllRoles = ViewBag.AllRoles;
 }
 
-<h2>Manage User Roles</h2>
-@Html.ActionLink("Create New Role", "CreateRole", "Admin") | @Html.ActionLink("Manage User Role", "ManageUserRoles", "Admin")
+<h2>All Current Roles</h2>
+@foreach (var role in AllRoles)
+{
+    <p>
+        <strong>@role.Name</strong>
+        @*<span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name">Delete</a></span> |*@
+        @*@Html.ActionLink("Edit", "Edit", new { roleName = @role.Name })*@
+    </p>
+}
+
+<hr />
+<h2>Create New Role</h2>
+@using(Html.BeginForm("CreateRole", "Admin", FormMethod.Post, new { @class="form"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div>
+        Role name
+    </div>
+    <p>
+        @Html.TextBox("RoleName")
+    </p>
+    <input type="submit" value="Save New Role" />
+}
 <hr />
 
 <h2>Role Add to User</h2>

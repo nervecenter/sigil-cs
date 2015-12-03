@@ -17,15 +17,19 @@ namespace Sigil.Controllers
         private readonly IIssueService issueService;
         private readonly ISubscriptionService subscriptionService;
         private readonly IErrorService errorService;
+        private readonly IProductService productService;
+        private readonly ITopicService topicService;
         private readonly ICountService countDataService;
 
-        public SubscriptionsController(IOrgService orgS, IIssueService issS, ISubscriptionService subS, IErrorService errS, ICountService countS)
+        public SubscriptionsController(IOrgService orgS, IIssueService issS, ISubscriptionService subS, IErrorService errS, ICountService countS, IProductService prodS, ITopicService topS)
         {
             orgService = orgS;
             issueService = issS;
             subscriptionService = subS;
             errorService = errS;
             countDataService = countS;
+            productService = prodS;
+            topicService = topS;
         }
 
         // GET: Subscriptions
@@ -45,21 +49,47 @@ namespace Sigil.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult AddSubscription(string orgURL)
+        public ActionResult AddSubscription(string URL, string type)
         {
             var userid = User.Identity.GetUserId();
-            var org = orgService.GetOrg(orgURL);
             Subscription new_sub = new Subscription();
-            new_sub.OrgId = org.Id;
             new_sub.UserId = userid;
-
-            countDataService.UpdateOrgSubscriptionCount(org.Id);
             
+            if(type == "topic")
+            {
+                //then its a topic....
+                var topic = topicService.GetTopic(URL);
+                new_sub.TopicId = topic.Id;
+            }
+            else if(type == "product")
+            {
+                //then its a product
+                var product = productService.GetProduct(URL, true); // products are the only ones who subscribe by name instead of url
+
+                if (product.ProductURL == "Default")
+                {
+                    new_sub.OrgId = product.OrgId;
+                }
+                else
+                {
+                    new_sub.ProductId = product.Id;
+                }
+                countDataService.UpdateOrgSubscriptionCount(product.OrgId);
+                countDataService.SaveOrgDataChanges();
+            }
+            else if(type == "org")
+            {
+                var org = orgService.GetOrg(URL);
+                new_sub.OrgId = org.Id;
+                countDataService.UpdateOrgSubscriptionCount(org.Id);
+                countDataService.SaveOrgDataChanges();
+            }
+
             try
             {
                 subscriptionService.CreateSubscription(new_sub);
                 subscriptionService.SaveSubscription();
-                countDataService.SaveOrgDataChanges();
+                
             }
             catch (Exception e)
             {
@@ -70,14 +100,38 @@ namespace Sigil.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult DeleteSubscription(string orgURL)
+        public ActionResult DeleteSubscription(string URL, string type)
         {
             var userId = User.Identity.GetUserId();
-            var org = orgService.GetOrg(orgURL);
-            var sub = subscriptionService.GetUserSubscription(userId, org.Id);
+            Subscription sub = default(Subscription);
+            if (type == "topic")
+            {
+                var topic = topicService.GetTopic(URL);
+                sub = subscriptionService.GetUserTopicSubscription(userId, topic.Id);
+            }
+            else if(type == "product")
+            {
+                var product = productService.GetProduct(URL, true); // products are the only ones who subscribe by name instead of url
+                if (product.ProductURL == "Default")
+                {
+                    sub = subscriptionService.GetUserOrgSubscription(userId, product.OrgId);
+                }
+                else
+                {
+                    sub = subscriptionService.GetUserProductSubscription(userId, product.Id);
+                }
 
+                countDataService.UpdateOrgSubscriptionCount(product.OrgId, false);
+                countDataService.SaveOrgDataChanges();
 
-            countDataService.UpdateOrgSubscriptionCount(org.Id, false);
+            }
+            else
+            {
+                var org = orgService.GetOrg(URL);
+                sub = subscriptionService.GetUserOrgSubscription(userId, org.Id);
+                countDataService.UpdateOrgSubscriptionCount(org.Id, false);
+                countDataService.SaveOrgDataChanges();
+            }
 
             try
             {

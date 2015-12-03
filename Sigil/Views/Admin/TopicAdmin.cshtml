@@ -1,0 +1,76 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+
+@model TopicCreateViewModel
+@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        ViewBag.Title = "SigilAdmin - View and Create Topics";
+        IEnumerable<TopicInfoVM> allTopics = ViewBag.AllTopics ?? new List<TopicInfoVM>();
+        IEnumerable<SelectListItem> topicSelect = allTopics.Select(t => new SelectListItem { Value = t.thisTopic.Id.ToString(), Text = t.thisTopic.topicName }).ToList() ?? new List<SelectListItem>();
+}
+
+<div class="col-xs-9 col-md-8">
+   
+    @if (allTopics.Count() != 0)
+    {
+        <h2>All Topics</h2>
+        foreach (TopicInfoVM top in allTopics)
+        {
+            <div class="panel-body">
+                <div class="media">
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <a href="/t/@top.thisTopic.topicURL">@top.thisTopic.topicName</a>
+                        </h4>
+                        <p class="pull-left">
+                            <img class="issue-panel-icon" src="@(top.thisTopic.Image.icon_100)" />
+                        </p>
+                        <p class="pull-right">
+                            <span>Number of Child Products:  @top.numberOfChildProducts</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h4>No Topics =(</h4>
+    }
+
+    @using (Html.BeginForm("AssignProductToTopic", "Admin"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <p>
+            Product : @Html.TextBox("OrgAndProductName", "", new { id = "AdminProductSearch" })
+            Topic : @Html.DropDownList("topicId", topicSelect, "Select ...")
+        </p>
+
+        <input type="submit" value="Save" />
+    }
+
+    <h2>Create Another Topic</h2>
+
+    @using (Html.BeginForm("CreateTopic", "Admin", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label for="topicName">The name of the new topic you want to create.</label><br />
+            @Html.TextBoxFor(m => m.topicName, new { @class = "form-control", placeholder = "Topic name" })
+        </div>
+
+        <div class="form-group">
+            <label for="orgUrl">Enter the the URL for the new topic.</label><br />
+            @Html.TextBoxFor(m => m.topicURL, new { @class = "form-control", placeholder = "Topic URL" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Topic</button>
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</div>

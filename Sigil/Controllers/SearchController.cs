@@ -81,6 +81,15 @@ namespace Sigil.Controllers
 
         }
 
+        public JsonResult AdminProductSearch(string term)
+        {
+            var products = productService.GetAllProducts();
+
+            List<string> orgsandproducts = products.Where(p => p.ProductName.StartsWith(term)).Select(p => p.Org.orgName + '-' + p.ProductName).ToList();
+
+            return Json(orgsandproducts, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SearchOrgs_Cats(string term)
         {
             List<string> search_list = new List<string>();

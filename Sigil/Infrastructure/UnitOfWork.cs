@@ -10,6 +10,9 @@ namespace Sigil.Repository
         void Commit();
     }
 
+    /// <summary>
+    /// Basic worker that saves all changes given to database. 
+    /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDbFactory dbFactory;

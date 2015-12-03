@@ -945,3 +945,11 @@ a:hover {
 	text-decoration: none;
 	color: #FFF;
 }
+
+
+hr { 
+    display: block;
+    margin: .5em,.5em,auto,auto;
+    border-style: inset;
+    border-width: 5px;
+} 

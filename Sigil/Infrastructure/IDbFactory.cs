@@ -6,7 +6,7 @@ using System.Web;
 namespace Sigil.Repository
 {
     /// <summary>
-    /// Parent DB factory for access the DB. Inherits from IDisposable explained below
+    /// Parent DB factory for access the DB. Inherits from IDisposable 
     /// </summary>
     public interface IDbFactory : IDisposable
     {
@@ -40,7 +40,6 @@ namespace Sigil.Repository
             isDisposed = true;
         }
 
-        // Ovveride this to dispose custom objects
         protected virtual void DisposeCore()
         {
         }

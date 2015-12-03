@@ -10,6 +10,11 @@ namespace Sigil.Services
     //The operations we want to expose to the controllers
     public interface ITopicService
     {
+        Topic GetTopic(int topicId);
+        Topic GetTopic(string topicSTR, bool name = false);
+        IEnumerable<Topic> GetAllTopics();
+
+        void UpdateTopic(Topic top);
         void CreateTopic(Topic top);
         void SaveTopic();
     }
@@ -29,6 +34,35 @@ namespace Sigil.Services
         public void CreateTopic(Topic top)
         {
             topicRepository.Add(top);
+        }
+
+        public Topic GetTopic(int topicId)
+        {
+            var top = topicRepository.GetById(topicId);
+            return top;
+        }
+
+        public Topic GetTopic(string topicSTR, bool name)
+        {
+            Topic top = default(Topic);
+
+            if (name)
+                top = topicRepository.GetTopicByName(topicSTR);
+            else
+                top = topicRepository.GetTopicByURL(topicSTR);
+
+            return top;
+        }
+
+        public IEnumerable<Topic> GetAllTopics()
+        {
+            return topicRepository.GetAll();
+        }
+
+        public void UpdateTopic(Topic top)
+        {
+            topicRepository.Update(top);
+            unitOfWork.Commit();
         }
 
         public void SaveTopic()

@@ -1,7 +1,7 @@
-﻿function subscribe(subbutton, orgurl) {
+﻿function subscribe(subbutton, orgurl, type) {
     $.ajax({
         type: "POST",
-        url:  '/subscribe/' + orgurl + '/',
+        url: '/subscribe/' + orgurl + '/' + type + '/',
         success: function () {
             subbutton.classList.remove('subscribe');
             subbutton.classList.remove('btn-primary');
@@ -17,10 +17,10 @@
     });
 }
 
-function unsubscribe(subbutton, orgurl) {
+function unsubscribe(subbutton, orgurl, type) {
     $.ajax({
         type: "POST",
-        url:  '/unsubscribe/' + orgurl + '/',
+        url: '/unsubscribe/' + orgurl + '/' + type + '/',
         success: function () {
             subbutton.classList.remove('unsubscribe');
             subbutton.classList.remove('btn-danger');

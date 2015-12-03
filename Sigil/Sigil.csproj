@@ -252,6 +252,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SubscriptionsController.cs" />
+    <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -485,15 +486,14 @@
     <Content Include="Views\Account\OrgRegister.cshtml" />
     <Content Include="Views\Admin\OrgApplicants.cshtml" />
     <Content Include="Views\Admin\ErrorLog.cshtml" />
-    <Content Include="Views\Account\OrgApplicants.cshtml" />
     <Content Include="Views\Org\OrgResponsesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage.cshtml" />
     <Content Include="Views\Home\FeaturesPage - Copy.cshtml" />
-    <Content Include="Views\Admin\RolesIndex.cshtml" />
-    <Content Include="Views\Admin\CreateRole.cshtml" />
-    <Content Include="Views\Admin\ManageUserRoles.cshtml" />
+    <Content Include="Views\Admin\RolesAdmin.cshtml" />
     <Content Include="Views\Shared\_404.cshtml" />
     <Content Include="Views\Product\ProductPage.cshtml" />
+    <Content Include="Views\Topic\TopicPage.cshtml" />
+    <Content Include="Views\Admin\TopicAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -506,9 +506,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Topic\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

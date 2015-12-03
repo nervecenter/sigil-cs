@@ -15,7 +15,9 @@ namespace Sigil.Services
 
         void RemoveSubscription(Subscription sub);
 
-        Subscription GetUserSubscription(string userId, int orgId);
+        Subscription GetUserOrgSubscription(string userId, int orgId);
+        Subscription GetUserProductSubscription(string userId, int productId);
+        Subscription GetUserTopicSubscription(string userId, int topicId);
 
         //Tuple<IEnumerable<Org>, IEnumerable<Topic>, IEnumerable<Product>> GetUserSubscriptions(string userId);
         IEnumerable<Subscription> GetUserSubscriptions(string userId);
@@ -52,7 +54,17 @@ namespace Sigil.Services
             subscriptionRepository.Delete(sub);
         }
 
-        public Subscription GetUserSubscription(string userId, int orgId)
+        public Subscription GetUserProductSubscription(string userId, int productId)
+        {
+            return subscriptionRepository.GetUserSubscriptionToProduct(userId, productId);
+        }
+
+        public Subscription GetUserTopicSubscription(string userId, int topicId)
+        {
+            return subscriptionRepository.GetUserSubscriptionToTopic(userId, topicId);
+        }
+
+        public Subscription GetUserOrgSubscription(string userId, int orgId)
         {
             return subscriptionRepository.GetUserSubscriptionToOrg(userId, orgId) ?? default(Subscription);
         }

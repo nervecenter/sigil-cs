@@ -132,7 +132,7 @@ namespace Sigil.ViewModels
         public string orgName { get; set; }
 
         [Required]
-        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 4)]
         [Display(Name = "Requested Organization URL for Sigil")]
         public string orgURL { get; set; }
 

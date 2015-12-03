@@ -21,7 +21,7 @@
                 Responsiveness: 69%<br />
                 <a href="/@Model.thisOrg.orgURL/data" style="font-size:25px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;">Data</div></a><br />
                 @foreach ( Product p in Model.orgProducts ) {
-                    <a href="@Model.thisOrg.orgURL/@p.ProductURL/" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
+                    <a href="/@Model.thisOrg.orgURL/@p.ProductURL" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
                 }
             </div>
         </div>

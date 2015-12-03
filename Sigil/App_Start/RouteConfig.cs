@@ -98,6 +98,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+               name: "Subscriptions",
+               url: "subscriptions/",
+               defaults: new { controller = "Subscriptions", action = "Index" }
+           );
+
+            routes.MapRoute(
                 name: "Manage",
                 url: "manage/",
                 defaults: new { controller = "Manage", action = "Index" }
@@ -111,21 +117,16 @@ namespace Sigil {
 
             routes.MapRoute(
                 name: "User DisplayName Search",
-                url: "searchUsers/",
+                url: "search/AdminUserSearch",
                 defaults: new { controller = "Search", action = "SearchByUserDisplayName" }
             );
 
             routes.MapRoute(
-                name: "Issue Search",
-                url: "issueSearch/{orgid}",
-                defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
+                name: "Admin Product Search",
+                url: "search/AdminProductSearch/",
+                defaults: new { controller = "Search", action = "AdminProductSearch" }
             );
 
-            routes.MapRoute(
-                name: "Subscriptions",
-                url: "subscriptions/",
-                defaults: new { controller = "Subscriptions", action = "Index" }
-            );
 
             routes.MapRoute(
                 name: "Search Orgs",
@@ -151,11 +152,7 @@ namespace Sigil {
                  defaults: new { controller = "Admin", action = "OrgApplicants" }
              );
 
-            routes.MapRoute(
-                name: "Org App Approve",
-                url: "sadmin/orgapps/{norgID}",
-                defaults: new { controller = "Account", action = "OrgConfirmed" }
-            );
+
 
             routes.MapRoute(
                 name: "Error Log",
@@ -163,24 +160,29 @@ namespace Sigil {
                 defaults: new { controller = "Admin", action = "ErrorLog" }
             );
 
-       
             routes.MapRoute(
-                name: "Subscribe",
-                url: "subscribe/{orgURL}/",
-                defaults: new { controller = "Subscriptions", action = "AddSubscription" }
+                name: "Topic Admin Area",
+                url: "sadmin/topicAdmin",
+                defaults: new { controller = "Admin", action = "TopicAdmin" }
             );
 
             routes.MapRoute(
-                name: "UnSubscribe",
-                url: "unsubscribe/{orgURL}/",
-                defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
+                name: "Create Topic",
+                url: "sadmin/topicAdmin/createTopic",
+                defaults: new { controller = "Admin", action = "CreateTopic" }
             );
 
             routes.MapRoute(
-                name: "Admin View Roles",
-                url: "sadmin/roles/",
-                defaults: new { controller = "Admin", action = "RolesIndex" }
+                name: "Assign Product To Topic",
+                url: "sadmin/topicAdmin/AssignProduct",
+                defaults: new { controller = "Admin", action = "AssignProductToTopic" }
             );
+
+            routes.MapRoute(
+               name: "Admin View Roles",
+               url: "sadmin/roles/",
+               defaults: new { controller = "Admin", action = "RolesIndex" }
+           );
 
             routes.MapRoute(
                 name: "Create Role",
@@ -188,11 +190,43 @@ namespace Sigil {
                 defaults: new { controller = "Admin", action = "CreateRole" }
             );
 
+            //routes.MapRoute(
+            //    name: "Role Manager",
+            //    url: "sadmin/roles/manage/",
+            //    defaults: new { controller = "Admin", action = "ManageUserRoles" }
+            //);
+
             routes.MapRoute(
-                name: "Role Manager",
-                url: "sadmin/roles/manage/",
-                defaults: new { controller = "Admin", action = "ManageUserRoles" }
+                name: "Topic Page",
+                url: "t/{topicURL}/",
+                defaults: new { controller = "Topic", action = "TopicPage" }
             );
+
+            routes.MapRoute(
+               name: "Issue Search",
+               url: "issueSearch/{orgid}",
+               defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
+           );
+
+            routes.MapRoute(
+                name: "Subscribe",
+                url: "subscribe/{URL}/{type}/",
+                defaults: new { controller = "Subscriptions", action = "AddSubscription" }
+            );
+
+            routes.MapRoute(
+                name: "UnSubscribe",
+                url: "unsubscribe/{URL}/{type}",
+                defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
+            );
+
+            routes.MapRoute(
+                name: "Org App Approve",
+                url: "sadmin/orgapps/{norgID}",
+                defaults: new { controller = "Account", action = "OrgConfirmed" }
+            );
+
+           
 
             routes.MapRoute(
                 name: "Default Org Data",

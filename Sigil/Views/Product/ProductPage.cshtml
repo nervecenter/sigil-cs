@@ -21,13 +21,13 @@
         {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.thisOrg.orgName</a>
         }
-        else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => s.subObjectId == Model.thisOrg.Id && s.subName == Model.thisOrg.orgName))
+        else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => (s.subObjectId == Model.thisProduct.Id && s.subName == Model.thisProduct.ProductName)))
         {
-            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisOrg.orgURL')">Unsubscribe from @Model.thisOrg.orgName</a>
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisProduct.ProductName', 'product')">Unsubscribe from @Model.thisProduct.ProductName</a>
         }
         else
         {
-            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisOrg.orgURL')">Subscribe to @Model.thisOrg.orgName</a>
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisProduct.ProductName', 'product')">Subscribe to @Model.thisProduct.ProductName</a>
         }
     </div>
     <div class="panel">

@@ -85,7 +85,7 @@ namespace Sigil
             app.UseAutofacMvc();
 
             ConfigureAuth(app);
-            AutoMapperConfiguration.Configure();
+            //AutoMapperConfiguration.Configure();
         }
     }
 }
