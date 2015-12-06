@@ -102,9 +102,17 @@ namespace Sigil.Controllers
             return Json(search_list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SearchIssuesByOrg( int id ) 
+        public class SearchModel {
+            public int id { get; set; }
+            public string term { get; set; }
+        }
+
+        [HttpPost]
+        public JsonResult SearchIssuesByOrg( SearchModel s ) 
         {
-            IEnumerable<Issue> issues = searchService.MatchIssuesByOrg( id ).OrderByDescending( i => i.votes );
+            IEnumerable<Issue> issues = searchService.MatchIssuesByOrg( s.id )
+                                            .Where(i => i.title.Contains(s.term))
+                                            .OrderByDescending( i => i.votes );
             //List<IssuePanelPartialJsonVM> partialList = new List<IssuePanelPartialJsonVM>();
             
             /*foreach ( Issue i in issues ) {

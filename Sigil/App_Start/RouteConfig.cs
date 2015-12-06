@@ -203,8 +203,8 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-               name: "Issue Search",
-               url: "issueSearch/{orgid}",
+               name: "Search Issues by Org",
+               url: "searchissuesbyorg/",
                defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
            );
 
