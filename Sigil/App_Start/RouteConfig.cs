@@ -284,6 +284,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "OrgAdmin",
+                url: "{orgURL}/admin/",
+                defaults: new { controller = "Admin", action = "OrgAdmin" }
+            );
+
+            routes.MapRoute(
               name: "Org Page",
               url: "{orgURL}/",
               defaults: new { controller = "Org", action = "OrgPage" }

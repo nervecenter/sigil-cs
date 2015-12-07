@@ -21,10 +21,10 @@ $('#issues-by-org-search').keyup(function () {
     //var orgID = $(this).data('orgid');
     var searchQuery = { SearchModel: { id: $(this).data('orgid'), term: $(this).val() } };
     $.ajax({
-        source: 'https://localhost:44301/searchissuesbyorg/',
+        url: 'https://localhost:44301/searchissuesbyorg/',
         type: 'POST',
-        //data: JSON.stringify(searchQuery),
-        data: searchQuery,
+        data: JSON.stringify(searchQuery),
+        //data: searchQuery,
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         async: false,
@@ -32,8 +32,8 @@ $('#issues-by-org-search').keyup(function () {
             $(".issue-panel-partial").remove();
             alert(searchResults);
         },
-        error: function () {
-            alert('Search didn\'t work.');
+        error: function (ts) {
+            alert(ts.responseText);
         }
         /*_renderItem: function (ul, item) {
             return $("<li>")

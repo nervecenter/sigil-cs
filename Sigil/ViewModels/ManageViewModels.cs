@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Sigil.Models
+namespace Sigil.ViewModels
 {
     public class IndexViewModel
     {
@@ -12,6 +12,7 @@ namespace Sigil.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        public UserViewModel UserVM { get; set; }
     }
 
     public class ManageLoginsViewModel

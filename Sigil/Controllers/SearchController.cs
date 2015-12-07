@@ -8,6 +8,7 @@ using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Sigil.Services;
+using System.Web.Http;
 
 namespace Sigil.Controllers
 {
@@ -107,8 +108,8 @@ namespace Sigil.Controllers
             public string term { get; set; }
         }
 
-        [HttpPost]
-        public JsonResult SearchIssuesByOrg( SearchModel s ) 
+
+        public JsonResult SearchIssuesByOrg([FromBody] SearchModel s) 
         {
             IEnumerable<Issue> issues = searchService.MatchIssuesByOrg( s.id )
                                             .Where(i => i.title.Contains(s.term))

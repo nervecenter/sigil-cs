@@ -24,22 +24,22 @@ namespace Sigil.Repository
 
         public Image GetOrgImage(int orgId)
         {
-            return DbContext.Images.Where(i => i.OwnerId == orgId.ToString() && i.imgType == (int)ImageType.Org).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == orgId.ToString() && i.imgType == (int)ImageTypeOwner.Org).FirstOrDefault();
         }
 
         public Image GetProductImage(int productId)
         {
-            return DbContext.Images.Where(i => i.OwnerId == productId.ToString() && i.imgType == (int)ImageType.Product).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == productId.ToString() && i.imgType == (int)ImageTypeOwner.Product).FirstOrDefault();
         }
 
         public Image GetTopicImage(int topId)
         {
-            return DbContext.Images.Where(i => i.OwnerId == topId.ToString() && i.imgType == (int)ImageType.Topic).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == topId.ToString() && i.imgType == (int)ImageTypeOwner.Topic).FirstOrDefault();
         }
 
         public Image GetUserImage(string userId)
         {
-            return DbContext.Images.Where(i => i.OwnerId == userId && i.imgType == (int)ImageType.User).FirstOrDefault();
+            return DbContext.Images.Where(i => i.OwnerId == userId && i.imgType == (int)ImageTypeOwner.User).FirstOrDefault();
         }
 
         //where we define the Image methods created below

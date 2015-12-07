@@ -54,7 +54,7 @@ namespace Sigil.Migrations
                 var user = context.Users.Where(u => u.UserName == "dominic@sigil.tech").FirstOrDefault();
 
                 Image userImg = new Image();
-                userImg.imgType = (int)ImageType.User;
+                userImg.imgType = (int)ImageTypeOwner.User;
                 userImg.OwnerId = user.Id;
                 context.Images.AddOrUpdate(userImg);
                 context.SaveChanges();
@@ -75,7 +75,7 @@ namespace Sigil.Migrations
                 var user = context.Users.Where(u => u.UserName == "nervecenter7@gmail.com").FirstOrDefault();
 
                 Image userImg = new Image();
-                userImg.imgType = (int)ImageType.User;
+                userImg.imgType = (int)ImageTypeOwner.User;
                 userImg.OwnerId = user.Id;
                 context.Images.AddOrUpdate(userImg);
                 context.SaveChanges();

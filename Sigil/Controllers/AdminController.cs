@@ -42,12 +42,75 @@ namespace Sigil.Controllers
         }
 
         // GET: Admin
+        [Authorize(Roles = "SigilAdmin OrgSuperAdmin OrgAdmin")]
         public ActionResult Index()
         {
+            //return the view based on if its Sigil or Org
+
             return View();
         }
 
+        #region Org Admin
 
+        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin OrgAdmin")]
+        public ActionResult OrgAdmin(string orgURL)
+        {
+            Org thisOrg = orgService.GetOrg(orgURL);
+            OrgAdminIndexViewModel orgAdminVM = new OrgAdminIndexViewModel()
+            {
+                thisOrg = thisOrg
+            };
+
+            return View("OrgAdminIndex", orgAdminVM);
+        }
+
+        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
+        //public ActionResult OrgURLChange(string orgURL, string newOrgURL)
+        //{
+
+        //}
+        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
+        //public ActionResult OrgNameChange(string orgURL, string newOrgName)
+        //{
+
+        //}
+        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
+        //public ActionResult AddOrgAdmin(string orgURL, string UserDisplayName)
+        //{
+
+        //}
+        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
+        //public ActionResult RemoveOrgAdmin(string orgURL, string UserDisplayName)
+        //{
+
+        //}
+
+        public ActionResult UploadOrgBanner(string orgURL)
+        {
+            var org = orgService.GetOrg(orgURL);
+            imageService.OrgBannerImageUpload(org, Request.Files[0]);
+
+            return RedirectToAction("OrgAdmin");
+        }
+
+        public ActionResult UploadOrgIcon100(string orgURL)
+        {
+            var org = orgService.GetOrg(orgURL);
+            imageService.OrgIcon100ImageUpload(org, Request.Files[0]);
+
+            return RedirectToAction("OrgAdmin");
+        }
+
+        public ActionResult UploadOrgIcon20(string orgURL)
+        {
+            var org = orgService.GetOrg(orgURL);
+            imageService.OrgIcon20ImageUpload(org, Request.Files[0]);
+
+            return RedirectToAction("OrgAdmin");
+        }
+
+        #endregion
+        #region Sigil Admin
         //================================================ Topic Admin ================================================//
 
         [Authorize(Roles = "SigilAdmin")]
@@ -79,7 +142,7 @@ namespace Sigil.Controllers
             topicService.CreateTopic(newTopic);
             topicService.SaveTopic();
 
-            newTopic.Image = imageService.AssignDefaultImage(newTopic.Id, ImageType.Topic);
+            newTopic.Image = imageService.AssignDefaultImage(newTopic.Id, ImageTypeOwner.Topic);
             topicService.UpdateTopic(newTopic);
 
             var allTopics = topicService.GetAllTopics();
@@ -209,5 +272,6 @@ namespace Sigil.Controllers
             var errors = errorService.GetAllErrors();//dc.Errors.Select(e => e).ToList();
             return View(errors);
         }
+        #endregion
     }
 }

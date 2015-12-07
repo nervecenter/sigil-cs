@@ -45,6 +45,7 @@ namespace Sigil.Controllers
             subscriptionService = subS;
         }
 
+        [HttpGet]
         public ActionResult OrgPage(string orgURL, int? page)
         {
             // Get the org
@@ -90,6 +91,8 @@ namespace Sigil.Controllers
             // Pass our org and issues to the view as the model
             return View(orgVM);
         }
+
+        
 
         /* 
         ==================== 

@@ -1,0 +1,40 @@
+﻿@using Sigil.ViewModels
+@model OrgAdminIndexViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.thisOrg.orgName Admin Panel</h2>
+<hr />
+<img src="@Model.thisOrg.Image.banner" /> 
+@using (Html.BeginForm("UploadOrgBanner", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+{
+    @Html.AntiForgeryToken();
+
+    @*<label for= "img" > New User Icon: </label>*@
+    <input type="file" name="imgBanner" id="imgBanner" />
+                        <br />
+                        <input type="submit" value="Upload" />
+}
+<hr />
+<img src="@Model.thisOrg.Image.icon_100" />
+@using (Html.BeginForm("UploadOrgIcon100", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+{
+    @Html.AntiForgeryToken();
+
+    @*<label for= "img" > New User Icon: </label>*@
+    <input type="file" name="img100" id="img100" />
+    <br />
+                        <input type="submit" value="Upload" />
+}
+<hr />
+<img src="@Model.thisOrg.Image.icon_20" />
+@using (Html.BeginForm("UploadOrgIcon20", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+{
+    @Html.AntiForgeryToken();
+
+    @*<label for= "img" > New User Icon: </label>*@
+    <input type="file" name="img20" id="img20" />
+    <br />
+                        <input type="submit" value="Upload" />
+}

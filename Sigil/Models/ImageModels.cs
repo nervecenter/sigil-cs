@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Sigil.Models
 {
-    public enum ImageType
+    public enum ImageTypeOwner
     {
         User, Org, Product, Topic
     }
