@@ -1,4 +1,5 @@
 ﻿using Sigil.Models;
+using Sigil.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Sigil.ViewModels
         public bool InPanel { get; set; }
     }
     
-    public struct IssuePanelPartialJsonVM
+    public class IssuePanelPartialJsonVM
     {   
         public int issueID { get; set; }
         
@@ -44,7 +45,50 @@ namespace Sigil.ViewModels
         public bool UserVoted { get; set; }
 
         public bool InPanel { get; set; }
+
+        public IssuePanelPartialJsonVM(Issue i, bool userVoted, bool inPanel) {
+            issueID = i.Id;
+            votes = i.votes;
+            title = i.title;
+            text = i.text;
+            orgName = i.Product.Org.orgName;
+            orgIcon = i.Product.Org.Image.icon_20;
+            productName = i.Product.ProductName;
+            productIcon = i.Product.Image.icon_20;
+            datePostedString = i.createTime.ToShortDateString();
+            userName = i.User.UserName;
+            userIcon = i.User.Image.icon_20;
+            UserVoted = userVoted;
+            InPanel = inPanel;
+        }
+
+        public static string IssuePanelPartialHTML( IssuePanelPartialVM Model ) {
+            string html = "<div class=\"panel panel-default issue-panel-partial\"><div class=\"panel-body\"><div class=\"media\"><div class=\"media-object pull-left votebutton-box\">";
+            //if( !Request.IsAuthenticated ) {
+            html += "<img src=\"/Content/Images/notvoted.png\" class=\"voteup\" onclick=\"redirectToLogin()\" onmouseover=\"votehover(this)\" onmouseout=\"voteunhover(this)\">";
+            /*} else if ( Model.UserVoted ) {
+                html += "<img src=\"~/Content/Images/voted.png\" class=\"unvoteup\" onclick=\"unvoteup(this, " + Model.issue.Id + "\" onmouseover=\"votehover(this)\" onmouseout=\"voteunhover(this)\">";
+            } else {
+                html += "<img src=\"~/Content/Images/notvoted.png\" class=\"voteup\" onclick=\"voteup(this, " + Model.issue.Id + "\" onmouseover=\"votehover(this)\" onmouseout=\"voteunhover(this)\">";
+            }*/
+            html += "<br /><span id=\"count-" + Model.issue.Id + "\" class=\"voteamount\">" + Model.issue.votes + "</span></div><div class=\"media-body\"><h4 class=\"media-heading\"><a href = \"/" + Model.issue.Product.Org.orgURL + "/" + Model.issue.Product.ProductURL + "/" + Model.issue.Id + "\">" + Model.issue.title + "</a>";
+            if ( Model.issue.responded ) {
+                html += "<small><i style=\"color:red;\">Response!</i></small>";
+            }
+            html += "</h4><p class=\"pull-left\"><img class=\"issue-panel-icon\" src=\"" + Model.issue.Product.Image.icon_20 + "\"/><span><a href = \"" + Model.issue.Product.Org.orgURL + "\">" + Model.issue.Product.Org.orgName + "</a></span>";
+            if ( Model.issue.Product.ProductURL != "Default" ) {
+                html += "<span>: <a href = \"/" + @Model.issue.Product.Org.orgURL + "/" + Model.issue.Product.ProductURL + "\">" + Model.issue.Product.ProductName + "</a></span>";
+            }
+            if ( Model.issue.Product.TopicId != null ) {
+                html += "<span> in <a href = \"/t/@Model.issue.Product.Topic.topicURL\">" + Model.issue.Product.Topic.topicName + "</a></span>";
+            }
+            html += "</p><p class=\"pull-right\"><span>Posted by " + Model.issue.User.DisplayName + "</span></p></div></div></div></div>";
+
+            return html;
+        }
     }
+
+    
 
     public struct UserViewModel
     {

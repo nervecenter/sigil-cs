@@ -45,6 +45,7 @@ namespace Sigil.Controllers
             subscriptionService = subS;
         }
 
+        [HttpGet]
         public ActionResult OrgPage(string orgURL, int? page)
         {
             // Get the org

@@ -15,7 +15,7 @@
     IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;//Sigil.Controllers.AccountController.userSubs( User );
 }
 
-<div class="col-md-9 col-lg-9">
+<div id="main-col" class="col-md-9 col-lg-9">
     <img class="img-rounded img-responsive org-banner-small" src="@(thisOrg.Image.banner)">
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-default active">Main feed</a>
@@ -42,12 +42,14 @@
             </form>
         </div>
     </div>
-    @foreach (IssuePanelPartialVM issue in Model.orgIssues) {
-        /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
-                                                                                             userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )}, 
-                                                                   issue );*/
-        @Html.Partial("../Shared/_IssuePanelPartial", issue)
-    }
+    <div id="issues">
+        @foreach ( IssuePanelPartialVM issue in Model.orgIssues ) {
+            /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
+                                                                                                 userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )},
+                                                                       issue );*/
+                                                                    @Html.Partial( "../Shared/_IssuePanelPartial", issue )
+        }
+    </div>
     @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
 
     @Html.PagedListPager(Model.orgIssues, page => Url.Action("OrgPage", "Org", new { page }))
