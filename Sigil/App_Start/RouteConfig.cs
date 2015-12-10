@@ -206,7 +206,13 @@ namespace Sigil {
                name: "Search Issues by Org",
                url: "searchissuesbyorg/",
                defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
-           );
+            );
+
+            routes.MapRoute(
+               name: "Search Issues by Product",
+               url: "searchissuesbyproduct/",
+               defaults: new { controller = "Search", action = "SearchIssuesByProduct" }
+            );
 
             routes.MapRoute(
                 name: "Subscribe",

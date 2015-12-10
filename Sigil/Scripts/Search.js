@@ -74,13 +74,25 @@ $('#issues-by-org-search').bindWithDelay("keyup", function () {
         success: function (data) {
             $("#issues").html("");
             $("#issues").append(data);
-            /*$.each(data, function(i, item) {
-                //alert(data[i].title);
-                var i = $("<div></div>");
-                i.class = "panel panel-default issue-panel-partial";
-                i.html = issuePartialInner(item);
-                $("#main-col").append(i);
-            })*/
+        },
+        error: function () {
+            alert('Search didn\'t work.');
+        }
+    });
+}, 300, true);
+
+$('#issues-by-product-search').bindWithDelay("keyup", function () {
+    var searchQuery = { id: $(this).data('orgid'), term: $(this).val() };
+    $.ajax({
+        url: 'https://localhost:44301/searchissuesbyproduct/',
+        type: 'POST',
+        data: JSON.stringify(searchQuery),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        async: false,
+        success: function (data) {
+            $("#issues").html("");
+            $("#issues").append(data);
         },
         error: function () {
             alert('Search didn\'t work.');

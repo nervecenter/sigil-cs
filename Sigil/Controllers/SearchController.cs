@@ -138,7 +138,46 @@ namespace Sigil.Controllers
             }
 
             if (partialsHTML == "") {
-                partialsHTML += "No issues found matching your query.";
+                partialsHTML += "No posts found matching your query.";
+            }
+
+            return Json( partialsHTML, JsonRequestBehavior.AllowGet );
+        }
+
+        [HttpPost]
+        public JsonResult SearchIssuesByProduct( int id, string term ) {
+            string partialsHTML = "";
+
+            // Three cases: Term is empty; fetch all issues
+            if ( term == "" ) {
+                var issues = searchService.MatchIssuesByProduct( id ).OrderByDescending( i => i.votes );
+
+                foreach ( Issue i in issues ) {
+                    if ( Request.IsAuthenticated ) {
+                        // TODO: Make sure we check if the user voted on this issue
+                        partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    } else {
+                        partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    }
+                }
+
+                return Json( partialsHTML, JsonRequestBehavior.AllowGet );
+            }
+
+            // Otherwise, fetch matching issues
+            var issuesList = searchService.MatchIssuesByProduct( id ).Where( i => i.title.ToLower().Contains( term.ToLower() ) ).OrderByDescending( i => i.votes ).ToList();
+
+            foreach ( Issue i in issuesList ) {
+                if ( Request.IsAuthenticated ) {
+                    // TODO: Make sure we check if the user voted on this issue
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                } else {
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                }
+            }
+
+            if ( partialsHTML == "" ) {
+                partialsHTML += "No posts found matching your query.";
             }
 
             return Json( partialsHTML, JsonRequestBehavior.AllowGet );
