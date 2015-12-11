@@ -227,15 +227,17 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        public ActionResult CreateIssue()
+        [HttpGet]
+        public ActionResult AddIssue(AddIssueVM vm)
         {
-            return View("AddIssue");
+            return View(vm);
         }
 
 
         [HttpPost]
         [Authorize]
-        public ActionResult AddIssue()
+        [ActionName("AddIssue")]
+        public ActionResult AddIssue_Post(AddIssueVM vm)
         {
             // Get the org for the issue we're adding
 

@@ -1,7 +1,11 @@
-﻿@{
+﻿@using Sigil.ViewModels
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Sigil - Submit new feedback";
 }
+
+@model AddIssueVM
 
 <script type="text/javascript">
     $(function () {
@@ -11,65 +15,6 @@
     });
 </script>
 
-@*<script type="text/javascript">
-    function appendAddTextButton() {
-        // Get the fieldset we'll be adding to
-        var fieldset = document.getElementById("add-issue-fieldset");
-        // Create a paragraph container for our button to confirm a new submission
-        var newsubmissionp = document.createElement("p");
-        newsubmissionp.id = "new-sub-p";
-        // Append it
-        fieldset.appendChild(newsubmissionp);
-        // Create our button
-        var newsubmissionbutton = document.createElement("input");
-        newsubmissionbutton.id = "new-submission-button";
-        newsubmissionbutton.type = "button";
-        newsubmissionbutton.name = "newsubmissionbutton";
-        newsubmissionbutton.value = "Add this as a new submission";
-        newsubmissionbutton.onclick = function () { confirmNewSubmission() };
-        // Get the paragraph we made earlier and append the button
-        document.getElementById("new-sub-p").appendChild(newsubmissionbutton);
-        document.getElementById("title-input").removeAttribute("oninput");
-    }
-
-    function confirmNewSubmission() {
-        // Get the fieldset we'll be adding to
-        var fieldset = document.getElementById("add-issue-fieldset");
-        // Remove the old button confirming a new submission
-        document.getElementById("new-sub-p").remove();
-        // Add our text field
-        var textp = document.createElement("p");
-        textp.id = "text-p";
-        fieldset.appendChild(textp);
-        var textlabel = document.createElement("label");
-        textlabel.id = "text-label";
-        textlabel.for = "text";
-        textp.appendChild(textlabel);
-        textlabel.innerHTML = "Explain your idea in-depth:";
-        textp.appendChild(document.createElement("br"));
-        var textinput = document.createElement("textarea");
-        textinput.type = "text";
-        textinput.name = "text";
-        textinput.classList.add("add-issue-input");
-        textinput.classList.add("add-issue-full-width");
-        textinput.classList.add("add-issue-text-input");
-        textinput.placeholder = "Explain your idea in-depth";
-        textp.appendChild(textinput);
-        // Add our submit button
-        var submitp = document.createElement("p");
-        submitp.id = "submit-p";
-        fieldset.appendChild(submitp);
-        var submitbutton = document.createElement("input");
-        submitbutton.type = "submit";
-        submitbutton.name = "buttonSubmit";
-        submitbutton.value = "Add Issue";
-        submitbutton.formAction = "@Url.Action("AddIssue", "Issue")";
-        submitp.appendChild(submitbutton);
-    }
-</script>*@
-
-
-
 <div class="col-md-9 col-lg-9">
     <h2>Post new feedback</h2>
     @using (Html.BeginForm("AddIssue", "Issue", FormMethod.Post, new { id = "add-issue-form" }))
@@ -77,18 +22,18 @@
         @Html.AntiForgeryToken()
         <div class="form-group">
             <label for="text">Company, person, or product:</label><br />
-            <input id="orgBox" class="form-control" type="text" name="product" value="@Request.Form["product"]" placeholder="Enter a company, person, or product" />
+            <input id="orgBox" class="form-control" type="text" name="product" value="@Model.product.ProductName" placeholder="Enter a company, person, or product" />
         </div>
         <div class="form-group">
             <label for="text">Title:</label><br />
-            <input id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Summarize your feedback" />
+            <input id="title-input" class="form-control" type="text" name="title" value="@Model.title" placeholder="Summarize your feedback" />
         </div>
         <div class="form-group">
             <label for="text">Text:</label><br />
-            <textarea id="title-input" class="form-control" type="text" name="text" value="@Request.Form["text"]" placeholder="If you'd like, elaborate on your feedback in-depth"></textarea>
+            <textarea id="title-input" class="form-control" type="text" name="text" placeholder="If you'd like, elaborate on your feedback in-depth"></textarea>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" >Submit new feedback</button>
+            <button type="submit" class="btn btn-primary" >Submit feedback</button>
         </div>
     }
 </div>
