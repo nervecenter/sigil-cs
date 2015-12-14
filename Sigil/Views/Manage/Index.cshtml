@@ -30,8 +30,8 @@
             <hr />
             <span></string>Upload New User Icon</span>
             <dd>
-                <img src="@Model.UserVM.User.Image.icon_100" /> <img src="@Model.UserVM.User.Image.icon_20" />
-                    @using (Html.BeginForm("User_Icon_Upload", "ImageUploader", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+                <img src="@Model.UserVM.User.Image.icon_100" /> @*<img src="@Model.UserVM.User.Image.icon_20" />*@
+                    @using (Html.BeginForm("User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
                     {
                         @Html.AntiForgeryToken();
                         

@@ -19,7 +19,7 @@
     <h2>Post new feedback</h2>
     @using (Html.BeginForm("AddIssue", "Issue", FormMethod.Post, new { id = "add-issue-form" }))
     {
-        @Html.AntiForgeryToken()
+        @*@Html.AntiForgeryToken()*@
         <div class="form-group">
             <label for="text">Company, person, or product:</label><br />
             <input id="orgBox" class="form-control" type="text" name="product" value="@Model.product.ProductName" placeholder="Enter a company, person, or product" />

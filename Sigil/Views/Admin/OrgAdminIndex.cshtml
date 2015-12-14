@@ -11,18 +11,17 @@
 {
     @Html.AntiForgeryToken();
 
-    @*<label for= "img" > New User Icon: </label>*@
     <input type="file" name="imgBanner" id="imgBanner" />
                         <br />
                         <input type="submit" value="Upload" />
 }
+
 <hr />
 <img src="@Model.thisOrg.Image.icon_100" />
 @using (Html.BeginForm("UploadOrgIcon100", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
 {
     @Html.AntiForgeryToken();
 
-    @*<label for= "img" > New User Icon: </label>*@
     <input type="file" name="img100" id="img100" />
     <br />
                         <input type="submit" value="Upload" />

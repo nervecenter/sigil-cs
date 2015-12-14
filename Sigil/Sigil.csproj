@@ -243,7 +243,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />

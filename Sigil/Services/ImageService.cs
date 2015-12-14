@@ -186,8 +186,8 @@ namespace Sigil.Services
 
         private string TMPImageHandler(HttpPostedFileBase img, string owner)
         {
-            string img_path = tmp_upload_path + owner +"_"+ DateTime.Now.Second.ToString() + "_" + img.FileName;
-
+            string img_path = HttpContext.Current.Server.MapPath(tmp_upload_path) + owner +"_"+ DateTime.Now.Second.ToString() + "_" + img.FileName;
+            
             img.SaveAs(img_path);
 
             return img_path;
@@ -216,22 +216,25 @@ namespace Sigil.Services
                     }
 
                     string final_path = "";
+                    string save_path = "";
                     if (typeOwner == ImageTypeOwner.User)
                     {
-                        final_path = user_folder_path; //+ owner + ExtensionMethods.GetDescription(typeSize) +".png";
-
-
+                        save_path = HttpContext.Current.Server.MapPath(user_folder_path); //+ owner + ExtensionMethods.GetDescription(typeSize) +".png";
+                        final_path = user_folder_path;
                     }
                     else if (typeOwner == ImageTypeOwner.Org)
                     {
-                        final_path = org_folder_path; //+ owner + ExtensionMethods.GetDescription(typeSize) + ".png";
+                        save_path = HttpContext.Current.Server.MapPath(org_folder_path); //+ owner + ExtensionMethods.GetDescription(typeSize) + ".png";
+                        final_path = org_folder_path;
                     }
                     else if (typeOwner == ImageTypeOwner.Product)
                     {
+                        save_path = HttpContext.Current.Server.MapPath(product_folder_path);
                         final_path = product_folder_path;
                     }
                     else if (typeOwner == ImageTypeOwner.Topic)
                     {
+                        save_path = HttpContext.Current.Server.MapPath(topic_folder_path);
                         final_path = topic_folder_path;
                     }
                     else
@@ -239,14 +242,15 @@ namespace Sigil.Services
                         //Something went wrong
                     }
 
+                    save_path += owner + ExtensionMethods.GetDescription(typeSize) + ".png";
                     final_path += owner + ExtensionMethods.GetDescription(typeSize) + ".png";
 
-                    var final_img = System.IO.File.Create(final_path);
+                    var final_img = System.IO.File.Create(save_path);
                     outStream.Seek(0, SeekOrigin.Begin);
                     outStream.CopyTo(final_img);
                     final_img.Close();
 
-                    return final_path;
+                    return final_path;//final_path.Replace(@"\", "/");
                 }
 
             }
@@ -262,6 +266,7 @@ namespace Sigil.Services
             UserImg.icon_100 = finalImg;
             UserImg.icon_20 = finalImg;
             imageRepository.Update(UserImg);
+            unitOfWork.Commit();
         }
 
         public void OrgBannerImageUpload(Org org, HttpPostedFileBase img)
@@ -273,6 +278,7 @@ namespace Sigil.Services
 
             OrgImg.banner = finalImg;
             imageRepository.Update(OrgImg);
+            unitOfWork.Commit();
         }
 
         public void OrgIcon20ImageUpload(Org org, HttpPostedFileBase img)
@@ -284,6 +290,7 @@ namespace Sigil.Services
 
             OrgImg.icon_20 = finalImg;
             imageRepository.Update(OrgImg);
+            unitOfWork.Commit();
         }
 
         public void OrgIcon100ImageUpload(Org org, HttpPostedFileBase img)
@@ -295,6 +302,7 @@ namespace Sigil.Services
 
             OrgImg.icon_100 = finalImg;
             imageRepository.Update(OrgImg);
+            unitOfWork.Commit();
         }
 
         public void ProductBannerImageUpload(Product product, HttpPostedFileBase img)
@@ -306,6 +314,7 @@ namespace Sigil.Services
 
             ProductImg.banner = finalImg;
             imageRepository.Update(ProductImg);
+            unitOfWork.Commit();
         }
 
         public void ProductIcon20ImageUpload(Product product, HttpPostedFileBase img)
@@ -317,6 +326,7 @@ namespace Sigil.Services
 
             ProductImg.icon_20 = finalImg;
             imageRepository.Update(ProductImg);
+            unitOfWork.Commit();
         }
 
         public void ProductIcon100ImageUpload(Product product, HttpPostedFileBase img)
@@ -328,6 +338,7 @@ namespace Sigil.Services
 
             ProductImg.icon_100 = finalImg;
             imageRepository.Update(ProductImg);
+            unitOfWork.Commit();
         }
 
         public void TopicBannerImageUpload(Topic topic, HttpPostedFileBase img)
@@ -339,6 +350,7 @@ namespace Sigil.Services
 
             TopicImg.banner = finalImg;
             imageRepository.Update(TopicImg);
+            unitOfWork.Commit();
         }
 
         public void TopicIcon20ImageUpload(Topic topic, HttpPostedFileBase img)
@@ -350,6 +362,7 @@ namespace Sigil.Services
 
             TopicImg.icon_20 = finalImg;
             imageRepository.Update(TopicImg);
+            unitOfWork.Commit();
         }
 
         public void TopicIcon100ImageUpload(Topic topic, HttpPostedFileBase img)
@@ -361,6 +374,7 @@ namespace Sigil.Services
 
             TopicImg.icon_100 = finalImg;
             imageRepository.Update(TopicImg);
+            unitOfWork.Commit();
         }
     }
 }

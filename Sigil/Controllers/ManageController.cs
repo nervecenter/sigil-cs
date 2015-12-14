@@ -114,6 +114,15 @@ namespace Sigil.Controllers
             return View(model);
         }
 
+        public ActionResult User_Icon_Upload()
+        {
+            var user = userService.GetUser(User.Identity.GetUserId());
+
+            imageService.UserIconImageUpload(user, Request.Files[0]);
+
+            return RedirectToAction("Index", "Manage");
+        }
+
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -143,14 +152,6 @@ namespace Sigil.Controllers
         public ActionResult AddPhoneNumber()
         {
             return View();
-        }
-
-
-        public ActionResult User_Icon_Upload()
-        {
-            var user = userService.GetUser(User.Identity.GetUserId());
-            imageService.UserIconImageUpload(user, Request.Files[0]);
-            return RedirectToAction("Index", "Manage");
         }
 
         //
