@@ -17,16 +17,11 @@
         <a class="btn btn-default active">Main feed</a>
         <a class="btn btn-info" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/responses">Responses</a>
         <a class="btn btn-success" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/data">Data</a>
-        @if (!Request.IsAuthenticated)
-        {
+        @if (!Request.IsAuthenticated) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.thisOrg.orgName</a>
-        }
-        else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => (s.subObjectId == Model.thisProduct.Id && s.subName == Model.thisProduct.ProductName)))
-        {
+        } else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => (s.subObjectId == Model.thisProduct.Id && s.subName == Model.thisProduct.ProductName))) {
             <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisProduct.ProductName', 'product')">Unsubscribe from @Model.thisProduct.ProductName</a>
-        }
-        else
-        {
+        } else {
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisProduct.ProductName', 'product')">Subscribe to @Model.thisProduct.ProductName</a>
         }
     </div>
@@ -35,7 +30,7 @@
             <form>
                 <div class="form-group">
                     @*<label for="text">Text:</label><br />*@
-                    <textarea id="title-input" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own" style="height:70px;min-height:70px;max-width:100%;min-width:100%;"></textarea>
+                    <textarea id="issues-by-product-search" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own" style="height:70px;min-height:70px;max-width:100%;min-width:100%;"></textarea>
                 </div>
                 <div class="form-group" style="margin-bottom:0px;">
                     <button type="submit" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</button>
@@ -43,13 +38,14 @@
             </form>
         </div>
     </div>
-    @foreach (IssuePanelPartialVM issue in Model.productIssues)
-    {
-        /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
-                                                                                             userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )},
-                                                                   issue );*/
-                                                                @Html.Partial("../Shared/_IssuePanelPartial", issue)
-    }
+    <div id="issues">
+        @foreach ( IssuePanelPartialVM issue in Model.productIssues ) {
+            /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
+                                                                                                 userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )},
+                                                                       issue );*/
+                                                                    @Html.Partial( "../Shared/_IssuePanelPartial", issue )
+        }
+    </div>
     @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
 
     @Html.PagedListPager(Model.productIssues, page => Url.Action("ProductPage", "Product", new { page }))

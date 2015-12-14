@@ -92,7 +92,23 @@ namespace Sigil.Controllers
             return View(orgVM);
         }
 
-        
+        [HttpPost]
+        [ActionName("OrgPage")]
+        public ActionResult OrgPage_Post( string orgURL, int? page ) {
+            // Get the org
+            Org thisOrg = orgService.GetOrg( orgURL );//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
+
+            string issueTitle = Request.Form[ "title" ];
+
+            // If the org doesn't exist, redirect to 404
+            if ( thisOrg == null ) {
+                return RedirectToRoute( "404" );
+            }
+
+            AddIssueVM addIssueVM = new AddIssueVM() { org = thisOrg, product = thisOrg.Products[ 0 ], title = issueTitle };
+
+            return RedirectToAction( "AddIssue", "Issue", addIssueVM);
+        }
 
         /* 
         ==================== 

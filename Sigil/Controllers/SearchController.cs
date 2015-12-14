@@ -8,7 +8,8 @@ using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Sigil.Services;
-using System.Web.Http;
+using System.Web.Script.Serialization;
+using Sigil.ViewModels;
 
 namespace Sigil.Controllers
 {
@@ -103,40 +104,83 @@ namespace Sigil.Controllers
             return Json(search_list, JsonRequestBehavior.AllowGet);
         }
 
-        public class SearchModel {
-            public int id { get; set; }
-            public string term { get; set; }
+        [HttpPost]
+        public JsonResult SearchIssuesByOrg( int id, string term ) 
+        {
+            string partialsHTML = "";
+
+            // Three cases: Term is empty; fetch all issues
+            if (term == "") {
+                var issues = searchService.MatchIssuesByOrg( id ).OrderByDescending( i => i.votes );
+
+                foreach (Issue i in issues) {
+                    if ( Request.IsAuthenticated ) {
+                        // TODO: Make sure we check if the user voted on this issue
+                        partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    } else {
+                        partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    }
+                }
+
+                return Json( partialsHTML, JsonRequestBehavior.AllowGet );
+            }
+
+            // Otherwise, fetch matching issues
+            var issuesList = searchService.MatchIssuesByOrg( id ).Where( i => i.title.ToLower().Contains( term.ToLower() ) ).OrderByDescending( i => i.votes ).ToList();
+
+            foreach (Issue i in issuesList) {
+                if ( Request.IsAuthenticated ) {
+                    // TODO: Make sure we check if the user voted on this issue
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                } else {
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                }
+            }
+
+            if (partialsHTML == "") {
+                partialsHTML += "No posts found matching your query.";
+            }
+
+            return Json( partialsHTML, JsonRequestBehavior.AllowGet );
         }
 
+        [HttpPost]
+        public JsonResult SearchIssuesByProduct( int id, string term ) {
+            string partialsHTML = "";
 
-        public JsonResult SearchIssuesByOrg([FromBody] SearchModel s) 
-        {
-            IEnumerable<Issue> issues = searchService.MatchIssuesByOrg( s.id )
-                                            .Where(i => i.title.Contains(s.term))
-                                            .OrderByDescending( i => i.votes );
-            //List<IssuePanelPartialJsonVM> partialList = new List<IssuePanelPartialJsonVM>();
-            
-            /*foreach ( Issue i in issues ) {
-                partialList.Add(
-                    new IssuePanelPartialJsonVM{
-                        issueID = i.Id,
-                        votes = i.votes,
-                        title = i.title,
-                        text = i.text,
-                        orgName = i.Org.orgName,
-                        orgIcon = i.Org.Image.icon20, //might be an underscore
-                        productName = i.Product.productName,
-                        productIcon = i.Product.Image.icon20,
-                        datePostedString =  make some date string ,
-                        userName = i.User.displayName,
-                        userIcon = i.User.Image.icon20,
-                        UserVoted =  get the uservotecol ,
-                        
+            // Three cases: Term is empty; fetch all issues
+            if ( term == "" ) {
+                var issues = searchService.MatchIssuesByProduct( id ).OrderByDescending( i => i.votes );
+
+                foreach ( Issue i in issues ) {
+                    if ( Request.IsAuthenticated ) {
+                        // TODO: Make sure we check if the user voted on this issue
+                        partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    } else {
+                        partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
                     }
-                );
-            }*/
+                }
 
-            return Json( issues.Select(i => new {thisIssue = i}), JsonRequestBehavior.AllowGet );
+                return Json( partialsHTML, JsonRequestBehavior.AllowGet );
+            }
+
+            // Otherwise, fetch matching issues
+            var issuesList = searchService.MatchIssuesByProduct( id ).Where( i => i.title.ToLower().Contains( term.ToLower() ) ).OrderByDescending( i => i.votes ).ToList();
+
+            foreach ( Issue i in issuesList ) {
+                if ( Request.IsAuthenticated ) {
+                    // TODO: Make sure we check if the user voted on this issue
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                } else {
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                }
+            }
+
+            if ( partialsHTML == "" ) {
+                partialsHTML += "No posts found matching your query.";
+            }
+
+            return Json( partialsHTML, JsonRequestBehavior.AllowGet );
         }
 
         /* 

@@ -29,6 +29,18 @@ namespace Sigil.ViewModels
 
     }
 
+    public struct AddIssueVM {
+        public Org org;
 
+        public Product product;
+
+        public string title;
+
+        /*public AddIssueVM(Org o, Product p, string title) {
+            thisOrg = o;
+            thisProduct = p;
+            issueTitle = title;
+        }*/
+    }
 
 }
