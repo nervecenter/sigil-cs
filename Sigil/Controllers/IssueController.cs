@@ -85,8 +85,12 @@ namespace Sigil.Controllers
 
             // Get the user's vote on this issues if it exists
             UserViewModel userVM = userService.GetUserViewModel(userID);
+            if (userVM.User.OrgId == thisOrg.Id)
+                userVM.isOrgAdmin = true;
+            else
+                userVM.isOrgAdmin = false;
 
-            var issueComments = commentService.GetIssueComments(issueID);
+            var issueComments = commentService.GetIssueComments(issueID);   
 
             var official = commentService.GetIssuesOfficialResponses(issueID);
 

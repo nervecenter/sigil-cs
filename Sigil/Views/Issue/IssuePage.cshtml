@@ -92,11 +92,11 @@
                         <textarea type="text" name="text" class="form-control" id="inputComment" placeholder="What would you like to say?"></textarea>
                         @Html.ValidationMessage( "text" )
                     </div>
-                    @*@if (Sigil.Controllers.AccountController.CheckUserRole(User.Identity.GetUserId(), thisOrg.Id))
+                    @if (Model.UserVM.isOrgAdmin)
                     {
                         <input type="checkbox" name="IsOfficial" id="IsOfficial" />
                         <label for="IsOfficial">Is Official Comment</label><br />
-                    }*@
+                    }
                     <button type="submit" name="buttonSubmit" class="btn btn-primary">Submit</button>
                     
                 </form>

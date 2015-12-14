@@ -52,9 +52,11 @@ namespace Sigil.Controllers
 
         #region Org Admin
 
-        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin OrgAdmin")]
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult OrgAdmin(string orgURL)
         {
+            //need to validate user is apart of the org they are trying to access.
+
             Org thisOrg = orgService.GetOrg(orgURL);
             OrgAdminIndexViewModel orgAdminVM = new OrgAdminIndexViewModel()
             {
@@ -64,11 +66,27 @@ namespace Sigil.Controllers
             return View("OrgAdminIndex", orgAdminVM);
         }
 
-        //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
-        //public ActionResult OrgURLChange(string orgURL, string newOrgURL)
-        //{
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin")]
+        public ActionResult OrgURLChange(string orgURL) //routes to here dont work for some reason
+        {
+            var thisOrg = orgService.GetOrg(orgURL);
+            string newURL = Request.Form["newURL"];
 
-        //}
+            var unique = orgService.GetAllOrgs().Any(o => o.orgURL.ToLower() == newURL.ToLower() || o.orgURL.ToLower().Contains(newURL.ToLower()));
+
+            if (!unique) //we need to take the not here because we are looking for similar urls in the .Any call
+            {
+                orgService.UpdateOrgURL(thisOrg, newURL);
+            }
+            else
+            {
+                ViewBag.Message = "URL has already been taken.";
+            }
+
+            return RedirectToAction("OrgAdminIndex", "Admin");
+        }   
+
+
         //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
         //public ActionResult OrgNameChange(string orgURL, string newOrgName)
         //{

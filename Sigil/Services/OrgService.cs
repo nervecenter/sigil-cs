@@ -23,6 +23,11 @@ namespace Sigil.Services
 
         Org GetOrg(int id);
 
+        void UpdateOrgURL(Org org, string newURL);
+        void UpdateOrgName(Org org, string newName);
+        void AddOrgAdmin(Org org, ApplicationUser user);
+        void RemoveOrgAdmin(Org org, ApplicationUser user);
+
         IEnumerable<OrgApp> GetAllOrgApplicants();
 
         /// <summary>
@@ -126,6 +131,27 @@ namespace Sigil.Services
         {
             orgAppRepository.Update(org);
             unitOfWork.Commit();
+        }
+
+        public void UpdateOrgURL(Org org, string newURL)
+        {
+            org.orgURL = newURL;
+            UpdateOrg(org);
+        }
+
+        public void UpdateOrgName(Org org, string newName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddOrgAdmin(Org org, ApplicationUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveOrgAdmin(Org org, ApplicationUser user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

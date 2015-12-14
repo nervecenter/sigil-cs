@@ -94,7 +94,7 @@ namespace Sigil.ViewModels
     {
         public ApplicationUser User { get; set; }
         public UserVoteCol UserVotes { get; set; }
-
+        public bool isOrgAdmin { get; set; }
         public IEnumerable<Notification> UserNotifications { get; set; }
         public IEnumerable<SubscriptionViewModel> UserSubscriptions { get; set; }
 
