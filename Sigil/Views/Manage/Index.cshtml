@@ -18,6 +18,7 @@
                 } else {
                     @Html.ActionLink( "Create", "SetPassword" )
                 }
+<<<<<<< HEAD
             </div>
 
             <div class="form-group">
@@ -41,6 +42,34 @@
             </div>
         }
                 @*
+=======
+                ]
+            </dd>
+            <hr />
+            <dt>External Logins:</dt>
+            <dd>
+                @Model.Logins.Count [
+                @Html.ActionLink( "Manage", "ManageLogins" ) ]
+            </dd>
+            <hr />
+            <span></string>Upload New User Icon</span>
+            <dd>
+                <img src="@Model.UserVM.User.Image.icon_100" /> @*<img src="@Model.UserVM.User.Image.icon_20" />*@
+                    @using (Html.BeginForm("User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        
+                        @*<label for= "img" > New User Icon: </label>*@
+                        <input type = "file" name = "img" id = "img" />
+                        <br />
+                        <input type = "submit" value="Upload" />
+                    }
+
+                    
+            </dd>
+            <hr />
+            @*
+>>>>>>> 021040ce575d3e1b7570159c90b975b69ca9f9d6
                 Phone Numbers can used as a second factor of verification in a two-factor authentication system.
 
                  See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
