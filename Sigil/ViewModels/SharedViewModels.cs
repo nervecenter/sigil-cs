@@ -154,7 +154,7 @@ namespace Sigil.ViewModels
             if (s.TopicId != null)
             {
                 subName = s.Topic.topicName;
-                subURL = "/" + s.Topic.topicURL;
+                subURL = "/t/" + s.Topic.topicURL;
                 subIcon = s.Topic.Image.icon_20;
                 subObjectId = s.TopicId ?? 0;
             }

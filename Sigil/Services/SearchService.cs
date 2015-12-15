@@ -13,6 +13,10 @@ namespace Sigil.Services
         
         IEnumerable<ApplicationUser> MatchUsersByName(string term);
 
+        IEnumerable<Topic> MatchTopicsByName(string term);
+
+        IEnumerable<Product> MatchProductsByName(string term);
+
         IEnumerable<Issue> MatchIssuesByTitle(string term);
 
         IEnumerable<Issue> MatchIssuesByOrg( int id );
@@ -25,20 +29,20 @@ namespace Sigil.Services
     public class SearchService: ISearchService
     {
         private readonly IOrgRepository orgRepository;
-        private readonly IProductRepository categoryRepository;
+        private readonly IProductRepository productRepository;
         private readonly IIssueRepository issueRepository;
         private readonly ITopicRepository topicRepository;
         private readonly IUserRepository userRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public SearchService(IUnitOfWork unit, IOrgRepository orgRepo, IUserRepository userRepo, IIssueRepository issRepo, ITopicRepository topRepo, IProductRepository catRepo)
+        public SearchService(IUnitOfWork unit, IOrgRepository orgRepo, IUserRepository userRepo, IIssueRepository issRepo, ITopicRepository topRepo, IProductRepository prodRepo)
         {
             unitOfWork = unit;
             orgRepository = orgRepo;
             userRepository = userRepo;
             issueRepository = issRepo;
             topicRepository = topRepo;
-            categoryRepository = catRepo;
+            productRepository = prodRepo;
         }
 
         public IEnumerable<Org> MatchOrgsByName(string term)
@@ -69,6 +73,16 @@ namespace Sigil.Services
         public IEnumerable<Issue> MatchIssuesByTopic( int id ) 
         {
             return issueRepository.GetMany( i => i.Product.TopicId.Equals( id ) );
+        }
+
+        public IEnumerable<Topic> MatchTopicsByName(string term)
+        {
+            return topicRepository.GetMany(t => t.topicName.StartsWith(term));
+        }
+
+        public IEnumerable<Product> MatchProductsByName(string term)
+        {
+            return productRepository.GetMany(p => p.ProductName.StartsWith(term));
         }
     }
 }

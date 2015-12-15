@@ -48,8 +48,9 @@ namespace Sigil.Controllers
             {
                 //search_list.AddRange(search_users(term));
                 search_list["Org"] = search_orgs(term);
-                
+                search_list["Topic"] = search_topics(term);
                 search_list["Issue"] = search_issues(term);
+                search_list["Product"] = search_products(term);
             }
 
             foreach(string k in search_list.Keys)
@@ -64,10 +65,26 @@ namespace Sigil.Controllers
                 }
                 else if(k == "Issue")
                 {
-                    List<Issue> found_orgs = (List<Issue>)search_list[k];
-                    foreach (Issue i in found_orgs)
+                    List<Issue> found_issues = (List<Issue>)search_list[k];
+                    foreach (Issue i in found_issues)
                     {
-                        Final_search_list[i.title] = "/" + i.Product.Org.orgName + "/" + i.Id;
+                        Final_search_list[i.title] = "/" + i.Product.Org.orgName + "/" + i.Product.ProductURL + "/" + i.Id;
+                    }
+                }
+                else if( k == "Topic")
+                {
+                    List<Topic> found_topics = (List<Topic>)search_list[k];
+                    foreach( Topic t in found_topics)
+                    {
+                        Final_search_list[t.topicName] = "/t/" + t.topicURL;
+                    }
+                }
+                else if(k == "Product")
+                {
+                    List<Product> found_products = (List<Product>)search_list[k];
+                    foreach (Product p in found_products)
+                    {
+                        Final_search_list[p.ProductName] = "/" + p.Org.orgName + "/" + p.ProductURL;
                     }
                 }
             }
@@ -238,6 +255,18 @@ namespace Sigil.Controllers
 
             return qu.ToList();
 
+        }
+
+        private List<Topic> search_topics(string term)
+        {
+            var qu = searchService.MatchTopicsByName(term);
+            return qu.ToList();
+        }
+
+        private List<Product> search_products(string term)
+        {
+            var qu = searchService.MatchProductsByName(term);
+            return qu.ToList();
         }
 
         private List<Issue> search_issues(string term)
