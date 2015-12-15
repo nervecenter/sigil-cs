@@ -231,10 +231,10 @@ namespace Sigil.Controllers
         ==================== 
         */
         [Authorize]
-        [HttpGet]
+        //[HttpGet]
         public ActionResult AddIssue(AddIssueVM vm)
         {
-            return View(vm);
+            return View(TempData["vm"]);
         }
 
 
