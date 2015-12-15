@@ -60,14 +60,15 @@ $(document).ready(function () {
             }
         });
     }
-   
-});
-
-$(function () {
-    //would be cool to have these auto popluate to the last week duration
     $("#datepickerStart").datepicker();
     $("#datepickerStop").datepicker();
 });
+
+/*$(function () {
+    //would be cool to have these auto popluate to the last week duration
+    $("#datepickerStart").datepicker();
+    $("#datepickerStop").datepicker();
+});*/
 
 function Custom_Org_Chart() {
     var dataOption = document.getElementById('selected_data').value;
