@@ -160,8 +160,8 @@ namespace Sigil.ViewModels
             }
             else if (s.ProductId != null)
             {
-                subName = s.Org.orgName + "-" + s.Product.ProductName;
-                subURL = "/" + s.Org.orgURL + "/" + s.Product.ProductURL;
+                subName = s.Product.Org.orgName + "-" + s.Product.ProductName;
+                subURL = "/" + s.Product.Org.orgURL + "/" + s.Product.ProductURL;
                 subIcon = s.Product.Image.icon_20;
                 subObjectId = s.ProductId ?? 0;
             }
