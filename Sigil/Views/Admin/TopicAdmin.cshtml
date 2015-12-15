@@ -3,14 +3,21 @@
 
 @model TopicCreateViewModel
 @{
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        ViewBag.Title = "SigilAdmin - View and Create Topics";
-        IEnumerable<TopicInfoVM> allTopics = ViewBag.AllTopics ?? new List<TopicInfoVM>();
-        IEnumerable<SelectListItem> topicSelect = allTopics.Select(t => new SelectListItem { Value = t.thisTopic.Id.ToString(), Text = t.thisTopic.topicName }).ToList() ?? new List<SelectListItem>();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "SigilAdmin - View and Create Topics";
+    IEnumerable<TopicInfoVM> allTopics = ViewBag.AllTopics ?? new List<TopicInfoVM>();
+    IEnumerable<SelectListItem> topicSelect = allTopics.Select(t => new SelectListItem { Value = t.thisTopic.Id.ToString(), Text = t.thisTopic.topicName }).ToList() ?? new List<SelectListItem>();
 }
 
+
+
+
 <div class="col-xs-9 col-md-8">
-   
+
+    @Html.ActionLink("Roles", "RolesIndex", "Admin")
+
+    
+
     @if (allTopics.Count() != 0)
     {
         <h2>All Topics</h2>

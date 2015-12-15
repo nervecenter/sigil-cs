@@ -42,10 +42,21 @@ namespace Sigil.Controllers
         }
 
         // GET: Admin
-        [Authorize(Roles = "SigilAdmin OrgSuperAdmin OrgAdmin")]
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult Index()
         {
             //return the view based on if its Sigil or Org
+
+            if(User.IsInRole("OrgSuperAdmin") || User.IsInRole("OrgAdmin"))
+            {
+                var user = userService.GetUser(User.Identity.GetUserId());
+                var userOrg = orgService.GetOrg(user.OrgId);
+                return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = userOrg.orgURL });
+            }
+            else if(User.IsInRole("SigilAdmin"))
+            {
+                return RedirectToAction("SigilAdminIndex", "Admin");
+            }
 
             return View();
         }
@@ -83,7 +94,7 @@ namespace Sigil.Controllers
                 ViewBag.Message = "URL has already been taken.";
             }
 
-            return RedirectToAction("OrgAdminIndex", "Admin");
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
         }   
 
 
@@ -108,7 +119,7 @@ namespace Sigil.Controllers
             var org = orgService.GetOrg(orgURL);
             imageService.OrgBannerImageUpload(org, Request.Files[0]);
 
-            return RedirectToAction("OrgAdmin");
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = org.orgURL });
         }
 
         public ActionResult UploadOrgIcon100(string orgURL)
@@ -116,7 +127,7 @@ namespace Sigil.Controllers
             var org = orgService.GetOrg(orgURL);
             imageService.OrgIcon100ImageUpload(org, Request.Files[0]);
 
-            return RedirectToAction("OrgAdmin");
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = org.orgURL });
         }
 
         public ActionResult UploadOrgIcon20(string orgURL)
@@ -124,12 +135,22 @@ namespace Sigil.Controllers
             var org = orgService.GetOrg(orgURL);
             imageService.OrgIcon20ImageUpload(org, Request.Files[0]);
 
-            return RedirectToAction("OrgAdmin");
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = org.orgURL });
         }
 
         #endregion
         #region Sigil Admin
         //================================================ Topic Admin ================================================//
+
+        [Authorize(Roles ="SigilAdmin")]
+        public ActionResult SigilAdminIndex()
+        {
+            SigilAdminIndexViewModel sigilVM = new SigilAdminIndexViewModel();
+            sigilVM.AllOrgsWithProduct = orgService.GetAllOrgs().Select(o => new Tuple<Org, int>(o, productService.GetProductsByOrg(o.Id).Count()));
+
+            return View("SigilAdminIndex", sigilVM);
+        }
+        
 
         [Authorize(Roles = "SigilAdmin")]
         public ActionResult TopicAdmin()

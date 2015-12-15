@@ -110,6 +110,30 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+               name: "Search Issues by Org",
+               url: "searchissuesbyorg/",
+               defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
+            );
+
+            routes.MapRoute(
+               name: "Search Issues by Product",
+               url: "searchissuesbyproduct/",
+               defaults: new { controller = "Search", action = "SearchIssuesByProduct" }
+            );
+
+            routes.MapRoute(
+                name: "Admin Index",
+                url: "admin/",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "Sigil Admin Index",
+                url: "sadmin/",
+                defaults: new { controller = "Admin", action = "SigilAdminIndex" }
+            );
+
+            routes.MapRoute(
                 name: "User DisplayName Search",
                 url: "search/AdminUserSearch",
                 defaults: new { controller = "Search", action = "SearchByUserDisplayName" }
@@ -196,17 +220,7 @@ namespace Sigil {
                 defaults: new { controller = "Topic", action = "TopicPage" }
             );
 
-            routes.MapRoute(
-               name: "Search Issues by Org",
-               url: "searchissuesbyorg/",
-               defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
-            );
 
-            routes.MapRoute(
-               name: "Search Issues by Product",
-               url: "searchissuesbyproduct/",
-               defaults: new { controller = "Search", action = "SearchIssuesByProduct" }
-            );
 
             routes.MapRoute(
                 name: "Subscribe",

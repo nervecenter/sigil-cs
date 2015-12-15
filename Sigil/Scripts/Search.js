@@ -82,7 +82,7 @@ $('#issues-by-org-search').bindWithDelay("keyup", function () {
 }, 300, true);
 
 $('#issues-by-product-search').bindWithDelay("keyup", function () {
-    var searchQuery = { id: $(this).data('orgid'), term: $(this).val() };
+    var searchQuery = { id: $(this).data('productid'), term: $(this).val() };
     $.ajax({
         url: 'https://localhost:44301/searchissuesbyproduct/',
         type: 'POST',

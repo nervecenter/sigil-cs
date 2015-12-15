@@ -8,6 +8,8 @@
     IEnumerable<IdentityRole> AllRoles = ViewBag.AllRoles;
 }
 
+@Html.ActionLink("Topics", "TopicAdmin", "Admin")
+
 <h2>All Current Roles</h2>
 @foreach (var role in AllRoles)
 {

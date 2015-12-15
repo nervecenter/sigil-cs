@@ -10,4 +10,10 @@ namespace Sigil.ViewModels
     {
         public Org thisOrg { get; set; }
     }
+
+    public struct SigilAdminIndexViewModel
+    {
+        public IEnumerable<Tuple<Org, int>> AllOrgsWithProduct { get; set; }
+    }
+
 }

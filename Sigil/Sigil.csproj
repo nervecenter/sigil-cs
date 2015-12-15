@@ -495,6 +495,7 @@
     <Content Include="Views\Topic\TopicPage.cshtml" />
     <Content Include="Views\Admin\TopicAdmin.cshtml" />
     <Content Include="Views\Admin\OrgAdminIndex.cshtml" />
+    <Content Include="Views\Admin\SigilAdminIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

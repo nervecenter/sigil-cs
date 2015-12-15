@@ -3,6 +3,13 @@
 @model UserViewModel
 @if ( Request.IsAuthenticated && Model.User != null) {
 
+
+    if(User.IsInRole("OrgSuperAdmin") || User.IsInRole("OrgAdmin") || User.IsInRole("SigilAdmin"))
+    {
+        <li>
+            @Html.ActionLink("Admin Panel", "Index", "Admin", routeValues: null, htmlAttributes: new {@class ="pull-right", style="border-left:0"})
+        </li>
+    }
     <li>
         <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@Model.User.Image.icon_100">
         @Html.ActionLink( Model.User.DisplayName, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right", style = "border-left:0;" } )
