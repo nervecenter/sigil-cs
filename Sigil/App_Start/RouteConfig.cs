@@ -52,7 +52,7 @@ namespace Sigil {
             routes.MapRoute(
                 name: "User Icon Upload",
                 url: "user_icon_upload/",
-                defaults: new { controller = "ImageUploader", action = "User_Icon_Upload", }
+                defaults: new { controller = "Manage", action = "User_Icon_Upload", }
             );
 
             routes.MapRoute(
@@ -281,6 +281,30 @@ namespace Sigil {
                 name: "OrgResponses",
                 url: "{orgURL}/responses/",
                 defaults: new { controller = "Org", action = "OrgResponsesPage" }
+            );
+
+            routes.MapRoute(
+                name: "OrgAdmin",
+                url: "{orgURL}/admin/",
+                defaults: new { controller = "Admin", action = "OrgAdmin" }
+            );
+
+            routes.MapRoute(
+                name: "Org 100 Icon Upload",
+                url: "{orgURL}/admin/100IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadOrgIcon100" }
+            );
+
+            routes.MapRoute(
+                name: "Org 20 Icon Upload",
+                url: "{orgURL}/admin/20IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadOrgIcon20" }
+            );
+
+            routes.MapRoute(
+                name: "Org Banner Upload",
+                url: "{orgURL}/admin/bannerUpload/",
+                defaults: new { controller = "Admin", action = "UploadOrgBanner" }
             );
 
             routes.MapRoute(

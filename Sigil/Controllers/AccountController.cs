@@ -210,7 +210,7 @@ namespace Sigil.Controllers
         private void Create_User_Extras(string userID)
         {
 
-            _userManager.AddToRole(userID, "BasisUser");
+            _userManager.AddToRole(userID, "BasicUser");
 
             Image img = imageService.AssignDefaultImage(userID);
             userService.AssignUserImage(userID, img);
@@ -294,7 +294,7 @@ namespace Sigil.Controllers
             orgService.SaveOrg();
 
             //need to save and commit org first before assigning image beause we need entity to fill in the org id for us
-            newOrg.Image = imageService.AssignDefaultImage(newOrg.Id, ImageType.Org);
+            newOrg.Image = imageService.AssignDefaultImage(newOrg.Id, ImageTypeOwner.Org);
 
             var orgProduct = new Product();
             orgProduct.ProductName = newOrg.orgName;
@@ -306,7 +306,7 @@ namespace Sigil.Controllers
             productService.CreateProduct(orgProduct);
             productService.SaveProduct();
 
-            orgProduct.Image = imageService.AssignDefaultImage(orgProduct.Id, ImageType.Product);
+            orgProduct.Image = imageService.AssignDefaultImage(orgProduct.Id, ImageTypeOwner.Product);
             orgProduct.ImageId = orgProduct.Image.Id;
             newOrg.Products.Add(orgProduct);
 

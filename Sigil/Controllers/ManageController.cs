@@ -6,24 +6,53 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Sigil.ViewModels;
 using Sigil.Models;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        //private readonly ApplicationSignInManager _signInManager;
+        //private readonly ApplicationUserManager _userManager;
 
-        public ManageController()
-        {
-        }
+        //public ManageController()
+        //{
+        //}
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        //public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        //{
+        //    UserManager = userManager;
+        //    SignInManager = signInManager;
+        //}
+
+
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly IAuthenticationManager _authManager;
+
+        private readonly IOrgService orgService;
+        private readonly ICountService countDataService;
+        private readonly IErrorService errorService;
+        private readonly IUserService userService;
+        private readonly IImageService imageService;
+        private readonly IProductService productService;
+
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IAuthenticationManager authManager, IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS, IProductService prodS)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _authManager = authManager;
+
+
+            orgService = orgS;
+            countDataService = countS;
+            errorService = errS;
+            userService = userS;
+            imageService = imgS;
+            productService = prodS;
         }
 
         public ApplicationSignInManager SignInManager
@@ -32,10 +61,10 @@ namespace Sigil.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
-            }
+            //private set 
+            //{ 
+            //    _signInManager = value; 
+            //}
         }
 
         public ApplicationUserManager UserManager
@@ -44,9 +73,17 @@ namespace Sigil.Controllers
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
-            private set
+            //private set
+            //{
+            //    _userManager = value;
+            //}
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
             {
-                _userManager = value;
+                return _authManager;
             }
         }
 
@@ -70,9 +107,20 @@ namespace Sigil.Controllers
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                UserVM = userService.GetUserViewModel(userId)
+                
             };
             return View(model);
+        }
+
+        public ActionResult User_Icon_Upload()
+        {
+            var user = userService.GetUser(User.Identity.GetUserId());
+
+            imageService.UserIconImageUpload(user, Request.Files[0]);
+
+            return RedirectToAction("Index", "Manage");
         }
 
         //
@@ -320,28 +368,28 @@ namespace Sigil.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing && _userManager != null)
+        //    {
+        //        _userManager.Dispose();
+        //        _userManager = null;
+        //    }
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
 
 #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+        //private IAuthenticationManager AuthenticationManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().Authentication;
+        //    }
+        //}
 
         private void AddErrors(IdentityResult result)
         {

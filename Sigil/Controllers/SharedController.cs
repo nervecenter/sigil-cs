@@ -59,7 +59,7 @@ namespace Sigil.Controllers
         {
             string userId = User.Identity.GetUserId();
             if (userId == null || !Request.IsAuthenticated)
-                return PartialView("_LoginPartial", new UserViewModel());
+                return PartialView("_LoginPartial", new UserViewModel().emptyUser());
             var VM = userService.GetUserViewModel(userId);
 
             return PartialView("_LoginPartial", VM);
