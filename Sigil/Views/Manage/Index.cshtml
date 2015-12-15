@@ -8,17 +8,41 @@
 <div class="col-md-9 col-lg-9">
     <p class="text-success">@ViewBag.StatusMessage</p>
     <div>
-        <h4>Change your account settings</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>Password:</dt>
-            <dd>
-                [
+        <h3>Change your account settings</h3>
+        @using ( Html.BeginForm( "User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label>Password:</label><br />
                 @if ( Model.HasPassword ) {
                     @Html.ActionLink( "Change your password", "ChangePassword" )
                 } else {
                     @Html.ActionLink( "Create", "SetPassword" )
                 }
+<<<<<<< HEAD
+            </div>
+
+            <div class="form-group">
+                <label>Social accounts:</label><br />
+                @*Model.Logins.Count*@
+                @Html.ActionLink( "Manage", "ManageLogins" )
+            </div>
+
+            <div class="form-group">
+                <label>Upload New User Icon</label><br />
+                <img src="@Model.UserVM.User.Image.icon_100" /> 
+                @*<img src="@Model.UserVM.User.Image.icon_20" />*@
+                @*using ( Html.BeginForm( "User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {*@
+
+                @*<label for= "img" > New User Icon: </label>*@
+                <input type="file" name="img" id="img" />
+                <br />
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        }
+                @*
+=======
                 ]
             </dd>
             <hr />
@@ -45,14 +69,13 @@
             </dd>
             <hr />
             @*
+>>>>>>> 021040ce575d3e1b7570159c90b975b69ca9f9d6
                 Phone Numbers can used as a second factor of verification in a two-factor authentication system.
 
                  See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
                     for details on setting up this ASP.NET application to support two-factor authentication using SMS.
 
                  Uncomment the following block after you have set up two-factor authentication
-            *@
-            @*
                 <dt>Phone Number:</dt>
                 <dd>
                     @(Model.PhoneNumber ?? "None") [
@@ -68,14 +91,13 @@
                     }
                     ]
                 </dd>
-            *@
             <dt> Two - Factor Authentication:</dt>
             <dd>
                 <p>
                     There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
                     for details on setting up this ASP.NET application to support two-factor authentication.
                 </p>
-                @*@if (Model.TwoFactor)
+                @if (Model.TwoFactor)
                     {
                         using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                         {
@@ -95,7 +117,5 @@
                             </text>
                         }
                     }*@
-            </dd>
-        </dl>
     </div>
 </div>
