@@ -17,12 +17,13 @@ namespace Sigil.Controllers
     {
         private readonly IProductService productService;
         private readonly ISearchService searchService;
-         
+        private SearchFilter searchFilter;
 
         public SearchController(IProductService prodS, ISearchService searchS)
         {
             productService = prodS;
             searchService = searchS;
+            searchFilter = new SearchFilter();
         }
 
         // GET: Search
@@ -143,14 +144,16 @@ namespace Sigil.Controllers
             }
 
             // Otherwise, fetch matching issues
-            var issuesList = searchService.MatchIssuesByOrg( id ).Where( i => i.title.ToLower().Contains( term.ToLower() ) ).OrderByDescending( i => i.votes ).ToList();
+            var issuesList = searchService.MatchIssuesByOrg(id).ToList();//.Where( i => i.title.ToLower().Contains( term.ToLower() ) ).OrderByDescending( i => i.votes ).ToList();
 
-            foreach (Issue i in issuesList) {
+            var MatchedIssues = searchFilter.FindMatchingIssues(term, issuesList);
+
+            foreach (Tuple<Issue,int> i in MatchedIssues) {
                 if ( Request.IsAuthenticated ) {
                     // TODO: Make sure we check if the user voted on this issue
-                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i.Item1, UserVoted = false, InPanel = true } );
                 } else {
-                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i, UserVoted = false, InPanel = true } );
+                    partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i.Item1, UserVoted = false, InPanel = true } );
                 }
             }
 
