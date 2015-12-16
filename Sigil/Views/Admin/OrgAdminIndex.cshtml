@@ -39,12 +39,12 @@
 }
 
 <hr />
-<h3>Current Org URL: @Model.thisOrg.orgURL</h3>
+@*<h3>Current Org URL: @Model.thisOrg.orgURL</h3>
 @using (Html.BeginForm("ChangeOrgURL", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post))
 {
     @Html.AntiForgeryToken();
     <input type="text" name="newURL" id="newURL" />
     <br />
     <input type="submit" value="Submit" />
- }
+ }*@
 

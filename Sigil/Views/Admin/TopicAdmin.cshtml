@@ -9,14 +9,9 @@
     IEnumerable<SelectListItem> topicSelect = allTopics.Select(t => new SelectListItem { Value = t.thisTopic.Id.ToString(), Text = t.thisTopic.topicName }).ToList() ?? new List<SelectListItem>();
 }
 
-
-
-
 <div class="col-xs-9 col-md-8">
 
     @Html.ActionLink("Roles", "RolesIndex", "Admin")
-
-    
 
     @if (allTopics.Count() != 0)
     {
