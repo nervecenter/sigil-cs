@@ -30,7 +30,7 @@ Examples:
     $(window).bindWithDelay("resize", callback, 1000, true);
 */
 
-(function ($) {
+/*(function ($) {
     $.fn.bindWithDelay = function (type, data, fn, timeout, throttle) {
         if ($.isFunction(data)) {
             throttle = timeout;
@@ -59,11 +59,29 @@ Examples:
             $(this).bind(type, data, cb);
         });
     };
-})(jQuery);
+})(jQuery);*/
+
+var typeTimer; // Our timer
+
+$('#issues-by-org-search').keyup(function () {
+    clearTimeout(typeTimer);
+    typeTimer = setTimeout(SearchIssuesByOrg, 800);
+});
+
+$('#issues-by-org-search').keydown(function () {
+    clearTimeout(typeTimer);
+    var $issues = $("#issues");
+    var loaderid = $issues.first().id;
+    if ($issues.first().id != "loader") {
+        $issues.html("<img id=\"loader\" src=\"/Content/Images/ajax-loader.gif\">");
+    }
+    // Replace the $("#issues").html() with a loading thingie if not already
+})
 
 //$('#issues-by-org-search').keyup(function () {
-$('#issues-by-org-search').bindWithDelay("keyup", function () {
-    var searchQuery = { id: $(this).data('orgid'), term: $(this).val() };
+function SearchIssuesByOrg() {
+    var $searchBox = $('#issues-by-org-search');
+    var searchQuery = { id: $searchBox.data('orgid'), term: $searchBox.val() };
     $.ajax({
         url: 'https://localhost:44301/searchissuesbyorg/',
         type: 'POST',
@@ -79,7 +97,7 @@ $('#issues-by-org-search').bindWithDelay("keyup", function () {
             alert('Search didn\'t work.');
         }
     });
-}, 300, true);
+}
 
 $('#issues-by-product-search').bindWithDelay("keyup", function () {
     var searchQuery = { id: $(this).data('productid'), term: $(this).val() };
