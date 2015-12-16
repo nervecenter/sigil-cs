@@ -71,14 +71,11 @@ $('#issues-by-org-search').keyup(function () {
 $('#issues-by-org-search').keydown(function () {
     clearTimeout(typeTimer);
     var $issues = $("#issues");
-    var loaderid = $issues.first().id;
     if ($issues.first().id != "loader") {
         $issues.html("<img id=\"loader\" src=\"/Content/Images/ajax-loader.gif\">");
     }
-    // Replace the $("#issues").html() with a loading thingie if not already
-})
+});
 
-//$('#issues-by-org-search').keyup(function () {
 function SearchIssuesByOrg() {
     var $searchBox = $('#issues-by-org-search');
     var searchQuery = { id: $searchBox.data('orgid'), term: $searchBox.val() };
@@ -99,8 +96,22 @@ function SearchIssuesByOrg() {
     });
 }
 
-$('#issues-by-product-search').bindWithDelay("keyup", function () {
-    var searchQuery = { id: $(this).data('productid'), term: $(this).val() };
+$('#issues-by-product-search').keyup(function () {
+    clearTimeout(typeTimer);
+    typeTimer = setTimeout(SearchIssuesByProduct, 800);
+});
+
+$('#issues-by-product-search').keydown(function () {
+    clearTimeout(typeTimer);
+    var $issues = $("#issues");
+    if ($issues.first().id != "loader") {
+        $issues.html("<img id=\"loader\" src=\"/Content/Images/ajax-loader.gif\">");
+    }
+});
+
+function SearchIssuesByProduct() {
+    var $searchBox = $('#issues-by-product-search');
+    var searchQuery = { id: $searchBox.data('productid'), term: $searchBox.val() };
     $.ajax({
         url: 'https://localhost:44301/searchissuesbyproduct/',
         type: 'POST',
@@ -116,7 +127,7 @@ $('#issues-by-product-search').bindWithDelay("keyup", function () {
             alert('Search didn\'t work.');
         }
     });
-}, 300, true);
+}
 
 var issuePartialInner = function (partialVM) {
     return "";
