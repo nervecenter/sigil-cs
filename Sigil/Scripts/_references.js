@@ -1,6 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="addissueform.js" />
 /// <reference path="bootstrap.min.js" />
+/// <reference path="bootstrap-datepicker.js" />
 /// <reference path="charts.js" />
 /// <reference path="graph.js" />
 /// <reference path="jquery.validate.min.js" />

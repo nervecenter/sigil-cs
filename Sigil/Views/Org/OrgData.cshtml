@@ -7,8 +7,10 @@
     Org thisOrg = ViewBag.thisOrg;
 }
 
+
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="~/Scripts/Graph.js"></script>
+<script type="text/javascript" src="~/Scripts/bootstrap-datepicker.js"></script>
 
 <div class="first-column">
     @*<img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))"><h1>@thisOrg.orgName</h1>*@
@@ -24,8 +26,10 @@
             <option value="Subscriptions">Subscriptions</option>
             <option value="All">All</option>
         </select>
-        <input type="text" id="datepickerStart" name="start" />
-        <input type="text" id="datepickerStop" name="stop" />
+        <input id="dpstart" class="span2" value="Start date" type="text">
+        <input id="dpend" class="span2" value="End date" type="text">
+        @*<input type="text" id="datepickerStart" name="start" />
+        <input type="text" id="datepickerStop" name="stop" />*@
         <input type="button" value="Get Chart" onclick="Custom_Org_Chart()" />
 
         </article>

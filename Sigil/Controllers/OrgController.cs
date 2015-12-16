@@ -106,8 +106,9 @@ namespace Sigil.Controllers
             }
 
             AddIssueVM addIssueVM = new AddIssueVM() { org = thisOrg, product = thisOrg.Products[ 0 ], title = issueTitle };
-
-            return RedirectToAction( "AddIssue", "Issue", addIssueVM);
+            TempData[ "vm" ] = addIssueVM;
+            //return View( "AddIssue", "Issue", addIssueVM );
+            return RedirectToAction( "AddIssue", "Issue");
         }
 
         /* 

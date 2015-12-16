@@ -60,20 +60,21 @@ $(document).ready(function () {
             }
         });
     }
-    $("#datepickerStart").datepicker();
-    $("#datepickerStop").datepicker();
+    //$("#dpstart").datepicker();
+    //$("#dpend").datepicker();
 });
 
-/*$(function () {
+$(function () {
     //would be cool to have these auto popluate to the last week duration
-    $("#datepickerStart").datepicker();
-    $("#datepickerStop").datepicker();
-});*/
+    $("#dpstart").datepicker();
+    $("#dpend").datepicker();
+});
 
 function Custom_Org_Chart() {
     var dataOption = document.getElementById('selected_data').value;
-    var start_date = jsDateToCSharp($("#datepickerStart").datepicker("getDate"));
-    var stop_date = jsDateToCSharp($("#datepickerStop").datepicker("getDate"));
+    var adate = $("#dpstart").val();
+    var start_date = jsDateToCSharp($("#dpstart").val());
+    var stop_date = jsDateToCSharp($("#dpend").val());
 
     var orgURL = get_org_url();
     var URL = "/custom_graph/" + orgURL + "/" + dataOption+ "/" + start_date + "/" + stop_date;
@@ -137,7 +138,7 @@ function Custom_Issue_Chart() {
 
 function jsDateToCSharp(date)
 {
-    var time = date.getTime();
+    var time = new Date(date).getTime();
 
     return time;
 }
