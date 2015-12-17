@@ -62,22 +62,69 @@ $(document).ready(function () {
     }
     //$("#dpstart").datepicker();
     //$("#dpend").datepicker();
+    BindDatePickers();
+    BindDataButton();
+
+    var $controlsCopy;
+    var $hider = $("#data-controls-hider");
+    var showing = true;
+    $hider.click(function () {
+        if (showing) {
+            showing = !showing;
+            $controlsCopy = $("#data-controls").clone();
+            $("#data-controls").remove();
+            $hider.attr("src", "/Content/Images/heirarchy-hidden.png");
+        } else if (!showing) {
+            showing = !showing;
+            $("#data-header").after($controlsCopy);
+            $hider.attr("src", "/Content/Images/heirarchy-extended.png");
+            BindDatePickers();
+            BindDataButton();
+        }
+    });
 });
 
-$(function () {
+function BindDataButton() {
+    $("#selected-data").change(function () {
+        var $button = $("#data-button");
+        //var value = $(this).find(":selected").text;
+        if ($(this).find(":selected").text() == "Pick chart data") {
+            $button.addClass("disabled");
+            $button.unbind("click");
+        } else {
+            $button.removeClass("disabled");
+            $button.click(Custom_Org_Chart);
+        }
+    });
+}
+
+function BindDatePickers() {
     //would be cool to have these auto popluate to the last week duration
-    $("#dpstart").datepicker();
-    $("#dpend").datepicker();
-});
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    $("#dpstart").datepicker({
+        onRender: function (date) {
+            return date.valueOf() > now.valueOf() ? 'disabled' : '';
+        }
+    });
+    $("#dpend").datepicker({
+        onRender: function (date) {
+            return date.valueOf() > now.valueOf() ? 'disabled' : '';
+        }
+    });
+}
 
 function Custom_Org_Chart() {
-    var dataOption = document.getElementById('selected_data').value;
+    var dataOption = document.getElementById('selected-data').value;
     var adate = $("#dpstart").val();
-    var start_date = jsDateToCSharp($("#dpstart").val());
-    var stop_date = jsDateToCSharp($("#dpend").val());
+    var start_date_str = $("#dpstart").val();
+    var start_date_ms = jsDateToCSharp(start_date_str);
+    var stop_date_str = $("#dpend").val();
+    var stop_date_ms = jsDateToCSharp(stop_date_str);
+    var date_dif_days = (stop_date_ms - start_date_ms) / 86400000;
 
     var orgURL = get_org_url();
-    var URL = "/custom_graph/" + orgURL + "/" + dataOption+ "/" + start_date + "/" + stop_date;
+    var URL = "/custom_graph/" + orgURL + "/" + dataOption + "/" + start_date_ms + "/" + stop_date_ms;
     $.ajax({
         url: URL,
         success: function (org_data) {
@@ -85,13 +132,15 @@ function Custom_Org_Chart() {
             chart_data.addColumn({ type: 'date', id: "Date" });
             chart_data.addColumn({ type: 'number', id: "Count" });
 
+            $("#data-period").html("from " + start_date_str + " to " + stop_date_str);
+
             $.each(org_data, function (index, data) {
                 chart_data.addRow([new Date(data.viewDate), data.viewCount]);
             });
 
             var default_options = {
                 title: dataOption + "Data",
-                hAxis: { title: 'Past Week', },
+                hAxis: { title: date_dif_days.toFixed(0) + ' days ending with ' + $("#dpend").val() },
                 vAxis: { title: 'Number of Users' }
             };
 
@@ -103,7 +152,7 @@ function Custom_Org_Chart() {
 }
 
 function Custom_Issue_Chart() {
-    var dataOption = document.getElementById('selected_data').value;
+    var dataOption = document.getElementById('selected-data').value;
     var start_date = jsDateToCSharp($("#datepickerStart").datepicker("getDate"));
     var stop_date = jsDateToCSharp($("#datepickerStop").datepicker("getDate"));
 
