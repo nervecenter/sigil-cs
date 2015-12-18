@@ -5,34 +5,106 @@
 
 @{
     Org thisOrg = ViewBag.thisOrg;
+    ViewBag.Title = "Sigil - " + thisOrg.orgName + " Data";
 }
 
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="~/Scripts/Graph.js"></script>
 <script type="text/javascript" src="~/Scripts/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="~/Scripts/bootstrap-select.js"></script>
 
-<div class="first-column">
+<style>
+    #dpstart, #dpend, #selected-data, #data-button {
+        width: 150px;
+        margin-left: 10px;
+    }
+
+    #selected-data {
+        margin-left: 27px;
+    }
+
+    #data-controls {
+        border-radius: 3px;
+        background-color: grey;
+        height: 60px;
+        padding-top: 7px;
+        clear: both;
+    }
+
+    #top-issues {
+        font-size: 18px;
+    }
+</style>
+
+<div class="col-md-9 col-lg-9">
     @*<img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))"><h1>@thisOrg.orgName</h1>*@
-    <article class="org-data-body">
-        <div id="chart_panel">
-            <div id="org_chart_div" style="width: 600px; height: 350px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <img id="data-controls-hider" class="pull-left" src="~/Content/Images/heirarchy-extended.png" style="margin-top:23px; margin-right: 10px;" />
+            <h3 id="data-header" class="pull-left">@thisOrg.orgName - Data <span id="data-period">for the past week</span></h3>
+            <div id="data-controls">
+                <select id="selected-data" name="selected-data" class="form-control pull-left">
+                    <option value="Pick chart data" selected="selected">Pick chart data</option>
+                    <option value="Views">Views</option>
+                    <option value="Votes">Votes</option>
+                    <option value="Comments">Comments</option>
+                    <option value="Subscriptions">Subscriptions</option>
+                    <option value="All">All</option>
+                </select>
+                <input id="dpstart" class="form-control pull-left" value="Start date" type="text">
+                <input id="dpend" class="form-control pull-left" value="End date" type="text">
+                @*<input type="text" id="datepickerStart" name="start" />
+                <input type="text" id="datepickerStop" name="stop" />*@
+                <button id="data-button" class="btn btn-primary disabled"@* onclick="Custom_Org_Chart()"*@>Get data</button>
+            </div>
+            <div id="chart_panel" style="clear:both;">
+                <div id="org_chart_div" style="width: 100%; height: 350px;">
+                </div>
+            </div>
+            <div>
+                <h4 id="data-header">Top issues for selected period</h4>
+                <ol id="top-issues">
+                    <li><a href="#">Issue number one</a></li>
+                    <li><a href="#">Issue number two</a></li>
+                    <li><a href="#">Issue number three</a></li>
+                    <li><a href="#">Issue number four</a></li>
+                    <li><a href="#">Issue number five</a></li>
+                    <li><a href="#">Issue number six</a></li>
+                    <li><a href="#">Issue number seven</a></li>
+                    <li><a href="#">Issue number eight</a></li>
+                    <li><a href="#">Issue number nine</a></li>
+                    <li><a href="#">Issue number ten</a></li>
+                </ol>
+                <h4 id="data-header">Top new and rising issues</h4>
+                <ol id="top-issues">
+                    <li><a href="#">Issue number one</a></li>
+                    <li><a href="#">Issue number two</a></li>
+                    <li><a href="#">Issue number three</a></li>
+                    <li><a href="#">Issue number four</a></li>
+                    <li><a href="#">Issue number five</a></li>
+                    <li><a href="#">Issue number six</a></li>
+                    <li><a href="#">Issue number seven</a></li>
+                    <li><a href="#">Issue number eight</a></li>
+                    <li><a href="#">Issue number nine</a></li>
+                    <li><a href="#">Issue number ten</a></li>
+                </ol>
+                <h4 id="data-header">Top issues awaiting responses</h4>
+                <ol id="top-issues">
+                    <li><a href="#">Issue number one</a></li>
+                    <li><a href="#">Issue number two</a></li>
+                    <li><a href="#">Issue number three</a></li>
+                    <li><a href="#">Issue number four</a></li>
+                    <li><a href="#">Issue number five</a></li>
+                    <li><a href="#">Issue number six</a></li>
+                    <li><a href="#">Issue number seven</a></li>
+                    <li><a href="#">Issue number eight</a></li>
+                    <li><a href="#">Issue number nine</a></li>
+                    <li><a href="#">Issue number ten</a></li>
+                </ol>
             </div>
         </div>
-        <select id ="selected_data" name="selected_data">
-            <option value="Views">Views</option>
-            <option value="Votes">Votes</option>
-            <option value="Comments">Comments</option>
-            <option value="Subscriptions">Subscriptions</option>
-            <option value="All">All</option>
-        </select>
-        <input id="dpstart" class="span2" value="Start date" type="text">
-        <input id="dpend" class="span2" value="End date" type="text">
-        @*<input type="text" id="datepickerStart" name="start" />
-        <input type="text" id="datepickerStop" name="stop" />*@
-        <input type="button" value="Get Chart" onclick="Custom_Org_Chart()" />
-
-        </article>
+    </div>
 </div>
 
 
