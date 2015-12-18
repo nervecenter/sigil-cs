@@ -171,11 +171,7 @@ namespace Sigil.Controllers
 
         public JsonResult DefaultData(string orgURL)
         {
-            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
-
-            //var orgIssueViews = (from vc in dc.ViewCounts
-            //                     where vc.OrgId == thisOrg.Id
-            //                     select CountXML<ViewCountCol>.XMLtoDATA(vc.count));
+            Org thisOrg = orgService.GetOrg(orgURL);
 
             var orgIssueViewData = countDataService.GetOrgViewCountCols(thisOrg.Id);
 

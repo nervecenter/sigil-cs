@@ -25,11 +25,21 @@ namespace Sigil.Services
     public class NotificationService : INotificationService
     {
         private readonly IOrgRepository orgRepository;
+#pragma warning disable CS0169 // The field 'NotificationService.categoryRepository' is never used
         private readonly IProductRepository categoryRepository;
+#pragma warning restore CS0169 // The field 'NotificationService.categoryRepository' is never used
+
+#pragma warning disable CS0169 // The field 'NotificationService.issueRepository' is never used
         private readonly IIssueRepository issueRepository;
+#pragma warning restore CS0169 // The field 'NotificationService.issueRepository' is never used
         private readonly INotificationRepository notificationRepository;
+#pragma warning disable CS0169 // The field 'NotificationService.commentRespository' is never used
         private readonly ICommentRepository commentRespository;
+#pragma warning restore CS0169 // The field 'NotificationService.commentRespository' is never used
+
+#pragma warning disable CS0169 // The field 'NotificationService.userRespository' is never used
         private readonly IUserRepository userRespository;
+#pragma warning restore CS0169 // The field 'NotificationService.userRespository' is never used
         private readonly IUnitOfWork unitOfWork;
 
         public NotificationService(IUnitOfWork unit, INotificationRepository noteRepo, IOrgRepository orgRepo)

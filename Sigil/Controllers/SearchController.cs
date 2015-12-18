@@ -17,12 +17,14 @@ namespace Sigil.Controllers
     {
         private readonly IProductService productService;
         private readonly ISearchService searchService;
+        private readonly ICommentService commentService;
         private SearchFilter searchFilter;
 
-        public SearchController(IProductService prodS, ISearchService searchS)
+        public SearchController(IProductService prodS, ISearchService searchS, ICommentService comS)
         {
             productService = prodS;
             searchService = searchS;
+            commentService = comS;
             searchFilter = new SearchFilter();
         }
 
@@ -144,11 +146,16 @@ namespace Sigil.Controllers
             }
 
             // Otherwise, fetch matching issues
+
+            
+
             var issuesList = searchService.MatchIssuesByOrg(id).ToList();//.Where( i => i.title.ToLower().Contains( term.ToLower() ) ).OrderByDescending( i => i.votes ).ToList();
+            var issuesWithResponses = issuesList.Select(i => new Tuple<Issue, List<OfficialResponse>>(i, commentService.GetIssuesOfficialResponses(i.Id).ToList())).ToList();
 
-            var MatchedIssues = searchFilter.FindMatchingIssues(term, issuesList);
+            var MatchedIssues = searchFilter.FindMatchingIssues(term, issuesWithResponses);
 
-            foreach (Tuple<Issue,int> i in MatchedIssues) {
+
+             foreach (Tuple<Issue,int> i in MatchedIssues) {
                 if ( Request.IsAuthenticated ) {
                     // TODO: Make sure we check if the user voted on this issue
                     partialsHTML += IssuePanelPartialJsonVM.IssuePanelPartialHTML( new IssuePanelPartialVM { issue = i.Item1, UserVoted = false, InPanel = true } );

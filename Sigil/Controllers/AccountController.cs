@@ -642,7 +642,8 @@ namespace Sigil.Controllers
 
         private string Generate_Temp_Password()
         {
-            return Membership.GeneratePassword(8, 2);
+            return "s323232";
+            //return Membership.GeneratePassword(8, 2);
         }
 
     }

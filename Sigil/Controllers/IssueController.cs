@@ -319,7 +319,9 @@ namespace Sigil.Controllers
                 
                 return newissue.Id;//dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
             }
+#pragma warning disable CS0168 // The variable 'e' is declared but never used
             catch (Exception e)
+#pragma warning restore CS0168 // The variable 'e' is declared but never used
             {
                 //ErrorHandler.Log_Error(newissue, e, dc);
                 return 0; //need to return a 404 or just rediret to another page that include an error message for the user

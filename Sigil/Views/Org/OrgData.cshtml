@@ -42,7 +42,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <img id="data-controls-hider" class="pull-left" src="~/Content/Images/heirarchy-extended.png" style="margin-top:23px; margin-right: 10px;" />
-            <h3 id="data-header" class="pull-left">@thisOrg.orgName - Data <span id="data-period">for the past week</span></h3>
+            <h3 id="data-header" class="pull-left">@thisOrg.orgName - Data <span id="data-period">REPLACE WITH FUNCTION TO GET TIME BASED ON TIMESPAN</span></h3>
             <div id="data-controls">
                 <select id="selected-data" name="selected-data" class="form-control pull-left">
                     <option value="Pick chart data" selected="selected">Pick chart data</option>
@@ -64,43 +64,16 @@
             </div>
             <div>
                 <h4 id="data-header">Top issues for selected period</h4>
-                <ol id="top-issues">
-                    <li><a href="#">Issue number one</a></li>
-                    <li><a href="#">Issue number two</a></li>
-                    <li><a href="#">Issue number three</a></li>
-                    <li><a href="#">Issue number four</a></li>
-                    <li><a href="#">Issue number five</a></li>
-                    <li><a href="#">Issue number six</a></li>
-                    <li><a href="#">Issue number seven</a></li>
-                    <li><a href="#">Issue number eight</a></li>
-                    <li><a href="#">Issue number nine</a></li>
-                    <li><a href="#">Issue number ten</a></li>
+                <ol id="top-issues-parent">
+
                 </ol>
                 <h4 id="data-header">Top new and rising issues</h4>
-                <ol id="top-issues">
-                    <li><a href="#">Issue number one</a></li>
-                    <li><a href="#">Issue number two</a></li>
-                    <li><a href="#">Issue number three</a></li>
-                    <li><a href="#">Issue number four</a></li>
-                    <li><a href="#">Issue number five</a></li>
-                    <li><a href="#">Issue number six</a></li>
-                    <li><a href="#">Issue number seven</a></li>
-                    <li><a href="#">Issue number eight</a></li>
-                    <li><a href="#">Issue number nine</a></li>
-                    <li><a href="#">Issue number ten</a></li>
+                <ol id="new-issues-parent">
+                    
                 </ol>
                 <h4 id="data-header">Top issues awaiting responses</h4>
-                <ol id="top-issues">
-                    <li><a href="#">Issue number one</a></li>
-                    <li><a href="#">Issue number two</a></li>
-                    <li><a href="#">Issue number three</a></li>
-                    <li><a href="#">Issue number four</a></li>
-                    <li><a href="#">Issue number five</a></li>
-                    <li><a href="#">Issue number six</a></li>
-                    <li><a href="#">Issue number seven</a></li>
-                    <li><a href="#">Issue number eight</a></li>
-                    <li><a href="#">Issue number nine</a></li>
-                    <li><a href="#">Issue number ten</a></li>
+                <ol id="response-issues-parent">
+                    
                 </ol>
             </div>
         </div>

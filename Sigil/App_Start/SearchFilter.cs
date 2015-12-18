@@ -42,30 +42,31 @@ namespace Sigil
 
             //for each issue, clean title and text and then compare to each search term.
 
-            //TODO: Need to run timing test to make sure parallelization is done in correct places. 
+            //Timing tests indicate that parallizing on the issues is fastest at the moment. This could change depending on the average length of issues title and text fields 
             Parallel.ForEach(IssueList, (iss) =>
             {
                 ConcurrentBag<string> IssueWords = CleanAndFilterText(iss.title + iss.text);
 
                 //first see if there are any direct matches by taking the intersection of both lists of words
-                var directMatches = IssueWords.AsParallel().Intersect(cleanedFilteredTerms.AsParallel()).ToList();
+                //var directMatches = IssueWords.AsParallel().Intersect(cleanedFilteredTerms.AsParallel()).ToList();
+                //parallizing this will only be a speed up if the issues have more words in the title and body text.
+                var directMatches = IssueWords.Intersect(cleanedFilteredTerms).ToList();
 
                 ConcurrentBag<string> partialMatches = new ConcurrentBag<string>();
 
                 //then find partial matches
-                
-                Parallel.ForEach(IssueWords, (IssueTerm) =>
+                foreach (var issueTerm in IssueWords)
                 {
-                    Parallel.ForEach(cleanedFilteredTerms, (searchTerm) =>
+                    foreach (var searchTerm in cleanedFilteredTerms)
                     {
-                        if(IssueTerm.Contains(searchTerm))
+                        if (issueTerm.Contains(searchTerm))
                         {
                             partialMatches.Add(searchTerm);
                         }
-                    });
-                });
+                    }
+                }
 
-                if(directMatches.Count() > 0 || partialMatches.Count() > 0)
+                if (directMatches.Count() > 0 || partialMatches.Count() > 0)
                 {
                     //Since we want direct matches to count for more than partial matches we get the rank by taking 80% of direct and 20% of partial (we just use ints though to avoid decimals)
                     int rank = directMatches.Count() * 8 + partialMatches.Count() * 2;
@@ -93,29 +94,30 @@ namespace Sigil
 
             //for each issue, clean title and text and then compare to each search term.
 
-            //TODO: Need to run timing test to make sure parallelization is done in correct places. 
+           
             Parallel.ForEach(issuesAndResponses, (iss) =>
             {
                 string AllOfficialResponseText = iss.Item2.Select(o => o.text).ToString();
                 ConcurrentBag<string> IssueWords = CleanAndFilterText(iss.Item1.title + iss.Item1.text + AllOfficialResponseText);
 
                 //first see if there are any direct matches by taking the intersection of both lists of words
-                var directMatches = IssueWords.AsParallel().Intersect(cleanedFilteredTerms.AsParallel()).ToList();
+                //var directMatches = IssueWords.AsParallel().Intersect(cleanedFilteredTerms.AsParallel()).ToList();
+                var directMatches = IssueWords.Intersect(cleanedFilteredTerms).ToList();
 
                 ConcurrentBag<string> partialMatches = new ConcurrentBag<string>();
 
                 //then find partial matches
 
-                Parallel.ForEach(IssueWords, (IssueTerm) =>
+                foreach (var issueTerm in IssueWords)
                 {
-                    Parallel.ForEach(cleanedFilteredTerms, (searchTerm) =>
+                    foreach (var searchTerm in cleanedFilteredTerms)
                     {
-                        if (IssueTerm.Contains(searchTerm))
+                        if (issueTerm.Contains(searchTerm))
                         {
                             partialMatches.Add(searchTerm);
                         }
-                    });
-                });
+                    }
+                }
 
                 if (directMatches.Count() > 0 || partialMatches.Count() > 0)
                 {

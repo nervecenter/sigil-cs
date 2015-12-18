@@ -149,6 +149,14 @@ function Custom_Org_Chart() {
             default_chart.draw(chart_data, default_options);
         }
     });
+
+    var issueURL = "/custom_data/"+orgURL+"/"+start_date_ms+"/"+stop_date_ms;
+    $.ajax({
+        url: issueURL,
+        success: function (issue_data) {
+
+        }
+    })
 }
 
 function Custom_Issue_Chart() {

@@ -74,3 +74,5 @@ C:\Sigil\Sigil\bin\System.Web.WebPages.Deployment.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.Razor.xml
 C:\Sigil\Sigil\obj\Release\Sigil.dll
 C:\Sigil\Sigil\obj\Release\Sigil.pdb
+C:\Sigil\Sigil\bin\Sigil.dll.CodeAnalysisLog.xml
+C:\Sigil\Sigil\bin\Sigil.dll.lastcodeanalysissucceeded

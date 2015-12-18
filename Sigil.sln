@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigil", "Sigil\Sigil.csproj", "{55972871-6C55-41B6-A322-02B238CD1249}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigil.Tests", "Sigil.Tests\Sigil.Tests.csproj", "{135D5129-48DD-40EC-A706-FDE18DA1A991}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,9 +15,6 @@ Global
 		{55972871-6C55-41B6-A322-02B238CD1249}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55972871-6C55-41B6-A322-02B238CD1249}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55972871-6C55-41B6-A322-02B238CD1249}.Release|Any CPU.Build.0 = Release|Any CPU
-		{135D5129-48DD-40EC-A706-FDE18DA1A991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{135D5129-48DD-40EC-A706-FDE18DA1A991}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{135D5129-48DD-40EC-A706-FDE18DA1A991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

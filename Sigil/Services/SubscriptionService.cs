@@ -25,12 +25,9 @@ namespace Sigil.Services
 
     public class SubscriptionService : ISubscriptionService
     {
-        private readonly IOrgRepository OrgsRepository;
-        private readonly IProductRepository categoryRepository;
-        private readonly IIssueRepository issueRepository;
+
         private readonly ISubscriptionRepository subscriptionRepository;
-        private readonly ICommentRepository commentRespository;
-        private readonly IUserRepository userRespository;
+
         private readonly IUnitOfWork unitOfWork;
 
         public SubscriptionService(IUnitOfWork unit, ISubscriptionRepository subRepo)
