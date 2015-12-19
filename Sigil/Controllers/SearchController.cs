@@ -92,13 +92,13 @@ namespace Sigil.Controllers
             return Json(orgsandproducts, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SearchOrgs_Cats(string term)
+        public JsonResult SearchOrgsAndProducts(string term)
         {
             List<string> search_list = new List<string>();
             if (!string.IsNullOrEmpty(term))
             {
                 //search_list.AddRange(search_orgs(term).Select(o => o.orgName));
-                search_list.AddRange(search_orgs_and_cats(term));
+                search_list.AddRange(search_orgs_and_products(term));
             }
 
             return Json(search_list, JsonRequestBehavior.AllowGet);
@@ -189,7 +189,7 @@ namespace Sigil.Controllers
         =============================================================================================================================================
         */
 
-        private List<string> search_orgs_and_cats(string term)
+        private List<string> search_orgs_and_products(string term)
         {
             //var qu = from org in dc.Orgs
             //         from cat in dc.Categories
@@ -202,15 +202,15 @@ namespace Sigil.Controllers
             
             foreach(var o in quOrgs)
             {
-                var orgCats = productService.GetProductsByOrg(o.Id).ToList();
-                if(orgCats.Count > 0)
+                var orgProducts = productService.GetProductsByOrg(o.Id).ToList();
+                if(orgProducts.Count > 0)
                 {
-                    foreach(var c in orgCats)
+                    foreach(var p in orgProducts)
                     {
-                        if (o.orgName == c.ProductName)
-                            finalQuery.Add(c.ProductName);
+                        if (o.orgName == p.ProductName)
+                            finalQuery.Add(p.ProductName);
                         else
-                            finalQuery.Add(o.orgName + "-" + c.ProductName);
+                            finalQuery.Add(o.orgName + "-" + p.ProductName);
                     }
                 }
             }
