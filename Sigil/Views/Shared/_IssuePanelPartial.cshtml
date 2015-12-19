@@ -41,10 +41,15 @@
             </div>
         </div>
     </div>
+    if (Model.issue.responded) {
+        <div class="panel-footer">
+            @Model.issue.OfficialResponses[ 0 ].text.Substring( 0, 100 )...
+        </div>
+    }
 }
 
 @if ( Model.InPanel ) {
-    <div class="panel panel-default issue-panel-partial">
+    <div class="panel @(Model.issue.responded ? "panel-primary" : "panel-default") issue-panel-partial">
         @MainMarkup()
     </div>
 } else {
