@@ -275,7 +275,9 @@ namespace Sigil.Controllers
             if (result.Succeeded)
             {
                 Create_User_Extras(user.Id);
+                user = userService.GetUser(user.Id);
                 _userManager.AddToRole(user.Id, "OrgSuperAdmin");
+                userService.UpdateUser(user);
             }
             else
             {

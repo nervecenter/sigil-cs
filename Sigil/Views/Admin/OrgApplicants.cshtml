@@ -25,13 +25,13 @@
                 Org Admins Phone: @applicant.ContactNumber<br />
                 Org Admins Comment: @applicant.comment
                 
-                @if (!applicant.OrgApproved)
-                {
+                @*@if (!applicant.OrgApproved)
+                {*@
                 <form>
                     <button type="submit" class="btn btn-success" formaction="orgapps/@applicant.Id/">Approve</button>
                     <button type="submit" class="btn btn-danger">Disapprove</button>
                 </form>
-                }
+                @*}*@
             </div>
         </div>
     }

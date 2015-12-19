@@ -178,6 +178,9 @@ namespace Sigil.Services
             OfficialResponse newOff = new OfficialResponse();
 
             newOff.createTime = DateTime.UtcNow;
+            newOff.editTime = DateTime.UtcNow;
+            newOff.lastVoted = DateTime.UtcNow;
+            
             newOff.downVotes = 0;
             newOff.upVotes = 1;
             newOff.IssueId = thisIssue.Id;
@@ -187,6 +190,7 @@ namespace Sigil.Services
 
 
             officialResponseRepository.Add(newOff);
+            unitOfWork.Commit();
             
 
             //Checking to see of the official response mentions any users specifically

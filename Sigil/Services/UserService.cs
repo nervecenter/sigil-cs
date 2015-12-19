@@ -173,6 +173,7 @@ namespace Sigil.Services
         public void SaveUserVotes()
         {
             unitOfWork.Commit();
+            
         }
 
         public void AddUserVote(ApplicationUser user, int issueId)
