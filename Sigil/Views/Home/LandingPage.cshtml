@@ -12,9 +12,10 @@
 
     <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
 
-    <script src="~/Scripts/jquery-1.8.3.js"></script>
-    <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
-    <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.11.3.js"></script>
+    <script src="~/Scripts/typeahead.js"></script>
+    @*<script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
+    <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />*@
 
     @Styles.Render( "~/Content/bootstrap-flatly.css" )
     @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
@@ -28,6 +29,10 @@
 
         .media-body {
             font-size: 12px;
+        }
+
+        .twitter-typeahead {
+            width: 100%;
         }
     </style>
 
@@ -90,7 +95,7 @@
             <div class="row">
                 <div class="btn-group btn-group-justified col-centered" style="max-width:800px;">
                     <a class="btn btn-warning" href="/features" style="color:black;">See how Sigil can revamp feedback for your company.</a>
-                    <a class="btn btn-info" href="/register">Start giving your own feedback</a>
+                    <a class="btn btn-info" href="/register">Start giving your own feedback.</a>
                 </div>
             </div>
         </div>
