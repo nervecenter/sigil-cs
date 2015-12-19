@@ -20,7 +20,7 @@
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-default active">Main feed</a>
         <a class="btn btn-info" href="/@thisOrg.orgURL/responses">Responses</a>
-        <a class="btn btn-success" href="/@thisOrg.orgURL/data">Data</a>
+        @*<a class="btn btn-success" href="/@thisOrg.orgURL/data">Data</a>*@
         @if (!Request.IsAuthenticated) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
         } else if (userSubs.Any<SubscriptionViewModel>(s => s.subObjectId == thisOrg.Id && s.subName == thisOrg.orgName)) {
