@@ -20,7 +20,7 @@
             <div class="media-body">
                 <h4 class="media-heading">
                     <a href="/@Model.issue.Product.Org.orgURL/@Model.issue.Product.ProductURL/@Model.issue.Id">@Model.issue.title</a>
-                    @if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }
+                    @*@if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }*@
                 </h4>
                 <p class="pull-left">
                     <img class="issue-panel-icon" src="@(Model.issue.Product.Image.icon_20)" /><span><a href="/@Model.issue.Product.Org.orgURL">@Model.issue.Product.Org.orgName</a></span>
@@ -41,15 +41,21 @@
             </div>
         </div>
     </div>
-    if (Model.issue.responded) {
+if ( Model.issue.responded && Model.InPanel ) {
         <div class="panel-footer">
-            @Model.issue.OfficialResponses[ 0 ].text.Substring( 0, 100 )...
+            <b>Response: </b>
+            @{var response = Model.issue.OfficialResponses[ 0 ].text;}
+            @if ( response.Length > 100 ) {
+                <span>@response.Substring( 0, 85 )...</span>
+            } else {
+                <span>@response</span>
+            }
         </div>
     }
 }
 
 @if ( Model.InPanel ) {
-    <div class="panel @(Model.issue.responded ? "panel-primary" : "panel-default") issue-panel-partial">
+    <div class="panel @(Model.issue.responded ? "panel-info" : "panel-default") issue-panel-partial">
         @MainMarkup()
     </div>
 } else {

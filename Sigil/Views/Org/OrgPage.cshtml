@@ -42,11 +42,11 @@
         </div>
     </div>
     <div id="issues">
-        @foreach ( IssuePanelPartialVM issue in Model.orgIssues ) {
+        @foreach ( IssuePanelPartialVM issueVM in Model.orgIssues ) {
             /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
                                                                                                  userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )},
                                                                        issue );*/
-                                                                    @Html.Partial( "../Shared/_IssuePanelPartial", issue )
+            @Html.Partial( "../Shared/_IssuePanelPartial", issueVM )
         }
     </div>
     @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
