@@ -5,7 +5,7 @@
         success: function () {
             votebutton.classList.remove('voteup');
             votebutton.classList.add('unvoteup');
-            votebutton.src = "../Content/Images/voted.png";
+            votebutton.src = "/Content/Images/voted.png";
             votebutton.setAttribute('onClick', 'unvoteup(this, ' + issueid + ')');
             var count = document.getElementById("count-" + issueid);
             count.innerHTML = (parseInt(count.innerHTML, 10) + 1);
@@ -24,7 +24,7 @@ function unvoteup(votebutton, issueid) {
         success: function () {
             votebutton.classList.remove('unvoteup');
             votebutton.classList.add('voteup');
-            votebutton.src = "../Content/Images/notvoted-hover.png";
+            votebutton.src = "/Content/Images/notvoted-hover.png";
             votebutton.setAttribute('onClick', 'voteup(this, ' + issueid + ')');
             var count = document.getElementById("count-" + issueid);
             count.innerHTML = (parseInt(count.innerHTML, 10) - 1);
@@ -59,13 +59,13 @@ function official_unvotedown(votebutton, officialId)
 
 function votehover(votebutton) {
     if (votebutton.classList.contains('voteup')) {
-        votebutton.src = "../Content/Images/notvoted-hover.png";
+        votebutton.src = "/Content/Images/notvoted-hover.png";
     }
 }
 
 function voteunhover(votebutton) {
     if (votebutton.classList.contains('voteup')) {
-        votebutton.src = "../Content/Images/notvoted.png";
+        votebutton.src = "/Content/Images/notvoted.png";
     }
 }
 
