@@ -55,7 +55,7 @@ namespace Sigil.Services
 
     public class ImageService : IImageService
     {
-        private readonly static string tmp_upload_path = "/Images/TMP/";
+        private readonly static string tmp_upload_path = "~/Images/TMP/";
         private readonly static string default_folder_path = "/Images/Default/";
         private readonly static string org_folder_path = "/Images/Org/";
         private readonly static string user_folder_path = "/Images/User/";

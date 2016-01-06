@@ -97,7 +97,7 @@ namespace Sigil.Controllers
             IssuePageViewModel viewModel = new IssuePageViewModel();
 
            
-            viewModel.IssuePanelVM = new IssuePanelPartialVM() { issue = thisIssue, UserVoted = userVM.UserVotes.Check_Vote(thisIssue.Id, thisOrg.Id), InPanel = false };
+            viewModel.IssuePanelVM = new IssuePanelPartialVM() { issue = thisIssue, UserVoted = userVM.UserVotes.Check_Vote(thisIssue.Id), InPanel = false };
 
             viewModel.UserVM = userVM;
 
@@ -346,10 +346,11 @@ namespace Sigil.Controllers
             issue.votes++;
             issue.lastVoted = DateTime.UtcNow;
             issueService.UpdateIssue(issue);
-               
+            issueService.SaveChanges();
             countDataService.UpdateIssueVoteCountData(issue);
+            countDataService.SaveIssueCountData();
             userService.UpdateUser(user);
-    
+            userService.SaveUserVotes();
 
             return new EmptyResult();
         }
@@ -398,12 +399,12 @@ namespace Sigil.Controllers
             issue.votes--;
             issue.lastVoted = DateTime.UtcNow;
             issueService.UpdateIssue(issue);
-
+            issueService.SaveChanges();
             countDataService.UpdateIssueVoteCountData(issue, false);
-
+            countDataService.SaveIssueCountData();
             userService.RemoveUserVote(user, IssueId);
             userService.UpdateUser(user);
-
+            userService.SaveUserVotes();
             return new EmptyResult();
         }
 

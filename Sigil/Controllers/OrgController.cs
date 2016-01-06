@@ -79,7 +79,7 @@ namespace Sigil.Controllers
             {
                 issue = i,
                 InPanel = true,
-                UserVoted = userVM.UserVotes.Check_Vote(i.Id, thisOrg.Id)
+                UserVoted = userVM.UserVotes.Check_Vote(i.Id)
             }).ToList();
 
             orgVM.orgIssues = OrgIssues.ToPagedList(pageNumber, num_results_per_page);
