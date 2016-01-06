@@ -14,24 +14,24 @@
     }
 });*/
 
-var orgsAndProducts = new Bloodhound({
+/*var orgsAndProducts = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
         url: 'https://localhost:44301/search/?term=%QUERY',
         wildcard: '%QUERY'
     }
-});
+});*/
 
-$("#searchBox").typeahead(null, {
+/*$("#searchBox").typeahead(null, {
     name: 'orgs-and-products',
     display: 'value',
     source: orgsAndProducts,
     updater: function (item) {
-        /* navigate to the selected item */
+        /* navigate to the selected item *
         window.location.href = data[item];
     },
-});
+});*/
 
 var typeTimer; // Our timer
 

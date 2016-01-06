@@ -9,9 +9,10 @@
     IEnumerable<OfficialResponse> official = Model.OfficialResponses;
     IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;
 
+    Issue thisIssue = Model.IssuePanelVM.issue;
     UserVoteCol userVote = ViewBag.userVote;
 
-    ViewBag.Title = "Sigil - " + Model.IssuePanelVM.issue.title;
+    ViewBag.Title = "Sigil - " + thisIssue.title;
 
     bool pull = false;
 
@@ -22,7 +23,7 @@
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-warning" href="/@Model.IssueOrg.orgURL">Main feed</a>
         <a class="btn btn-info" href="/@Model.IssueOrg.orgURL/responses">Responses</a>
-        <a class="btn btn-success" href="/@Model.IssueOrg.orgURL/@Model.IssueProduct.ProductURL/@Model.IssuePanelVM.issue.Id/data">Data</a>
+        <a class="btn btn-success" href="/@Model.IssueOrg.orgURL/@Model.IssueProduct.ProductURL/@thisIssue.Id/data">Data</a>
 
         @if ( !Request.IsAuthenticated ) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.IssueOrg.orgName</a>
@@ -32,10 +33,45 @@
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.IssueOrg.orgURL')">Subscribe to @Model.IssueOrg.orgName</a>
         }
     </div>
-    <article class="panel panel-default">
-        @Html.Partial( "../Shared/_IssuePanelPartial", Model.IssuePanelVM )
-        <div class="panel-body">@Model.IssuePanelVM.issue.text</div>
-    </article>
+    <div class="panel panel-default issue-panel-partial">
+        @*Html.Partial( "../Shared/_IssuePanelPartial", Model.IssuePanelVM )*@
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-object pull-left votebutton-box">
+                    @if ( !Request.IsAuthenticated ) {
+                        <img src="~/Content/Images/notvoted.png" class="voteup" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    } else if ( Model.IssuePanelVM.UserVoted ) {
+                        <img src="~/Content/Images/voted.png" class="unvoteup" onclick="unvoteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    } else {
+                        <img src="~/Content/Images/notvoted.png" class="voteup" onclick="voteup(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+                    }
+                    <br />
+                    <span id="count-@thisIssue.Id" class="voteamount">@thisIssue.votes</span>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a href="/@thisIssue.Product.Org.orgURL/@thisIssue.Product.ProductURL/@thisIssue.Id">@thisIssue.title</a>
+                        @*@if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }*@
+                    </h4>
+                    <p class="pull-left">
+                        <img class="issue-panel-icon" src="@(thisIssue.Product.Image.icon_20)" /><span><a href="/@thisIssue.Product.Org.orgURL">@thisIssue.Product.Org.orgName</a></span>
+                        @if ( thisIssue.Product.ProductURL != "Default" ) {
+                            <span>: <a href="/@thisIssue.Product.Org.orgURL/@thisIssue.Product.ProductURL"> @thisIssue.Product.ProductName</a></span>
+                        }
+                        @if ( thisIssue.Product.TopicId != null ) {
+                            <span>in <a href="/t/@thisIssue.Product.Topic.topicURL">@thisIssue.Product.Topic.topicName</a></span>
+                        }
+
+                    </p>
+                    <p class="pull-right">
+                        Posted @*@Sigil.Controllers.IssueController.TimeSince( thisIssue.CreateTime )*@
+                        <span>by @thisIssue.User.DisplayName</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">@thisIssue.text</div>
+    </div>
     @if ( official.Count() > 0) {
         <div class="panel panel-primary">
             @foreach (var OfResponse in official)
