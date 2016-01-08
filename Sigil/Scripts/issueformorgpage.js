@@ -1,6 +1,9 @@
-﻿$("#new-feedback-button").click(function () {
+﻿$("#product-select-group").hide();
+
+$("#new-feedback-button").click(function () {
     var $issuesearchpostform = $("#issue-search-post-form");
     $(this).remove();
+    $("#product-select-group").show();
     var $text = $("<textarea/>")
                     .attr("id", "issues-by-org-search")
                     .attr("type", "text")
@@ -12,7 +15,7 @@
                     .attr("type", "submit")
                     .attr("class", "btn btn-primary pull-right")
                     .attr("style", "padding:4px 9px;")
-                    .text("Submit feedback");
+                    .text("Post new feedback");
     $issuesearchpostform.append($("<div/>").addClass("form-group").append($text));
     $issuesearchpostform.append($("<div/>").addClass("form-group").append($submit));
 });

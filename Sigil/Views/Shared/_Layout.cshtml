@@ -58,7 +58,6 @@
         </div>
     </div>
     <br class="clear" />
-    @*if ( !actionsWithoutFooter.Contains( actionCalled ) ) {}*@
     @Html.Partial( "_Footer" )
     
     @RenderSection( "scripts", required: false )
@@ -68,7 +67,7 @@
     
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
     <script type="text/javascript" src="~/Scripts/Search.js"></script>
-    <script type="text/javascript" src="~/Scripts/issueform.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/issueform.js"></script>*@
     <script type="text/javascript" src="~/Scripts/addissueform.js"></script>
     <script type="text/javascript" src="~/Scripts/notifications.js"></script>
     <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>

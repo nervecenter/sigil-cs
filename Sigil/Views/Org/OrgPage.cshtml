@@ -36,6 +36,13 @@
                     <textarea id="issues-by-org-search" class="form-control" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own" style="height:70px;min-height:70px;max-width:100%;min-width:100%;" data-orgid="@thisOrg.Id"></textarea>
                 </div>
                 <div id="new-feedback-button" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</div>
+                <div class="form-group" id="product-select-group">
+                    <select class="form-control" id="product-select" name="product-select">
+                        @foreach ( Product p in Model.thisOrg.Products ) {
+                            <option value="@p.Id">@p.ProductName</option>
+                        }
+                    </select>
+                </div>
                 @*
                 <div class="form-group">
                     <textarea id="issues-by-org-search" class="form-control" type="text" name="text" value="" placeholder="Talk about your feedback in-depth" style="height:100px;min-height:100px;max-width:100%;min-width:100%;"></textarea>
@@ -48,9 +55,6 @@
     </div>
     <div id="issues">
         @foreach ( IssuePanelPartialVM issueVM in Model.orgIssues ) {
-            /*var issuePanelModel = new Tuple<IssuePanelOptions, Issue>( new IssuePanelOptions() { inPanel = true, showOrg = false, showCat = false, showTopic = false, showUser = true,
-                                                                                                 userVoted = userVotes.Check_Vote( issue.Id, issue.Category.OrgId )},
-                                                                       issue );*/
             @Html.Partial( "../Shared/_IssuePanelPartial", issueVM )
         }
     </div>
@@ -59,3 +63,5 @@
     @Html.PagedListPager(Model.orgIssues, page => Url.Action("OrgPage", "Org", new { page }))
 </div>
 @{Html.RenderAction("_SideBar", "Shared");}
+
+<script type="text/javascript" src="~/Scripts/issueformorgpage.js"></script>
