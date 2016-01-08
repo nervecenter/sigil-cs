@@ -3,6 +3,7 @@
 /// <reference path="bootstrap.min.js" />
 /// <reference path="bootstrap-datepicker.js" />
 /// <reference path="graph.js" />
+/// <reference path="issueform.js" />
 /// <reference path="jquery.validate.min.js" />
 /// <reference path="jquery.validate.unobtrusive.min.js" />
 /// <reference path="jquery-1.8.3.js" />

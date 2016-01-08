@@ -63,7 +63,7 @@ namespace Sigil.ViewModels
         }
 
         public static string IssuePanelPartialHTML( IssuePanelPartialVM Model ) {
-            string html = "<div class=\"panel panel-default issue-panel-partial\"><div class=\"panel-body\"><div class=\"media\"><div class=\"media-object pull-left votebutton-box\">";
+            string html = "<div class=\"panel " + ( Model.issue.responded ? "panel-info" : "panel-default") + " issue-panel-partial\"><div class=\"panel-body\"><div class=\"media\"><div class=\"media-object pull-left votebutton-box\">";
             //if( !Request.IsAuthenticated ) {
             html += "<img src=\"/Content/Images/notvoted.png\" class=\"voteup\" onclick=\"redirectToLogin()\" onmouseover=\"votehover(this)\" onmouseout=\"voteunhover(this)\">";
             /*} else if ( Model.UserVoted ) {
@@ -72,9 +72,6 @@ namespace Sigil.ViewModels
                 html += "<img src=\"~/Content/Images/notvoted.png\" class=\"voteup\" onclick=\"voteup(this, " + Model.issue.Id + "\" onmouseover=\"votehover(this)\" onmouseout=\"voteunhover(this)\">";
             }*/
             html += "<br /><span id=\"count-" + Model.issue.Id + "\" class=\"voteamount\">" + Model.issue.votes + "</span></div><div class=\"media-body\"><h4 class=\"media-heading\"><a href = \"/" + Model.issue.Product.Org.orgURL + "/" + Model.issue.Product.ProductURL + "/" + Model.issue.Id + "\">" + Model.issue.title + "</a>";
-            if ( Model.issue.responded ) {
-                html += "<small><i style=\"color:red;\">Response!</i></small>";
-            }
             html += "</h4><p class=\"pull-left\"><img class=\"issue-panel-icon\" src=\"" + Model.issue.Product.Image.icon_20 + "\"/><span><a href = \"" + Model.issue.Product.Org.orgURL + "\">" + Model.issue.Product.Org.orgName + "</a></span>";
             if ( Model.issue.Product.ProductURL != "Default" ) {
                 html += "<span>: <a href = \"/" + @Model.issue.Product.Org.orgURL + "/" + Model.issue.Product.ProductURL + "\">" + Model.issue.Product.ProductName + "</a></span>";
@@ -82,7 +79,17 @@ namespace Sigil.ViewModels
             if ( Model.issue.Product.TopicId != null ) {
                 html += "<span> in <a href = \"/t/@Model.issue.Product.Topic.topicURL\">" + Model.issue.Product.Topic.topicName + "</a></span>";
             }
-            html += "</p><p class=\"pull-right\"><span>Posted by " + Model.issue.User.DisplayName + "</span></p></div></div></div></div>";
+            html += "</p><p class=\"pull-right\"><span>Posted by " + Model.issue.User.DisplayName + "</span></p></div></div></div>";
+
+            if ( Model.issue.responded ) {
+                var response = Model.issue.OfficialResponses[ 0 ].text;
+                if ( response.Length > 100 ) {
+                    response = response.Substring( 0, 85 ) + "...";
+                }
+                html += "<div class=\"panel-footer\"><b> Response: </b><span>" + response + "</span></div>";
+            }
+                
+            html += "</div>";
 
             return html;
         }

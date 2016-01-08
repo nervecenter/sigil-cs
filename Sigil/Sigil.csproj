@@ -363,6 +363,7 @@
     <Content Include="Content\Images\vote_circle_hover_small.png" />
     <Content Include="Content\Images\vote_circle_small.png" />
     <Content Include="Content\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="Content\oldcss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -406,6 +407,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Graph.js" />
+    <Content Include="Scripts\issueform.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
