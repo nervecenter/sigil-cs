@@ -1,4 +1,51 @@
-﻿function voteup(votebutton, issueid) {
+﻿$(".votelogin, .voteup, .unvoteup")
+    .mouseover(function () {
+        var $this = $(this);
+        if ($this.hasClass('voteup') || $this.hasClass("votelogin")) {
+            $this.attr("src", "/Content/Images/notvoted-hover.png");
+        }
+    })
+    .mouseout(function () {
+        var $this = $(this);
+        if ($this.hasClass('voteup') || $this.hasClass("votelogin")) {
+            $this.attr("src", "/Content/Images/notvoted.png");
+        }
+    });
+
+$(".votelogin").click(redirectToLogin);
+
+function voteup($button, issueid) {
+    $.post("/voteup/" + issueid + "/", function () {
+        $button.removeClass("voteup")
+            .addClass("unvoteup")
+            .attr("src", "/Content/Images/voted.png")
+            .click({ $button: $button, issueid: issueid }, unvoteup);
+        var $count = $("#count-" + issueid);
+        $count.html(parseInt(count.html, 10) + 1);
+    });
+}
+
+function unvoteup($button, issueid) {
+    $.post("/unvoteup/" + issueid + "/", function () {
+        $button.removeClass("unvoteup")
+            .addClass("voteup")
+            .attr("src", "/Content/Images/notvoted-hover.png")
+            .click({ $button: $button, issueid: issueid }, voteup);
+        var $count = $("#count-" + issueid);
+        $count.html(parseInt(count.html, 10) - 1);
+    });
+}
+
+$(".voteup").click({ $button: $(this), issueid: $(this).data("issueid") }, voteup);
+
+$(".unvoteup").click({ $button: $(this), issueid: $(this).data("issueid") }, unvoteup);
+
+
+function redirectToLogin() {
+    window.location = "/login";
+}
+
+/*function voteup(votebutton, issueid) {
     $.ajax({
         type: "POST",
         url: '/voteup/' + issueid + '/',
@@ -67,8 +114,4 @@ function voteunhover(votebutton) {
     if (votebutton.classList.contains('voteup')) {
         votebutton.src = "/Content/Images/notvoted.png";
     }
-}
-
-function redirectToLogin() {
-    window.location = "/login";
-}
+}*/
