@@ -14,24 +14,24 @@
 
 $(".votelogin").click(redirectToLogin);
 
-function voteup($button, issueid) {
-    $.post("/voteup/" + issueid + "/", function () {
-        $button.removeClass("voteup")
+function voteup(event) {
+    $.post("/voteup/" + event.data.issueid + "/", function () {
+        event.data.$button.removeClass("voteup")
             .addClass("unvoteup")
             .attr("src", "/Content/Images/voted.png")
-            .click({ $button: $button, issueid: issueid }, unvoteup);
-        var $count = $("#count-" + issueid);
+            .click({ $button: event.data.$button, issueid: event.data.issueid }, unvoteup);
+        var $count = $("#count-" + event.data.issueid);
         $count.html(parseInt(count.html, 10) + 1);
     });
 }
 
-function unvoteup($button, issueid) {
-    $.post("/unvoteup/" + issueid + "/", function () {
-        $button.removeClass("unvoteup")
+function unvoteup(event) {
+    $.post("/unvoteup/" + event.data.issueid + "/", function () {
+        event.data.$button.removeClass("unvoteup")
             .addClass("voteup")
             .attr("src", "/Content/Images/notvoted-hover.png")
-            .click({ $button: $button, issueid: issueid }, voteup);
-        var $count = $("#count-" + issueid);
+            .click({ $button: $button, issueid: event.data.issueid }, voteup);
+        var $count = $("#count-" + event.data.issueid);
         $count.html(parseInt(count.html, 10) - 1);
     });
 }
