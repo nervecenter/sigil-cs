@@ -123,8 +123,6 @@ namespace Sigil.Services
 
             viewCountRepository.Add(newView);
 
-            SaveIssueCountData();
-
         }
 
         public void SaveOrgCountData()

@@ -76,6 +76,15 @@ namespace Sigil.Controllers
 
             // Get the user
             var userID = User.Identity.GetUserId();
+            UserViewModel userVM = default(UserViewModel);
+            if (userID == null)
+            {
+                userVM = new UserViewModel();
+            }
+            else
+            {
+                userVM = userService.GetUserViewModel(userID);
+            }
 
             // If the page is in POST, we're posting a comment; get form data and POST it
             if (Request.HttpMethod == "POST")
@@ -84,8 +93,8 @@ namespace Sigil.Controllers
             }
 
             // Get the user's vote on this issues if it exists
-            UserViewModel userVM = userService.GetUserViewModel(userID);
-            if (userVM.User.OrgId == thisOrg.Id)
+            
+            if (userID != null && userVM.User.OrgId == thisOrg.Id)
                 userVM.isOrgAdmin = true;
             else
                 userVM.isOrgAdmin = false;
@@ -230,53 +239,52 @@ namespace Sigil.Controllers
             Form for adding an issue. Linked on org page. Adds issue to current org. 
         ==================== 
         */
-        [Authorize]
+        //[Authorize]
         //[HttpGet]
-        public ActionResult AddIssue(AddIssueVM vm)
-        {
-            return View(TempData["vm"]);
-        }
+        //public ActionResult AddIssue(AddIssueVM vm)
+        //{
+        //    return View(TempData["vm"]);
+        //}
 
 
-        [HttpPost]
+        
         [Authorize]
-        [ActionName("AddIssue")]
-        public ActionResult AddIssue_Post(AddIssueVM vm)
+        public ActionResult AddIssue_Post()
         {
             // Get the org for the issue we're adding
 
             // Get the user
             var userId = User.Identity.GetUserId();
-
+            AddIssueVM vm = (AddIssueVM)TempData["vm"];
             // check to see if they are posting to a specific org's Product or just to the org itself
-            string orgName = Request.Form["product"];
-            string issueproduct = "";
-            if (orgName.Contains("-"))
-            {
-                var temp = orgName.Split('-');
-                orgName = temp[0];
-                issueproduct = temp[1];
-            }
+            //string orgName = Request.Form["product"];
+            //string issueproduct = "";
+            //if (orgName.Contains("-"))
+            //{
+            //    var temp = orgName.Split('-');
+            //    orgName = temp[0];
+            //    issueproduct = temp[1];
+            //}
 
-            if(issueproduct == "")
-            {
-                issueproduct = orgName;
-            }
+            //if(issueproduct == "")
+            //{
+            //    issueproduct = orgName;
+            //}
 
-            var org = orgService.GetOrg(orgName, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
-            var product = productService.GetProduct(issueproduct, true);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
+            //var org = orgService.GetOrg(vm.org, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
+            //var product = productService.GetProduct(issueproduct, true);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
 
             //pass in creators userid, the org and possible Product of the issue
-            int issueId = Create_New_Issue(userId, org, product);
+            int issueId = Create_New_Issue(userId, vm.org, vm.product, vm);
 
             if (issueId == 0)
             {
                 //this is where we need to redirect to a page if the issue posting failed in the previous function call
             }
 
-            New_Issue_Data_Routine(userId, org.Id, issueId);
+            New_Issue_Data_Routine(userId, vm.org.Id, issueId);
 
-            return Redirect("~/" + org.orgURL+ "/"+ product.ProductURL + "/" + issueId);
+            return Redirect("~/" + vm.org.orgURL+ "/"+ vm.product.ProductURL + "/" + issueId);
 
         }
 
@@ -291,9 +299,10 @@ namespace Sigil.Controllers
             //update the users votes xml ds because every user votes on the issue they make
             userService.AddUserVote(user, orgId, issueId);
             userService.UpdateUser(user);
+            userService.SaveUserVotes();
         }
 
-        private int Create_New_Issue(string userId, Org org, Product product)
+        private int Create_New_Issue(string userId, Org org, Product product, AddIssueVM vm)
         {
             // Create a new issue
             Issue newissue = new Issue();
@@ -304,8 +313,8 @@ namespace Sigil.Controllers
             newissue.lastVoted = DateTime.UtcNow;
             newissue.votes = 1;
             newissue.viewCount = 1;
-            newissue.title = Request.Form["title"];
-            newissue.text = Request.Form["text"];
+            newissue.title = vm.title;
+            newissue.text = vm.text;
             newissue.ProductId = product == default(Product) ? 0 : product.Id;
             newissue.ProductId = product.Id;
             
@@ -319,9 +328,7 @@ namespace Sigil.Controllers
                 
                 return newissue.Id;//dc.Issues.Last(i => i.UserId == userId && i.OrgId == org.Id).Id;
             }
-#pragma warning disable CS0168 // The variable 'e' is declared but never used
-            catch (Exception e)
-#pragma warning restore CS0168 // The variable 'e' is declared but never used
+            catch
             {
                 //ErrorHandler.Log_Error(newissue, e, dc);
                 return 0; //need to return a 404 or just rediret to another page that include an error message for the user

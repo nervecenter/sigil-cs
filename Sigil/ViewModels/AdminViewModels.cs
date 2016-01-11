@@ -9,6 +9,7 @@ namespace Sigil.ViewModels
     public struct OrgAdminIndexViewModel
     {
         public Org thisOrg { get; set; }
+        public IEnumerable<Product> thisOrgProducts { get; set; }
     }
 
     public struct SigilAdminIndexViewModel

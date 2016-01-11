@@ -44,7 +44,7 @@ namespace Sigil.Controllers {
 
 
                 //get all the users issues based on their subscriptions
-                var userIssues = issueService.GetAllUserIssues(userID);
+                var userIssues = issueService.GetAllUserIssues(userID, subscriptionService.GetUserSubscriptions(userID));
 
                 //NEED TO SORT JUST GET THE SORTED ISSUES FROM THE ISSUE SERVICE!!!!!!!!
 
@@ -68,8 +68,17 @@ namespace Sigil.Controllers {
         public ActionResult LandingPage()
         {
             Home_LandingPageViewModel vm = new Home_LandingPageViewModel();
-            vm.TrendingIssues = Get_Trending_Issues_With_Topics();
-            
+            var TrendingIssues = Get_Trending_Issues_With_Topics().ToList();
+
+            for (int i = 0; i < TrendingIssues.Count(); ++i)
+            {
+                if (i % 3 == 0)
+                    vm.LeftColumn.Add(TrendingIssues[i]);
+                else if (i % 3 == 1)
+                    vm.MiddleColumn.Add(TrendingIssues[i]);
+                else
+                    vm.RightColumn.Add(TrendingIssues[i]);
+            }
 
             return View("LandingPage", vm);
         }

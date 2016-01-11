@@ -5,6 +5,25 @@
 }
 
 <h2>@Model.thisOrg.orgName Admin Panel</h2>
+<div class="panel-body">
+    @foreach (var product in Model.thisOrgProducts)
+    {
+        <div class="media">
+            <div class="media-body">
+                <h4 class="media-heading">
+                    <a href="/@Model.thisOrg.orgURL/@product.ProductURL/"> Name: @product.ProductName Url: @product.ProductURL</a>
+                </h4>
+            </div>
+        </div>
+    }
+</div>
+@using (Html.BeginForm("AddOrgProduct", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { role = "form" }))
+{
+    @Html.AntiForgeryToken();
+    <input type="text" name="product-name" id="product-name" placeholder="Product Name"/>
+    <input type="text" name="product-url" id="product-url" placeholder="Product URL" />
+    <input type="submit" value="Create New Product" />
+}
 <hr />
 <img src="@Model.thisOrg.Image.banner" /> 
 @using (Html.BeginForm("UploadOrgBanner", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))

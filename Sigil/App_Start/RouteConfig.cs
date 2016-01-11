@@ -64,7 +64,7 @@ namespace Sigil {
             routes.MapRoute(
                 name: "Add Issue",
                 url: "addissue/",
-                defaults: new { controller = "Issue", action = "AddIssue" }
+                defaults: new { controller = "Issue", action = "AddIssue_Post" }
             );
 
             routes.MapRoute(
@@ -301,6 +301,12 @@ namespace Sigil {
                 name: "OrgAdmin",
                 url: "{orgURL}/admin/",
                 defaults: new { controller = "Admin", action = "OrgAdmin" }
+            );
+
+            routes.MapRoute(
+                name: "OrgCreateNewProduct",
+                url: "{orgURL}/admin/newproduct/",
+                defaults: new { controller = "Admin", action = "AddOrgProduct" }
             );
 
             routes.MapRoute(

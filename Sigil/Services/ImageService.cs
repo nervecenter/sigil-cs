@@ -204,7 +204,7 @@ namespace Sigil.Services
             else if (typeSize == ImageTypeSize.icon_20)
                 size = new System.Drawing.Size(20, 20);
             else if (typeSize == ImageTypeSize.banner)
-                size = new System.Drawing.Size(1000, 300);
+                size = new System.Drawing.Size(1000, 200);
 
             using (MemoryStream inStream = new MemoryStream(img_bytes))
             {

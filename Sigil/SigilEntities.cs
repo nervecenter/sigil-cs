@@ -76,7 +76,13 @@ namespace Sigil
 
         public virtual void Commit()
         {
-            base.SaveChanges();
+            try {
+                base.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                string exp = e.Message;
+            }
         }
     }
 }

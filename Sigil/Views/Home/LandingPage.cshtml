@@ -4,6 +4,9 @@
 @using System;
 
 @model Home_LandingPageViewModel
+@{
+    
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,9 +20,9 @@
     @*<script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
     <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />*@
 
-    @Styles.Render( "~/Content/bootstrap-flatly.css" )
+    @Styles.Render("~/Content/bootstrap-flatly.css")
     @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
-    @Styles.Render( "~/Content/Site.css" )
+    @Styles.Render("~/Content/Site.css")
 
     @*
         
@@ -54,8 +57,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-center">
-                    <li class="pull-right">@Html.ActionLink( "Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )</li>
-                    <li class="pull-right">@Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )</li>
+                    <li class="pull-right">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" })</li>
+                    <li class="pull-right">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" })</li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -70,7 +73,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 col-centered email-div">
-                    @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "", role = "search", style = "width:100%;" } ) ) {
+                    @using (Html.BeginRouteForm("Search Page", FormMethod.Post, new { @class = "", role = "search", style = "width:100%;" })) {
                         <div class="form-group" style="width:100%;">
                             <input id="searchBox" type="text" class="form-control" placeholder="Search for a company, person, or product" autocomplete="on" style="width:100%;">
                         </div>
@@ -105,24 +108,41 @@
     <div class="container landing-container">
         <div class="row">
             <div class="col-md-4 col-lg-4" id="left-col">
-
-            </div>
-            <div class="col-md-4 col-lg-4" id="middle-col">
-
-            </div>
-            <div class="col-md-4 col-lg-4" id="right-col">
-
-            </div>
-            @foreach ( IGrouping<Org, IssuePanelPartialVM> group in Model.TrendingIssues) {
-                <div class="col-md-4 col-lg-4">
+               @foreach (IGrouping<Org, IssuePanelPartialVM> group in Model.LeftColumn)
+               {
                     <div class="panel panel-default">
-                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;"/>@group.Key.orgName</a></div>
-                        @foreach ( IssuePanelPartialVM issue in group ) {
-                            @Html.Partial( "../Shared/_IssuePanelPartial", issue)
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;" />@group.Key.orgName</a></div>
+                        @foreach (IssuePanelPartialVM issue in group)
+                        {
+                            @Html.Partial("../Shared/_IssuePanelPartial", issue)
                         }
                     </div>
-                </div>
-            }
+               }
+            </div>
+            <div class="col-md-4 col-lg-4" id="middle-col">
+                @foreach (IGrouping<Org, IssuePanelPartialVM> group in Model.MiddleColumn)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;" />@group.Key.orgName</a></div>
+                        @foreach (IssuePanelPartialVM issue in group)
+                        {
+                            @Html.Partial("../Shared/_IssuePanelPartial", issue)
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-4 col-lg-4" id="right-col">
+                @foreach (IGrouping<Org, IssuePanelPartialVM> group in Model.RightColumn)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;" />@group.Key.orgName</a></div>
+                        @foreach (IssuePanelPartialVM issue in group)
+                        {
+                            @Html.Partial("../Shared/_IssuePanelPartial", issue)
+                        }
+                    </div>
+                }
+            </div>
         </div>
     </div>
     @Html.Partial( "_Footer" )

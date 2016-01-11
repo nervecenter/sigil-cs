@@ -26,6 +26,7 @@ namespace Sigil.Controllers
         private readonly IUserService userService;
         private readonly IImageService imageService;
         private readonly ISubscriptionService subscriptionService;
+        private readonly IProductService productService;
         /* 
         ==================== 
         OrgPage
@@ -34,7 +35,7 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public OrgController(IOrgService orgS, ICountService countS, IIssueService issueS, ICommentService commS, IUserService userS, IImageService imgS, ISubscriptionService subS)
+        public OrgController(IOrgService orgS, ICountService countS, IIssueService issueS, ICommentService commS, IUserService userS, IImageService imgS, ISubscriptionService subS, IProductService prodS)
         {
             orgService = orgS;
             countDataService = countS;
@@ -43,6 +44,8 @@ namespace Sigil.Controllers
             userService = userS;
             imageService = imgS;
             subscriptionService = subS;
+            productService = prodS;
+
         }
 
         [HttpGet]
@@ -99,16 +102,19 @@ namespace Sigil.Controllers
             Org thisOrg = orgService.GetOrg( orgURL );//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
             string issueTitle = Request.Form[ "title" ];
-
+            string issuetext = Request.Form["text"];
             // If the org doesn't exist, redirect to 404
             if ( thisOrg == null ) {
                 return RedirectToRoute( "404" );
             }
 
-            AddIssueVM addIssueVM = new AddIssueVM() { org = thisOrg, product = thisOrg.Products[ 0 ], title = issueTitle };
+            Product prod = productService.GetProduct(Convert.ToInt32(Request.Form["product-select"]));
+            
+            AddIssueVM addIssueVM = new AddIssueVM() { org = thisOrg, product = prod, title = issueTitle, text = issuetext };
+          
             TempData[ "vm" ] = addIssueVM;
             //return View( "AddIssue", "Issue", addIssueVM );
-            return RedirectToAction( "AddIssue", "Issue");
+            return RedirectToAction( "AddIssue_Post", "Issue");
         }
 
         /* 

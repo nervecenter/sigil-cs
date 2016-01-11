@@ -35,7 +35,7 @@ namespace Sigil.ViewModels
         public Product product;
 
         public string title;
-
+        public string text;
         /*public AddIssueVM(Org o, Product p, string title) {
             thisOrg = o;
             thisProduct = p;

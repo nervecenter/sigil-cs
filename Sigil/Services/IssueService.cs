@@ -23,7 +23,7 @@ namespace Sigil.Services
         IEnumerable<Issue> GetAllTopicIssues(int topicId);
         IEnumerable<Issue> GetAllProductIssues(int productId);
         IEnumerable<Issue> GetAllUserIssues(string userId);
-
+        IEnumerable<Issue> GetAllUserIssues(string userId, IEnumerable<Subscription> subs);
     }
 
     public class IssueService : IIssueService
@@ -91,7 +91,24 @@ namespace Sigil.Services
 
         public IEnumerable<Issue> GetAllUserIssues(string userId)
         {
+
             return issueRepository.GetMany(i => i.UserId == userId) ?? new List<Issue>().AsEnumerable();
+        }
+
+        public IEnumerable<Issue> GetAllUserIssues(string userid, IEnumerable<Subscription> subs)
+        {
+            var userSubmitted = issueRepository.GetMany(i => i.UserId == userid);
+            List<Issue> userSubscribed = new List<Issue>();
+            foreach(var s in subs)
+            {
+                if (s.OrgId.HasValue)
+                    userSubscribed = userSubscribed.Union(GetAllOrgIssues(s.OrgId.Value)).ToList();
+                else if (s.ProductId.HasValue)
+                    userSubscribed = userSubscribed.Union(GetAllProductIssues(s.ProductId.Value)).ToList();
+                else if (s.TopicId.HasValue)
+                    userSubscribed = userSubscribed.Union(GetAllTopicIssues(s.TopicId.Value)).ToList();
+            }
+            return userSubscribed.Union(userSubmitted);
         }
     }
 }

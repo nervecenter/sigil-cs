@@ -16,7 +16,17 @@ namespace Sigil.ViewModels
 
     public class Home_LandingPageViewModel
     {
-        public IEnumerable<IGrouping<Org, IssuePanelPartialVM>> TrendingIssues { get; set; }
+        //public List<IGrouping<Org, IssuePanelPartialVM>> TrendingIssues { get; set; }
+        public List<IGrouping<Org, IssuePanelPartialVM>> LeftColumn { get; set; }
+        public List<IGrouping<Org, IssuePanelPartialVM>> MiddleColumn { get; set; }
+        public List<IGrouping<Org, IssuePanelPartialVM>> RightColumn { get; set; }
+
+        public Home_LandingPageViewModel()
+        {
+            LeftColumn = new List<IGrouping<Org, IssuePanelPartialVM>>();
+            MiddleColumn = new List<IGrouping<Org, IssuePanelPartialVM>>();
+            RightColumn = new List<IGrouping<Org, IssuePanelPartialVM>>();
+        }
     }
 
     public class Home_AboutPageViewModel

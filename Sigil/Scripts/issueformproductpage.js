@@ -4,7 +4,7 @@ $("#new-feedback-button").click(function () {
     var $issuesearchpostform = $("#issue-search-post-form");
     $(this).remove();
     var $text = $("<textarea/>")
-                    .attr("id", "issues-by-org-search")
+                    .attr("id", "issues-by-product-search")
                     .attr("type", "text")
                     .attr("name", "text")
                     .attr("placeholder", "Talk about your feedback in-depth")

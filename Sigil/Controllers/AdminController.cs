@@ -71,10 +71,31 @@ namespace Sigil.Controllers
             Org thisOrg = orgService.GetOrg(orgURL);
             OrgAdminIndexViewModel orgAdminVM = new OrgAdminIndexViewModel()
             {
-                thisOrg = thisOrg
+                thisOrg = thisOrg,
+                thisOrgProducts = productService.GetProductsByOrg(thisOrg.Id)
             };
 
             return View("OrgAdminIndex", orgAdminVM);
+        }
+
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
+        public ActionResult AddOrgProduct(string orgURL)
+        {
+            Org thisOrg = orgService.GetOrg(orgURL);
+            Product newProduct = new Product();
+            newProduct.OrgId = thisOrg.Id;
+            newProduct.ProductName = Request.Form["product-name"];
+            newProduct.ProductURL = Request.Form["product-url"];
+            productService.CreateProduct(newProduct);
+            productService.SaveProduct();
+
+            newProduct = productService.GetProduct(Request.Form["product-url"]);
+            Image newImage = imageService.AssignDefaultImage(newProduct.Id, ImageTypeOwner.Product);
+            newProduct.ImageId = newImage.Id;
+            productService.UpdateProduct(newProduct);
+            productService.SaveProduct();
+
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
         }
 
         [Authorize(Roles = "SigilAdmin, OrgSuperAdmin")]

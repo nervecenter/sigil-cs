@@ -63,7 +63,7 @@ function SearchIssuesByOrg() {
             $("#issues").append(data);
         },
         error: function () {
-            alert('Search didn\'t work.');
+            //alert('Search didn\'t work.');
         }
     });
 }
@@ -95,8 +95,8 @@ function SearchIssuesByProduct() {
             $("#issues").html("");
             $("#issues").append(data);
         },
-        error: function () {
-            alert('Search didn\'t work.');
+        error: function (e) {
+            //alert('Search didn\'t work.');
         }
     });
 }
