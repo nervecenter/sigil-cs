@@ -363,6 +363,7 @@
     <Content Include="Content\Images\vote_circle_hover_small.png" />
     <Content Include="Content\Images\vote_circle_small.png" />
     <Content Include="Content\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="Content\oldcss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -406,6 +407,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Graph.js" />
+    <Content Include="Scripts\issueformorgpage.js" />
+    <Content Include="Scripts\issueformproductpage.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -490,7 +493,7 @@
     <Content Include="Views\Admin\OrgApplicants.cshtml" />
     <Content Include="Views\Admin\ErrorLog.cshtml" />
     <Content Include="Views\Org\OrgResponsesPage.cshtml" />
-    <Content Include="Views\Home\FeaturesPage.cshtml" />
+    <Content Include="Views\Home\FeaturesPage - Copy2.cshtml" />
     <Content Include="Views\Home\FeaturesPage - Copy.cshtml" />
     <Content Include="Views\Admin\RolesAdmin.cshtml" />
     <Content Include="Views\Shared\_404.cshtml" />
@@ -499,6 +502,7 @@
     <Content Include="Views\Admin\TopicAdmin.cshtml" />
     <Content Include="Views\Admin\OrgAdminIndex.cshtml" />
     <Content Include="Views\Admin\SigilAdminIndex.cshtml" />
+    <Content Include="Views\Home\FeaturesPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

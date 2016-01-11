@@ -23,7 +23,7 @@
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-warning" href="/@Model.IssueOrg.orgURL">Main feed</a>
         <a class="btn btn-info" href="/@Model.IssueOrg.orgURL/responses">Responses</a>
-        <a class="btn btn-success" href="/@Model.IssueOrg.orgURL/@Model.IssueProduct.ProductURL/@thisIssue.Id/data">Data</a>
+        @*<a class="btn btn-success" href="/@Model.IssueOrg.orgURL/@Model.IssueProduct.ProductURL/@thisIssue.Id/data">Data</a>*@
 
         @if ( !Request.IsAuthenticated ) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.IssueOrg.orgName</a>

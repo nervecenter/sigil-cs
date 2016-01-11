@@ -1,4 +1,9 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Sigil - Features";
+}
 
 <!DOCTYPE html>
 <html>
@@ -8,166 +13,67 @@
 
     <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
 
-    <script src="~/Scripts/jquery-1.8.3.js"></script>
-    <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
-    <link href="~/Content/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+    @*<script type="text/javascript">
+            $(function () {
+                $('#searchBox').autocomplete({
+                    source: '@Url.Action("SearchDB","Search")'
+                });
+            });
+        </script>*@
 
+    <script src="~/Scripts/jquery-1.11.3.js"></script>
+    <script src="~/Scripts/typeahead.js"></script>
+    @*Scripts.Render("~/bundles/jqueryui")*@
+    @*<script type="text/javascript" src="~/Scripts/bootstrap.js"></script>*@
+    @*Styles.Render( "~/Content/jquery-ui-1.9.2.custom.min.css" )*@
     @Styles.Render( "~/Content/bootstrap-flatly.css" )
     @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
     @Styles.Render( "~/Content/Site.css" )
-
-    <style type="text/css">
-        .media-heading {
-            font-size:14px;
-            font-weight: 600;
-        }
-
-        .media-body {
-            font-size: 12px;
-        }
-    </style>
-
-  
-    <title>Sigil - Features</title>
+    @Styles.Render( "~/Content/PagedList.css" )
+    @Styles.Render( "~/Content/datepicker.css" )
+    @Styles.Render( "~/Content/bootstrap-select.css" )
+    <title>@ViewBag.Title</title>
 </head>
 <body class="page">
-    @*<header class="page-header page-header-landing">
-        @using ( Html.BeginForm( "Index", "Search", FormMethod.Post, new { @class = "search-box-form landing-search-form" } ) ) {
-            <button class="search-submit-button landing-search-submit-button" type="submit"><img src="../Content/Images/search-icon-small.png"></button>
-                <input id="searchBox" name="term" class="search-query landing-search-query" type="text" placeholder="Search for a company, organization, or person">
-        }
-        <nav class="header-link-container landing-header-link-container">
-            @Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-            @Html.ActionLink( "Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-            @Html.ActionLink( "Register Organization", "OrgRegister", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )
-        </nav>
-    </header>*@
-    <nav class="navbar navbar-transparent navbar-static-top" style="margin-bottom:-60px;">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-center">
-                    <li style="margin-left:30%;width:40%;display:inline-block;">
-                        @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search", style = "padding-left:-50%;width:100%;" } ) ) {
-                            <div class="form-group" style="width:100%;">
-                                <input id="searchBox" type="text" class="form-control" placeholder="Search for a company, person, or product" autocomplete="on" style="width:100%;">
-                            </div>
-                        }
-                    </li>
-                    <li class="pull-right">@Html.ActionLink( "Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )</li>
-                    <li class="pull-right">@Html.ActionLink( "Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )</li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-    @*Html.Partial( "_Header" )*@
-    <section class="splash" style="background-position: 0px 0px;">
-        <div class="container" style="max-width:800px;">
-            <div class="row">
-                <div class="col-lg-12 col-centered" style="max-width:350px;">
-                    <img class="img-responsive" src="../Content/Images/logo-600.png">
-                </div>
-            </div>
-            <div class="row landing-blurbs">
-                <div class="col-lg-12 col-centered">
-                    <h4 style="text-align:center;">
-                        A feedback destination for a new age.
-                    </h4>
+    <div class="wrap">
+        @Html.Partial( "_Header" )
+        <div class="splash" style="height:100vh;display:table;width:100%;">
+            <div class="row" style="display:table-cell;vertical-align:middle;">
+                <div class="col-lg-12">
+                    <span style="font-size:60px;">Feedback simplified</span>
+                    <h4>Increase engagement etc.</h4>
                 </div>
             </div>
         </div>
-    </section>
-    <section class="splash splash-blurbs">
-        <div class="row landing-blurbs col-centered" style="margin-bottom:10px;max-width:850px;">
+        <div class="row" style="max-width:800px;margin:20px auto;">
             <div class="col-lg-4">
-                <img class="landing-blurb-image" src="../Content/Images/earth_white.png">
-                <p class="landing-blurb-text">We connect big and small. Engage with your favorite companies, elected officials, or even your employer.</p>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Normal</div>
+                    <div class="panel-body">500 dorra</div>
+                </div>
             </div>
-            <div class="col-lg-4 hidden-xs hidden-sm" style="border-left:1px;border-right:1px;border-color:darkgrey;">
-                <img class="landing-blurb-image" src="../Content/Images/speakerphone_white.png">
-                <p class="landing-blurb-text">Have a voice in the future. Your feedback matters. Make your thoughts known, and support those of your peers.</p>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Premium</div>
+                    <div class="panel-body">1000 dorra</div>
+                </div>
             </div>
-            <div class="col-lg-4 hidden-xs hidden-sm">
-                <img class="landing-blurb-image" src="../Content/Images/speedometer_white.png">
-                <p class="landing-blurb-text">The best gauge of the direction your company should take is customer demand. Know exactly what your users want the most.</p>
-            </div>
-        </div>
-    </section>
-    <section class="splash splash-2">
-        <div class="container">
-            <div class="row landing-blurbs">
-                <div class="col-lg-6 pull-right">
-                    <p style="text-align:center;color:#000000;">
-                        <b>A single feedback channel to connect with your audience.</b><br />
-                        We aim to be the one place on your mind for feedback and correspondence -- and in the minds of your users. Forget trying to plug a dozen channel solutions into your workflow. Just plug into us. We'll handle the rest.
-                    </p>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Enterprise</div>
+                    <div class="panel-body">you terr us dorra</div>
                 </div>
             </div>
         </div>
-    </section>
-    <section class="splash splash-3">
-        <div class="container">
-            <div class="row landing-blurbs">
-                <div class="col-lg-6 pull-left">
-                    <p style="text-align:center;">
-                        <b>Elegant query-response layout clearly communicates your intent.</b><br />
-                        No more struggling to disseminate your message -- it's right there for everybody to see. And at any time, users can pull up a list of everything you've answered.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="splash splash-4">
-        <div class="container">
-            <div class="row landing-blurbs">
-                <div class="col-lg-6 pull-right">
-                    <p style="text-align:center;">
-                        <b>We eliminate abuse and redundancy, promoting thoughtful discussion.</b><br />
-                        A simple up-only voting system rewards thoughtful feedback and eliminates abusive spammers. And our elegant search-before-posting system ensures that anyone whose question has been asked or answered is directed to the appropriate post. Instead of answering a thousand of the same question across multiple channels, now you can have a thousand votes on one post right here, and answer once.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="splash splash-5">
-        <div class="container">
-            <div class="row landing-blurbs">
-                <div class="col-lg-6 pull-left">
-                    <p style="text-align:center;">
-                        <b>Integrated data solutions bring you the results you expect.</b><br />
-                        No more tacked-on machine learning tools or third-party data gathering and aggregation. Every metric you expect is built right in.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-        <div class="container">
-            <div class="row" style="max-width:800px;margin:20px auto;">
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Normal</div>
-                        <div class="panel-body">500 dorra</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Premium</div>
-                        <div class="panel-body">1000 dorra</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Enterprise</div>
-                        <div class="panel-body">you terr us dorra</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+    <br class="clear" />
     @Html.Partial( "_Footer" )
-    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
-    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
     <script type="text/javascript" src="~/Scripts/Search.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/issueform.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/addissueform.js"></script>
+    <script type="text/javascript" src="~/Scripts/notifications.js"></script>
+    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
 </body>
 </html>
