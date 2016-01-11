@@ -79,7 +79,7 @@ namespace Sigil.Controllers
             UserViewModel userVM = default(UserViewModel);
             if (userID == null)
             {
-                userVM = new UserViewModel();
+                userVM = new UserViewModel().emptyUser();
             }
             else
             {
