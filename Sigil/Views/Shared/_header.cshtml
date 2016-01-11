@@ -13,16 +13,16 @@
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <a href="@Url.Action("Index", "Home")"><img src="/Content/Images/logo-small.png" class="navbar-logo"></a>
+            <a href="@Url.Action("Index", "Home")"><img src="/Content/Images/symbol-small.png" class="navbar-logo"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul id="navbar-list" class="nav navbar-nav navbar-right">
-                @using (Html.BeginRouteForm("Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" }))
+                @using (Html.BeginRouteForm("Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search", style="width:25vw;" }))
                 {
-                    <div class="form-group">
-                        <input id="searchBox" type="text" value="@Request.Form["searchTerm"]" data-provide="typeahead" name="searchTerm" class="form-control typeahead" placeholder="Search">
+                    <div class="form-group" style="width:100%;">
+                        <input id="searchBox" type="text" value="@Request.Form["searchTerm"]" data-provide="typeahead" name="searchTerm" class="form-control typeahead" placeholder="Search for a company, person, or product" style="width:100%;">
                     </div>
                 }
                 @{Html.RenderAction("_LoginPartial", "Shared");}
