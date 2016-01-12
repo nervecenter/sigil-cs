@@ -16,9 +16,9 @@
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-default active">Main feed</a>
         <a class="btn btn-info" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/responses">Responses</a>
-        <a class="btn btn-success" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/data">Data</a>
+        @*<a class="btn btn-success" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/data">Data</a>*@
         @if (!Request.IsAuthenticated) {
-            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.thisOrg.orgName</a>
+            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.thisProduct.ProductName</a>
         } else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => (s.subObjectId == Model.thisProduct.Id && s.subName == Model.thisOrg.orgName +"-"+Model.thisProduct.ProductName))) {
             <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisProduct.ProductName', 'product')">Unsubscribe from @Model.thisProduct.ProductName</a>
         } else {

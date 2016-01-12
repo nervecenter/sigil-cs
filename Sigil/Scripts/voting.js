@@ -1,4 +1,13 @@
-﻿$(".votelogin, .voteup, .unvoteup")
+﻿// DEFINE our simple redirect function for when the user is not logged in
+function redirectToLogin() {
+    window.location = "/login";
+}
+
+/*
+ *  SET our mousover events to change the arrow when we hover
+ */
+
+$(".votelogin, .voteup, .unvoteup")
     .mouseover(function () {
         var $this = $(this);
         if ($this.hasClass('voteup') || $this.hasClass("votelogin")) {
@@ -12,16 +21,23 @@
         }
     });
 
+// ENSURE the user is redirected to login when they're not logged in
 $(".votelogin").click(redirectToLogin);
+
+/*
+ *  DEFINE our vote functions, which (un)votes and then inverts the button
+ *  for the next click to have the opposite action
+ */
 
 function voteup(event) {
     $.post("/voteup/" + event.data.issueid + "/", function () {
         event.data.$button.removeClass("voteup")
             .addClass("unvoteup")
             .attr("src", "/Content/Images/voted.png")
+            .off("click")
             .click({ $button: event.data.$button, issueid: event.data.issueid }, unvoteup);
         var $count = $("#count-" + event.data.issueid);
-        $count.html(parseInt(count.html, 10) + 1);
+        $count.html(parseInt($count.html(), 10) + 1);
     });
 }
 
@@ -30,20 +46,24 @@ function unvoteup(event) {
         event.data.$button.removeClass("unvoteup")
             .addClass("voteup")
             .attr("src", "/Content/Images/notvoted-hover.png")
-            .click({ $button: $button, issueid: event.data.issueid }, voteup);
+            .off("click")
+            .click({ $button: event.data.$button, issueid: event.data.issueid }, voteup);
         var $count = $("#count-" + event.data.issueid);
-        $count.html(parseInt(count.html, 10) - 1);
+        $count.html(parseInt($count.html(), 10) - 1);
     });
 }
 
-$(".voteup").click({ $button: $(this), issueid: $(this).data("issueid") }, voteup);
+/*
+ *  BIND our vote buttons with their actions when the page renders
+ */
 
-$(".unvoteup").click({ $button: $(this), issueid: $(this).data("issueid") }, unvoteup);
+$(".voteup").each(function () {
+    $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, voteup);
+});
 
-
-function redirectToLogin() {
-    window.location = "/login";
-}
+$(".unvoteup").each(function () {
+    $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, unvoteup);
+});
 
 /*function voteup(votebutton, issueid) {
     $.ajax({
