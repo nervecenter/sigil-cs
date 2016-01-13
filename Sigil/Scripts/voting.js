@@ -65,6 +65,10 @@ $(".unvoteup").each(function () {
     $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, unvoteup);
 });
 
+
+
+
+
 /*function voteup(votebutton, issueid) {
     $.ajax({
         type: "POST",

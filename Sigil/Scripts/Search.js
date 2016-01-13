@@ -1,4 +1,4 @@
-﻿/*$('#searchBox').autocomplete({
+﻿$('#site-search-box').autocomplete({
     source: 'https://localhost:44301/search/',
     _renderItem: function( ul, item ) {
         return $( "<li>" )
@@ -12,26 +12,7 @@
         window.location = ui.item.value;
         ui.item.value = ui.item.label;
     }
-});*/
-
-/*var orgsAndProducts = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-        url: 'https://localhost:44301/search/?term=%QUERY',
-        wildcard: '%QUERY'
-    }
-});*/
-
-/*$("#searchBox").typeahead(null, {
-    name: 'orgs-and-products',
-    display: 'value',
-    source: orgsAndProducts,
-    updater: function (item) {
-        /* navigate to the selected item *
-        window.location.href = data[item];
-    },
-});*/
+});
 
 var typeTimer; // Our timer
 

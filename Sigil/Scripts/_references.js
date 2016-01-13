@@ -1,5 +1,4 @@
 ﻿/// <autosync enabled="true" />
-/// <reference path="addissueform.js" />
 /// <reference path="bootstrap.min.js" />
 /// <reference path="bootstrap-datepicker.js" />
 /// <reference path="graph.js" />

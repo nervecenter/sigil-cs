@@ -35,10 +35,10 @@
     </script>*@
     
     <script src="~/Scripts/jquery-1.11.3.js"></script>
-    <script src="~/Scripts/typeahead.js"></script>
-    @*Scripts.Render("~/bundles/jqueryui")*@
-    @*<script type="text/javascript" src="~/Scripts/bootstrap.js"></script>*@
-    @*Styles.Render( "~/Content/jquery-ui-1.9.2.custom.min.css" )*@
+    
+    @Scripts.Render("~/bundles/jqueryui")
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    @Styles.Render( "~/Content/jquery-ui-1.9.2.custom.min.css" )
     @Styles.Render( "~/Content/bootstrap-flatly.css" )
     @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
     @Styles.Render( "~/Content/Site.css" )
@@ -64,11 +64,11 @@
    
     
 
-    
+
+    @*<script type="text/javascript" src="~/Scripts/typeahead.js"></script>*@
     <script type="text/javascript" src="~/Scripts/voting.js"></script>
-    <script type="text/javascript" src="~/Scripts/Search.js"></script>
+    <script type="text/javascript" src="~/Scripts/search.js"></script>
     @*<script type="text/javascript" src="~/Scripts/issueform.js"></script>*@
-    <script type="text/javascript" src="~/Scripts/addissueform.js"></script>
     <script type="text/javascript" src="~/Scripts/notifications.js"></script>
     <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
 </body>
