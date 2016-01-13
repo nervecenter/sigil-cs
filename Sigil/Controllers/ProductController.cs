@@ -38,17 +38,17 @@ namespace Sigil.Controllers
             // Get the org
             Org thisOrg = orgService.GetOrg(orgURL);
 
-            Product thisProduct = productService.GetProduct(productURL);
+            Product thisProduct = productService.GetProduct(productURL,thisOrg.Id);
 
             // If the org doesn't exist, redirect to 404
             if (thisOrg == default(Org) || thisProduct == default(Product))
             {
                 return RedirectToRoute("404");
             }
-            /*else if(thisProduct.ProductURL == "Default")
-            {
-                return RedirectToAction("OrgPage", "Org", new { orgURL = thisOrg.orgURL });
-            }*/
+            //else if(thisProduct.ProductURL == "Default" && )
+            //{
+            //    return RedirectToAction("OrgPage", "Org", new { orgURL = thisOrg.orgURL });
+            //}
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
@@ -102,6 +102,22 @@ namespace Sigil.Controllers
             TempData["vm"] = addIssueVM;
             //return View( "AddIssue", "Issue", addIssueVM );
             return RedirectToAction("AddIssue_Post", "Issue");
+        }
+
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
+        public ActionResult DeleteIssue(string orgURL, string productURL,int issueId)
+        {
+            var user = userService.GetUser(User.Identity.GetUserId());
+
+            var issue = issueService.GetIssue(issueId);
+            var org = orgService.GetOrg(orgURL);
+
+            if (user.OrgId == org.Id)
+            {
+                issueService.DeleteIssue(issue);
+            }
+
+            return RedirectToAction("ProductPage", "Org", routeValues: new { orgURL = org.orgURL, productURL = productURL});
         }
 
     }

@@ -99,6 +99,15 @@ namespace Sigil.Controllers
         }
 
         [Authorize(Roles = "SigilAdmin, OrgSuperAdmin")]
+        public ActionResult DeleteOrgProduct(string orgURL, string productId)
+        {
+            Product product_to_delete = productService.GetProduct(productId);
+            productService.DeleteProduct(product_to_delete);
+
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = orgURL });
+        }
+
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin")]
         public ActionResult OrgURLChange(string orgURL) //routes to here dont work for some reason
         {
             var thisOrg = orgService.GetOrg(orgURL);

@@ -13,6 +13,8 @@ namespace Sigil.Repository
         //Methods for how when we need to get Products
         Product GetProductByName(string product);
         Product GetProductByURL(string product);
+        Product GetProductByName(string product, int orgId);
+        Product GetProductByURL(string product, int orgId);
     }
 
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
@@ -24,9 +26,19 @@ namespace Sigil.Repository
             return DbContext.Products.Where(p => p.ProductName == product).FirstOrDefault();
         }
 
+        public Product GetProductByName(string product, int orgId)
+        {
+            return DbContext.Products.Where(p => p.ProductName == product && p.OrgId == orgId).FirstOrDefault();
+        }
+
         public Product GetProductByURL(string product)
         {
             return DbContext.Products.Where(p => p.ProductURL == product).FirstOrDefault();
+        }
+
+        public Product GetProductByURL(string product, int orgId)
+        {
+            return DbContext.Products.Where(p => p.ProductURL == product && p.OrgId == orgId).FirstOrDefault();
         }
 
         //where we define the Product methods created below

@@ -102,6 +102,7 @@ namespace Sigil.ViewModels
         public ApplicationUser User { get; set; }
         public UserVoteCol UserVotes { get; set; }
         public bool isOrgAdmin { get; set; }
+        public string orgURL { get; set; }
         public IEnumerable<Notification> UserNotifications { get; set; }
         public IEnumerable<SubscriptionViewModel> UserSubscriptions { get; set; }
 
@@ -167,7 +168,7 @@ namespace Sigil.ViewModels
             }
             else if (s.ProductId != null)
             {
-                subName = s.Product.Org.orgName + "-" + s.Product.ProductName;
+                subName = (s.Product.ProductURL == "Default") ? s.Product.Org.orgName + "- General Feed" : s.Product.Org.orgName + "-" + s.Product.ProductName;
                 subURL = "/" + s.Product.Org.orgURL + "/" + s.Product.ProductURL;
                 subIcon = s.Product.Image.icon_20;
                 subObjectId = s.ProductId ?? 0;

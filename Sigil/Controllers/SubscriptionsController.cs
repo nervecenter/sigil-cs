@@ -60,41 +60,61 @@ namespace Sigil.Controllers
                 //then its a topic....
                 var topic = topicService.GetTopic(URL);
                 new_sub.TopicId = topic.Id;
+
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
             }
             else if(type == "product")
             {
                 //then its a product
                 var product = productService.GetProduct(URL, true); // products are the only ones who subscribe by name instead of url
 
-                if (product.ProductURL == "Default")
-                {
-                    new_sub.OrgId = product.OrgId;
-                }
-                else
-                {
+                //if (product.ProductURL == "Default")
+                //{
+                //    new_sub.OrgId = product.OrgId;
+                //}
+                //else
+                //{
                     new_sub.ProductId = product.Id;
-                }
+                //}
                 countDataService.UpdateOrgSubscriptionCount(product.OrgId);
                 countDataService.SaveOrgDataChanges();
+
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
+
             }
-            else if(type == "org")
+            else if(type == "all")
             {
                 var org = orgService.GetOrg(URL);
+                var orgProducts = productService.GetProductsByOrg(org.Id).Except(subscriptionService.GetUserSubscriptions(userid).Select(s => s.Product));
+                foreach (Product p in orgProducts)
+                {
+                    Subscription sub = new Subscription();
+                    sub.UserId = userid;
+                    sub.ProductId = p.Id;
+
+                    subscriptionService.CreateSubscription(sub);
+                }
+
                 new_sub.OrgId = org.Id;
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
+
                 countDataService.UpdateOrgSubscriptionCount(org.Id);
                 countDataService.SaveOrgDataChanges();
             }
 
-            try
-            {
-                subscriptionService.CreateSubscription(new_sub);
-                subscriptionService.SaveSubscription();
+            //try
+            //{
+            //    subscriptionService.CreateSubscription(new_sub);
+            //    subscriptionService.SaveSubscription();
                 
-            }
-            catch (Exception e)
-            {
-                errorService.CreateError(new_sub, e);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    errorService.CreateError(new_sub, e);
+            //}
             return new EmptyResult();
         }
 
@@ -108,40 +128,53 @@ namespace Sigil.Controllers
             {
                 var topic = topicService.GetTopic(URL);
                 sub = subscriptionService.GetUserTopicSubscription(userId, topic.Id);
+                subscriptionService.RemoveSubscription(sub);
             }
             else if(type == "product")
             {
                 var product = productService.GetProduct(URL, true); // products are the only ones who subscribe by name instead of url
-                if (product.ProductURL == "Default")
-                {
-                    sub = subscriptionService.GetUserOrgSubscription(userId, product.OrgId);
-                }
-                else
-                {
+                //if (product.ProductURL == "Default")
+                //{
+                //    sub = subscriptionService.GetUserOrgSubscription(userId, product.OrgId);
+                //}
+                //else
+                //{
                     sub = subscriptionService.GetUserProductSubscription(userId, product.Id);
-                }
+                //}
 
                 countDataService.UpdateOrgSubscriptionCount(product.OrgId, false);
                 countDataService.SaveOrgDataChanges();
 
+                subscriptionService.RemoveSubscription(sub);
+                //countDataService.SaveOrgDataChanges();
+
             }
-            else
+            else if(type == "all")
             {
                 var org = orgService.GetOrg(URL);
+                var orgProducts = productService.GetProductsByOrg(org.Id);
+
+                var subs = orgProducts.Select(p => subscriptionService.GetUserProductSubscription(userId, p.Id));
+                foreach (Subscription s in subs)
+                {
+                    if(s != null)
+                        subscriptionService.RemoveSubscription(s);
+                }
                 sub = subscriptionService.GetUserOrgSubscription(userId, org.Id);
+                subscriptionService.RemoveSubscription(sub);
                 countDataService.UpdateOrgSubscriptionCount(org.Id, false);
                 countDataService.SaveOrgDataChanges();
             }
 
-            try
-            {
-                subscriptionService.RemoveSubscription(sub);
-                countDataService.SaveOrgDataChanges();
-            }
-            catch (Exception e)
-            {
-                errorService.CreateError(sub, e);
-            }
+            //try
+            //{
+            //    subscriptionService.RemoveSubscription(sub);
+            //    countDataService.SaveOrgDataChanges();
+            //}
+            //catch (Exception e)
+            //{
+            //    errorService.CreateError(sub, e);
+            //}
             return new EmptyResult();
         }
 

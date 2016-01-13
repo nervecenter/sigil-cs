@@ -14,13 +14,14 @@ namespace Sigil.Services
         void CreateProduct(Product prod);
         void UpdateProduct(Product prod);
         void SaveProduct();
-
+        void DeleteProduct(Product prod);
         IEnumerable<Product> GetAllProducts();
 
         IEnumerable<Product> GetProductsByOrg(int orgId);
         IEnumerable<Product> GetProductsByOrg(string org, bool name = false);
         Product GetProduct(int productId);
         Product GetProduct(string productStr, bool name = false);
+        Product GetProduct(string productStr, int orgId, bool name = false);
     }
 
     public class ProductService : IProductService
@@ -91,6 +92,16 @@ namespace Sigil.Services
             return cat ?? default(Product);
         }
 
+        public Product GetProduct(string productStr, int orgId, bool name)
+        {
+            Product product = default(Product);
+            if (name)
+                product = productRepository.GetProductByName(productStr, orgId);
+            else
+                product = productRepository.GetProductByURL(productStr, orgId);
+
+            return product;
+        }
 
         /// <summary>
         /// Gets product by either the products Name or the product URL
@@ -119,5 +130,13 @@ namespace Sigil.Services
         {
             return productRepository.GetAll();
         }
+
+        public void DeleteProduct(Product prod)
+        {
+            productRepository.Delete(prod);
+            unitOfWork.Commit();
+        }
+
+
     }
 }
