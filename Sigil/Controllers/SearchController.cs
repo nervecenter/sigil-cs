@@ -63,7 +63,7 @@ namespace Sigil.Controllers
                     List<Org> found_orgs = (List<Org>)search_list[k];
                     foreach(Org o in found_orgs)
                     {
-                        Final_search_list[o.orgName] = "/" + o.orgName;
+                        Final_search_list[o.orgName] = "/" + o.orgURL;
                     }
                 }
                 else if(k == "Issue")
@@ -71,7 +71,7 @@ namespace Sigil.Controllers
                     List<Issue> found_issues = (List<Issue>)search_list[k];
                     foreach (Issue i in found_issues)
                     {
-                        Final_search_list[i.title] = "/" + i.Product.Org.orgName + "/" + i.Product.ProductURL + "/" + i.Id;
+                        Final_search_list[i.title] = "/" + i.Product.Org.orgURL + "/" + i.Product.ProductURL + "/" + i.Id;
                     }
                 }
                 else if( k == "Topic")
@@ -87,7 +87,7 @@ namespace Sigil.Controllers
                     List<Product> found_products = (List<Product>)search_list[k];
                     foreach (Product p in found_products)
                     {
-                        Final_search_list[p.ProductName] = "/" + p.Org.orgName + "/" + p.ProductURL;
+                        Final_search_list[p.ProductName] = "/" + p.Org.orgURL + "/" + p.ProductURL;
                     }
                 }
             }

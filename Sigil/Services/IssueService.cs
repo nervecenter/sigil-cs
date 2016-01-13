@@ -13,6 +13,7 @@ namespace Sigil.Services
         void CreateIssue(Issue issue);
         void UpdateIssue(Issue issue);
         void SaveChanges();
+        void DeleteIssue(Issue issue);
 
         Issue GetIssue(int issueId);
 
@@ -109,6 +110,12 @@ namespace Sigil.Services
                     userSubscribed = userSubscribed.Union(GetAllTopicIssues(s.TopicId.Value)).ToList();
             }
             return userSubscribed.Union(userSubmitted);
+        }
+
+        public void DeleteIssue(Issue issue)
+        {
+            issueRepository.Delete(issue);
+            unitOfWork.Commit();
         }
     }
 }

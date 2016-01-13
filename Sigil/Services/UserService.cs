@@ -64,7 +64,7 @@ namespace Sigil.Services
 
     public class UserService : IUserService
     {
-        //private readonly IOrgRepository OrgsRepository;
+        private readonly IOrgRepository orgsRepository;
         //private readonly IProductRepository categoryRepository;
         //private readonly IIssueRepository issueRepository;
         private readonly INotificationRepository notificationRepository;
@@ -76,13 +76,14 @@ namespace Sigil.Services
 
         private readonly IErrorService errorService;
 
-        public UserService(IUnitOfWork unit, IUserRepository userRepo, ICommentRepository comRepo, INotificationRepository noteRepo, ISubscriptionRepository subRepo, IErrorService errS)
+        public UserService(IUnitOfWork unit, IUserRepository userRepo, IOrgRepository orgRepo,ICommentRepository comRepo, INotificationRepository noteRepo, ISubscriptionRepository subRepo, IErrorService errS)
         {
             unitOfWork = unit;
             userRepository = userRepo;
             commentRespository = comRepo;
             notificationRepository = noteRepo;
             subscriptionRepository = subRepo;
+            orgsRepository = orgRepo;
             errorService = errS;
         }
 
@@ -238,6 +239,12 @@ namespace Sigil.Services
             userVM.UserNotifications = notificationRepository.GetUsersNotifications(userId);
             userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId).Select(s => new SubscriptionViewModel().Create(s));
             userVM.UserVotes = GetUserVotes(userId);
+            
+            if(userVM.User.OrgId != 0)
+            {
+                userVM.isOrgAdmin = true;
+                userVM.orgURL = orgsRepository.GetById(userVM.User.OrgId).orgURL;
+            }
 
             return userVM;
         }

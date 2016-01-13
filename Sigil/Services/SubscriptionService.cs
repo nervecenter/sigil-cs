@@ -49,6 +49,7 @@ namespace Sigil.Services
         public void RemoveSubscription(Subscription sub)
         {
             subscriptionRepository.Delete(sub);
+            unitOfWork.Commit();
         }
 
         public Subscription GetUserProductSubscription(string userId, int productId)

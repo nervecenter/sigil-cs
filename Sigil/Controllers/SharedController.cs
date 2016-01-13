@@ -38,7 +38,7 @@ namespace Sigil.Controllers
 
                 var currentURL = Request.Url.AbsoluteUri.Split('/');
                 // Get the org
-                sidebarVM.thisOrg = orgService.GetOrg(currentURL[3]);
+                sidebarVM.thisOrg = orgService.GetOrg(currentURL[3].Split('?')[0]);
                 // Get the org's products
                 sidebarVM.orgProducts = productService.GetProductsByOrg(sidebarVM.thisOrg.Id);
 

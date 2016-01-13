@@ -22,7 +22,7 @@
         } else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => (s.subObjectId == Model.thisProduct.Id && s.subName == Model.thisOrg.orgName +"-"+Model.thisProduct.ProductName))) {
             <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisProduct.ProductName', 'product')">Unsubscribe from @Model.thisProduct.ProductName</a>
         } else {
-            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisProduct.ProductName', 'product')">Subscribe to @Model.thisProduct.ProductName</a>
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisProduct.ProductName', 'product')">Subscribe to @((Model.thisProduct.ProductURL == "Default") ?  "General Feed" : @Model.thisProduct.ProductName)</a>
         }
     </div>
     <div class="panel">

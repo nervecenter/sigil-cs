@@ -231,21 +231,7 @@ namespace Sigil.Controllers
         }
 
 
-
-        /* 
-        ==================== 
-        AddIssue
-  
-            Form for adding an issue. Linked on org page. Adds issue to current org. 
-        ==================== 
-        */
-        //[Authorize]
-        //[HttpGet]
-        //public ActionResult AddIssue(AddIssueVM vm)
-        //{
-        //    return View(TempData["vm"]);
-        //}
-
+        
 
         
         [Authorize]
@@ -297,7 +283,7 @@ namespace Sigil.Controllers
             countDataService.SaveIssueCountData();
 
             //update the users votes xml ds because every user votes on the issue they make
-            userService.AddUserVote(user, orgId, issueId);
+            userService.AddUserVote(user, issueId);
             userService.UpdateUser(user);
             userService.SaveUserVotes();
         }

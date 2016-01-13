@@ -117,6 +117,23 @@ namespace Sigil.Controllers
             return RedirectToAction( "AddIssue_Post", "Issue");
         }
 
+
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
+        public ActionResult DeleteIssue(string orgURL, int issueId)
+        {
+            var user = userService.GetUser(User.Identity.GetUserId());
+
+            var issue = issueService.GetIssue(issueId);
+            var org = orgService.GetOrg(orgURL);
+
+            if (user.OrgId == org.Id)
+            {
+                issueService.DeleteIssue(issue);
+            }
+
+            return RedirectToAction("OrgPage", "Org", routeValues: new { orgURL = org.orgURL });
+        }
+
         /* 
         ==================== 
         OrgResponsesPage

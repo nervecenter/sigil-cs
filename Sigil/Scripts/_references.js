@@ -19,4 +19,5 @@
 /// <reference path="respond.min.js" />
 /// <reference path="search.js" />
 /// <reference path="subscriptions.js" />
+/// <reference path="timestamp.js" />
 /// <reference path="voting.js" />

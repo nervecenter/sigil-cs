@@ -304,6 +304,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Org Issue Delete",
+                url: "{orgURL}/issuedelete/{issueId}/",
+                defaults: new { controller = "Org", action = "DeleteIssue" }
+            );
+
+            routes.MapRoute(
                 name: "OrgCreateNewProduct",
                 url: "{orgURL}/admin/newproduct/",
                 defaults: new { controller = "Admin", action = "AddOrgProduct" }
@@ -334,6 +340,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Org Admin Product Delete",
+                url: "{orgURL}/admin/delete/{productId}/",
+                defaults: new { controller = "Admin", action = "DeleteOrgProduct" }
+            );
+
+            routes.MapRoute(
               name: "Org Page",
               url: "{orgURL}/",
               defaults: new { controller = "Org", action = "OrgPage" }
@@ -344,6 +356,12 @@ namespace Sigil {
                 name: "Product Page",
                 url: "{orgURL}/{productURL}/",
                 defaults: new { controller = "Product", action = "ProductPage" }
+            );
+
+            routes.MapRoute(
+                name: "Product Issue Delete",
+                url: "{orgURL}/{productURL}/issueDelete/{issueId}/",
+                defaults: new { controller = "Product", action = "DeleteIssue" }
             );
 
             routes.MapRoute(
