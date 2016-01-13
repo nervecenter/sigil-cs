@@ -2,6 +2,7 @@
 /// <reference path="bootstrap.min.js" />
 /// <reference path="bootstrap-datepicker.js" />
 /// <reference path="graph.js" />
+/// <reference path="infinitescroll.js" />
 /// <reference path="issueformorgpage.js" />
 /// <reference path="issueformproductpage.js" />
 /// <reference path="jquery.validate.min.js" />
