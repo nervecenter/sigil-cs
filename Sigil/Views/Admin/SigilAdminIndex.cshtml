@@ -3,9 +3,12 @@
 }
 @model Sigil.ViewModels.SigilAdminIndexViewModel
 
-@Html.ActionLink("Roles","RolesIndex", "Admin") 
+@Html.ActionLink("Roles","RolesIndex", "Admin")
+|
 @Html.ActionLink("Topics", "TopicAdmin", "Admin")
+|
 @Html.ActionLink("Org Applications","OrgApplicants", "Admin" )
+|
 @Html.ActionLink("Error Log", "ErrorLog", "Admin")
 
 @foreach (var org in Model.AllOrgsWithProduct)

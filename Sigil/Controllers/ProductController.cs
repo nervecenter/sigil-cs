@@ -45,10 +45,10 @@ namespace Sigil.Controllers
             {
                 return RedirectToRoute("404");
             }
-            else if(thisProduct.ProductURL == "Default")
+            /*else if(thisProduct.ProductURL == "Default")
             {
                 return RedirectToAction("OrgPage", "Org", new { orgURL = thisOrg.orgURL });
-            }
+            }*/
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();

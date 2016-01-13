@@ -98,6 +98,19 @@
         </div>
     }
     <div class="panel panel-default">
+        <div class="panel-heading">Make an official response</div>
+        <div class="panel-body">
+            <form method="post">
+                <div class="form-group">
+                    <textarea type="text" name="text" class="form-control panel-input-box" id="input-re" placeholder="Address this issue for your customers"></textarea>
+                    @Html.ValidationMessage( "text" )
+                </div>
+                <button type="submit" name="buttonSubmit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
         <div class="panel-heading">Comments</div>
         <div class="panel-body">
             @if (issueComments.Count() == 0) 
@@ -125,7 +138,7 @@
                 <form method="post" class="issue-add-comment">
                     <div class="form-group">
                         <label for="inputComment">Add a comment</label>
-                        <textarea type="text" name="text" class="form-control" id="inputComment" placeholder="What would you like to say?"></textarea>
+                        <textarea type="text" name="text" class="form-control panel-input-box" id="inputComment" placeholder="What would you like to say?"></textarea>
                         @Html.ValidationMessage( "text" )
                     </div>
                     @if (Model.UserVM.isOrgAdmin)
