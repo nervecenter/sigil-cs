@@ -12,11 +12,13 @@ $(window).scroll(scrollListener);
 function grabIssues(/*might need parameters*/) {
     // Query server for issues
 
-    // If we got a full batch of issues, add them and add the listener again
-    //add issues
-    $(window).scroll(scrollListener);
+    $("#issues").append(/*html we got back*/);
 
-    // If we didn't get a full batch, put a rock at the bottom and don't add the listener
-    //add issues
-    //add rock
+    if (/*full batch*/) {
+        // If we got a full batch of issues, add them and add the listener again
+        $(window).scroll(scrollListener);
+    } else {
+        // If we didn't get a full batch, put a rock at the bottom and don't add the listener
+        $("#issues").append($("<img/>").attr("src", "rock.png"));
+    }
 }
