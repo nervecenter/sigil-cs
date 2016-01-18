@@ -4,33 +4,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .container {
-        width:1000px;
-    }
-
-    .img-relief {
-        box-shadow: 0px 5px 10px 5px #898989;
-    }
-</style>
-
-<div class="container">
-    <h2>@Model.thisOrg.orgName Admin Panel</h2>
+<div class="container settings-container">
+    <h2 class="settings-page-header">@Model.thisOrg.orgName Admin Panel</h2>
     <div class="panel" style="text-align:center;">
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6"><h4>Product name:</h4></div>
                 <div class="col-lg-6"><h4>Product URL:</h4></div>
             </div>
+
             @foreach ( var product in Model.thisOrgProducts ) {
+                <hr />
                 <div class="row" style="margin-bottom:10px;">
                     <div class="col-lg-6">@product.ProductName</div>
                     <div class="col-lg-6">@product.ProductURL - <a href="/@Model.thisOrg.orgURL/@product.ProductURL/">www.sigil.tech/@Model.thisOrg.orgURL/@product.ProductURL/</a></div>
                 </div>
             }
+
             @using ( Html.BeginForm( "AddOrgProduct", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { role = "form" } ) ) {
                 @Html.AntiForgeryToken();
-                <div class="row">
+                <div class="row" style="margin-top:30px;">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <input type="text" class="form-control" name="product-name" id="product-name" placeholder="Product Name" />
@@ -54,12 +47,12 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container settings-container">
     <div class="row">
     </div>
     <div class="panel">
         <div class="panel-body">
-            <img class="img-rounded img-responsive img-relief org-banner-small" src="@Model.thisOrg.Image.banner" />
+            <img class="img-rounded img-responsive img-relief" src="@Model.thisOrg.Image.banner" />
             <h4>Recommended banner size: 1000 x 200</h4>
             @using ( Html.BeginForm( "UploadOrgBanner", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
                 @Html.AntiForgeryToken();
@@ -82,12 +75,13 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container settings-container">
     <div class="row">
         <div class="col-lg-6">
             <div class="panel">
                 <div class="panel-body">
-                    <img src="@Model.thisOrg.Image.icon_100" class="img-rounded img-responsive img-relief" style="margin:0px auto 15px;" />
+                    <img src="@Model.thisOrg.Image.icon_100" class="img-rounded img-responsive img-relief" />
+                    <h4>Icon size: 100 x 100</h4>
                     @using ( Html.BeginForm( "UploadOrgIcon100", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
                         @Html.AntiForgeryToken();
                         <div class="form-group">
@@ -110,7 +104,8 @@
         <div class="col-lg-6">
             <div class="panel">
                 <div class="panel-body">
-                    <img src="@Model.thisOrg.Image.icon_20" class="img-responsive img-relief" style="margin:0px auto 15px;" />
+                    <img src="@Model.thisOrg.Image.icon_20" class="img-responsive img-relief" />
+                    <h4>Small icon size: 20 x 20</h4>
                     @using ( Html.BeginForm( "UploadOrgIcon20", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
                         @Html.AntiForgeryToken();
                         <div class="form-group">
