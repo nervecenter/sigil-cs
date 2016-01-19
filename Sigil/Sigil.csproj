@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sigil</RootNamespace>
     <AssemblyName>Sigil</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44301</IISExpressSSLPort>
@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -153,6 +154,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -163,8 +165,7 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -202,18 +203,21 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -303,7 +307,6 @@
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="SigilEntities.cs" />
-    <Compile Include="SigilSeedData.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\HomeViewModels.cs" />
@@ -318,51 +321,54 @@
     <Content Include="App_Data\SigilDb_log.ldf">
       <DependentUpon>SigilDb.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap-flatly.css" />
+    <Content Include="Content\bootstrap-flatly.min.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap-sandstone.css" />
+    <Content Include="Content\bootstrap-sandstone.min.css" />
+    <Content Include="Content\bootstrap-select.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
-    <Content Include="Content\Images\check_mark_hover_small.png" />
-    <Content Include="Content\Images\check_mark_small.png" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\callout.png" />
     <Content Include="Content\Images\Dark-SpriteSheet.png" />
-    <Content Include="Content\Images\data-hover.png" />
-    <Content Include="Content\Images\data.png" />
     <Content Include="Content\Images\earth_white.png" />
     <Content Include="Content\Images\favicon.png" />
-    <Content Include="Content\Images\feed-hover.png" />
-    <Content Include="Content\Images\feed.png" />
+    <Content Include="Content\Images\feedback-shadow.png" />
     <Content Include="Content\Images\glyphicons-halflings-white.png" />
     <Content Include="Content\Images\glyphicons-halflings.png" />
-    <Content Include="Content\Images\helpful.png" />
+    <Content Include="Content\Images\heirarchy-extended.png" />
+    <Content Include="Content\Images\heirarchy-hidden.png" />
+    <Content Include="Content\Images\helpful-clicked-small.png" />
+    <Content Include="Content\Images\helpful-hover-small.png" />
+    <Content Include="Content\Images\helpful-small.png" />
     <Content Include="Content\Images\Light-SpriteSheet.png" />
     <Content Include="Content\Images\logo-600.png" />
     <Content Include="Content\Images\logo-medium.png" />
     <Content Include="Content\Images\logo-small.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\new-way-sigil.png" />
     <Content Include="Content\Images\notvoted-hover.png" />
     <Content Include="Content\Images\notvoted.png" />
-    <Content Include="Content\Images\saleback.jpg" />
     <Content Include="Content\Images\search-icon-small.png" />
     <Content Include="Content\Images\speakerphone_white.png" />
     <Content Include="Content\Images\speedometer_white.png" />
-    <Content Include="Content\Images\subscribe.png" />
-    <Content Include="Content\Images\subscribe_hover.png" />
-    <Content Include="Content\Images\unsubscribe.png" />
-    <Content Include="Content\Images\unsubscribe_hover.png" />
-    <Content Include="Content\Images\unhelpful.png" />
+    <Content Include="Content\Images\splash.jpg" />
+    <Content Include="Content\Images\splash2.png" />
+    <Content Include="Content\Images\splash3.jpg" />
+    <Content Include="Content\Images\splash4.jpg" />
+    <Content Include="Content\Images\splash5.jpg" />
+    <Content Include="Content\Images\symbol-small.png" />
+    <Content Include="Content\Images\symbol-white.png" />
+    <Content Include="Content\Images\unhelpful-clicked.png" />
+    <Content Include="Content\Images\unhelpful-hover.png" />
+    <Content Include="Content\Images\unhelpful-small.png" />
     <Content Include="Content\Images\voted.png" />
-    <Content Include="Content\Images\votedown-clicked.png" />
-    <Content Include="Content\Images\votedown-hover.png" />
-    <Content Include="Content\Images\votedown.png" />
-    <Content Include="Content\Images\voteup-clicked.png" />
-    <Content Include="Content\Images\voteup-hover.png" />
-    <Content Include="Content\Images\voteup.png" />
-    <Content Include="Content\Images\vote_circle_hover_small.png" />
-    <Content Include="Content\Images\vote_circle_small.png" />
-    <Content Include="Content\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="Content\jquery-ui-1.9.2.custom.css" />
     <Content Include="Content\oldcss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -415,6 +421,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\beta.sigil.tech - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

@@ -102,6 +102,13 @@ namespace Sigil {
                 url: "manage/",
                 defaults: new { controller = "Manage", action = "Index" }
             );
+
+            routes.MapRoute(
+                name: "Change Password",
+                url: "manage/changepassword/",
+                defaults: new { controller = "Manage", action = "ChangePassword" }
+            );
+
             //========================= Search Controller ==================================================================
             routes.MapRoute(
                 name: "Search for Header Dropdown",

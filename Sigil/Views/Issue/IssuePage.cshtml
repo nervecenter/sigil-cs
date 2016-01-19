@@ -105,6 +105,10 @@
                     <textarea type="text" name="text" class="form-control panel-input-box" id="input-re" placeholder="Address this issue for your customers"></textarea>
                     @Html.ValidationMessage( "text" )
                 </div>
+                @if (Model.UserVM.isOrgAdmin && Model.UserVM.User.OrgId == Model.IssueOrg.Id)
+                {
+                    <input type="checkbox" name="IsOfficial" id="IsOfficial" checked="checked" hidden="hidden"/>
+                }
                 <button type="submit" name="buttonSubmit" class="btn btn-primary">Submit</button>
             </form>
         </div>
@@ -141,11 +145,7 @@
                         <textarea type="text" name="text" class="form-control panel-input-box" id="inputComment" placeholder="What would you like to say?"></textarea>
                         @Html.ValidationMessage( "text" )
                     </div>
-                    @if (Model.UserVM.isOrgAdmin)
-                    {
-                        <input type="checkbox" name="IsOfficial" id="IsOfficial" />
-                        <label for="IsOfficial">Is Official Comment</label><br />
-                    }
+                   
                     <button type="submit" name="buttonSubmit" class="btn btn-primary">Submit</button>
                     
                 </form>

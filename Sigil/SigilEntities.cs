@@ -13,12 +13,12 @@ namespace Sigil
 {
     public class SigilEntities : IdentityDbContext<ApplicationUser>//IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
-        public SigilEntities() : base("SigilDB")
+        public SigilEntities() : base("SigilDB", throwIfV1Schema: false)
         {
-           /* Database.SetInitializer<SigilEntities>(new Migrations.Configuration());//new DropCreateDatabaseIfModelChanges<SigilEntities>());//new CreateDatabaseIfNotExists<SigilEntities>());*/// 
+            Database.SetInitializer<SigilEntities>(new CreateDatabaseIfNotExists<SigilEntities>());//(new Migrations.Configuration());//new DropCreateDatabaseIfModelChanges<SigilEntities>());//*/// 
 
-        //    Configuration.ProxyCreationEnabled = false;
-        //    Configuration.LazyLoadingEnabled = false;
+            //    Configuration.ProxyCreationEnabled = false;
+            //    Configuration.LazyLoadingEnabled = false;
         }
 
         public static SigilEntities Create()
