@@ -33,12 +33,13 @@ namespace Sigil.Controllers
         {
             string term = Request.Form["searchTerm"];
 
-            var quUsers = searchService.MatchUsersByName(term).ToList();//dc.AspNetUsers.Where(u => u.DisplayName.StartsWith(term)).ToList();
+            
             var quOrgs = searchService.MatchOrgsByName(term).ToList();//dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();
-            var quIssues = searchService.MatchIssuesByTitle(term).ToList();//dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
+            var quProducts = searchService.MatchProductsByName(term).ToList();
+            //var quIssues = searchService.MatchIssuesByTitle(term).ToList();//dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
 
 
-            Tuple<List<ApplicationUser>, List<Org>, List<Issue>> search_list = new Tuple<List<ApplicationUser>, List<Org>, List<Issue>>(quUsers, quOrgs, quIssues);
+            Tuple<List<Org>, List<Product>> search_list = new Tuple<List<Org>, List<Product>>(quOrgs, quProducts);
             return View(search_list);
 
         }

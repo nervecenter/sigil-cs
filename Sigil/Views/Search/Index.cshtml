@@ -3,31 +3,16 @@
 }
 
 @using Sigil.Models
-@model Tuple<List<AspNetUser>, List<Org>, List<Issue>>
+@model Tuple<List<Org>, List<Product>>
 @using Microsoft.AspNet.Identity
 <div class="main">
     <div class="first-column">
         @if (Model.Item1.Count != 0)
         {
-            <h3>Users</h3>
-            <ul>
-
-                @foreach (AspNetUser us in Model.Item1)
-                {
-                    <li>@us.UserName</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <h3>No Users matching your query.</h3>
-        }
-        @if (Model.Item2.Count != 0)
-        {
             <h3>Orgs</h3>
             <ul>
 
-                @foreach (Org org in Model.Item2)
+                @foreach (Org org in Model.Item1)
                 {
                     <li><a href="/@org.orgURL">@org.orgName</a></li>
                 }
@@ -37,15 +22,15 @@
         {
             <h3>No Orgs matching your query.</h3>
         }
-        @if (Model.Item3.Count != 0)
+        @if (Model.Item2.Count != 0)
         {
             <h3>Issues</h3>
             <ul>
 
-                @foreach (Issue issue in Model.Item3)
+                @foreach (Product prod in Model.Item2)
                 {
 
-                    <li><a href="@Html.Raw(@Url.Action("IssuePage","Issue",new { @orgURL = issue.Org.orgURL, @IssueId = issue.Id }))">@issue.title</a></li>
+                    <li><a href="@Html.Raw(@Url.Action("ProductPage","Product", new { @orgURL = prod.Org.orgURL, @productURL = prod.ProductURL}))">@prod.ProductName</a></li>
                 }
             </ul>
         }

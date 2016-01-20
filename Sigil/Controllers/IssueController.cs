@@ -230,10 +230,6 @@ namespace Sigil.Controllers
             return View();
         }
 
-
-        
-
-        
         [Authorize]
         public ActionResult AddIssue_Post()
         {
@@ -242,23 +238,6 @@ namespace Sigil.Controllers
             // Get the user
             var userId = User.Identity.GetUserId();
             AddIssueVM vm = (AddIssueVM)TempData["vm"];
-            // check to see if they are posting to a specific org's Product or just to the org itself
-            //string orgName = Request.Form["product"];
-            //string issueproduct = "";
-            //if (orgName.Contains("-"))
-            //{
-            //    var temp = orgName.Split('-');
-            //    orgName = temp[0];
-            //    issueproduct = temp[1];
-            //}
-
-            //if(issueproduct == "")
-            //{
-            //    issueproduct = orgName;
-            //}
-
-            //var org = orgService.GetOrg(vm.org, true);//dc.Orgs.Where(o => o.orgName == orgName).Single();
-            //var product = productService.GetProduct(issueproduct, true);//dc.Categories.SingleOrDefault(c => c.catName == Product && c.orgId == org.Id);
 
             //pass in creators userid, the org and possible Product of the issue
             int issueId = Create_New_Issue(userId, vm.org, vm.product, vm);
