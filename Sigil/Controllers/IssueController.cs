@@ -151,6 +151,41 @@ namespace Sigil.Controllers
 
         }
 
+        public ActionResult Edit_Issue(int issueId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ActionResult Edit_Comment(int commentId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public ActionResult Delete_Issue(int issueId)
+        {
+            Issue delete_me = issueService.GetIssue(issueId);
+            delete_me.UserId = userService.GetUserByDisplayName("Deleted").Id;
+            delete_me.title = "Deleted";
+            delete_me.text = "Deleted";
+            delete_me.editTime = DateTime.UtcNow;
+            issueService.UpdateIssue(delete_me);
+            issueService.SaveChanges();
+            return RedirectToAction("IssuePage", "Issue", new { orgURL = delete_me.Product.Org.orgURL, productURL = delete_me.Product.ProductURL, issueID = issueId });
+        }
+
+        public ActionResult Delete_Issue_Comment(int commentId)
+        {
+            Comment delete_me = commentService.GetComment(commentId);
+            delete_me.UserId = userService.GetUserByDisplayName("Deleted").Id;
+            delete_me.text = "Deleted";
+            delete_me.editTime = DateTime.UtcNow;
+            commentService.UpdateComment(delete_me);
+            //Issue commentIssue = issueService.GetIssue(delete_me.IssueId);
+            //commentService.DeleteComment(delete_me);
+            return RedirectToAction("IssuePage", "Issue", new { orgURL = delete_me.Issue.Product.Org.orgURL, productURL = delete_me.Issue.Product.ProductURL, issueID = delete_me.IssueId });
+        }
+
         /* 
         ==================== 
         IssueData

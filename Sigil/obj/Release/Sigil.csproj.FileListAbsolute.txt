@@ -74,6 +74,6 @@ C:\Sigil\Sigil\bin\System.Web.Razor.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.Deployment.xml
 C:\Sigil\Sigil\bin\System.Web.WebPages.Razor.xml
-C:\Sigil\Sigil\obj\Release\Sigil.csprojResolveAssemblyReference.cache
 C:\Sigil\Sigil\obj\Release\Sigil.dll
 C:\Sigil\Sigil\obj\Release\Sigil.pdb
+C:\Sigil\Sigil\obj\Release\Sigil.csprojResolveAssemblyReference.cache

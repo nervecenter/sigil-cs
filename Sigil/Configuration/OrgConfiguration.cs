@@ -20,10 +20,7 @@ namespace Sigil.Configuration
             Property(o => o.website).IsOptional();
             Property(o => o.lastView).IsRequired();
             Property(o => o.UserID).IsOptional();
-            
-            
-            
-            
+            Property(o => o.Website).IsOptional();  
         }
     }
 
@@ -43,9 +40,7 @@ namespace Sigil.Configuration
             Property(o => o.ContactNumber).IsRequired();
             Property(o => o.AdminContactName).IsRequired();
             Property(o => o.ApplyDate).IsRequired();
-            Property(o => o.OrgApproved).IsRequired();
-            
-            
+            Property(o => o.OrgApproved).IsRequired(); 
         }
     }
 }

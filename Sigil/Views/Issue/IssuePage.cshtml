@@ -135,6 +135,8 @@
                         <div class="media-body">
                             <h4 class="media-heading">@comment.Item1.User.DisplayName<small><i>Posted @*@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )*@</i></small></h4>
                             <p>@comment.Item1.text</p>
+                            @if (comment.Item1.UserId == User.Identity.GetUserId())
+                            { <a href="/delete/comment/@comment.Item1.Id">Delete Comment?</a>}
                         </div>
                     </div>
 

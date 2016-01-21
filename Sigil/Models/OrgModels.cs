@@ -28,6 +28,7 @@ namespace Sigil.Models
         /// </summary>
         public string UserID { get; set; }
 
+        public string Website { get; set; }
 
 
 

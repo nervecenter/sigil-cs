@@ -333,7 +333,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
-<<<<<<< HEAD
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\callout.png" />
     <Content Include="Content\Images\Dark-SpriteSheet.png" />
@@ -347,29 +346,23 @@
     <Content Include="Content\Images\helpful-clicked-small.png" />
     <Content Include="Content\Images\helpful-hover-small.png" />
     <Content Include="Content\Images\helpful-small.png" />
-=======
     <Content Include="Content\Images\Dark-SpriteSheet.png" />
     <Content Include="Content\Images\earth_white.png" />
     <Content Include="Content\Images\favicon.png" />
     <Content Include="Content\Images\glyphicons-halflings-white.png" />
     <Content Include="Content\Images\glyphicons-halflings.png" />
->>>>>>> origin/Refactor
     <Content Include="Content\Images\Light-SpriteSheet.png" />
     <Content Include="Content\Images\logo-600.png" />
     <Content Include="Content\Images\logo-medium.png" />
     <Content Include="Content\Images\logo-small.png" />
     <Content Include="Content\Images\logo.png" />
-<<<<<<< HEAD
     <Content Include="Content\Images\new-way-sigil.png" />
-=======
     <Content Include="Content\Images\mail.png" />
->>>>>>> origin/Refactor
     <Content Include="Content\Images\notvoted-hover.png" />
     <Content Include="Content\Images\notvoted.png" />
     <Content Include="Content\Images\search-icon-small.png" />
     <Content Include="Content\Images\speakerphone_white.png" />
     <Content Include="Content\Images\speedometer_white.png" />
-<<<<<<< HEAD
     <Content Include="Content\Images\splash.jpg" />
     <Content Include="Content\Images\splash2.png" />
     <Content Include="Content\Images\splash3.jpg" />
@@ -382,11 +375,9 @@
     <Content Include="Content\Images\unhelpful-small.png" />
     <Content Include="Content\Images\voted.png" />
     <Content Include="Content\jquery-ui-1.9.2.custom.css" />
-=======
     <Content Include="Content\Images\voted.png" />
     <Content Include="Content\Images\website.png" />
     <Content Include="Content\jquery-ui-1.9.2.custom.min.css" />
->>>>>>> origin/Refactor
     <Content Include="Content\oldcss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />

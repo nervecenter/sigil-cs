@@ -86,6 +86,26 @@ namespace Sigil.Migrations
                 userManager.AddToRole(user.Id, "SigilAdmin");
 
             }
+            if(!(context.Users.Any(u => u.UserName == "deleted@sigil.tech")))
+            {
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+                var userToInsert = new ApplicationUser { UserName = "deleted@sigil.tech", Email = "deleted@sigil.tech", DisplayName = "Deleted" };
+                userManager.Create(userToInsert, "s323232");
+
+                var user = context.Users.Where(u => u.UserName == "deleted@sigil.tech").FirstOrDefault();
+
+                Image userImg = new Image();
+                userImg.imgType = (int)ImageTypeOwner.User;
+                userImg.OwnerId = user.Id;
+                context.Images.AddOrUpdate(userImg);
+                context.SaveChanges();
+                userImg = context.Images.Where(i => i.OwnerId == user.Id).FirstOrDefault();
+                user.ImageId = userImg.Id;
+                user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol()).ToString();
+                context.Users.AddOrUpdate(user);
+                userManager.AddToRole(user.Id, "SigilAdmin");
+            }
 
             context.SaveChanges();
 

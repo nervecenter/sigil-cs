@@ -1,6 +1,6 @@
 ﻿@using Sigil.Models
 @using Sigil.ViewModels
-
+@using Microsoft.AspNet.Identity
 @model IssuePanelPartialVM
 
 @helper MainMarkup() {
@@ -37,6 +37,8 @@
                 <p class="pull-right">
                     Posted  @*@Sigil.Controllers.IssueController.TimeSince( thisIssue.CreateTime )*@ 
                     <span>by @Model.issue.User.DisplayName</span>
+                    @if (Model.issue.UserId == User.Identity.GetUserId())
+                    {<span><a href="/delete/issue/@Model.issue.Id/">Delete Issue?</a></span>}
                 </p>
             </div>
         </div>

@@ -247,7 +247,17 @@ namespace Sigil {
                 defaults: new { controller = "Account", action = "OrgConfirmed" }
             );
 
-           
+            routes.MapRoute(
+                name: "Issue Delete",
+                url: "delete/issue/{issueId}",
+                defaults: new { controller = "Issue", action = "Delete_Issue" }
+            );
+
+            routes.MapRoute(
+                name: "Comment Delete",
+                url: "delete/comment/{commentId}",
+                defaults: new { controller = "Issue", action = "Delete_Issue_Comment" }
+            );
 
             routes.MapRoute(
                 name: "Default Org Data",
