@@ -1,3 +1,21 @@
+.sidebar-divider {
+    margin-top:10px;
+    margin-bottom:5px;
+}
+
+.settings-page-header {
+    margin-bottom: 30px;
+}
+
+.settings-container {
+    max-width: 1000px;
+}
+
+.img-relief {
+    box-shadow: 0px 5px 10px 5px #898989;
+    margin:0px auto 15px;
+}
+
 .panel-input-box {
     height:70px;
     min-height: 70px;

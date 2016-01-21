@@ -16,12 +16,13 @@
 
 <style>
     #dpstart, #dpend, #selected-data, #data-button {
-        width: 150px;
-        margin-left: 10px;
+        width: 22.5%;
+        margin-left: 2%;
     }
 
     #selected-data {
-        margin-left: 27px;
+        width: 22.5%;
+        margin-left: 2%;
     }
 
     #data-controls {
@@ -35,49 +36,55 @@
     #top-issues {
         font-size: 18px;
     }
+
+    .container {
+        max-width: 1000px;
+    }
 </style>
 
-<div class="col-md-9 col-lg-9">
-    @*<img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))"><h1>@thisOrg.orgName</h1>*@
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <img id="data-controls-hider" class="pull-left" src="~/Content/Images/heirarchy-extended.png" style="margin-top:23px; margin-right: 10px;" />
-            <h3 id="data-header" class="pull-left">@thisOrg.orgName - Data <span id="data-period">for the past week</span></h3>
-            <div id="data-controls">
-                <select id="selected-data" name="selected-data" class="form-control pull-left">
-                    <option value="Pick chart data" selected="selected">Pick chart data</option>
-                    <option value="Views">Views</option>
-                    <option value="Votes">Votes</option>
-                    <option value="Comments">Comments</option>
-                    <option value="Subscriptions">Subscriptions</option>
-                    <option value="All">All</option>
-                </select>
-                <input id="dpstart" class="form-control pull-left" value="Start date" type="text">
-                <input id="dpend" class="form-control pull-left" value="End date" type="text">
-                @*<input type="text" id="datepickerStart" name="start" />
-                <input type="text" id="datepickerStop" name="stop" />*@
-                <button id="data-button" class="btn btn-primary disabled"@* onclick="Custom_Org_Chart()"*@>Get data</button>
-            </div>
-            <div id="chart_panel" style="clear:both;">
-                <div id="org_chart_div" style="width: 100%; height: 350px;">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img id="data-controls-hider" class="pull-left" src="~/Content/Images/heirarchy-extended.png" style="margin-top:23px; margin-right: 10px;" />
+                    <h3 id="data-header" class="pull-left">@thisOrg.orgName - Data <span id="data-period">for the past week</span></h3>
+                    <div id="data-controls">
+                        <select id="selected-data" name="selected-data" class="form-control pull-left">
+                            <option value="Pick chart data" selected="selected">Pick chart data</option>
+                            <option value="Views">Views</option>
+                            <option value="Votes">Votes</option>
+                            <option value="Comments">Comments</option>
+                            <option value="Subscriptions">Subscriptions</option>
+                            <option value="All">All</option>
+                        </select>
+                        <input id="dpstart" class="form-control pull-left" value="Start date" type="text">
+                        <input id="dpend" class="form-control pull-left" value="End date" type="text">
+                        @*<input type="text" id="datepickerStart" name="start" />
+                    <input type="text" id="datepickerStop" name="stop" />*@
+                        <button id="data-button" class="btn btn-primary disabled" @* onclick="Custom_Org_Chart()"*@>Get data</button>
+                    </div>
+                    <div id="chart_panel" style="clear:both;width:100%;">
+                        <div id="org_chart_div" style="width: 100%; height: 350px;">
+                        </div>
+                    </div>
+                    <div>
+                        <h4 id="data-header">Top issues for selected period</h4>
+                        <ol id="top-issues-parent"></ol>
+                        <h4 id="data-header">Top new and rising issues</h4>
+                        <ol id="new-issues-parent"></ol>
+                        <h4 id="data-header">Top issues awaiting responses</h4>
+                        <ol id="response-issues-parent"></ol>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <h4 id="data-header">Top issues for selected period</h4>
-                <ol id="top-issues-parent">
-
-                </ol>
-                <h4 id="data-header">Top new and rising issues</h4>
-                <ol id="new-issues-parent">
-                    
-                </ol>
-                <h4 id="data-header">Top issues awaiting responses</h4>
-                <ol id="response-issues-parent">
-                    
-                </ol>
             </div>
         </div>
     </div>
+</div>
+
+<div class="col-md-9 col-lg-9">
+    @*<img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))"><h1>@thisOrg.orgName</h1>*@
+    
 </div>
 
 

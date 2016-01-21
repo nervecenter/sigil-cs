@@ -1,18 +1,129 @@
-﻿@{
+﻿@using Sigil.Models
+@model Tuple<List<ApplicationUser>, List<Org>, List<Issue>>
+@using Microsoft.AspNet.Identity
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var users = Model.Item1;
+    var orgs = Model.Item2;
+    var issues = Model.Item3;
 }
 
-@using Sigil.Models
-@model Tuple<List<Org>, List<Product>>
-@using Microsoft.AspNet.Identity
-<div class="main">
+<style>
+    .column {
+        max-width: 1000px;
+    }
+</style>
+
+<div class="column">
+    <div class="row">
+        <div class="col-lg-6">
+            <h3>Organizations</h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @if (orgs.Count > 0) {
+                        foreach (var o in orgs) {
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="media-object" src="@o.Image.icon_100" />
+                                </div>
+                                <div class="media-body">
+                                    <h3><a href="/@o.orgURL">@o.orgName</a></h3>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    } else {
+                        <p>No organizations, companies, or people matching your search.</p>
+                    }
+                </div>
+            </div>
+
+            <h3>Issues</h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @*@if ( issues.Count > 0 ) {
+                        foreach ( var i in issues ) {
+                            // drop in issues panel partial
+                            <hr />
+                        }
+                    } else {
+                        <p>No issues matching your search.</p>
+                    }*@
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <h3>Users</h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @if ( users.Count > 0 ) {
+                        foreach ( var u in users ) {
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="media-object" src="@u.Image.icon_100" />
+                                </div>
+                                <div class="media-body">
+                                    <h3><a href="/users/@u.UserName">@u.DisplayName</a></h3>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    } else {
+                        <p>No users matching your search.</p>
+                    }
+                </div>
+            </div>
+
+            <h3>Products</h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @*@if ( products.Count > 0 ) {
+                        foreach ( var p in products ) {
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="media-object" src="@p.Image.icon_100" />
+                                </div>
+                                <div class="media-body">
+                                    <h3><a href="/@p.Org.orgName/@p.ProductName">@p.ProductName</a></h3>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    } else {
+                        <p>No products matching your search.</p>
+                    }*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* OLD VERSION *@
+
+@*<div class="main">
     <div class="first-column">
         @if (Model.Item1.Count != 0)
+        {
+            <h3>Users</h3>
+            <ul>
+
+                @foreach ( ApplicationUser us in Model.Item1)
+                {
+                    <li>@us.UserName</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <h3>No Users matching your query.</h3>
+        }
+        @if (Model.Item2.Count != 0)
         {
             <h3>Orgs</h3>
             <ul>
 
-                @foreach (Org org in Model.Item1)
+                @foreach (Org org in Model.Item2)
                 {
                     <li><a href="/@org.orgURL">@org.orgName</a></li>
                 }
@@ -22,15 +133,15 @@
         {
             <h3>No Orgs matching your query.</h3>
         }
-        @if (Model.Item2.Count != 0)
+        @if (Model.Item3.Count != 0)
         {
             <h3>Issues</h3>
             <ul>
 
-                @foreach (Product prod in Model.Item2)
+                @foreach (Issue issue in Model.Item3)
                 {
 
-                    <li><a href="@Html.Raw(@Url.Action("ProductPage","Product", new { @orgURL = prod.Org.orgURL, @productURL = prod.ProductURL}))">@prod.ProductName</a></li>
+                    <li><a href="@Html.Raw(@Url.Action("IssuePage","Issue",new { @orgURL = issue.Product.Org.orgURL, @IssueId = issue.Id }))">@issue.title</a></li>
                 }
             </ul>
         }
@@ -39,4 +150,4 @@
             <h3>No Issues matching your query.</h3>
         }
     </div>
-</div>
+</div>*@

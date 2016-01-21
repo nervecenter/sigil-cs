@@ -5,117 +5,57 @@
     ViewBag.Title = "Sigil - Account Settings";
 }
 
-<div class="col-md-9 col-lg-9">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <p class="text-success">@ViewBag.StatusMessage</p>
-            <div>
-                <h3>Change your account settings</h3>
-                @using ( Html.BeginForm( "User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
-                    @Html.AntiForgeryToken()
+<div class="container settings-container">
+    <h2 class="settings-page-header">Change your account settings</h2>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     <div class="form-group">
-                        <label>Password:</label><br />
                         @if ( Model.HasPassword ) {
-                            @Html.ActionLink( "Change your password", "ChangePassword", "Manage")
+                            <h4>@Html.ActionLink( "Change your password", "ChangePassword" )</h4>
                         } else {
-                            @Html.ActionLink( "Create", "SetPassword" )
+                            <h4>@Html.ActionLink( "Create", "SetPassword" )</h4>
                         }
                     </div>
-                    @*<div class="form-group">
-                        <label>Social accounts:</label><br />
-                        Model.Logins.Count
-                        @Html.ActionLink( "Manage", "ManageLogins" )
-                    </div>*@
+                    <hr />
                     <div class="form-group">
-                        <label>Upload New User Icon</label><br />
-                        <img src="@Model.UserVM.User.Image.icon_100" />
-                        @*<img src="@Model.UserVM.User.Image.icon_20" />*@
-                        @*using ( Html.BeginForm( "User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {*@
-
-                        @*<label for= "img" > New User Icon: </label>*@
-                        <input type="file" name="img" id="img" />
-                        <br />
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Upload</button>
-                        </div>
+                        <h4>@Html.ActionLink( "Manage social media logins", "ManageLogins" )</h4>
                     </div>
-                }
-
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p class="text-success">@ViewBag.StatusMessage</p>
+                    <img src="@Model.UserVM.User.Image.icon_100" class="img-rounded img-responsive img-relief" />
+                    <h4>Icon size: 100 x 100</h4>
+                    @using ( Html.BeginForm( "User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse <input type="file" name="img" id="img" />
+                                    </span>
+                                </div>
+                                <input class="form-control" readonly="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success form-control">Upload new icon</button>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-@*OLD CRAP*@
-
-@*
-                    ]
-                </dd>
-                <hr />
-                <dt>External Logins:</dt>
-                <dd>
-                    @Model.Logins.Count [
-                    @Html.ActionLink( "Manage", "ManageLogins" ) ]
-                </dd>
-                <hr />
-                <span></string>Upload New User Icon</span>
-                <dd>
-                    <img src="@Model.UserVM.User.Image.icon_100" /> @*<img src="@Model.UserVM.User.Image.icon_20" />
-                        @using (Html.BeginForm("User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
-                        {
-                            @Html.AntiForgeryToken();
-
-                            <label for= "img" > New User Icon: </label>
-                            <input type = "file" name = "img" id = "img" />
-                            <br />
-                            <input type = "submit" value="Upload" />
-                        }
-                @*
-    >>>>>>> 021040ce575d3e1b7570159c90b975b69ca9f9d6
-                    Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-
-                     See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                        for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-
-                     Uncomment the following block after you have set up two-factor authentication
-                    <dt>Phone Number:</dt>
-                    <dd>
-                        @(Model.PhoneNumber ?? "None") [
-                        @if (Model.PhoneNumber != null)
-                        {
-                            @Html.ActionLink("Change", "AddPhoneNumber")
-                            @: &nbsp;|&nbsp;
-                            @Html.ActionLink("Remove", "RemovePhoneNumber")
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Add", "AddPhoneNumber")
-                        }
-                        ]
-                    </dd>
-                <dt> Two - Factor Authentication:</dt>
-                <dd>
-                    <p>
-                        There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                        for details on setting up this ASP.NET application to support two-factor authentication.
-                    </p>
-                    @if (Model.TwoFactor)
-                        {
-                            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                <text>Enabled
-                                <input type="submit" value="Disable" class="btn btn-link" />
-                                </text>
-                            }
-                        }
-                        else
-                        {
-                            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                <text>Disabled
-                                <input type="submit" value="Enable" class="btn btn-link" />
-                                </text>
-                            }
-                        }*@
+<script>
+    $(".btn-file :file").change(function () {
+        var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+        $(this).parent().parent().parent().children().last().attr("value", label);
+    });
+</script>
