@@ -10,29 +10,110 @@
     List<OrgApp> applicantList = Model;
 }
 
-<div class="col-md-12 col-lg-12">
-    @foreach (OrgApp applicant in applicantList) {
-        
-        <div class="panel panel-primary">
-            <div class="panel-body">
-                Org Name: @applicant.orgName<br />
-                Org Apply Date: @applicant.ApplyDate
-                Requested OrgURL: @applicant.orgURL<br />
-                Org's Website:<a href="https://@(applicant.website) ">@applicant.website</a><br />
-                Requested Org Admin Username: @applicant.DisplayName<br />
-                Org Admin's Email: @applicant.AdminEmail<br />
-                Org Admin's Name: @applicant.AdminContactName<br />
-                Org Admins Phone: @applicant.ContactNumber<br />
-                Org Admins Comment: @applicant.comment
-                
-                @if (!applicant.OrgApproved)
-                {
-                <form>
-                    <button type="submit" class="btn btn-success" formaction="orgapps/@applicant.Id/">Approve</button>
-                    <button type="submit" class="btn btn-danger">Disapprove</button>
-                </form>
-                }
-            </div>
-        </div>
+<style>
+    .container {
+        max-width: 1000px;
     }
+
+    table {
+        width: 100%;
+    }
+
+    tr {
+        width: 100%;
+    }
+
+    td {
+        width: 50%;
+    }
+
+    p {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            @foreach ( OrgApp applicant in applicantList ) {
+
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <table>
+                            <tr>
+                                <td>Org Name: </td>
+                                <td>@applicant.orgName</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Org Apply Date: </td>
+                                <td>@applicant.ApplyDate</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Requested OrgURL: </td>
+                                <td>@applicant.orgURL</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Org's Website:</td>
+                                <td><a href="https://@(applicant.website) ">@applicant.website</a></td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Requested Org Admin Username: </td>
+                                <td>@applicant.DisplayName</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Org Admin's Email: </td>
+                                <td>@applicant.AdminEmail</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Org Admin's Name: </td>
+                                <td>@applicant.AdminContactName</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Org Admins Phone: </td>
+                                <td>@applicant.ContactNumber</td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>Org Admins Comment: </td>
+                                <td>@applicant.comment</td>
+                            </tr>
+                        </table>
+
+
+                        @if ( !applicant.OrgApproved ) {
+                            <form>
+                                <button type="submit" class="btn btn-success" formaction="orgapps/@applicant.Id/">Approve</button>
+                                <button type="submit" class="btn btn-danger">Disapprove</button>
+                            </form>
+                        } else {
+                            <p>Org has been approved and is active.</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

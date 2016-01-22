@@ -4,88 +4,103 @@
     ViewBag.Title = "Sigil - Register";
 }
 
-<div class="col-xs-9 col-md-8">
-    <h2>Create a company page</h2>
-
-    @using ( Html.BeginForm( "OrgRegister", "Account", FormMethod.Post, new { role = "form" } ) ) {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary( "", new { @class = "text-danger" } )
-
-        <div class="form-group">
-            <label for="orgName">The name of your company as will display across Sigil</label><br />
-            @Html.TextBoxFor( m => m.orgName, new { @class = "form-control", placeholder = "Company name" } )
-        </div> 
-
-        <div class="form-group">
-            <label for="orgUrl">Enter a handle for your company's url (i.e. sigil.com/handle)</label><br />
-            @Html.TextBoxFor( m => m.orgURL, new { @class = "form-control", placeholder = "Company URL handle" } )
-        </div>
-
-        <div class="form-group">
-            <label for="orgWebsite">Enter your companys Website URL</label><br />
-            @Html.TextBoxFor(m => m.orgWebsite, new { @class = "form-control", placeholder = "Company Website URL" })
-        </div>
-
-        <div class="form-group">
-            <label for="orgAdminName">Enter your Name</label><br />
-            @Html.TextBoxFor(m => m.orgAdminName, new { @class = "form-control", placeholder = "First Last Name" })
-        </div>
-
-        <div class="form-group">
-            <label for="orgContact">Enter a contact number we can reach you at if needed</label><br />
-            @Html.TextBoxFor(m => m.orgContact, new { @class = "form-control", placeholder = "Company Website URL" })
-        </div>
-
-        <div class="form-group">
-            <label for="OrgComment">Give us some Information about your company</label><br />
-            @Html.TextBoxFor(m => m.orgComment, new { @class="form-control", placeholder = "Information about your Organization"})
-        </div>
-
-        @*  
-        @Html.TextBoxFor( m => m.orgTallBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Large banner" } )
-
-        @Html.TextBoxFor( m => m.orgShortBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Small banner" } )
-
-        @Html.TextBoxFor( m => m.orgLargeIcon, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "A 100x100 icon or logo" } )
-
-        @Html.TextBoxFor( m => m.orgSmallIcon, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "A 20x20 icon or logo" } )
-    
-        @Html.TextAreaFor( m => m.orgMiscellanea, new { @class = "form-control", placeholder = "Information about your organization, who you as the applicant individual are, and a way we can contact you if we have any queries before adding you" } )
-        *@
-
-        <div class="form-group">
-            <label for="Email">The email of your first privileged admin</label><br />
-            @Html.TextBoxFor( m => m.Email, new { @class = "form-control", placeholder = "Admin email" } )
-        </div> 
-
-        <div class="form-group">
-            @*Html.LabelFor( m => m.Email_confirm, new { @class = "col-md-2 control-label" } )*@
-            @Html.TextBoxFor( m => m.Email_confirm, new { @class = "form-control", placeholder = "Confirm email" } )
-        </div> 
-
-        <div class="form-group">
-            <label for="UserName">The username of your first privileged admin</label><br />
-            @*Html.LabelFor( m => m.UserName, new { @class = "col-md-2 control-label" } )*@
-            @Html.TextBoxFor( m => m.DisplayName, new { @class = "form-control", placeholder = "Admin username" } )
-        </div> 
-
-
-
-        @*<div class="form-group">
-            <label for="Password">The password of your first privileged admin</label><br />
-            @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" } 
-            @Html.PasswordFor( m => m.Password, new { @class = "form-control", placeholder = "Admin password" } )
-        </div> 
-
-        <div class="form-group">
-            Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )
-            @Html.PasswordFor( m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm password" } )
-        </div>*@ 
-
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+<style>
+    .container {
+        max-width: 1000px;
     }
+</style>
 
-    @section Scripts {
-        @Scripts.Render( "~/bundles/jqueryval" )
-    }
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Create a company page</h2>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @using ( Html.BeginForm( "OrgRegister", "Account", FormMethod.Post, new { role = "form" } ) ) {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary( "", new { @class = "text-danger" } )
+
+                        <div class="form-group">
+                            <label for="orgName">The name of your organization as will display across Sigil.</label><br />
+                            @Html.TextBoxFor( m => m.orgName, new { @class = "form-control", placeholder = "Organization name" } )
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orgUrl">Enter an address handle for your company's Sigil URL (i.e. sigil.tech/handle). Should be lowercase, only letters or numbers.</label><br />
+                            @Html.TextBoxFor( m => m.orgURL, new { @class = "form-control", placeholder = "Address handle" } )
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orgWebsite">Enter the URL of your organization's official website or product.</label><br />
+                            @Html.TextBoxFor( m => m.orgWebsite, new { @class = "form-control", placeholder = "Organization website" } )
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orgAdminName">Enter the full name of the individual signing up for the organization.</label><br />
+                            @Html.TextBoxFor( m => m.orgAdminName, new { @class = "form-control", placeholder = "Signer's full name" } )
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orgContact">Enter a contact phone number we can reach you at if need be.</label><br />
+                            @Html.TextBoxFor( m => m.orgContact, new { @class = "form-control", placeholder = "Contact phone number" } )
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrgComment">Describe your organization and its products or services</label><br />
+                            @Html.TextAreaFor( m => m.orgComment, new { @class = "form-control", placeholder = "Organization information", style = "min-width: 100%; min-height: 70px;" } )
+                        </div>
+
+                        @*
+                        @Html.TextBoxFor( m => m.orgTallBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Large banner" } )
+
+                        @Html.TextBoxFor( m => m.orgShortBanner, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "Small banner" } )
+
+                        @Html.TextBoxFor( m => m.orgLargeIcon, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "A 100x100 icon or logo" } )
+
+                        @Html.TextBoxFor( m => m.orgSmallIcon, new { @class = "form-control", type = "file", accept = "image/*", placeholder = "A 20x20 icon or logo" } )
+
+                        @Html.TextAreaFor( m => m.orgMiscellanea, new { @class = "form-control", placeholder = "Information about your organization, who you as the applicant individual are, and a way we can contact you if we have any queries before adding you" } )
+                        *@
+
+                        <div class="form-group">
+                            <label for="Email">Set up the Sigil account for the first priveleged admin for your organization.</label><br />
+                            @Html.TextBoxFor( m => m.Email, new { @class = "form-control", placeholder = "Admin email" } )
+                        </div>
+
+                        @*<div class="form-group">
+                            Html.LabelFor( m => m.Email_confirm, new { @class = "col-md-2 control-label" } )
+                            @Html.TextBoxFor( m => m.Email_confirm, new { @class = "form-control", placeholder = "Confirm email" } )
+                        </div>*@
+
+                        <div class="form-group">
+                            @*Html.LabelFor( m => m.UserName, new { @class = "col-md-2 control-label" } )*@
+                            @Html.TextBoxFor( m => m.DisplayName, new { @class = "form-control", placeholder = "Admin username" } )
+                        </div>
+
+
+
+                        @*
+                        <div class="form-group">
+                            <label for="Password">The password of your first privileged admin</label><br />
+                            @*Html.LabelFor( m => m.Password, new { @class = "col-md-2 control-label" }
+                            @Html.PasswordFor( m => m.Password, new { @class = "form-control", placeholder = "Admin password" } )
+                        </div>
+
+                        <div class="form-group">
+                            Html.LabelFor( m => m.ConfirmPassword, new { @class = "col-md-2 control-label" } )
+                            @Html.PasswordFor( m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm password" } )
+                        </div>
+                        *@
+
+                        <h4>We'll review this application and contact you directly within two business days.</h4>
+                        <button type="submit" class="btn btn-primary">Submit application</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render( "~/bundles/jqueryval" )
+}
