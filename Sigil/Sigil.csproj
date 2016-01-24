@@ -387,6 +387,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Graph.js" />
+    <Content Include="Scripts\inputlisteners.js" />
     <Content Include="Scripts\infinitescroll.js" />
     <Content Include="Scripts\issueformorgpage.js" />
     <Content Include="Scripts\issueformproductpage.js" />

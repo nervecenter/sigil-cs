@@ -102,16 +102,19 @@ function BindDatePickers() {
     //would be cool to have these auto popluate to the last week duration
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var month = now.getMonth() + 1;
+    var monthTwoDigit = (month > 9 ? "" + (month + 1) : "0" + month);
+
     $("#dpstart").datepicker({
         onRender: function (date) {
             return date.valueOf() > now.valueOf() ? 'disabled' : '';
         }
-    });
+    }).val(monthTwoDigit + "/" + now.getDate() + "/" + now.getFullYear());
     $("#dpend").datepicker({
         onRender: function (date) {
             return date.valueOf() > now.valueOf() ? 'disabled' : '';
         }
-    });
+    }).val(monthTwoDigit + "/" + now.getDate() + "/" + now.getFullYear());
 }
 
 function Custom_Org_Chart() {
