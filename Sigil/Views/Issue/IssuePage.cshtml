@@ -20,6 +20,7 @@
 
 <div class="col-md-9 col-lg-9">
     <img class="img-rounded img-responsive org-banner-small" src="@(Model.IssueOrg.Image.banner)">
+
     <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
         <a class="btn btn-warning" href="/@Model.IssueOrg.orgURL">Main feed</a>
         <a class="btn btn-info" href="/@Model.IssueOrg.orgURL/responses">Responses</a>
@@ -33,6 +34,7 @@
             <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.IssueOrg.orgURL')">Subscribe to @Model.IssueOrg.orgName</a>
         }
     </div>
+
     <div class="panel panel-default issue-panel-partial">
         @*Html.Partial( "../Shared/_IssuePanelPartial", Model.IssuePanelVM )*@
         <div class="panel-body">
@@ -72,6 +74,7 @@
         </div>
         <div class="panel-body">@thisIssue.text</div>
     </div>
+
     @if ( official.Count() > 0) {
         <div class="panel panel-primary">
             @foreach (var OfResponse in official)
@@ -83,14 +86,14 @@
                             <img src="@OfResponse.User.Image.icon_100" class="media-object" alt="Sample Image">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading">@OfResponse.User.DisplayName<small><i> Posted @*@Sigil.Controllers.IssueController.TimeSince(OfResponse.createTime)*@</i></small></h4>
+                            <h4 class="media-heading">@OfResponse.User.DisplayName<small><i> Posted @OfResponse.createTime.ToShortDateString()</i></small></h4>
                             <p>
                                 @OfResponse.text
                             </p>
-                            <div class="btn-group glyphicon-position" data-toggle="buttons">
+                            @*<div class="btn-group glyphicon-position" data-toggle="buttons">
                                 <button type="button" class="btn btn-success btn-xs"><!--<span class="glyphicon glyphicon-ok"></span>--> Helpful</button>
                                 <button type="button" class="btn btn-danger btn-xs"><!--<span class="glyphicon glyphicon-remove"></span>--> Unhelpful</button>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -98,8 +101,11 @@
         </div>
     }
 
+<<<<<<< HEAD
     @if (Model.UserVM.isOrgAdmin)
     {
+=======
+>>>>>>> origin/Refactor
     <div class="panel panel-default">
         <div class="panel-heading">Make an official response</div>
         <div class="panel-body">

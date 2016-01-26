@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-if ( Model.issue.responded && Model.InPanel ) {
+if ( (Model.issue.responded || Model.issue.OfficialResponses.Count > 0) && Model.InPanel ) {
         <div class="panel-footer">
             <b>Response: </b>
             @{var response = Model.issue.OfficialResponses[ 0 ].text;}
@@ -57,7 +57,7 @@ if ( Model.issue.responded && Model.InPanel ) {
 }
 
 @if ( Model.InPanel ) {
-    <div class="panel @(Model.issue.responded ? "panel-info" : "panel-default") issue-panel-partial">
+    <div class="panel @((Model.issue.responded || Model.issue.OfficialResponses.Count > 0) ? "panel-info" : "panel-default") issue-panel-partial">
         @MainMarkup()
     </div>
 } else {

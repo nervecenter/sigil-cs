@@ -1,3 +1,7 @@
+.panel-info {
+    border-width: 2px;
+}
+
 .sidebar-divider {
     margin-top:10px;
     margin-bottom:5px;
