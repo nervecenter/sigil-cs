@@ -52,10 +52,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(".btn-file :file").change(function () {
-        var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
-        $(this).parent().parent().parent().children().last().attr("value", label);
-    });
-</script>
