@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNet.Identity
+@using Sigil.Models
+
+@model Tuple<bool, Issue>
+
+@{ 
+    bool voted = Model.Item1;
+    Issue thisIssue = Model.Item2;
+}
+
+@if ( !Request.IsAuthenticated ) {
+    <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="redirectToLogin()" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+} else if (voted ) {//userVote.Check_Vote( thisIssue.Id, thisIssue.Org.Id ) ) {
+               // Issue has been voted on, get the checked button and checked class
+    <img class="issue-vote-button checked" id="button-@thisIssue.Id" src="../Content/Images/checked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+} else {
+    // Issue hasn't been voted on, get the opposite
+    <img class="issue-vote-button unchecked" id="button-@thisIssue.Id" src="../Content/Images/unchecked.png" onclick="vote(this, @thisIssue.Id)" onmouseover="votehover(this)" onmouseout="voteunhover(this)">
+}

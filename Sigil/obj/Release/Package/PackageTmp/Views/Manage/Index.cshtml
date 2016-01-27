@@ -1,0 +1,61 @@
+﻿@model Sigil.ViewModels.IndexViewModel
+@using Sigil.Controllers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil - Account Settings";
+}
+
+<div class="container settings-container">
+    <h2 class="settings-page-header">Change your account settings</h2>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @if ( Model.HasPassword ) {
+                            <h4>@Html.ActionLink( "Change your password", "ChangePassword" )</h4>
+                        } else {
+                            <h4>@Html.ActionLink( "Create", "SetPassword" )</h4>
+                        }
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <h4>@Html.ActionLink( "Manage social media logins", "ManageLogins" )</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p class="text-success">@ViewBag.StatusMessage</p>
+                    <img src="@Model.UserVM.User.Image.icon_100" class="img-rounded img-responsive img-relief" />
+                    <h4>Icon size: 100 x 100</h4>
+                    @using ( Html.BeginForm( "User_Icon_Upload", "Manage", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse <input type="file" name="img" id="img" />
+                                    </span>
+                                </div>
+                                <input class="form-control" readonly="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default disabled form-control">Upload new icon</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".btn-file :file").change(function () {
+        var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+        $(this).parent().parent().parent().children().last().attr("value", label);
+    });
+</script>

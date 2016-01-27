@@ -191,7 +191,7 @@ namespace Sigil.Controllers
             Data page for an Org, showing views/votes this week/month, responsiveness, and top issues  
         ==================== 
         */
-
+        [Authorize (Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
         public JsonResult DefaultData(string orgURL)
         {
             Org thisOrg = orgService.GetOrg(orgURL);
@@ -248,23 +248,44 @@ namespace Sigil.Controllers
 
             return Json(view_data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
         }
-
+        [Authorize (Roles ="SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult OrgData(string orgURL)
         {
             // Get the org
             Org thisOrg = orgService.GetOrg(orgURL); //dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+            var user = userService.GetUser(User.Identity.GetUserId());
+            var userVM = userService.GetUserViewModel(user.Id);
+            if (user.OrgId != thisOrg.Id && !User.IsInRole("SigilAdmin"))
+            {
+                var usersOrg = orgService.GetOrg(user.OrgId);
+                return RedirectToAction("OrgData", "Org", new { orgURL = usersOrg.orgURL });
+            }
 
+            OrgDataPageViewModel vm = new OrgDataPageViewModel();
+            vm.thisOrg = thisOrg;
+            vm.TopIssuePeriod = issueService.GetAllOrgIssues(thisOrg.Id).Where(i => i.editTime >= DateTime.Now.AddDays(-7)).OrderBy(o => o.votes).ThenBy(o => o.viewCount).Take(5).Select(i => new IssuePanelPartialVM()
+            {
+                issue = i,
+                InPanel = true,
+                UserVoted = userVM.UserVotes.Check_Vote(i.Id)
+            }).ToList();
 
-            /*
-             * VIEWBAG
-             */
+            vm.TopNewRising = issueService.GetAllOrgIssues(thisOrg.Id).OrderBy(i => i.editTime).ThenBy(i => i.viewCount).Take(5).Select(i => new IssuePanelPartialVM()
+            {
+                issue = i,
+                InPanel = true,
+                UserVoted = userVM.UserVotes.Check_Vote(i.Id)
+            }).ToList();
 
-            // Add the org to the ViewBag
-            ViewBag.thisOrg = thisOrg;
-
+            vm.TopWaitingResponse = issueService.GetAllOrgIssues(thisOrg.Id).Where(i => i.responded == false).OrderBy(i => i.viewCount).ThenBy(i => i.votes).Select(i => new IssuePanelPartialVM()
+            {
+                issue = i,
+                InPanel = true,
+                UserVoted = userVM.UserVotes.Check_Vote(i.Id)
+            }).ToList();
             // Pass our model list of charts as the model of the view
             // return View(listOfCharts);
-            return View();
+            return View(vm);
         }
 
     }

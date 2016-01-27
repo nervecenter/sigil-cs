@@ -72,11 +72,11 @@ namespace Sigil.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email Confirm")]
-        [Compare("Email", ErrorMessage = "The Email and confirmation email do not match.")]
-        public string Email_confirm { get; set; }
+        //[Required]
+        //[EmailAddress]
+        //[Display(Name = "Email Confirm")]
+        //[Compare("Email", ErrorMessage = "The Email and confirmation email do not match.")]
+        //public string Email_confirm { get; set; }
 
         [Required]
         [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
@@ -127,7 +127,7 @@ namespace Sigil.ViewModels
     public class OrgRegisterViewModel
     {
         [Required]
-        [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
         [Display(Name = "Organization Name")]
         public string orgName { get; set; }
 

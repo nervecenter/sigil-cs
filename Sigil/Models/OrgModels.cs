@@ -20,7 +20,7 @@ namespace Sigil.Models
         public virtual Image Image { get; set; }
 
         public int viewCount { get; set; }
-        public string website { get; set; }
+
         public DateTime lastView { get; set; }
 
         /// <summary>

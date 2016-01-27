@@ -60,7 +60,7 @@ namespace Sigil
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = false,
                 RequireDigit = true,
-                RequireLowercase = true,
+                RequireLowercase = false,
                 RequireUppercase = false,
             };
 

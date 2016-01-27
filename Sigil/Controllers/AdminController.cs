@@ -102,9 +102,44 @@ namespace Sigil.Controllers
         public ActionResult DeleteOrgProduct(string orgURL, string productId)
         {
             Product product_to_delete = productService.GetProduct(productId);
+            if(product_to_delete.ProductURL == "Default")
+                return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = orgURL });
+
+            if (product_to_delete.Issues.Count > 0)
+            {
+                var defaultProduct = productService.GetDefaultProduct(product_to_delete.OrgId);
+                var movingIssues = issueService.GetAllProductIssues(product_to_delete.Id);
+                foreach (Issue i in movingIssues)
+                    issueService.ChangeIssueProduct(i, defaultProduct.Id);
+
+            }
+            
             productService.DeleteProduct(product_to_delete);
 
             return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = orgURL });
+        }
+
+        public ActionResult ChangeProductURL(string orgURL, string productURL)
+        {
+            var product = productService.GetProduct(productURL);
+            string newURL = Request.Form["newURL"];
+  
+            var unique = productService.GetAllProducts().Any(p => p.ProductURL.ToLower() == newURL.ToLower() || p.ProductURL.ToLower().Contains(newURL.ToLower()));
+            if(productURL == "Default")
+            {
+                ViewBag.Message = "Can not change default products url.";
+            }
+            else if (!unique) //we need to take the not here because we are looking for similar urls in the .Any call
+            {
+                productService.UpdateProductURL(product, newURL);
+                return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = newURL});
+            }
+            else
+            {
+                ViewBag.Message = "URL has already been taken.";
+            }
+
+            return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
         }
 
         [Authorize(Roles = "SigilAdmin, OrgSuperAdmin")]
@@ -166,6 +201,65 @@ namespace Sigil.Controllers
             imageService.OrgIcon20ImageUpload(org, Request.Files[0]);
 
             return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = org.orgURL });
+        }
+
+        #endregion
+        #region Product Admin
+
+        [Authorize (Roles= "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
+        public ActionResult ProductAdminIndex(string orgURL, string productURL)
+        {
+            ProductAdminIndexViewModel vm = new ProductAdminIndexViewModel();
+            vm.thisProduct = productService.GetProduct(productURL);
+            vm.thisOrg = orgService.GetOrg(orgURL);
+
+            return View(vm);
+        }
+
+
+        public ActionResult UploadProductBanner(string orgURL, string productURL)
+        {
+            //var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL);
+            imageService.ProductBannerImageUpload(product, Request.Files[0]);
+
+            return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
+        }
+
+        public ActionResult UploadProductIcon100(string orgURL, string productURL)
+        {
+            var product = productService.GetProduct(productURL);
+            imageService.ProductIcon100ImageUpload(product, Request.Files[0]);
+
+            return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
+        }
+
+        public ActionResult UploadProductIcon20(string orgURL, string productURL)
+        {
+            var product = productService.GetProduct(productURL);
+            imageService.ProductIcon20ImageUpload(product, Request.Files[0]);
+
+            return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
+        }
+
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin")]
+        public ActionResult ProductURLChange(string orgURL, string productURL) //routes to here dont work for some reason
+        {
+            var thisOrg = orgService.GetOrg(orgURL);
+            string newURL = Request.Form["newURL"];
+
+            var unique = orgService.GetAllOrgs().Any(o => o.orgURL.ToLower() == newURL.ToLower() || o.orgURL.ToLower().Contains(newURL.ToLower()));
+
+            if (!unique) //we need to take the not here because we are looking for similar urls in the .Any call
+            {
+                orgService.UpdateOrgURL(thisOrg, newURL);
+            }
+            else
+            {
+                ViewBag.Message = "URL has already been taken.";
+            }
+
+            return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
         }
 
         #endregion

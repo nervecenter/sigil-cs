@@ -377,7 +377,6 @@
     <Content Include="Content\jquery-ui-1.9.2.custom.css" />
     <Content Include="Content\Images\voted.png" />
     <Content Include="Content\Images\website.png" />
-    <Content Include="Content\jquery-ui-1.9.2.custom.min.css" />
     <Content Include="Content\oldcss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -521,6 +520,7 @@
     <Content Include="Views\Admin\OrgAdminIndex.cshtml" />
     <Content Include="Views\Admin\SigilAdminIndex.cshtml" />
     <Content Include="Views\Home\FeaturesPage.cshtml" />
+    <Content Include="Views\Admin\ProductAdminIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

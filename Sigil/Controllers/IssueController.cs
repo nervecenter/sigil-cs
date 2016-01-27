@@ -10,16 +10,10 @@ using Microsoft.AspNet.Identity;
 using System.Data.SqlTypes;
 using Sigil.Services;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace Sigil.Controllers
 {
-    //need to move this to models
-    //enum VoteState {
-    //    NotLoggedIn,
-    //    Voted,
-    //    NotVoted
-    //}
-
     public class IssueController : Controller
     {
 
@@ -30,7 +24,7 @@ namespace Sigil.Controllers
         private readonly ICountService countDataService;
         private readonly IErrorService errorService;
         private readonly IProductService productService;
-
+        private Regex textFilter;
 
         public IssueController(IOrgService orgS, IIssueService issS, ICommentService comS, IUserService userS, ICountService countS, IErrorService errS, IProductService prodS)
         {
@@ -41,15 +35,10 @@ namespace Sigil.Controllers
             countDataService = countS;
             errorService = errS;
             productService = prodS;
+
+            textFilter = new Regex("[^0-9a-zA-Z . @]");
         }
 
-        /* 
-        ==================== 
-        IssuePage
-  
-            The main page for an issue in any org. Contains vote buttons, issue text, responses, comment section. 
-        ==================== 
-        */
         public ActionResult IssuePage( string orgURL, string productURL ,int issueID )
         {
             // Grab the issue's org
@@ -186,14 +175,6 @@ namespace Sigil.Controllers
             return RedirectToAction("IssuePage", "Issue", new { orgURL = delete_me.Issue.Product.Org.orgURL, productURL = delete_me.Issue.Product.ProductURL, issueID = delete_me.IssueId });
         }
 
-        /* 
-        ==================== 
-        IssueData
-  
-            Data page for an issue, showing views/votes this week/month 
-        ==================== 
-        */
-
         public JsonResult DefaultData(string orgURL, int issueId)
         {
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
@@ -248,20 +229,6 @@ namespace Sigil.Controllers
         [Authorize]
         public ActionResult IssueData(string orgURL, string productURL,int issueID)
         {
-            // Get the issue
-            //Issue thisIssue = issueService.GetIssue(orgURL, , issueID);//dc.Issues.SingleOrDefault(i => i.Id == issueID);
-
-            //// Get the org
-            //Org thisOrg = thisIssue.Product.Org;
-            ///*
-            // * VIEWBAG
-            // */
-
-            //// Add the issue and org to the ViewBag
-            //ViewBag.thisIssue = thisIssue;
-            //ViewBag.thisOrg = thisOrg;
-
-
             return View();
         }
 
@@ -314,7 +281,7 @@ namespace Sigil.Controllers
             newissue.votes = 1;
             newissue.viewCount = 1;
             newissue.title = vm.title;
-            newissue.text = vm.text;
+            newissue.text = textFilter.Replace(vm.text, "");
             newissue.ProductId = product == default(Product) ? 0 : product.Id;
             newissue.ProductId = product.Id;
             

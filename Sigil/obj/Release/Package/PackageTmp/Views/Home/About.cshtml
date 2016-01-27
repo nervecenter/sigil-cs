@@ -1,0 +1,14 @@
+﻿@using Sigil.ViewModels
+@model UserViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil - About";
+}
+
+<div class="first-column">
+    <article class="first-column-box legal-body">
+        <h3 class="first-column-header">Sigil is the crossroads of civil society.</h3>
+        <p class="first-column-paragraph">We want to change the way feedback is handled for everyone.</p>
+    </article>
+</div>
+@{Html.RenderAction("_SideBar", "Shared");}

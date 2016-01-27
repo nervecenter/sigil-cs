@@ -14,12 +14,7 @@ namespace Sigil.Services
         Comment, OfficialResponse,
     }
 
-    struct NotificationPanel
-    {
-        public string From { get; set; }
-        public string Title { get; set; }
-        public string URL { get; set; }
-    }
+
 
     //The operations we want to expose to the controllers
     public interface ICommentService
@@ -48,7 +43,7 @@ namespace Sigil.Services
     {
         //private readonly IOrgRepository OrgsRepository;
         //private readonly IProductRepository ProductRepository;
-        //private readonly IIssueRepository issueRepository;
+        private readonly IIssueRepository issueRepository;
         private readonly ICommentRepository commentRespository;
         private readonly ICommentCountRepository commentCountRepository;
         private readonly IUserRepository userRepository;
@@ -59,7 +54,7 @@ namespace Sigil.Services
         private readonly IErrorService errorService;
         //private readonly ICountService countDataService;
 
-        public CommentService(IUnitOfWork unit, ICommentRepository commRepo, IOfficialResponseRepository offRepo, ICommentCountRepository comCRepo, IUserRepository userRepo, INotificationRepository noteRepo, IUserService userS, IErrorService errS)
+        public CommentService(IUnitOfWork unit, ICommentRepository commRepo, IOfficialResponseRepository offRepo, ICommentCountRepository comCRepo, IUserRepository userRepo, INotificationRepository noteRepo, IUserService userS, IIssueRepository issR,IErrorService errS)
         {
             unitOfWork = unit;
             commentRespository = commRepo;
@@ -69,6 +64,7 @@ namespace Sigil.Services
             notificationRepository = noteRepo;
             userService = userS;
             errorService = errS;
+            issueRepository = issR;
         }
 
         public void CreateComment(Comment comm)
@@ -134,6 +130,9 @@ namespace Sigil.Services
             if (request.Form["IsOfficial"] != null)
             {
                 Create_Official_Response(request, thisIssue, userID);
+                thisIssue.responded = true;
+                issueRepository.Update(thisIssue);
+                unitOfWork.Commit();               
             }
             else
             {
@@ -254,10 +253,10 @@ namespace Sigil.Services
 
             var allUsers = VoteUsers.Union(CommentUsers);
 
-            foreach (var user in allUsers)
-            {
-                CreateNotification(user.Id, userId, issue.Id, issue.ProductId, issue.Product.OrgId, commentID, (int)NotificationType.OfficialResponse);
-            }
+            //foreach (var user in allUsers)
+            //{
+            //    CreateNotification(user.Id, userId, issue.Id, issue.ProductId, issue.Product.OrgId, commentID, (int)NotificationType.OfficialResponse);
+            //}
 
             unitOfWork.Commit();
             //notificationService.SaveNotification();

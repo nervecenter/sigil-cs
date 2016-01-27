@@ -291,7 +291,7 @@ namespace Sigil.Controllers
             newOrg.orgURL = verifiedOrg.orgURL;
             newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id)).ToString();
             newOrg.lastView = DateTime.UtcNow;
-
+            newOrg.Website = verifiedOrg.website;
             orgService.CreateOrg(newOrg);
             orgService.SaveOrg();
 

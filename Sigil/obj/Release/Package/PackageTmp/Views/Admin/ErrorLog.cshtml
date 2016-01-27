@@ -1,0 +1,25 @@
+﻿@using Sigil.Models
+@using Microsoft.AspNet.Identity
+@using Microsoft.Owin.Security
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil Database Errors";
+    List<Error> db_errors = Model;
+}
+
+
+<div class="col-md-12 col-lg-12">
+    @foreach (Error er in db_errors)
+    {
+        <div class="panel panel-primary">
+            <div class="panel-body">
+               Error Date: @er.error_date<br />
+               Error Object: @er.error_object<br />
+               Exception: @er.error_exception
+            </div>
+        </div>
+    }
+</div>
+
+

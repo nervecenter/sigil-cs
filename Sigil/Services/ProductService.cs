@@ -17,11 +17,14 @@ namespace Sigil.Services
         void DeleteProduct(Product prod);
         IEnumerable<Product> GetAllProducts();
 
+
         IEnumerable<Product> GetProductsByOrg(int orgId);
         IEnumerable<Product> GetProductsByOrg(string org, bool name = false);
         Product GetProduct(int productId);
         Product GetProduct(string productStr, bool name = false);
         Product GetProduct(string productStr, int orgId, bool name = false);
+        Product GetDefaultProduct(int orgId);
+        void UpdateProductURL(Product product, string newURL);
     }
 
     public class ProductService : IProductService
@@ -137,6 +140,15 @@ namespace Sigil.Services
             unitOfWork.Commit();
         }
 
+        public Product GetDefaultProduct(int orgId)
+        {
+            return productRepository.Get(p => p.OrgId == orgId && p.ProductURL == "Default");
+        }
 
+        public void UpdateProductURL(Product product, string newURL)
+        {
+            product.ProductURL = newURL;
+            UpdateProduct(product);
+        }
     }
 }

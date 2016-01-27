@@ -376,6 +376,36 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Product Admin Index Page",
+                url: "{orgURL}/{productURL}/admin/",
+                defaults: new { controller = "Admin", action = "ProductAdminIndex" }
+            );
+
+            routes.MapRoute(
+                name: "Product URL Change",
+                url: "{orgURL}/{productURL}/admin/URLChange/",
+                defaults: new { controller = "Admin", action = "ChangeProductURL" }
+            );
+
+            routes.MapRoute(
+                name: "Product 100 Icon Upload",
+                url: "{orgURL}/{productURL}/admin/100IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadProductIcon100" }
+            );
+
+            routes.MapRoute(
+                name: "Product 20 Icon Upload",
+                url: "{orgURL}/{productURL}/admin/20IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadProductIcon20" }
+            );
+
+            routes.MapRoute(
+                name: "Product Banner Upload",
+                url: "{orgURL}/{productURL}/admin/bannerUpload/",
+                defaults: new { controller = "Admin", action = "UploadProductBanner" }
+            );
+
+            routes.MapRoute(
                 name: "Product Issue Delete",
                 url: "{orgURL}/{productURL}/issueDelete/{issueId}/",
                 defaults: new { controller = "Product", action = "DeleteIssue" }

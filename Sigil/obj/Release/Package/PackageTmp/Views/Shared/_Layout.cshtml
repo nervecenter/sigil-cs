@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNet.Identity
+@using Sigil.Models
+
+@*@{ 
+    string actionCalled = ViewContext.RouteData.GetRequiredString( "action" );
+    string[] urlParts = Request.Url.AbsoluteUri.Remove( 0, 24 ).Split( '/' );
+
+    string[] actionsWithSubButton = {
+        "OrgPage",
+        "IssuePage",
+        "CatPage",
+        "TopicPage"
+    };
+
+    /*string[] actionsWithoutFooter = {
+        "Login",
+        "Register"
+    };*/
+}*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+
+    <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
+
+    @*<script type="text/javascript">
+        $(function () {
+            $('#searchBox').autocomplete({
+                source: '@Url.Action("SearchDB","Search")'
+            });
+        });
+    </script>*@
+    
+    <script src="~/Scripts/jquery-1.11.3.js"></script>
+    <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
+    <link href="~/Content/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
+
+    @Styles.Render( "~/Content/bootstrap-flatly.css" )
+    @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
+    @Styles.Render( "~/Content/Site.css" )
+    @Styles.Render( "~/Content/PagedList.css" )
+    @Styles.Render( "~/Content/datepicker.css" )
+    @Styles.Render( "~/Content/bootstrap-select.css" )
+
+    <title>@ViewBag.Title</title>
+</head>
+<body class="page">
+    <div class="wrap">
+        @Html.Partial( "_Header" )
+        <div class="container main-container">
+            <div class="row">
+                <!-- Main column and sidebar in here -->
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <br class="clear" />
+    @Html.Partial( "_Footer" )
+    
+    @RenderSection( "scripts", required: false )
+   
+    
+
+    <script type="text/javascript" src="~/Scripts/infinitescroll.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/inputlisteners.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/typeahead.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/voting.js"></script>
+    <script type="text/javascript" src="~/Scripts/search.js"></script>
+    <script type="text/javascript" src="~/Scripts/notifications.js"></script>
+    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
+</body>
+</html>

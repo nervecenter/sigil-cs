@@ -43,6 +43,17 @@ namespace Sigil.Migrations
                 }
             }
 
+            if(!(context.Orgs.Any(o => o.orgName == "Sigil")))
+            {
+                var sigilOrg = new Org();
+                sigilOrg.orgName = "Sigil";
+                sigilOrg.orgURL = "sigil";
+                sigilOrg.viewCount = 0;
+                sigilOrg.lastView = DateTime.UtcNow;
+                context.Orgs.AddOrUpdate(sigilOrg);
+                context.SaveChanges();
+            }
+
             if (!(context.Users.Any(u => u.UserName == "dominic@sigil.tech")))
             {
 
@@ -52,7 +63,7 @@ namespace Sigil.Migrations
                 var userToInsert = new ApplicationUser { UserName = "dominic@sigil.tech", Email = "dominic@sigil.tech", DisplayName = "Dominic" };
                 userManager.Create(userToInsert, "s323232");
                 var user = context.Users.Where(u => u.UserName == "dominic@sigil.tech").FirstOrDefault();
-
+                user.OrgId = context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
                 Image userImg = new Image();
                 userImg.imgType = (int)ImageTypeOwner.User;
                 userImg.OwnerId = user.Id;
@@ -69,11 +80,11 @@ namespace Sigil.Migrations
             {
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
-                var userToInsert = new ApplicationUser { UserName = "nervecenter7@gmail.com", Email = "nervecenter7@gmail.com", DisplayName = "Nerve" };
+                var userToInsert = new ApplicationUser { UserName = "cjcollazo@sigil.tech", Email = "cjcollazo@sigil.tech", DisplayName = "Chris" };
                 userManager.Create(userToInsert, "s323232");
 
                 var user = context.Users.Where(u => u.UserName == "nervecenter7@gmail.com").FirstOrDefault();
-
+                user.OrgId = context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
                 Image userImg = new Image();
                 userImg.imgType = (int)ImageTypeOwner.User;
                 userImg.OwnerId = user.Id;

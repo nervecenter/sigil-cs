@@ -1,0 +1,114 @@
+﻿@using Sigil.ViewModels
+@model ProductAdminIndexViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container settings-container">
+    <h2 class="settings-page-header">@Model.thisOrg.orgName - @Model.thisProduct.ProductName Product Setting's Panel</h2>
+</div>
+<a href="/@Model.thisOrg.orgURL/admin/">
+    <span class="glyphicon glyphicon-arrow-left">Back to Main Admin Panel</span>
+</a>
+<div class="container settings-container">
+    <div class="row">
+        <h3>Current Product URL: @Model.thisProduct.ProductURL</h3>
+        Change Product URL
+        @using (Html.BeginForm("ChangeProductURL", "Admin", new { orgURL = Model.thisOrg.orgURL, productURL = Model.thisProduct.ProductURL }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken();
+            <input type="text" name="newURL" id="newURL" />
+                <br />
+                <input type="submit" value="Submit" />
+        }
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <img class="img-rounded img-responsive img-relief" src="@Model.thisProduct.Image.banner" />
+            <h4>Recommended banner size: 1000 x 200</h4>
+            @using (Html.BeginForm("UploadProductBanner", "Admin", new { orgURL = Model.thisOrg.orgURL, productURL = Model.thisProduct.ProductURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+            {
+                @Html.AntiForgeryToken();
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <span class="btn btn-default btn-file">
+                                Browse <input type="file" name="imgBanner" id="imgBanner">
+                            </span>
+                        </div>
+                        <input class="form-control image-input" readonly="" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default disabled form-control">Upload new Product banner</button>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container settings-container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-body">
+                    <img src="@Model.thisProduct.Image.icon_100" class="img-rounded img-responsive img-relief" />
+                    <h4>Icon size: 100 x 100</h4>
+                    @using (Html.BeginForm("UploadProductIcon100", "Admin", new { orgURL = Model.thisOrg.orgURL, productURL = Model.thisProduct.ProductURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse <input type="file" name="img100" id="img100" />
+                                    </span>
+                                </div>
+                                <input class="form-control image-input" readonly="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default disabled form-control">Upload new icon</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-body">
+                    <img src="@Model.thisProduct.Image.icon_20" class="img-responsive img-relief" />
+                    <h4>Small icon size: 20 x 20</h4>
+                    @using (Html.BeginForm("UploadProductIcon20", "Admin", new { orgURL = Model.thisOrg.orgURL, productURL = Model.thisProduct.ProductURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse <input type="file" name="img20" id="img20" />
+                                    </span>
+                                </div>
+                                <input class="form-control image-input" readonly="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default disabled form-control">Upload new small icon</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".btn-file :file").change(function () {
+        var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+        $(this).parent().parent().parent().children().last().attr("value", label);
+    });
+</script>
+
+
+

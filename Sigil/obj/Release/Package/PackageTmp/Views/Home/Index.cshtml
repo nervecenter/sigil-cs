@@ -1,0 +1,43 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@using Microsoft.Owin.Security
+@using PagedList.Mvc;
+@model Home_IndexViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil";
+    //PagedList.IPagedList<IssueViewModel> issueList = Model.UserIssues;
+    //UserVoteCol voteList = Model.UserVM.UserVotes;
+}
+
+<div class="col-md-9 col-lg-9">
+    <span style="font-size:30px;">@Model.UserVM.User.DisplayName's feed</span>
+    <div class="panel">
+        <div class="panel-body">
+            <form>
+                <div class="form-group">
+                    @*<label for="text">Text:</label><br />*@
+                    <textarea id="title-input" class="form-control panel-input-box" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:0px;">
+                    <button type="submit" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @if (Model.UserIssues.Count > 0 ) {
+        foreach ( IssuePanelPartialVM issue in Model.UserIssues) {
+            @Html.Partial( "../Shared/_IssuePanelPartial", issue)
+        }
+        <br />
+        @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
+
+        @Html.PagedListPager(Model.UserIssues, page => Url.Action("Index","Home", new {page}))
+    } else {
+        <br />
+        <h4>There's nothing here. :(<br /><br />Search for a company, person, or topic to subscribe to!</h4>
+    }
+</div>
+@{Html.RenderAction("_SideBar", "Shared");}

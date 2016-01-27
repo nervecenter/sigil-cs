@@ -14,7 +14,7 @@ namespace Sigil.Services
         void UpdateIssue(Issue issue);
         void SaveChanges();
         void DeleteIssue(Issue issue);
-
+        void ChangeIssueProduct(Issue issue, int newProductId);
         Issue GetIssue(int issueId);
 
         Issue GetLatestIssue(string userId, int productId);
@@ -116,6 +116,13 @@ namespace Sigil.Services
         {
             issueRepository.Delete(issue);
             unitOfWork.Commit();
+        }
+
+        public void ChangeIssueProduct(Issue issue, int newProductId)
+        {
+            issue.ProductId = newProductId;
+            UpdateIssue(issue);
+            SaveChanges();
         }
     }
 }

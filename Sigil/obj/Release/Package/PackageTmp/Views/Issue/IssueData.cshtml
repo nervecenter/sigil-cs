@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Sigil.Models
+@{
+    Org thisOrg = ViewBag.thisOrg;
+    IssueViewModel thisIssue = ViewBag.thisIssue;
+}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="~/Scripts/Graph.js"></script>
+
+<div class="first-column">
+    @*<img class="org-banner" src="@(Sigil.Controllers.ImageController<Org>.Get_Banner(thisOrg))">*@
+    <section class="issue-data-body">
+        <div class="issue-vote-area">
+            <span class="issue-vote-amount" id="count-1">@thisIssue.votes</span>
+        </div>
+        <div class="issue-main-area issue-main-issue-page">
+            <div class="issue-main-cell">
+                <div class="issue-title-area issue-main-sub-areas">
+                    <span class="issue-title">@thisIssue.title</span>
+                    <div class="issue-info-area issue-main-sub-areas">
+                        <span class="issue-org-cat-topic">
+                            @* Need to include if stuct to determine if this issue is apart of a category and or topic<img class="issue-info-icon" src="../Content/Images/orgicons/microsoft_20.png"></img>@thisIssue.Org.orgName :
+                            <img class="issue-info-icon" src="../Content/Images/caticons/windows_20.png"></img>Windows
+                            in Operating Systems*@
+                        </span>
+                        <span class="issue-user-date">
+                            @thisIssue.createTime
+                            @*<img class="issue-info-icon" src="@(Sigil.Controllers.ImageController<AspNetUser>.Get_Icon_100(@thisIssue.UserId))">@thisIssue.AspNetUser.DisplayName*@
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br class="clear">
+        </div>
+        <div id="chart_panel">
+            <div id="issue_chart_div" style="width: 600px; height: 350px;">
+            </div>
+        </di>v
+        <select id="selected_data" name="selected_data">
+            <option value="Views">Views</option>
+            <option value="Votes">Votes</option>
+            <option value="Comments">Comments</option>
+            <option value="All">All</option>
+        </select>
+        <input type="text" id="datepickerStart" name="start" />
+        <input type="text" id="datepickerStop" name="stop" />
+        <input type="button" value="Get Chart" onclick="Custom_Issue_Chart()" />
+    </section>
+</div>

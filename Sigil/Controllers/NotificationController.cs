@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity;
 using Sigil.Models;
 using System.Threading.Tasks;
 using Sigil.Services;
-
+using Sigil.ViewModels;
 namespace Sigil.Controllers
 {
     public class NotificationController : Controller
@@ -34,31 +34,36 @@ namespace Sigil.Controllers
         public JsonResult Get_Notifications()
         {
             string userID = User.Identity.GetUserId();
-            List<NotificationPanel> rNotes = new List<NotificationPanel>();
-            var noNotes = new NotificationPanel();
+            List<NotificationPanelVM> rNotes = new List<NotificationPanelVM>();
+            var noNotes = new NotificationPanelVM();
             noNotes.URL = "";
-            noNotes.Title = "No notifications, you're all caught up. :)";
-
+            noNotes.Title = "No notifications, you're all caught up.";
+            noNotes.Icon = "";
+            Issue testiss = issueService.GetIssue(19);
+            var testuser = userService.GetUser("68737fa9-6e72-4703-b46d-2096694715e7");
             if (userID != null)
             {
-                var notes = notificationService.GetUserNotifications(userID);//dc.Notifications.Where(n => n.To_UserId == userID).Select(n => n);
+                var notes = notificationService.GetUserNotifications(userID).ToList();//dc.Notifications.Where(n => n.To_UserId == userID).Select(n => n);
                 if (!notes.Any())
                 {
                     rNotes.Add( noNotes );
-                    return Json( rNotes.Select( n => new { from = n.From, title = n.Title, url = n.URL } ), JsonRequestBehavior.AllowGet );
+                    return Json( rNotes.Select( n => new { from = n.From, title = n.Title, url = n.URL, icon=n.Icon } ), JsonRequestBehavior.AllowGet );
                 }
                 
                 foreach (var n in notes)
                 {
-                    NotificationPanel tmp = new NotificationPanel();
+                    NotificationPanelVM tmp = new NotificationPanelVM();
                     var issue = issueService.GetIssue(n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
-                    tmp.From = n.From_UserId;
+                    string from = n.From_UserId;
+                    var fromUser = userService.GetUser(from);
+                    tmp.From = fromUser.DisplayName;
                     tmp.Title = issue.title;
                     tmp.URL = issue.Product.Org.orgURL + "/" + issue.Product.ProductURL + "/" + issue.Id;
+                    tmp.Icon = fromUser.Image.icon_100;
                     rNotes.Add(tmp);
                 }
 
-                return Json(rNotes.Select(n => new { from = n.From, title = n.Title, url = n.URL }), JsonRequestBehavior.AllowGet);
+                return Json(rNotes.Select(n => new { from = n.From, title = n.Title, url = n.URL, icon = n.Icon}), JsonRequestBehavior.AllowGet);
 
             }
             else

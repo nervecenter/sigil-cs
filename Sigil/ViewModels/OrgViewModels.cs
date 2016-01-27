@@ -19,7 +19,10 @@ namespace Sigil.ViewModels
 
     public struct OrgDataPageViewModel
     {
-
+        public Org thisOrg { get; set; }
+        public IEnumerable<IssuePanelPartialVM> TopIssuePeriod { get; set; }
+        public IEnumerable<IssuePanelPartialVM> TopNewRising { get; set; }
+        public IEnumerable<IssuePanelPartialVM> TopWaitingResponse { get; set; }
     }
 
     public struct OrgResponsePageViewModel

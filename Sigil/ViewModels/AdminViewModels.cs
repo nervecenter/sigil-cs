@@ -17,4 +17,10 @@ namespace Sigil.ViewModels
         public IEnumerable<Tuple<Org, int>> AllOrgsWithProduct { get; set; }
     }
 
+    public struct ProductAdminIndexViewModel
+    {
+        public Org thisOrg { get; set; }
+        public Product thisProduct { get; set; }
+    }
+
 }

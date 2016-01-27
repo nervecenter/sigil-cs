@@ -95,7 +95,15 @@ namespace Sigil.ViewModels
         }
     }
 
-    
+
+    struct NotificationPanelVM
+    {
+        public string From { get; set; }
+        public string Title { get; set; }
+        public string URL { get; set; }
+        public string Icon { get; set; }
+    }
+
 
     public struct UserViewModel
     {

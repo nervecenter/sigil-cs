@@ -1,0 +1,37 @@
+﻿@using Sigil.Models
+
+@using Microsoft.AspNet.Identity
+
+<script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
+<div class="first-column">
+    @model Tuple<List<Org>, List<Subscription>>
+    @foreach (Org org in Model.Item1)
+    {
+
+        <article class="issue-box">
+            <div class="issue-vote-area">
+
+                @if (Model.Item2.Any(v => v.OrgId == org.Id))
+                {
+                    <img class="issue-vote-button checked" id="@org.Id" onclick="unsubscribe('@org.orgURL', '@User.Identity.GetUserName()')" src="~/Content/Images/check_mark_hover_small.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+                }
+                else
+                {
+                    <img class="issue-vote-button unchecked" id="@org.Id" onclick="subscribe('@org.orgURL', '@User.Identity.GetUserName()')" src="~/Content/Images/vote_circle_small.png" onmouseover="subhover(this)" onmouseout="subunhover(this)">
+                }
+            </div>
+
+            <div class="issue-main-area">
+                <div class="issue-main-cell">
+                    <div class="issue-title-area">
+                        <a href="/@org.orgURL" class="issue-title">@org.orgName</a>
+                    </div>
+
+                </div>
+            </div>
+        </article>
+
+
+    }
+</div>
+@Html.Partial( "../Shared/_SideBar", Sigil.Controllers.AccountController.userSubs( User ) )

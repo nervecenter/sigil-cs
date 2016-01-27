@@ -1,0 +1,154 @@
+﻿@using Microsoft.AspNet.Identity
+@using Sigil.Models
+@using Sigil.ViewModels
+@using System;
+
+@model Home_LandingPageViewModel
+@{
+    
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
+
+    <script src="~/Scripts/jquery-1.11.3.js"></script>
+    <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
+    <link href="~/Content/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/bootstrap-flatly.css")
+    @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
+    @Styles.Render("~/Content/Site.css")
+
+    @*
+        
+    *@
+
+    <style type="text/css">
+        .media-heading {
+            font-size:14px;
+            font-weight: 600;
+        }
+
+        .media-body {
+            font-size: 12px;
+        }
+
+        .twitter-typeahead {
+            width: 100%;
+        }
+
+        .navbar {
+            box-shadow: none;
+        }
+
+        .header-link {
+            color:white;
+        }
+    </style>
+
+  
+    <title>Sigil</title>
+</head>
+<body class="page">
+    <nav class="navbar navbar-transparent navbar-static-top" style="margin-bottom:-60px;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-center">
+                    <li class="pull-right">@Html.ActionLink("Sign Up", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" })</li>
+                    <li class="pull-right">@Html.ActionLink("Log In", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "header-link" } )</li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <section class="splash splash-landing">
+        <div class="container" style="max-width:800px;">
+            <div class="row" style="margin-bottom: 30px;">
+                <div class="col-lg-12 col-centered" style="max-width:350px;">
+                    <img class="img-responsive" src="../Content/Images/logo-600.png" style="margin-bottom:10px;">
+                    <h3 style="margin-top:0px;margin-bottom:0px;">A focal point for feedback.</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-centered email-div">
+                    @using (Html.BeginRouteForm("Search Page", FormMethod.Post, new { @class = "", role = "search", style = "width:100%;" })) {
+                        <div class="form-group" style="width:100%;">
+                            <input id="site-search-box" type="text" class="form-control" placeholder="Search for a company, person, or product" autocomplete="off" style="width:100%;">
+                        </div>
+                    }
+                </div>
+            </div>
+            @*<div class="row landing-blurbs" style="margin-bottom:10px;">
+                    <div class="col-lg-4">
+                        <img class="landing-blurb-image" src="../Content/Images/earth_white.png">
+                        <p class="landing-blurb-text">We connect big and small. Engage with your favorite companies, elected officials, or even your employer.</p>
+                    </div>
+                    <div class="col-lg-4 hidden-xs hidden-sm">
+                        <img class="landing-blurb-image" src="../Content/Images/speakerphone_white.png">
+                        <p class="landing-blurb-text">Have a voice in the future. Your feedback matters. Make your thoughts known, and support those of your peers.</p>
+                    </div>
+                    <div class="col-lg-4 hidden-xs hidden-sm">
+                        <img class="landing-blurb-image" src="../Content/Images/speedometer_white.png">
+                        <p class="landing-blurb-text">The best gauge of the direction your company should take is customer demand. Know exactly what your users want the most.</p>
+                    </div>
+                </div>*@
+            <div class="row small-links">
+                <a href="#">See how Sigil can revamp feedback for your company</a>
+                |
+                <a href="/register">Start giving your own feedback</a>
+            </div>
+        </div>
+    </section>
+    <div class="container landing-container">
+        <div class="row">
+            <div class="col-md-4 col-lg-4" id="left-col">
+               @foreach (IGrouping<Org, IssuePanelPartialVM> group in Model.LeftColumn)
+               {
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;" />@group.Key.orgName</a></div>
+                        @foreach (IssuePanelPartialVM issue in group)
+                        {
+                            @Html.Partial("../Shared/_IssuePanelPartial", issue)
+                        }
+                    </div>
+               }
+            </div>
+            <div class="col-md-4 col-lg-4" id="middle-col">
+                @foreach (IGrouping<Org, IssuePanelPartialVM> group in Model.MiddleColumn)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;" />@group.Key.orgName</a></div>
+                        @foreach (IssuePanelPartialVM issue in group)
+                        {
+                            @Html.Partial("../Shared/_IssuePanelPartial", issue)
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-4 col-lg-4" id="right-col">
+                @foreach (IGrouping<Org, IssuePanelPartialVM> group in Model.RightColumn)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="/@group.Key.orgURL"><img src="@(group.Key.Image.icon_20)" style="margin-right:5px;" />@group.Key.orgName</a></div>
+                        @foreach (IssuePanelPartialVM issue in group)
+                        {
+                            @Html.Partial("../Shared/_IssuePanelPartial", issue)
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @Html.Partial( "_Footer" )
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/typeahead.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/voting.js"></script>
+    <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>
+    <script type="text/javascript" src="~/Scripts/search.js"></script>
+</body>
+</html>
