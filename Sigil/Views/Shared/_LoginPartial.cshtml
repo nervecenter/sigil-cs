@@ -18,7 +18,7 @@
         </li>
     }
     <li>
-        <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@Model.User.Image.icon_100">
+        <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" src="@Model.User.Image.icon_100">
         @Html.ActionLink( Model.User.DisplayName, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right", style = "border-left:0;" } )
     </li>
     <li>
