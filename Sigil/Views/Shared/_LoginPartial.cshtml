@@ -7,17 +7,18 @@
     if(User.IsInRole("SigilAdmin"))
     {
         <li>
-            @Html.ActionLink("Sigil Admin Panel", "Index", "Admin", routeValues: null, htmlAttributes: new {@class ="pull-right", style="border-left:0"})
+            @Html.ActionLink("Site Admin Panel", "Index", "Admin", routeValues: null, htmlAttributes: new {@class ="pull-right", style="border-left:0"})
         </li>
     }
     if(User.IsInRole("OrgSuperAdmin") || User.IsInRole("OrgAdmin") || User.IsInRole("SigilAdmin"))
     {
         <li>
-            @Html.ActionLink("Admin Panel", "OrgAdmin", "Admin", routeValues: new { orgURL = Model.orgURL }, htmlAttributes: new { @class = "pull-right", style = "border-left:0" })
+            @*Html.ActionLink("Admin Panel", "OrgAdmin", "Admin", routeValues: new { orgURL = Model.orgURL }, htmlAttributes: new { @class = "pull-right", style = "border-left:0" })*@
+            <a href="/@Model.orgURL/admin/">Org Admin Panel</a>
         </li>
     }
     <li>
-        <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@Model.User.Image.icon_100">
+        <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" src="@Model.User.Image.icon_100">
         @Html.ActionLink( Model.User.DisplayName, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right", style = "border-left:0;" } )
     </li>
     <li>
