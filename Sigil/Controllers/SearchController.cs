@@ -18,13 +18,15 @@ namespace Sigil.Controllers
         private readonly IProductService productService;
         private readonly ISearchService searchService;
         private readonly ICommentService commentService;
+        private readonly IUserService userService;
         private SearchFilter searchFilter;
 
-        public SearchController(IProductService prodS, ISearchService searchS, ICommentService comS)
+        public SearchController(IProductService prodS, ISearchService searchS, ICommentService comS, IUserService userS)
         {
             productService = prodS;
             searchService = searchS;
             commentService = comS;
+            userService = userS;
             searchFilter = new SearchFilter();
         }
 
@@ -32,14 +34,23 @@ namespace Sigil.Controllers
         public ActionResult Index()
         {
             string term = Request.Form["searchTerm"];
-
-            
+            string userid = User.Identity.GetUserId();
+            UserViewModel uservm = new UserViewModel();
+            if (userid != null)
+                uservm = userService.GetUserViewModel(userid);
+            else
+                uservm = uservm.emptyUser();
             var quOrgs = searchService.MatchOrgsByName(term).ToList();//dc.Orgs.Where(o => o.orgName.StartsWith(term)).ToList();
             var quProducts = searchService.MatchProductsByName(term).ToList();
-            //var quIssues = searchService.MatchIssuesByTitle(term).ToList();//dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
+            var quIssues = searchService.MatchIssuesByTitle(term).Select(i => new IssuePanelPartialVM()
+            {
+                issue = i,
+                UserVoted = uservm.UserVotes.Check_Vote(i.Id),
+                InPanel = true
+            }).ToList();//dc.Issues.Where(i => i.title.StartsWith(term)).ToList();
 
 
-            Tuple<List<Org>, List<Product>> search_list = new Tuple<List<Org>, List<Product>>(quOrgs, quProducts);
+            Tuple<List<Org>, List<Product>, List<IssuePanelPartialVM>> search_list = new Tuple<List<Org>, List<Product>, List<IssuePanelPartialVM>>(quOrgs, quProducts, quIssues);
             return View(search_list);
 
         }
