@@ -15,6 +15,7 @@ namespace Sigil.Services
         void DeleteNotification(Notification note);
         void SaveNotification();
 
+        Notification GetNotification(int noteId);
         IEnumerable<Notification> GetUserNotifications(string userId);
         IEnumerable<Notification> GetOrgNotifications(int orgId);
         IEnumerable<Notification> GetOrgNotifications(string orgURL, bool name = false);
@@ -92,6 +93,11 @@ namespace Sigil.Services
             }
 
             return GetOrgNotifications(org.Id);
+        }
+
+        public Notification GetNotification(int noteId)
+        {
+            return notificationRepository.GetById(noteId);
         }
     }
 }

@@ -36,9 +36,6 @@ namespace Sigil.Controllers
             string userID = User.Identity.GetUserId();
             List<NotificationPanelVM> rNotes = new List<NotificationPanelVM>();
 
-            Issue testiss = issueService.GetIssue(19);
-            var testuser = userService.GetUser("68737fa9-6e72-4703-b46d-2096694715e7");
-
             if (userID != null)
             {
                 var notes = notificationService.GetUserNotifications(userID).ToList();//dc.Notifications.Where(n => n.To_UserId == userID).Select(n => n);
@@ -54,6 +51,7 @@ namespace Sigil.Controllers
                     var issue = issueService.GetIssue(n.issueId);//dc.Issues.Single(i => i.Id == n.issueId && i.OrgId == n.OrgId);
                     string from = n.From_UserId;
                     var fromUser = userService.GetUser(from);
+                    tmp.Id = n.Id;
                     tmp.From = fromUser.DisplayName;
                     tmp.Title = issue.title;
                     tmp.URL = issue.Product.Org.orgURL + "/" + issue.Product.ProductURL + "/" + issue.Id;
@@ -61,7 +59,7 @@ namespace Sigil.Controllers
                     rNotes.Add(tmp);
                 }
 
-                return Json(rNotes.Select(n => new { from = n.From, title = n.Title, url = n.URL, icon = n.Icon}), JsonRequestBehavior.AllowGet);
+                return Json(rNotes.Select(n => new { id = n.Id, from = n.From, title = n.Title, url = n.URL, icon = n.Icon}), JsonRequestBehavior.AllowGet);
 
             }
             else
@@ -72,6 +70,15 @@ namespace Sigil.Controllers
             }
             
             return Json( new { response = "none" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Delete_Notification(int noteId)
+        {
+            var note = notificationService.GetNotification(noteId);
+            notificationService.DeleteNotification(note);
+            notificationService.SaveNotification();
+            bool success = true;
+            return Json(success, JsonRequestBehavior.AllowGet);
         }
 
     }

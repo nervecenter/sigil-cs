@@ -71,7 +71,7 @@ namespace Sigil.Controllers
             //ViewBag.userVotes = userVotes;
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
-            int num_results_per_page = 3;
+            int num_results_per_page = 20;
             int pageNumber = (page ?? 1);
 
             OrgPageViewModel orgVM = new OrgPageViewModel();
