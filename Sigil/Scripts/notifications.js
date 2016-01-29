@@ -101,10 +101,3 @@ function refreshnumnotes() {
         }
     });
 }
-
-$(document).ready(function () {
-    $("#header-user-icon").click(shownotifications);
-    $("#num-notes-back").hide();
-    $("#num-notes").hide();
-    refreshnumnotes();
-});

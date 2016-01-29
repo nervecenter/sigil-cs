@@ -23,23 +23,25 @@
                     @*@if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }*@
                 </h4>
                 <p class="pull-left">
-                    <img class="issue-panel-icon" src="@(Model.issue.Product.Image.icon_20)" /><span><a href="/@Model.issue.Product.Org.orgURL">@Model.issue.Product.Org.orgName</a></span>
-                    @if (Model.issue.Product.ProductURL != "Default")
-                    {
-                    <span>: <a href="/@Model.issue.Product.Org.orgURL/@Model.issue.Product.ProductURL"> @Model.issue.Product.ProductName</a></span>
+                    <img class="issue-panel-icon" src="@(Model.issue.Product.Org.Image.icon_20)" /><span><a href="/@Model.issue.Product.Org.orgURL">@Model.issue.Product.Org.orgName</a></span>
+                    @if ( Model.issue.Product.ProductURL != "Default" ) {
+                        <span>: <img class="issue-panel-icon" src="@(Model.issue.Product.Image.icon_20)" /><a href="/@Model.issue.Product.Org.orgURL/@Model.issue.Product.ProductURL">@Model.issue.Product.ProductName</a></span>
                     }
                     @if (Model.issue.Product.TopicId != null)
                     {
                         <span>in <a href="/t/@Model.issue.Product.Topic.topicURL">@Model.issue.Product.Topic.topicName</a></span>
                     }
-
                 </p>
                 <p class="pull-right">
                     Posted  @*@Sigil.Controllers.IssueController.TimeSince( thisIssue.CreateTime )*@ 
-                    <span>by @Model.issue.User.DisplayName</span>
-                    @if (Model.issue.UserId == User.Identity.GetUserId())
-                    {<span><a href="/delete/issue/@Model.issue.Id/">Delete Issue?</a></span>}
+                    <span>
+                        by @Model.issue.User.DisplayName
+                    @if ( Model.issue.UserId == User.Identity.GetUserId() ) {
+                        <span>(<a href = "/delete/issue/@Model.issue.Id/"> Delete issue </a>)</span>
+                    }
+                    </span>
                 </p>
+
             </div>
         </div>
     </div>
