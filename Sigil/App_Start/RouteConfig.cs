@@ -62,6 +62,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Number Notifications",
+                url: "num_notes/",
+                defaults: new { controller = "Notification", action = "Get_Number_Notifications", }
+            );
+
+            routes.MapRoute(
                 name: "Add Issue",
                 url: "addissue/",
                 defaults: new { controller = "Issue", action = "AddIssue_Post" }

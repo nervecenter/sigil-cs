@@ -1,22 +1,14 @@
-<<<<<<< HEAD
-﻿function shownotifications() {
-=======
-﻿
 function shownotifications() {
->>>>>>> Dom_Refactor
     $("#header-user-icon").off("click").click(hidenotifications);
 
-    //<div id='NoteParent' class='panel-body'></div>
     var $noteparent = $("<div>")
         .attr("id", "NoteParent")
         .addClass("panel-body");
 
-    // <img class='callout' src='/Content/Images/callout.png' />
     var $callout = $("<img>")
         .addClass("callout")
         .attr("src", "/Content/Images/callout.png");
 
-    //<div class='panel panel-default notifications-panel'></div>
     var $panel = $("<div>")
         .addClass("panel")
         .addClass("panel-default")
@@ -32,53 +24,87 @@ function shownotifications() {
 
     $.get("/check_notes",
         function (data) {
-            //alert("Data length: " + data.length);
             if (data.response == "none") {
                 var $nonotes = $("<h5>").attr("style", "text-align:center;").html("No notifications. You're all caught up. :)")
                 $("#NoteParent").append($nonotes);
             } else {
                 $.each(data, function (index, Note) {
-                    var $img = $("<img>") //img container for the user icon
+                    //img container for the user icon
+                    var $img = $("<img>")
                         .addClass("media-object")
                         .addClass("notification-icon")
                         .attr("src", Note.icon);
-                    var $imganchor = $("<a>")   //icon for from user -- need to change return value of from userid to a link to their icon instead
-                        .addClass("pull-left")
+                    //icon for from user -- need to change return value of from userid to a link to their icon instead
+                    var $imganchor = $("<a>")   
+                        .addClass("media-left")
                         .append($img);
-                    var $notificationtext = $("<a>")    //link container that allows clicking the notification to take you to where it is
+
+                    //link container that allows clicking the notification to take you to where it is
+                    var $notificationtext = $("<a>")
                         .attr("href", Note.url)
                         .html(Note.title);
-                    var $deleteimg = $("<span>").addClass("glyphicon glyphicon-remove-sign");
-                
-                    var $deleteLink = $("<a>").click(Note.id,DeleteNotification).append($deleteimg);
 
-                    //var mediabodySpan = document.createElement("span"); //The span that includes the issue title where the notification took place
-                    var $mediabody = $("<div>") //div container that includes the title and link
+                    var $deletebutton = $("<span>")
+                        .addClass("glyphicon glyphicon-remove-sign");
+                    var $deleteanchor = $("<a>")
+                        .append($deletebutton)
+                        .attr("href", "#")
+                        .click({ id: Note.id }, deletenotification);
+                    var $controls = $("<div>")
+                        .addClass("media-right")
+                        .append($deleteanchor);
+
+                    //div container that includes the title and link
+                    var $mediabody = $("<div>")
                         .addClass("media-body")
-                        .append($notificationtext).append($deleteLink);
-                    var $media = $("<div>")     //parent div for entire notification
+                        .append($notificationtext);
+
+                    //parent div for entire notification
+                    var $media = $("<div>")
                         .addClass("media")
                         .append($imganchor)
-                        .append($mediabody);
+                        .append($mediabody)
+                        .append($controls);
                     $("#NoteParent").append($media);
                 });
             }
-            //should probably include a check on data to see if there is stuff there and if not just have a message that shows no notifications
         }
     );
 
 }
 
-function DeleteNotification(noteid) {
-    $.post("/delete_notification/" + noteid,
-        function () { });
+function deletenotification(event) {
+    var $note = $(this);
+    $.post("/delete_notification/" + event.data.id, function () {
+        $note.parent().parent().remove();
+        if ($("#NoteParent").html() == "") {
+            var $nonotes = $("<h5>").attr("style", "text-align:center;").html("No notifications. You're all caught up. :)")
+            $("#NoteParent").append($nonotes);
+        }
+        refreshnumnotes();
+    });
 }
-
-//"<img class='callout' src='/Content/Images/callout.png' /><div class='panel panel-default notifications-panel'><div id='NoteParent' class='panel-body'><div class='media'><a href='#' class='pull-left'><img src='/Images/User/nervecenter_100.png' class='notification-icon' alt='Sample Image'></a><div class='media-body'><span>Why hello durr, dis is a notification.</span></div></div><div class='media'><a href='#' class='pull-left'><img src='/Images/User/nervecenter_100.png' class='notification-icon' alt='Sample Image'></a><div class='media-body'><span>This is a second notification with a longer text body because in the Ministry of Feedback there really is just too much room and space to use and we need to fill it with useless shit.</span></div></div></div></div>"
 
 function hidenotifications() {
     $("#header-user-icon").off("click").click(function () { shownotifications() });
     $("#notifications-shade").remove();
 }
 
-$("#header-user-icon").click(shownotifications);
+function refreshnumnotes() {
+    $.get("/num_notes", function (data) {
+        if (data.numnotes > 0) {
+            $("#num-notes-back").show();
+            $("#num-notes").html(data.numnotes).show();
+        } else {
+            $("#num-notes-back").hide();
+            $("#num-notes").hide();
+        }
+    });
+}
+
+$(document).ready(function () {
+    $("#header-user-icon").click(shownotifications);
+    $("#num-notes-back").hide();
+    $("#num-notes").hide();
+    refreshnumnotes();
+});

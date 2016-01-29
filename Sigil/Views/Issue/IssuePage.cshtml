@@ -139,10 +139,14 @@
                             <img src="@comment.Item1.User.Image.icon_100" class="media-object" alt="Sample Image">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading">@comment.Item1.User.DisplayName<small><i>Posted @*@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )*@</i></small></h4>
+                            <h4 class="media-heading">
+                                @comment.Item1.User.DisplayName
+                                <small><i> Posted @comment.Item1.createTime.ToShortDateString()</i></small>
+                                @if ( comment.Item1.UserId == User.Identity.GetUserId() ) { 
+                                    <small><a href="/delete/comment/@comment.Item1.Id"> Delete</a></small> 
+                                }
+                            </h4>
                             <p>@comment.Item1.text</p>
-                            @if (comment.Item1.UserId == User.Identity.GetUserId())
-                            { <a href="/delete/comment/@comment.Item1.Id">Delete Comment?</a>}
                         </div>
                     </div>
 

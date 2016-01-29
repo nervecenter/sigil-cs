@@ -1,3 +1,30 @@
+#NoteParent > .media > .media-left > .media-object {
+    width: 45px;
+}
+
+#NoteParent > .media > .media-body {
+    font-size: 15px;
+}
+
+#num-notes-back {
+    position: absolute;
+    width: 100%;
+    top: 60%;
+    left: 50%;
+    width:20px;
+    pointer-events: none;
+}
+
+#num-notes {
+    position: absolute;
+    width: 20px;
+    top: 43%;
+    left: 51%;
+    color: white;
+    text-align: center;
+    pointer-events: none;
+}
+
 @media (min-width: 768px) {
   .navbar-form {
     width: 25vw;

@@ -26,11 +26,6 @@ namespace Sigil.Controllers
             userService = userS;
         }
 
-        public class NoNotes {
-            public string url = "";
-            public string title = "No notifications, you're all caught up. :)";
-        }
-
         public JsonResult Get_Notifications()
         {
             string userID = User.Identity.GetUserId();
@@ -41,7 +36,6 @@ namespace Sigil.Controllers
                 var notes = notificationService.GetUserNotifications(userID).ToList();//dc.Notifications.Where(n => n.To_UserId == userID).Select(n => n);
                 if (!notes.Any())
                 {
-                    //return Json( rNotes.Select( n => new { from = n.From, title = n.Title, url = n.URL, icon=n.Icon } ), JsonRequestBehavior.AllowGet );
                     return Json( new { response = "none" }, JsonRequestBehavior.AllowGet );
                 }
                 
@@ -65,11 +59,27 @@ namespace Sigil.Controllers
             else
             {
                 //We have a serious problem haha
-                //ErrorHandler.Log_Error(userID, "No user id of when Get_Notifications was called.", dc);
                 errorService.CreateError(userID, "No user id of when Get_Notifications was called.");
             }
             
             return Json( new { response = "none" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Get_Number_Notifications() {
+            string userID = User.Identity.GetUserId();
+
+            if ( userID != null ) {
+                var numNotes = notificationService.GetUserNotifications( userID ).Count();
+                if ( numNotes < 1 ) {
+                    return Json( new { numnotes = 0 }, JsonRequestBehavior.AllowGet );
+                } else {
+                    return Json( new { numnotes = numNotes }, JsonRequestBehavior.AllowGet );
+                }
+            } else {
+                //We have a serious problem haha
+                errorService.CreateError( userID, "No user id of when Get_Number_Notifications was called." );
+            }
+            return Json( new { response = "none" }, JsonRequestBehavior.AllowGet );
         }
 
         public JsonResult Delete_Notification(int noteId)
