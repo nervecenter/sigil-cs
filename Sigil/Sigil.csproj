@@ -334,6 +334,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\book.jpg" />
     <Content Include="Content\Images\callout.png" />
     <Content Include="Content\Images\Dark-SpriteSheet.png" />
     <Content Include="Content\Images\earth_white.png" />
@@ -360,6 +361,7 @@
     <Content Include="Content\Images\mail.png" />
     <Content Include="Content\Images\notvoted-hover.png" />
     <Content Include="Content\Images\notvoted.png" />
+    <Content Include="Content\Images\num-notes-back.png" />
     <Content Include="Content\Images\search-icon-small.png" />
     <Content Include="Content\Images\speakerphone_white.png" />
     <Content Include="Content\Images\speedometer_white.png" />
