@@ -1,4 +1,8 @@
-/* Maximum container width classes */
+@media (min-width: 768px) {
+  .navbar-form {
+    width: 25vw;
+  }
+}
 
 .maxw-400 {
     max-width: 400px;
@@ -90,10 +94,6 @@
     box-shadow: 0px -2px 15px 0px #000;
 }
 
-.navbar-center {
-    width: 100%;
-    text-align: center;
-}
 
 .btn-group-justified > .btn {
     width: 25%;
@@ -226,11 +226,6 @@
     margin-top:10px;
 }
 
-/*.navbar-center > li {
-    float: none;
-    display: inline-block;
-}*/
-
 .col-centered{
     float: none;
     margin: 0 auto;
@@ -313,11 +308,6 @@
 
 .media-object {
 	width: 64px;
-}
-
-.navbar-logo {
-	margin-top: 10px;
-	height: 40px;
 }
 
 .org-banner-small {
