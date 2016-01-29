@@ -86,9 +86,9 @@
                 </div>
                 <div class="panel-body">
                     <div class="media">
-                        <a href="#" class="pull-left">
+                        <div class="pull-left">
                             <img src="@official.ElementAt(responseNum).User.Image.icon_100" class="media-object" alt="Sample Image">
-                        </a>
+                        </div>
                         <div class="media-body">
                             <h4 class="media-heading">@official.ElementAt( responseNum ).User.DisplayName<small><i> Posted @official.ElementAt( responseNum ).createTime.ToShortDateString()</i></small></h4>
                             <p>
@@ -135,9 +135,10 @@
                 foreach ( var comment in issueComments ) 
                 {
                     <div class="media">
-                        <a href="#" class=@((pull = !pull) ? "pull-left" : "pull-right")>
+                        @*<div class=@((pull = !pull) ? "pull-left" : "pull-right")>*@
+                        <div class="pull-left">
                             <img src="@comment.Item1.User.Image.icon_100" class="media-object" alt="Sample Image">
-                        </a>
+                        </div>
                         <div class="media-body">
                             <h4 class="media-heading">
                                 @comment.Item1.User.DisplayName

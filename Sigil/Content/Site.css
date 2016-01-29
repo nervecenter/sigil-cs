@@ -1,3 +1,7 @@
+.panel-footer {
+    background-color: rgba(99, 178, 198, 0.62);
+}
+
 #NoteParent > .media > .media-left > .media-object {
     width: 45px;
 }
