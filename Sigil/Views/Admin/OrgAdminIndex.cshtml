@@ -10,7 +10,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6"><h4>Product name:</h4></div>
-                <div class="col-lg-6"><h4>Product URL:</h4></div>
+                <div class="col-lg-6"><h4>Product Handle:</h4></div>
             </div>
 
             @foreach (var product in Model.thisOrgProducts)
@@ -34,6 +34,8 @@
                     </div>
             }
 
+            <span style="color:red">@ViewBag.Message</span>
+
             @using (Html.BeginForm("AddOrgProduct", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { role = "form" }))
             {
                 @Html.AntiForgeryToken();
@@ -45,7 +47,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="product-url" id="product-url" placeholder="Product URL" />
+                            <input type="text" class="form-control" name="product-url" id="product-url" placeholder="Product URL" min="4"/>
                         </div>
                     </div>
                 </div>

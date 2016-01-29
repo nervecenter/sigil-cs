@@ -268,6 +268,14 @@ namespace Sigil.Controllers
             verifiedOrg.OrgApproved = true;
             orgService.UpdateOrgApp(verifiedOrg);
 
+            var newOrg = new Org();
+            newOrg.orgName = verifiedOrg.orgName;
+            newOrg.orgURL = verifiedOrg.orgURL;
+            //newOrg.UserID = ""; //CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id)).ToString();
+            newOrg.lastView = DateTime.UtcNow;
+            newOrg.Website = verifiedOrg.website;
+            orgService.CreateOrg(newOrg);
+            orgService.SaveOrg();
 
             var user = new ApplicationUser { UserName = verifiedOrg.AdminEmail, Email = verifiedOrg.AdminEmail, DisplayName = verifiedOrg.DisplayName };
             string tempPassword = Generate_Temp_Password();
@@ -276,6 +284,7 @@ namespace Sigil.Controllers
             {
                 Create_User_Extras(user.Id);
                 user = userService.GetUser(user.Id);
+                user.OrgId = newOrg.Id;
                 _userManager.AddToRole(user.Id, "OrgSuperAdmin");
                 userService.UpdateUser(user);
             }
@@ -286,14 +295,7 @@ namespace Sigil.Controllers
             }
             //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
 
-            var newOrg = new Org();
-            newOrg.orgName = verifiedOrg.orgName;
-            newOrg.orgURL = verifiedOrg.orgURL;
-            newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id)).ToString();
-            newOrg.lastView = DateTime.UtcNow;
-            newOrg.Website = verifiedOrg.website;
-            orgService.CreateOrg(newOrg);
-            orgService.SaveOrg();
+
 
             //need to save and commit org first before assigning image beause we need entity to fill in the org id for us
             newOrg.Image = imageService.AssignDefaultImage(newOrg.Id, ImageTypeOwner.Org);

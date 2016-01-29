@@ -431,6 +431,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\Legal\Sigil Acceptable Use.pdf" />
+    <Content Include="Content\Legal\Sigil Privacy Policy.pdf" />
+    <Content Include="Content\Legal\Sigil Terms of Use Jan 2016.pdf" />
     <None Include="Properties\PublishProfiles\beta.sigil.tech - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />

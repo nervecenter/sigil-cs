@@ -7,6 +7,7 @@ using Sigil.Models;
 using Sigil.Services;
 using Microsoft.AspNet.Identity;
 using Sigil.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace Sigil.Controllers
 {
@@ -19,7 +20,7 @@ namespace Sigil.Controllers
         private readonly ITopicService topicService;
         private readonly IIssueService issueService;
         private readonly IProductService productService;
-
+        private Regex inputFilter;
 
         private readonly ApplicationUserManager _userManager;
 
@@ -34,11 +35,7 @@ namespace Sigil.Controllers
             topicService = topS;
             issueService = issS;
             productService = prodS;
-        }
-
-       public AdminController(IOrgService orgS, IErrorService errS) {
-            orgService = orgS;
-            errorService = errS;
+            inputFilter = new Regex("[^a-z]");
         }
 
         // GET: Admin
@@ -75,6 +72,8 @@ namespace Sigil.Controllers
                 thisOrgProducts = productService.GetProductsByOrg(thisOrg.Id)
             };
 
+            ViewBag.Message = TempData["Message"];
+
             return View("OrgAdminIndex", orgAdminVM);
         }
 
@@ -82,6 +81,25 @@ namespace Sigil.Controllers
         public ActionResult AddOrgProduct(string orgURL)
         {
             Org thisOrg = orgService.GetOrg(orgURL);
+            string newProductName = Request.Form["product-name"];
+            string newProductURL = inputFilter.Replace(Request.Form["product-url"].ToLower(), "");
+            if(newProductName.Length < 5 || newProductURL.Length < 5)
+            {
+                TempData["Message"] = "Product Name and Product Handle must be minimum 5 characters.";
+                return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
+            }
+            else if(productService.GetAllProducts().Where(p => p.ProductName == newProductName).Count() != 0)
+            {
+                TempData["Message"] = "Product Name already exists. Please choose another.";
+                return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
+            }
+            else if(productService.GetAllProducts().Where(p => p.ProductURL == newProductURL).Count() != 0)
+            {
+                TempData["Message"] = "Product Handle already exists. Please choose another.";
+                return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
+            }
+            
+
             Product newProduct = new Product();
             newProduct.OrgId = thisOrg.Id;
             newProduct.ProductName = Request.Form["product-name"];
@@ -122,12 +140,16 @@ namespace Sigil.Controllers
         public ActionResult ChangeProductURL(string orgURL, string productURL)
         {
             var product = productService.GetProduct(productURL);
-            string newURL = Request.Form["newURL"];
+            string newURL = inputFilter.Replace(Request.Form["newURL"].ToLower(), "");
   
             var unique = productService.GetAllProducts().Any(p => p.ProductURL.ToLower() == newURL.ToLower() || p.ProductURL.ToLower().Contains(newURL.ToLower()));
-            if(productURL == "Default")
+            if(newURL.Length < 4)
             {
-                ViewBag.Message = "Can not change default products url.";
+                TempData["Message"] = "Product Handles must be minimum of 4 characters.";
+            }
+            else if (productURL == "Default")
+            {
+                TempData["Message"] = "Can not change default products url.";
             }
             else if (!unique) //we need to take the not here because we are looking for similar urls in the .Any call
             {
@@ -136,7 +158,7 @@ namespace Sigil.Controllers
             }
             else
             {
-                ViewBag.Message = "URL has already been taken.";
+                TempData["Message"] = "URL has already been taken.";
             }
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
@@ -210,8 +232,10 @@ namespace Sigil.Controllers
         public ActionResult ProductAdminIndex(string orgURL, string productURL)
         {
             ProductAdminIndexViewModel vm = new ProductAdminIndexViewModel();
-            vm.thisProduct = productService.GetProduct(productURL);
             vm.thisOrg = orgService.GetOrg(orgURL);
+            vm.thisProduct = productService.GetProduct(productURL, vm.thisOrg.Id);
+
+            ViewBag.Message = TempData["Message"];
 
             return View(vm);
         }

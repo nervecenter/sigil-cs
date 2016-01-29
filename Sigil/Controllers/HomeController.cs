@@ -51,7 +51,7 @@ namespace Sigil.Controllers {
                 //sort the users issues by issue rank 
                 userIssues.OrderBy(i => Rank);
                 List<IssuePanelPartialVM> userIssuesVM = userIssues.Select(i => new IssuePanelPartialVM() { issue = i, UserVoted = uservm.UserVotes.Check_Vote(i.Id), InPanel = true }).ToList();
-                int num_results_per_page = 6;
+                int num_results_per_page = 20;
                 int pageNumber = (page ?? 1);
                 vm.UserIssues = userIssuesVM.ToPagedList(pageNumber, num_results_per_page);
                 

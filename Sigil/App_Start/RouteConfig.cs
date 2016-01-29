@@ -266,6 +266,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Delete Notification",
+                url: "delete_notification/{noteId}/",
+                defaults: new { controller = "Notification", action = "Delete_Notification" }
+            );
+
+            routes.MapRoute(
                 name: "Issue VoteUp",
                 url: "voteup/{IssueId}/",
                 defaults: new { controller = "Issue", action = "VoteUp" }
