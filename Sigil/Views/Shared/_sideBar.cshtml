@@ -24,16 +24,22 @@
 
                 <hr class="sidebar-divider" />
 
-                <h4 style="margin-bottom:10px;">Products:</h4>
+                @*<h4 style="margin-bottom:10px;">Products:</h4>
                 @foreach ( Product p in Model.orgProducts ) {
                     <a href="/@Model.thisOrg.orgURL/@p.ProductURL" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
+                }*@
+
+                <h4 style="margin-bottom:10px;">Tags:</h4>
+                @foreach ( Product p in Model.orgProducts ) {
+                    <img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName<br />
                 }
             </div>
         </div>
     }
     @if (Model.showSubscriptions) {
         <div class="panel panel-default">
-            <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>
+            @*<div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>*@
+            <div class="panel-heading">Your Subscriptions</div>
             <div class="panel-body">
                 @foreach(var sub in userSubs)
                 {

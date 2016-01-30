@@ -48,7 +48,7 @@ namespace Sigil.Controllers
                     tmp.Id = n.Id;
                     tmp.From = fromUser.DisplayName;
                     tmp.Title = issue.title;
-                    tmp.URL = issue.Product.Org.orgURL + "/" + issue.Product.ProductURL + "/" + issue.Id;
+                    tmp.URL = "/" + issue.Product.Org.orgURL + "/" + issue.Product.ProductURL + "/" + issue.Id;
                     tmp.Icon = fromUser.Image.icon_100;
                     rNotes.Add(tmp);
                 }

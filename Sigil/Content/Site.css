@@ -1,3 +1,8 @@
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #FFF;
+    background-color: transparent;
+}
+
 .panel-footer {
     background-color: rgba(99, 178, 198, 0.62);
 }
@@ -134,7 +139,7 @@
     width:15px; 
     height:15px;
     margin-right: 4px;
-    vertical-align: -1px;
+    vertical-align: -3px;
 }
 
 .sub-org-icon {

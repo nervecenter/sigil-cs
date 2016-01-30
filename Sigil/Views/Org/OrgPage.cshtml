@@ -24,9 +24,9 @@
         @if (!Request.IsAuthenticated) {
             <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
         } else if (userSubs.Any<SubscriptionViewModel>(s => s.subObjectId == thisOrg.Id && s.subName == thisOrg.orgName)) {
-            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL', 'all')">Unsubscribe from All Products @*thisOrg.orgName*@</a>
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL', 'all')">Unsubscribe from @thisOrg.orgName</a>
         } else {
-            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL', 'all')">Subscribe to All Products @*thisOrg.orgName*@</a>
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL', 'all')">Subscribe to @thisOrg.orgName</a>
         }
     </div>
     <div class="panel">
@@ -38,7 +38,7 @@
                 <div id="new-feedback-button" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</div>
                 
                 <div class="form-group" id="product-select-group">
-                    <label for="product-select">The product or department of your feedback:</label>
+                    <label for="product-select">Tag your feedback by product, department, or category:</label>
                     <select class="form-control" id="product-select" name="product-select">
                         @foreach ( Product p in Model.thisOrg.Products ) {
                             <option value="@p.Id">@p.ProductName</option>

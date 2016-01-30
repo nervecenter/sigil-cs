@@ -13,12 +13,10 @@
 }
 
 <div class="col-md-9 col-lg-9">
-    <span style="font-size:30px;">@Model.UserVM.User.DisplayName's feed</span>
-    <div class="panel">
+    @*<div class="panel">
         <div class="panel-body">
             <form>
                 <div class="form-group">
-                    @*<label for="text">Text:</label><br />*@
                     <textarea id="title-input" class="form-control panel-input-box" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own"></textarea>
                 </div>
                 <div class="form-group" style="margin-bottom:0px;">
@@ -26,9 +24,10 @@
                 </div>
             </form>
         </div>
-    </div>
-    @if (Model.UserIssues.Count > 0 ) {
-        foreach ( IssuePanelPartialVM issue in Model.UserIssues) {
+    </div>*@
+    @if ( Model.UserIssues.Count > 0 ) {
+        <h4 style="margin: 0px auto 20px;">Hey @Model.UserVM.User.DisplayName! Here's the latest feedback from your subscriptions.</h4>
+        foreach ( IssuePanelPartialVM issue in Model.UserIssues ) {
             @Html.Partial( "../Shared/_IssuePanelPartial", issue)
         }
         <br />

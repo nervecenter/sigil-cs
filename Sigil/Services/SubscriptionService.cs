@@ -69,7 +69,7 @@ namespace Sigil.Services
 
         public IEnumerable<Subscription> GetUserSubscriptions(string userId)
         {
-            return subscriptionRepository.GetMany(s => s.UserId == userId) ?? new List<Subscription>().AsEnumerable();
+            return subscriptionRepository.GetMany(s => s.UserId == userId && s.ProductId == null) ?? new List<Subscription>().AsEnumerable();
         }
     }
 }

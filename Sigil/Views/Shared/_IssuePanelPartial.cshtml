@@ -25,7 +25,7 @@
                 <p class="pull-left">
                     <img class="issue-panel-icon" src="@(Model.issue.Product.Org.Image.icon_20)" /><span><a href="/@Model.issue.Product.Org.orgURL">@Model.issue.Product.Org.orgName</a></span>
                     @if ( Model.issue.Product.ProductURL != "Default" ) {
-                        <span>: <img class="issue-panel-icon" src="@(Model.issue.Product.Image.icon_20)" /><a href="/@Model.issue.Product.Org.orgURL/@Model.issue.Product.ProductURL">@Model.issue.Product.ProductName</a></span>
+                          <span class="label label-default"><img class="issue-panel-icon" src="@(Model.issue.Product.Image.icon_20)" />@Model.issue.Product.ProductName</span>
                     }
                     @if (Model.issue.Product.TopicId != null)
                     {

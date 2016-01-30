@@ -146,11 +146,11 @@ namespace Sigil {
                defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                name: "Search Issues by Product",
                url: "searchissuesbyproduct/",
                defaults: new { controller = "Search", action = "SearchIssuesByProduct" }
-            );
+            );*/
 
             routes.MapRoute(
                 name: "Admin Index",
@@ -170,11 +170,11 @@ namespace Sigil {
                 defaults: new { controller = "Search", action = "SearchByUserDisplayName" }
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Admin Product Search",
                 url: "search/AdminProductSearch/",
                 defaults: new { controller = "Search", action = "AdminProductSearch" }
-            );
+            );*/
 
 
             routes.MapRoute(
@@ -183,11 +183,11 @@ namespace Sigil {
                 defaults: new { controller = "Search", action = "SearchOrgs" }
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Search Orgs and Products",
                 url: "search/Orgs_Cats/",
                 defaults: new { controller = "Search", action = "SearchOrgs_Cats" }
-            );
+            );*/
 
             routes.MapRoute(
                 name: "Search Page",
@@ -221,11 +221,11 @@ namespace Sigil {
                 defaults: new { controller = "Admin", action = "CreateTopic" }
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Assign Product To Topic",
                 url: "sadmin/topicAdmin/AssignProduct",
                 defaults: new { controller = "Admin", action = "AssignProductToTopic" }
-            );
+            );*/
 
             routes.MapRoute(
                name: "Admin View Roles",
@@ -399,11 +399,11 @@ namespace Sigil {
             );
 
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Product Page",
                 url: "{orgURL}/{productURL}/",
                 defaults: new { controller = "Product", action = "ProductPage" }
-            );
+            );*/
 
             routes.MapRoute(
                 name: "Product Admin Index Page",
@@ -411,11 +411,11 @@ namespace Sigil {
                 defaults: new { controller = "Admin", action = "ProductAdminIndex" }
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Product URL Change",
                 url: "{orgURL}/{productURL}/admin/URLChange/",
                 defaults: new { controller = "Admin", action = "ChangeProductURL" }
-            );
+            );*/
 
             routes.MapRoute(
                 name: "Product 100 Icon Upload",
@@ -429,11 +429,11 @@ namespace Sigil {
                 defaults: new { controller = "Admin", action = "UploadProductIcon20" }
             );
 
-            routes.MapRoute(
+            /*routes.MapRoute(
                 name: "Product Banner Upload",
                 url: "{orgURL}/{productURL}/admin/bannerUpload/",
                 defaults: new { controller = "Admin", action = "UploadProductBanner" }
-            );
+            );*/
 
             routes.MapRoute(
                 name: "Product Issue Delete",

@@ -58,7 +58,7 @@
                     <p class="pull-left">
                         <img class="issue-panel-icon" src="@(thisIssue.Product.Org.Image.icon_20)" /><span><a href="/@thisIssue.Product.Org.orgURL">@thisIssue.Product.Org.orgName</a></span>
                         @if ( thisIssue.Product.ProductURL != "Default" ) {
-                            <span>: <a href="/@thisIssue.Product.Org.orgURL/@thisIssue.Product.ProductURL"> @thisIssue.Product.ProductName</a></span>
+                            <span class="label label-default"><img class="issue-panel-icon" src="@(thisIssue.Product.Image.icon_20)" />@thisIssue.Product.ProductName</span>
                         }
                         @if ( thisIssue.Product.TopicId != null ) {
                             <span>in <a href="/t/@thisIssue.Product.Topic.topicURL">@thisIssue.Product.Topic.topicName</a></span>
