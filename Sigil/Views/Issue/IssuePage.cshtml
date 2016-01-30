@@ -56,7 +56,7 @@
                         @*@if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }*@
                     </h4>
                     <p class="pull-left">
-                        <img class="issue-panel-icon" src="@(thisIssue.Product.Image.icon_20)" /><span><a href="/@thisIssue.Product.Org.orgURL">@thisIssue.Product.Org.orgName</a></span>
+                        <img class="issue-panel-icon" src="@(thisIssue.Product.Org.Image.icon_20)" /><span><a href="/@thisIssue.Product.Org.orgURL">@thisIssue.Product.Org.orgName</a></span>
                         @if ( thisIssue.Product.ProductURL != "Default" ) {
                             <span>: <a href="/@thisIssue.Product.Org.orgURL/@thisIssue.Product.ProductURL"> @thisIssue.Product.ProductName</a></span>
                         }

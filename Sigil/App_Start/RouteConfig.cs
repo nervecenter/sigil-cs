@@ -50,6 +50,24 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Terms of Use",
+                url: "terms/",
+                defaults: new { controller = "Home", action = "Terms" }
+            );
+
+            routes.MapRoute(
+                name: "Acceptable Use",
+                url: "acceptableuse/",
+                defaults: new { controller = "Home", action = "AcceptableUse" }
+            );
+
+            routes.MapRoute(
+                name: "Privacy Policy",
+                url: "privacy/",
+                defaults: new { controller = "Home", action = "Privacy" }
+            );
+
+            routes.MapRoute(
                 name: "User Icon Upload",
                 url: "user_icon_upload/",
                 defaults: new { controller = "Manage", action = "User_Icon_Upload", }

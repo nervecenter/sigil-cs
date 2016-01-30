@@ -100,6 +100,16 @@ namespace Sigil.Controllers {
             return View(userVM);
         }
 
+        public FileResult Terms() {
+            return File( "/Content/Legal/Sigil Terms of Use.pdf", "application/pdf");
+        }
+        public FileResult AcceptableUse() {
+            return File( "/Content/Legal/Sigil Acceptable Use.pdf", "application/pdf" );
+        }
+        public FileResult Privacy() {
+            return File( "/Content/Legal/Sigil Privacy Policy.pdf", "application/pdf" );
+        }
+
         public ActionResult About()
         {
             return View();

@@ -92,14 +92,31 @@
                         </div>
                         *@
 
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="policy-accept"> I agree to Sigil's <a href="/terms" target="_blank">Terms of Use</a> and <a href="/acceptableuse" target="_blank">Acceptable Use</a> policies.
+                            </label>
+                        </div>
+
                         <h4>We'll review this application and contact you directly within two business days.</h4>
-                        <button type="submit" class="btn btn-primary">Submit application</button>
+                        <button type="submit" class="btn btn-primary disabled" id="sign-up-button">Submit application</button>
                     }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+        $("#policy-accept").change(function () {
+            var checked = $(this).prop("checked");
+            if (checked) {
+                $("#sign-up-button").removeClass("disabled");
+            } else {
+                $("#sign-up-button").addClass("disabled");
+            }
+        });
+</script>
 
 @section Scripts {
     @Scripts.Render( "~/bundles/jqueryval" )
