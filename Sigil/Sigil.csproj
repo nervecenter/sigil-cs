@@ -333,12 +333,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
+    <Content Include="Content\Images\advertise.png" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\book.jpg" />
     <Content Include="Content\Images\callout.png" />
     <Content Include="Content\Images\Dark-SpriteSheet.png" />
     <Content Include="Content\Images\earth_white.png" />
     <Content Include="Content\Images\favicon.png" />
+    <Content Include="Content\Images\feedback-ad.png" />
     <Content Include="Content\Images\feedback-shadow.png" />
     <Content Include="Content\Images\glyphicons-halflings-white.png" />
     <Content Include="Content\Images\glyphicons-halflings.png" />

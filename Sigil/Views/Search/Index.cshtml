@@ -56,17 +56,17 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <h3>Products</h3>
+            <h3>Tags</h3>
             <div class="panel panel-default">
                 <div class="panel-body">
                     @if ( products.Count > 0 ) {
                         foreach ( var p in products ) {
                             <div class="media">
                                 <div class="media-left">
-                                    <img class="media-object" src="@p.Image.icon_100" />
+                                    <img class="media-object" src="@p.Org.Image.icon_100" />
                                 </div>
                                 <div class="media-body">
-                                    <h3><a href="/@p.Org.orgName/@p.ProductName">@p.ProductName</a></h3>
+                                    <h3><a href="/@p.Org.orgURL">@p.Org.orgName</a> <span class="label label-default pull-right"><img src="@p.Image.icon_20" /> @p.ProductName</span></h3>
                                 </div>
                             </div>
                             <hr />
