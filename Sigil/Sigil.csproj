@@ -522,6 +522,7 @@
     <Content Include="Views\Admin\SigilAdminIndex.cshtml" />
     <Content Include="Views\Home\FeaturesPage.cshtml" />
     <Content Include="Views\Admin\ProductAdminIndex.cshtml" />
+    <Content Include="Views\Org\OrgList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

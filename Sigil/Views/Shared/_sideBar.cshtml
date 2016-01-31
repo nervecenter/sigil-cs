@@ -9,7 +9,7 @@
     var ad = new Random().Next() % 2;
 }
 
-<div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12">
     @if ( Model.showOrgBox ) {
         <div class="panel panel-default">
             <div class="panel-body">
@@ -40,8 +40,8 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <a href="/index">Browse companies on Sigil</a><br />
-            <a href="/index">Browse topics</a>
+            <a href="/companies">Browse companies on Sigil</a><br />
+            @*<a href="/index">Browse topics</a>*@
             <hr class="sidebar-divider" />
             <a href="/features"><b>Sigil for your business</b></a>
         </div>

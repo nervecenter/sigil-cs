@@ -32,8 +32,13 @@ namespace Sigil.Controllers
             SideBarVM sidebarVM = new SideBarVM().Init();
             
             string controller = Request.RequestContext.RouteData.Values[ "controller" ].ToString();
+            string action = Request.RequestContext.RouteData.Values[ "action" ].ToString();
+            
+            if (action == "OrgList") {
+                sidebarVM.showOrgBox = false;
+            }
 
-            if (controller == "Org" || controller == "Issue" || controller == "Product") {
+            else if (controller == "Org" || controller == "Issue" || controller == "Product") {
                 sidebarVM.showOrgBox = true;
 
                 var currentURL = Request.Url.AbsoluteUri.Split('/');

@@ -284,6 +284,12 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Org List",
+                url: "companies/",
+                defaults: new { controller = "Org", action = "OrgList" }
+            );
+
+            routes.MapRoute(
                 name: "Default Org Data",
                 url: "default_graph/{orgURL}/",
                 defaults: new { controller = "Org", action = "DefaultData" }
