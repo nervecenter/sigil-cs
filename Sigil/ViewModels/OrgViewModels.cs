@@ -17,6 +17,11 @@ namespace Sigil.ViewModels
         public IPagedList<IssuePanelPartialVM> orgIssues { get; set; }
     }
 
+    public struct OrgListViewModel {
+        public IEnumerable<Org> orgs { get; set; }
+        public UserViewModel UserVM { get; set; }
+    }
+
     public struct OrgDataPageViewModel
     {
         public Org thisOrg { get; set; }

@@ -27,6 +27,7 @@ namespace Sigil.Controllers
         private readonly IImageService imageService;
         private readonly ISubscriptionService subscriptionService;
         private readonly IProductService productService;
+
         /* 
         ==================== 
         OrgPage
@@ -46,6 +47,25 @@ namespace Sigil.Controllers
             subscriptionService = subS;
             productService = prodS;
 
+        }
+
+        public ActionResult OrgList() {
+            // Get the org
+            var allOrgs = orgService.GetAllOrgs();//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
+
+            // Get the user and their subscriptions
+            var userId = User.Identity.GetUserId();
+            UserViewModel userVM = new UserViewModel().emptyUser();
+
+            if ( userId != null ) {
+                userVM = userService.GetUserViewModel( userId );
+            }
+
+            OrgListViewModel orgListVM = new OrgListViewModel();
+            orgListVM.UserVM = userVM;
+            orgListVM.orgs = allOrgs;
+            
+            return View( orgListVM );
         }
 
         [HttpGet]

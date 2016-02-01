@@ -65,7 +65,7 @@ namespace Sigil.Controllers
                 search_list["Org"] = search_orgs(term);
                 search_list["Topic"] = search_topics(term);
                 search_list["Issue"] = search_issues(term);
-                search_list["Product"] = search_products(term);
+                //search_list["Product"] = search_products(term);
             }
 
             foreach(string k in search_list.Keys)
@@ -94,14 +94,14 @@ namespace Sigil.Controllers
                         Final_search_list[t.topicName] = "/t/" + t.topicURL;
                     }
                 }
-                else if(k == "Product")
+                /*else if(k == "Product")
                 {
                     List<Product> found_products = (List<Product>)search_list[k];
                     foreach (Product p in found_products)
                     {
                         Final_search_list[p.ProductName] = "/" + p.Org.orgURL + "/" + p.ProductURL;
                     }
-                }
+                }*/
             }
 
             return Json(Final_search_list.Select(s => new { label = s.Key, value = s.Value }), JsonRequestBehavior.AllowGet);

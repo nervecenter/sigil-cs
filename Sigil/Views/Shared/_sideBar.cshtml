@@ -6,9 +6,10 @@
 
 @{ 
     IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
+    var ad = new Random().Next() % 2;
 }
 
-<div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12">
     @if ( Model.showOrgBox ) {
         <div class="panel panel-default">
             <div class="panel-body">
@@ -36,6 +37,16 @@
             </div>
         </div>
     }
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a href="/companies">Browse companies on Sigil</a><br />
+            @*<a href="/index">Browse topics</a>*@
+            <hr class="sidebar-divider" />
+            <a href="/features"><b>Sigil for your business</b></a>
+        </div>
+    </div>
+
     @if (Model.showSubscriptions) {
         <div class="panel panel-default">
             @*<div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>*@
@@ -48,23 +59,25 @@
             </div>
         </div>
     }
-    <div class="panel panel-default">
-        <div class="panel-body">
-            Ads go here.
-        </div>
-    </div>
+
+    @if ( ad == 0 ) {
+        <a href="mailto:contact@sigil.tech"><img class="img-responsive img-rounded" src="~/Content/Images/advertise.png" style="margin-bottom:21px;" /></a>
+    } else {
+        <a href="/sigil" target="_blank"><img class="img-responsive img-rounded" src="~/Content/Images/feedback-ad.png" style="margin-bottom:21px;" /></a>
+    }
+
     <div class="panel panel-default">
         <div class="panel-body" style="font-size:12px;">
             © 2016 Sigil Technologies Inc.<br />
-            <a href="/about">About</a>
+            <a href="/404">About</a>
             |
             <a href="/legal">Legal</a>
             |
-            <a href="/advertise">Advertise</a>
+            <a href="mailto:contact@sigil.tech">Advertise</a>
             |
             <a href="#">Twitter</a>
             |
-            <a href="https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/">Facebook</a>
+            <a href="https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/" target="_blank">Facebook</a>
             |
             <a href="mailto:contact@sigil.tech">Contact</a>
         </div>
