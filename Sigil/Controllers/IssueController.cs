@@ -103,7 +103,8 @@ namespace Sigil.Controllers
 
             viewModel.IssueProduct = thisProduct;
 
-            viewModel.sideBar = new SideBarVM() { thisOrg = thisOrg, Subscriptions = userVM.UserSubscriptions };
+            //viewModel.sideBar = new SideBarVM() { thisOrg = thisOrg, Subscriptions = userVM.UserSubscriptions };
+            viewModel.sideBar = new SideBarVM() { thisOrg = thisOrg };
 
             viewModel.OfficialResponses = official;
             

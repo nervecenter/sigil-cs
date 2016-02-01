@@ -52,9 +52,11 @@ namespace Sigil.Controllers
 
             if (Request.IsAuthenticated) {
                 sidebarVM.showSubscriptions = true;
-                
-                List<Subscription> subs = subscriptionService.GetUserSubscriptions( User.Identity.GetUserId() ).ToList();
-                sidebarVM.Subscriptions = subs.Select(s => new SubscriptionViewModel().Create(s));
+
+                sidebarVM.UserVM = userService.GetUserViewModel( User.Identity.GetUserId() );
+
+                //List<Subscription> subs = subscriptionService.GetUserSubscriptions( User.Identity.GetUserId() ).ToList();
+                //sidebarVM.Subscriptions = subs.Select(s => new SubscriptionViewModel().Create(s));
             }
 
             return PartialView( sidebarVM );

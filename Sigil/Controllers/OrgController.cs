@@ -162,47 +162,47 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        //public ActionResult OrgResponsesPage( string orgURL ) {
-        //    // Get the org
-        //    Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault( o => o.orgURL == orgURL );
+        public ActionResult OrgResponses( string orgURL, int? page ) {
+            // Get the org
+            Org thisOrg = orgService.GetOrg( orgURL );//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
-        //    // If the org doesn't exist, redirect to 404
-        //    if ( thisOrg == default( Org ) ) {
-        //        Response.Redirect( "~/404" );
-        //    }
+            // If the org doesn't exist, redirect to 404
+            if ( thisOrg == null ) {
+                return RedirectToRoute( "404" );
+            }
 
-        //    // Get the user and their subscriptions
-        //    var userId = User.Identity.GetUserId();
-        //    UserVoteCol userVotes = new UserVoteCol();
+            // Get the user and their subscriptions
+            var userId = User.Identity.GetUserId();
+            UserViewModel userVM = new UserViewModel().emptyUser();
 
-        //    if ( userId != null ) {
-        //        // Get the user's votes on this org
-        //        userVotes = userService.GetUserVotes(userId);//CountXML<UserVoteCol>.XMLtoDATA( countDataService.GetUserVotes(userId))//dc.AspNetUsers.Single( u => u.Id == userId ).votes );
-        //    }
+            if ( userId != null ) {
+                userVM = userService.GetUserViewModel( userId );
+            }
+            //ViewBag.userVotes = userVotes;
 
-        //    ViewBag.userVotes = userVotes;
+            // MODEL: Put the org and the list of issues into a tuple as our page model
+            int num_results_per_page = 20;
+            int pageNumber = ( page ?? 1 );
 
-        //    // Get the issues of the org
-        //    // TODO: Grab issues chosen by an algorithm based on age and weight
-        //    //IQueryable<Issue> issueList = from issue in dc.Issues
-        //    //                              where issue.OrgId == thisOrg.Id && issue.responded == true
-        //    //                              select issue;
+            OrgResponsesViewModel orgResVM = new OrgResponsesViewModel();
+            orgResVM.UserVM = userVM;
+            orgResVM.thisOrg = thisOrg;
 
-        //    var OrgComments = commentService.GetOrgsOfficialResponses(thisOrg.Id).ToList();
+            var OrgRespondedIssues = issueService.GetAllOrgIssues( thisOrg.Id ).Where(i => i.responded || i.OfficialResponses.Count > 0).Select( i => new IssuePanelPartialVM() {
+                issue = i,
+                InPanel = true,
+                UserVoted = userVM.UserVotes.Check_Vote( i.Id )
+            } ).ToList();
 
-        //    if (OrgComments.Count > 0) {
-        //        OrgComments.OrderBy( i => i.createTime);
-        //    }
+            orgResVM.orgRespondedIssues = OrgRespondedIssues.ToPagedList( pageNumber, num_results_per_page );
+            //Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, userView, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
 
-        //    // MODEL: Put the org and the list of issues into a tuple as our page model
-        //    Tuple<Org, IEnumerable<Issue>> orgAndIssues = new Tuple<Org, IQueryable<Issue>>( thisOrg, OrgComments );
+            // This may not actually be necessary.
+            //ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
 
-        //    // Again, might not actually be necessary.
-        //    //ViewBag.userSub = dc.Subscriptions.SingleOrDefault( s => s.UserId == userId && s.OrgId == thisOrg.Id );
-
-        //    // Pass our org and issues to the view as the model
-        //    return View( orgAndIssues );
-        //}
+            // Pass our org and issues to the view as the model
+            return View( orgResVM );
+        }
 
         /* 
         ==================== 

@@ -237,7 +237,7 @@ namespace Sigil.Services
             userVM.User = GetUser(userId);
             
             userVM.UserNotifications = notificationRepository.GetUsersNotifications(userId);
-            userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId).Select(s => new SubscriptionViewModel().Create(s));
+            userVM.UserSubscriptions = subscriptionRepository.GetMany(s => s.UserId == userId && s.ProductId == null).Select(s => new SubscriptionViewModel().Create(s));
             userVM.UserVotes = GetUserVotes(userId);
             
             if(userVM.User.OrgId != 0)
