@@ -8,26 +8,47 @@
     }
 }
 
-
-<nav class="navbar navbar-fixed-top @(!transparent ? "navbar-default" : "") @(transparent ? "navbar-transparent" : "")">
+<nav class="navbar navbar-fixed-top @(transparent ? "navbar-transparent" : "navbar-default")">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a href="@Url.Action("Index", "Home")"><img src="/Content/Images/symbol-small.png" class="navbar-logo"></a>
+        <div class="navbar-header" id="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/" style="padding: 10px 15px;height:40px;">
+                <img alt="Sigil" src="/Content/Images/symbol-small.png">
+            </a>
+            <div class="navbar-brand">Beta</div>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul id="navbar-list" class="nav navbar-nav navbar-right">
-                @using (Html.BeginRouteForm("Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search", style="width:25vw;" }))
-                {
-                    <div class="form-group" style="width:100%;">
-                        <input id="site-search-box" type="text" value="@Request.Form["searchTerm"]" data-provide="typeahead" name="searchTerm" class="form-control typeahead" placeholder="Search for a company, person, or product">
-                    </div>
-                }
-                @{Html.RenderAction("_LoginPartial", "Shared");}
-                
+
+            @using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" } ) ) {
+                <div class="form-group" style="width:100%;">
+                    <input id="site-search-box" type="text" value="@Request.Form["searchTerm"]" data-provide="typeahead" name="searchTerm" class="form-control typeahead" placeholder="Search for a company, person, or product">
+                </div>
+            }
+            
+            @*<ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
             </ul>
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
+            </ul>*@
+
+            @{Html.RenderAction( "_LoginPartial", "Shared" );}
+
+            @*@using ( Html.BeginRouteForm( "Search Page", FormMethod.Post, new { @class = "navbar-form navbar-right", role = "search", style = "width:25vw;" } ) ) {
+                <div class="form-group" style="width:100%;">
+                    <input id="site-search-box" type="text" value="@Request.Form["searchTerm"]" data-provide="typeahead" name="searchTerm" class="form-control typeahead" placeholder="Search for a company, person, or product">
+                </div>
+            }*@
+
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>

@@ -14,3 +14,8 @@ function EnableProductSubmit() {
 
 $("#product-name").keyup(EnableProductSubmit);
 $("#product-url").keyup(EnableProductSubmit);
+
+$(".btn-file :file").change(function () {
+    var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+    $(this).parent().parent().parent().children().last().attr("value", label);
+});

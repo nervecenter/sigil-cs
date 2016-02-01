@@ -1,35 +1,64 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Sigil.ViewModels
 @model UserViewModel
-@if ( Request.IsAuthenticated && Model.User != null) {
+@if ( Request.IsAuthenticated && Model.User != null ) {
 
+    @*<ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+    </ul>*@
 
-    if(User.IsInRole("SigilAdmin"))
-    {
+    <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Sigil Admin Panel", "Index", "Admin", routeValues: null, htmlAttributes: new {@class ="pull-right", style="border-left:0"})
+            <a href="javascript:document.getElementById('logoutForm').submit()">
+                @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm" } ) ) {
+                    @Html.AntiForgeryToken()
+                    <span>Log Out</span>
+                }
+            </a>
         </li>
-    }
-    if(User.IsInRole("OrgSuperAdmin") || User.IsInRole("OrgAdmin") || User.IsInRole("SigilAdmin"))
-    {
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Admin Panel", "OrgAdmin", "Admin", routeValues: new { orgURL = Model.orgURL }, htmlAttributes: new { @class = "pull-right", style = "border-left:0" })
+            @Html.ActionLink( Model.User.DisplayName, "Index", "Manage" )
         </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right hidden-xs">
+        <li style="position:relative;">
+            <img id="header-user-icon" class="img-rounded img-responsive" src="@Model.User.Image.icon_100" style="height: 40px;margin-top:10px;">
+            <img id="num-notes-back" src="~/Content/Images/num-notes-back.png">
+            <h5 id="num-notes"></h5>
+        </li>
+    </ul>
+
+    <script>
+        $(document).ready(function () {
+            $("#header-user-icon").click(shownotifications);
+            $("#num-notes-back").hide();
+            $("#num-notes").hide();
+            refreshnumnotes();
+        });
+    </script>
+
+    if ( User.IsInRole( "OrgSuperAdmin" ) || User.IsInRole( "OrgAdmin" ) || User.IsInRole( "SigilAdmin" ) ) {
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/@Model.orgURL/admin/">Org Admin Panel</a></li>
+        </ul>
     }
-    <li>
-        <img id="header-user-icon" class="img-rounded img-responsive header-user-icon pull-left" onclick="shownotifications()" src="@Model.User.Image.icon_100">
-        @Html.ActionLink( Model.User.DisplayName, "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "pull-right", style = "border-left:0;" } )
-    </li>
-    <li>
-        <a href="javascript:document.getElementById('logoutForm').submit()">
-            @using ( Html.BeginForm( "LogOff", "Account", FormMethod.Post, new { id = "logoutForm" } ) ) {
-                @Html.AntiForgeryToken()
-                <span>Log Out</span>
-            }
-        </a>
-    </li>
+
+    if ( User.IsInRole( "SigilAdmin" ) ) {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink( "Site Admin Panel", "Index", "Admin" )</li>
+        </ul>
+    }
 
 } else {
-    <li>@Html.ActionLink( "Log In", "Login", "Account", routeValues: null, htmlAttributes: new { } )</li>
-    <li>@Html.ActionLink( "Sign Up", "Register", "Account", routeValues: null, htmlAttributes: new { style = "margin-right:12px;" } )</li>
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink( "Sign Up", "Register", "Account" )</li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink( "Log In", "Login", "Account")</li>
+    </ul>
 }

@@ -13,9 +13,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <h3 style="margin: 10px auto -10px;"><a href="/@Model.thisOrg.orgURL"><img class="sub-org-icon" src="@Model.thisOrg.Image.icon_100" style="width:25px;height:25px;" />@Model.thisOrg.orgName</a></h3><br />
-                @if (Model.thisOrg.Website != null)
-                {<a href="@Model.thisOrg.Website"><img class="sub-org-icon" src="~/Content/Images/website.png" />Website</a><br />}
-                <a href="#"><img class="sub-orgi-con" src="~/Content/Images/mail.png" />Message</a>
+                @if (Model.thisOrg.Website != null) {
+                    <a href="@Model.thisOrg.Website"><img class="sub-org-icon" src="~/Content/Images/website.png" />Website</a><br />
+                }
+                @*<a href="#"><img class="sub-orgi-con" src="~/Content/Images/mail.png" />Contact</a>*@
 
                 <hr class="sidebar-divider" />
 
@@ -23,16 +24,22 @@
 
                 <hr class="sidebar-divider" />
 
-                <h4 style="margin-bottom:10px;">Products:</h4>
+                @*<h4 style="margin-bottom:10px;">Products:</h4>
                 @foreach ( Product p in Model.orgProducts ) {
                     <a href="/@Model.thisOrg.orgURL/@p.ProductURL" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
+                }*@
+
+                <h4 style="margin-bottom:10px;">Tags:</h4>
+                @foreach ( Product p in Model.orgProducts ) {
+                    <img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName<br />
                 }
             </div>
         </div>
     }
     @if (Model.showSubscriptions) {
         <div class="panel panel-default">
-            <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>
+            @*<div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>*@
+            <div class="panel-heading">Your Subscriptions</div>
             <div class="panel-body">
                 @foreach(var sub in userSubs)
                 {

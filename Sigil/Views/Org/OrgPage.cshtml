@@ -6,7 +6,7 @@
 @model OrgPageViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = Server.MapPath(@" ~/Views") + "/Shared/_Layout.cshtml";
 
     Org thisOrg = Model.thisOrg;
     ViewBag.Title = "Sigil - " + thisOrg.orgName;

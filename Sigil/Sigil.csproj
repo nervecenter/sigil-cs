@@ -430,6 +430,7 @@
     <Content Include="Content\Legal\Sigil Acceptable Use.pdf" />
     <Content Include="Content\Legal\Sigil Privacy Policy.pdf" />
     <Content Include="Content\Legal\Sigil Terms of Use.pdf" />
+    <Content Include="App_Data\FilteredWords.csv" />
     <None Include="Properties\PublishProfiles\beta.sigil.tech - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />

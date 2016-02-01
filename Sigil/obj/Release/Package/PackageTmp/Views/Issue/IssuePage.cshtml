@@ -56,9 +56,9 @@
                         @*@if ( Model.issue.responded ) { <small><i style="color:red;">Response!</i></small> }*@
                     </h4>
                     <p class="pull-left">
-                        <img class="issue-panel-icon" src="@(thisIssue.Product.Image.icon_20)" /><span><a href="/@thisIssue.Product.Org.orgURL">@thisIssue.Product.Org.orgName</a></span>
+                        <img class="issue-panel-icon" src="@(thisIssue.Product.Org.Image.icon_20)" /><span><a href="/@thisIssue.Product.Org.orgURL">@thisIssue.Product.Org.orgName</a></span>
                         @if ( thisIssue.Product.ProductURL != "Default" ) {
-                            <span>: <a href="/@thisIssue.Product.Org.orgURL/@thisIssue.Product.ProductURL"> @thisIssue.Product.ProductName</a></span>
+                            <span class="label label-default"><img class="issue-panel-icon" src="@(thisIssue.Product.Image.icon_20)" />@thisIssue.Product.ProductName</span>
                         }
                         @if ( thisIssue.Product.TopicId != null ) {
                             <span>in <a href="/t/@thisIssue.Product.Topic.topicURL">@thisIssue.Product.Topic.topicName</a></span>
@@ -75,20 +75,24 @@
         <div class="panel-body">@thisIssue.text</div>
     </div>
 
-    @if ( official.Count() > 0) {
+    @if ( official.Count() > 0 ) {
+        for ( int responseNum = 0; responseNum < official.Count(); responseNum++ /*var OfResponse in official*/ ) {
         <div class="panel panel-primary">
-            @foreach (var OfResponse in official)
-            {
-                <div class="panel-heading">Official Response</div>
+                <div class="panel-heading">
+                    Official Response
+                    @if (official.Count() > 1) {
+                        <span>#@(responseNum + 1)</span>
+                    }
+                </div>
                 <div class="panel-body">
                     <div class="media">
-                        <a href="#" class="pull-left">
-                            <img src="@OfResponse.User.Image.icon_100" class="media-object" alt="Sample Image">
-                        </a>
+                        <div class="pull-left">
+                            <img src="@official.ElementAt(responseNum).User.Image.icon_100" class="media-object" alt="Sample Image">
+                        </div>
                         <div class="media-body">
-                            <h4 class="media-heading">@OfResponse.User.DisplayName<small><i> Posted @OfResponse.createTime.ToShortDateString()</i></small></h4>
+                            <h4 class="media-heading">@official.ElementAt( responseNum ).User.DisplayName<small><i> Posted @official.ElementAt( responseNum ).createTime.ToShortDateString()</i></small></h4>
                             <p>
-                                @OfResponse.text
+                                @official.ElementAt( responseNum ).text
                             </p>
                             @*<div class="btn-group glyphicon-position" data-toggle="buttons">
                                 <button type="button" class="btn btn-success btn-xs"><!--<span class="glyphicon glyphicon-ok"></span>--> Helpful</button>
@@ -97,8 +101,8 @@
                         </div>
                     </div>
                 </div>
-            }
         </div>
+        }
     }
     @if (Model.UserVM.isOrgAdmin)
     {
@@ -131,14 +135,19 @@
                 foreach ( var comment in issueComments ) 
                 {
                     <div class="media">
-                        <a href="#" class=@((pull = !pull) ? "pull-left" : "pull-right")>
+                        @*<div class=@((pull = !pull) ? "pull-left" : "pull-right")>*@
+                        <div class="pull-left">
                             <img src="@comment.Item1.User.Image.icon_100" class="media-object" alt="Sample Image">
-                        </a>
+                        </div>
                         <div class="media-body">
-                            <h4 class="media-heading">@comment.Item1.User.DisplayName<small><i>Posted @*@Sigil.Controllers.IssueController.TimeSince( @comm.postDate )*@</i></small></h4>
+                            <h4 class="media-heading">
+                                @comment.Item1.User.DisplayName
+                                <small><i> Posted @comment.Item1.createTime.ToShortDateString()</i></small>
+                                @if ( comment.Item1.UserId == User.Identity.GetUserId() ) { 
+                                    <small><a href="/delete/comment/@comment.Item1.Id"> Delete</a></small> 
+                                }
+                            </h4>
                             <p>@comment.Item1.text</p>
-                            @if (comment.Item1.UserId == User.Identity.GetUserId())
-                            { <a href="/delete/comment/@comment.Item1.Id">Delete Comment?</a>}
                         </div>
                     </div>
 

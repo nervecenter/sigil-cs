@@ -15,7 +15,8 @@ namespace Sigil
     {
         public SigilEntities() : base("SigilDB", throwIfV1Schema: false)
         {
-            Database.SetInitializer<SigilEntities>(new CreateDatabaseIfNotExists<SigilEntities>());//(new Migrations.Configuration());//new DropCreateDatabaseIfModelChanges<SigilEntities>());//*/// 
+            Database.SetInitializer<SigilEntities>(new DropCreateDatabaseIfModelChanges<SigilEntities>());//
+             // (new CreateDatabaseIfNotExists<SigilEntities>());//new //*/// 
 
             //    Configuration.ProxyCreationEnabled = false;
             //    Configuration.LazyLoadingEnabled = false;
