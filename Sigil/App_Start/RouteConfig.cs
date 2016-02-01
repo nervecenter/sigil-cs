@@ -347,7 +347,7 @@ namespace Sigil {
             routes.MapRoute(
                 name: "OrgResponses",
                 url: "{orgURL}/responses/",
-                defaults: new { controller = "Org", action = "OrgResponsesPage" }
+                defaults: new { controller = "Org", action = "OrgResponses" }
             );
 
             routes.MapRoute(

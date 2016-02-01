@@ -5,7 +5,12 @@
 @model SideBarVM
 
 @{ 
+<<<<<<< HEAD
     IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
+=======
+    //IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;
+>>>>>>> origin/Refactor
     var ad = new Random().Next() % 2;
 }
 
@@ -21,9 +26,10 @@
 
                 <hr class="sidebar-divider" />
 
-                <a href="/@Model.thisOrg.orgURL/data" style="font-size:23px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;width:100%;">Data</div></a>
-
-                <hr class="sidebar-divider" />
+                @if ( Model.UserVM.isOrgAdmin ) {
+                    <a href="/@Model.thisOrg.orgURL/data" style="font-size:23px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;width:100%;">Data</div></a>
+                    <hr class="sidebar-divider" />
+                }
 
                 @*<h4 style="margin-bottom:10px;">Products:</h4>
                 @foreach ( Product p in Model.orgProducts ) {

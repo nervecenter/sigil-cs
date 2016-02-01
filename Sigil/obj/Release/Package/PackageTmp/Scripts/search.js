@@ -1,5 +1,5 @@
 ﻿$('#site-search-box').autocomplete({
-    source: 'https://localhost:44301/search/',
+    source: '/search/',
     _renderItem: function( ul, item ) {
         return $( "<li>" )
           .attr( "data-value", item.label )
@@ -33,7 +33,7 @@ function SearchIssuesByOrg() {
     var $searchBox = $('#issues-by-org-search');
     var searchQuery = { id: $searchBox.data('orgid'), term: $searchBox.val() };
     $.ajax({
-        url: 'https://localhost:44301/searchissuesbyorg/',
+        url: '/searchissuesbyorg/',
         type: 'POST',
         data: JSON.stringify(searchQuery),
         dataType: 'json',
@@ -66,7 +66,7 @@ function SearchIssuesByProduct() {
     var $searchBox = $('#issues-by-product-search');
     var searchQuery = { id: $searchBox.data('productid'), term: $searchBox.val() };
     $.ajax({
-        url: 'https://localhost:44301/searchissuesbyproduct/',
+        url: '/searchissuesbyproduct/',
         type: 'POST',
         data: JSON.stringify(searchQuery),
         dataType: 'json',

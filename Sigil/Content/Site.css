@@ -122,6 +122,13 @@
     color: #FFF;
 }
 
+@media (max-width: 767px) {
+    .small-links {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+}
+
 .panel, .btn-group, .org-banner-small {
     box-shadow: 1px 5px 10px -4px #898989;
 }

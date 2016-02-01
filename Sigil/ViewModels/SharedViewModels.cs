@@ -134,7 +134,9 @@ namespace Sigil.ViewModels
 
         public bool showSubscriptions { get; set; }
 
-        public IEnumerable<SubscriptionViewModel> Subscriptions { get; set; }
+        //public IEnumerable<SubscriptionViewModel> Subscriptions { get; set; }
+
+        public UserViewModel UserVM { get; set; }
         
 
         public SideBarVM Init()
@@ -145,7 +147,8 @@ namespace Sigil.ViewModels
             thisOrg = default(Org);
 
             orgProducts = new List<Product>().AsEnumerable();
-            Subscriptions = new List<SubscriptionViewModel>().AsEnumerable();
+            //Subscriptions = new List<SubscriptionViewModel>().AsEnumerable();
+            UserVM = new UserViewModel().emptyUser();
 
             return this;
         }
