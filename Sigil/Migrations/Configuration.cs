@@ -76,14 +76,14 @@ namespace Sigil.Migrations
                 userManager.AddToRole(user.Id, "SigilAdmin");
             }
 
-            if (!(context.Users.Any(u => u.UserName == "nervecenter7@gmail.com")))
+            if (!(context.Users.Any(u => u.UserName == "cjcollazo@sigil.tech" ) ))
             {
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 var userToInsert = new ApplicationUser { UserName = "cjcollazo@sigil.tech", Email = "cjcollazo@sigil.tech", DisplayName = "Chris" };
                 userManager.Create(userToInsert, "s323232");
 
-                var user = context.Users.Where(u => u.UserName == "nervecenter7@gmail.com").FirstOrDefault();
+                var user = context.Users.Where(u => u.UserName == "cjcollazo@sigil.tech").FirstOrDefault();
                 user.OrgId = context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
                 Image userImg = new Image();
                 userImg.imgType = (int)ImageTypeOwner.User;

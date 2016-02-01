@@ -4,13 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container settings-container">
+@*<div class="container settings-container">
     <h2 class="settings-page-header">@Model.thisOrg.orgName Admin Panel</h2>
     <div class="panel" style="text-align:center;">
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6"><h4>Product name:</h4></div>
-                <div class="col-lg-6"><h4>Product URL:</h4></div>
+                <div class="col-lg-6"><h4>Product Handle:</h4></div>
             </div>
 
             @foreach (var product in Model.thisOrgProducts)
@@ -34,6 +34,8 @@
                     </div>
             }
 
+            <span style="color:red">@ViewBag.Message</span>
+
             @using (Html.BeginForm("AddOrgProduct", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { role = "form" }))
             {
                 @Html.AntiForgeryToken();
@@ -45,7 +47,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="product-url" id="product-url" placeholder="Product URL" />
+                            <input type="text" class="form-control" name="product-url" id="product-url" placeholder="Product URL" min="4"/>
                         </div>
                     </div>
                 </div>
@@ -59,7 +61,7 @@
             }
         </div>
     </div>
-</div>
+</div>*@
 
 <div class="container settings-container">
     <div class="row">
@@ -92,13 +94,68 @@
 
 <div class="container settings-container">
     <div class="row">
+
+        <div class="col-lg-6">
+            <div class="panel" style="text-align:center;">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6"><h4>Tag name:</h4></div>
+                        <div class="col-lg-6"><h4>Tag URL:</h4></div>
+                    </div>
+
+                    @foreach ( var product in Model.thisOrgProducts ) {
+                        <hr />
+                        <div class="row" style="margin-bottom:10px;">
+                            <div class="col-lg-6">@product.ProductName</div>
+                            <div class="col-lg-6">
+                                @product.ProductURL -
+                                <a href="/@Model.thisOrg.orgURL/@product.ProductURL/">www.sigil.tech/@Model.thisOrg.orgURL/@product.ProductURL/</a>
+                                <a href="/@Model.thisOrg.orgURL/@product.ProductURL/admin/">
+                                    <span class="glyphicon glyphicon-wrench"></span>
+                                </a>
+                                @if ( product.ProductURL != "Default" ) {
+                                    <a href="/@Model.thisOrg.orgURL/admin/delete/@product.ProductURL/">
+                                        <span class="glyphicon glyphicon-remove-sign"></span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <span style="color:red">@ViewBag.Message</span>
+
+                    @using ( Html.BeginForm( "AddOrgProduct", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { role = "form" } ) ) {
+                        @Html.AntiForgeryToken();
+                        <div class="row" style="margin-top:30px;">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="product-name" id="product-name" placeholder="Tag name" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="product-url" id="product-url" placeholder="Tag URL" min="4" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <button id="new-product-submit" class="btn btn-default disabled form-control" type="submit">Create New Tag</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-6">
             <div class="panel">
                 <div class="panel-body">
                     <img src="@Model.thisOrg.Image.icon_100" class="img-rounded img-responsive img-relief" />
                     <h4>Icon size: 100 x 100</h4>
-                    @using (Html.BeginForm("UploadOrgIcon100", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
-                    {
+                    @using ( Html.BeginForm( "UploadOrgIcon100", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
                         @Html.AntiForgeryToken();
                         <div class="form-group">
                             <div class="input-group">
@@ -116,8 +173,7 @@
                     }
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6">
+
             <div class="panel">
                 <div class="panel-body">
                     <img src="@Model.thisOrg.Image.icon_20" class="img-responsive img-relief" />
@@ -142,15 +198,9 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-
-<script>
-    $(".btn-file :file").change(function () {
-        var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
-        $(this).parent().parent().parent().children().last().attr("value", label);
-    });
-</script>
 
 @*<h3>Current Org URL: @Model.thisOrg.orgURL</h3>
     @using (Html.BeginForm("ChangeOrgURL", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post))

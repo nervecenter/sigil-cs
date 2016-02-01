@@ -18,10 +18,10 @@
                             <h4>@Html.ActionLink( "Create", "SetPassword" )</h4>
                         }
                     </div>
-                    <hr />
-                    <div class="form-group">
-                        <h4>@Html.ActionLink( "Manage social media logins", "ManageLogins" )</h4>
-                    </div>
+                    @*<hr />
+    <div class="form-group">
+        <h4>@Html.ActionLink( "Manage social media logins", "ManageLogins" )</h4>
+    </div>*@
                 </div>
             </div>
         </div>
@@ -52,10 +52,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(".btn-file :file").change(function () {
-        var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
-        $(this).parent().parent().parent().children().last().attr("value", label);
-    });
-</script>

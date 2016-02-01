@@ -5,34 +5,54 @@
 @model SideBarVM
 
 @{ 
-    IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
+    //IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;
+    var ad = new Random().Next() % 2;
 }
 
-<div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12">
     @if ( Model.showOrgBox ) {
         <div class="panel panel-default">
             <div class="panel-body">
                 <h3 style="margin: 10px auto -10px;"><a href="/@Model.thisOrg.orgURL"><img class="sub-org-icon" src="@Model.thisOrg.Image.icon_100" style="width:25px;height:25px;" />@Model.thisOrg.orgName</a></h3><br />
-                @if (Model.thisOrg.Website != null)
-                {<a href="@Model.thisOrg.Website"><img class="sub-org-icon" src="~/Content/Images/website.png" />Website</a><br />}
-                <a href="#"><img class="sub-orgi-con" src="~/Content/Images/mail.png" />Message</a>
+                @if (Model.thisOrg.Website != null) {
+                    <a href="@Model.thisOrg.Website"><img class="sub-org-icon" src="~/Content/Images/website.png" />Website</a><br />
+                }
+                @*<a href="#"><img class="sub-orgi-con" src="~/Content/Images/mail.png" />Contact</a>*@
 
                 <hr class="sidebar-divider" />
 
-                <a href="/@Model.thisOrg.orgURL/data" style="font-size:23px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;width:100%;">Data</div></a>
+                @if ( Model.UserVM.isOrgAdmin ) {
+                    <a href="/@Model.thisOrg.orgURL/data" style="font-size:23px;"><div class="btn btn-sm btn-primary" style="padding:2px 12px;width:100%;">Data</div></a>
+                    <hr class="sidebar-divider" />
+                }
 
-                <hr class="sidebar-divider" />
-
-                <h4 style="margin-bottom:10px;">Products:</h4>
+                @*<h4 style="margin-bottom:10px;">Products:</h4>
                 @foreach ( Product p in Model.orgProducts ) {
                     <a href="/@Model.thisOrg.orgURL/@p.ProductURL" class="sub"><img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName</a><br />
+                }*@
+
+                <h4 style="margin-bottom:10px;">Tags:</h4>
+                @foreach ( Product p in Model.orgProducts ) {
+                    <img class="sub-org-icon" src="@p.Image.icon_20" />@p.ProductName<br />
                 }
             </div>
         </div>
     }
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a href="/companies">Browse companies on Sigil</a><br />
+            @*<a href="/index">Browse topics</a>*@
+            <hr class="sidebar-divider" />
+            <a href="/features"><b>Sigil for your business</b></a>
+        </div>
+    </div>
+
     @if (Model.showSubscriptions) {
         <div class="panel panel-default">
-            <div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>
+            @*<div class="panel-heading"><a href="@Url.Action( "Index", "Subscriptions" )">Your Subscriptions</a></div>*@
+            <div class="panel-heading">Your Subscriptions</div>
             <div class="panel-body">
                 @foreach(var sub in userSubs)
                 {
@@ -41,23 +61,25 @@
             </div>
         </div>
     }
-    <div class="panel panel-default">
-        <div class="panel-body">
-            Ads go here.
-        </div>
-    </div>
+
+    @if ( ad == 0 ) {
+        <a href="mailto:contact@sigil.tech"><img class="img-responsive img-rounded" src="~/Content/Images/advertise.png" style="margin-bottom:21px;" /></a>
+    } else {
+        <a href="/sigil" target="_blank"><img class="img-responsive img-rounded" src="~/Content/Images/feedback-ad.png" style="margin-bottom:21px;" /></a>
+    }
+
     <div class="panel panel-default">
         <div class="panel-body" style="font-size:12px;">
             © 2016 Sigil Technologies Inc.<br />
-            <a href="/about">About</a>
+            <a href="/404">About</a>
             |
             <a href="/legal">Legal</a>
             |
-            <a href="/advertise">Advertise</a>
+            <a href="mailto:contact@sigil.tech">Advertise</a>
             |
             <a href="#">Twitter</a>
             |
-            <a href="https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/">Facebook</a>
+            <a href="https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/" target="_blank">Facebook</a>
             |
             <a href="mailto:contact@sigil.tech">Contact</a>
         </div>

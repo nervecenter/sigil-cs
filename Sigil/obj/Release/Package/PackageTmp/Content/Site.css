@@ -1,3 +1,57 @@
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #FFF;
+    background-color: transparent;
+}
+
+.panel-footer {
+    background-color: rgba(99, 178, 198, 0.62);
+}
+
+#NoteParent > .media > .media-left > .media-object {
+    width: 45px;
+}
+
+#NoteParent > .media > .media-body {
+    font-size: 15px;
+}
+
+#num-notes-back {
+    position: absolute;
+    width: 100%;
+    top: 60%;
+    left: 50%;
+    width:20px;
+    pointer-events: none;
+}
+
+#num-notes {
+    position: absolute;
+    width: 20px;
+    top: 43%;
+    left: 51%;
+    color: white;
+    text-align: center;
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .navbar-form {
+    width: 25vw;
+  }
+}
+
+.maxw-400 {
+    max-width: 400px;
+}
+
+.maxw-700 {
+    max-width: 700px;
+}
+
+.maxw-1000 {
+    max-width: 1000px;
+}
+
 .panel-info {
     border-width: 2px;
 }
@@ -68,6 +122,13 @@
     color: #FFF;
 }
 
+@media (max-width: 767px) {
+    .small-links {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+}
+
 .panel, .btn-group, .org-banner-small {
     box-shadow: 1px 5px 10px -4px #898989;
 }
@@ -76,10 +137,6 @@
     box-shadow: 0px -2px 15px 0px #000;
 }
 
-.navbar-center {
-    width: 100%;
-    text-align: center;
-}
 
 .btn-group-justified > .btn {
     width: 25%;
@@ -89,7 +146,7 @@
     width:15px; 
     height:15px;
     margin-right: 4px;
-    vertical-align: -1px;
+    vertical-align: -3px;
 }
 
 .sub-org-icon {
@@ -212,11 +269,6 @@
     margin-top:10px;
 }
 
-/*.navbar-center > li {
-    float: none;
-    display: inline-block;
-}*/
-
 .col-centered{
     float: none;
     margin: 0 auto;
@@ -299,11 +351,6 @@
 
 .media-object {
 	width: 64px;
-}
-
-.navbar-logo {
-	margin-top: 10px;
-	height: 40px;
 }
 
 .org-banner-small {
