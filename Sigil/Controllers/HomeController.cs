@@ -145,7 +145,7 @@ namespace Sigil.Controllers {
         /// <returns></returns>
         private IEnumerable<IGrouping<Org, IssuePanelPartialVM>> Get_Trending_Issues_With_Topics()
         {
-            var pretrending = issueService.GetAllIssues().ToList();
+            var pretrending = issueService.GetAllIssues().Where(i => i.User.DisplayName != "Deleted").ToList();
 
             pretrending.Sort(Rank);
 

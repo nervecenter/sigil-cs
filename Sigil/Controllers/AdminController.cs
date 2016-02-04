@@ -244,8 +244,8 @@ namespace Sigil.Controllers
         [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadProductBanner(string orgURL, string productURL)
         {
-            //var org = orgService.GetOrg(orgURL);
-            var product = productService.GetProduct(productURL);
+            var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL, org.Id);
             imageService.ProductBannerImageUpload(product, Request.Files[0]);
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
@@ -253,15 +253,18 @@ namespace Sigil.Controllers
         [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadProductIcon100(string orgURL, string productURL)
         {
-            var product = productService.GetProduct(productURL);
+            var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL, org.Id);
             imageService.ProductIcon100ImageUpload(product, Request.Files[0]);
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
         }
+
         [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadProductIcon20(string orgURL, string productURL)
         {
-            var product = productService.GetProduct(productURL);
+            var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL,org.Id);
             imageService.ProductIcon20ImageUpload(product, Request.Files[0]);
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
@@ -454,7 +457,7 @@ namespace Sigil.Controllers
 
             return View(newOrgs);
         }
-
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult ErrorLog()
         {
             var errors = errorService.GetAllErrors();//dc.Errors.Select(e => e).ToList();

@@ -31,19 +31,39 @@ namespace Sigil
 
         public static MailAddress fromAddress = new MailAddress("contact@sigil.tech", "Sigil");
 
-        private static NetworkCredential Credentials = new NetworkCredential { UserName = "contact@sigil.tech", Password = "Sigiltech1027!" };
+        //private static NetworkCredential Credentials =  { UserName = "dominic@sigil.tech", Password = "Sigiltech1027!" };
+
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            string path = HostingEnvironment.MapPath(@"~/App_Data/");
 
-            string email = EmailAddressLinkFormat(emailAddress);
+            var emailMessage = new MailMessage();
+            emailMessage.To.Add(message.Destination);
 
-            var fileText = System.IO.File.ReadAllText(path + @"\EmailTemplate.html");
-            StringDictionary fields = new StringDictionary();
-            fields.Add("EMAIL", email);
+            emailMessage.From = fromAddress;
+            emailMessage.Subject = message.Subject;// "Thank you for joining us for the next step in feedback";
+            emailMessage.Body = message.Body;
+            emailMessage.IsBodyHtml = true;
+            try
+            {
+                using (var smtp = new SmtpClient())
+                {
+                    
+                    smtp.Host = "smtp-relay.gmail.com";
+                    smtp.Timeout = 15000;
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential("dominic@sigil.tech", "Sigiltech1027!");
+                    smtp.Send(emailMessage);
+                }
+            }
+            catch (Exception e)
+            {
+                
+                return Task.FromResult(1);
+            }
 
-           
             return Task.FromResult(0);
         }
     }
@@ -102,54 +122,6 @@ namespace Sigil
             UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
         }
     }
-
-        //public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
-        //{
-        //    var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<SigilEntities>()));//context.Get<ApplicationDbContext>()));
-        //    // Configure validation logic for usernames
-        //    manager.UserValidator = new UserValidator<ApplicationUser>(manager)
-        //    {
-        //        AllowOnlyAlphanumericUserNames = false,
-        //        RequireUniqueEmail = true
-        //    };
-
-        //    // Configure validation logic for passwords
-        //    manager.PasswordValidator = new PasswordValidator
-        //    {
-        //        RequiredLength = 6,
-        //        RequireNonLetterOrDigit = true,
-        //        RequireDigit = true,
-        //        RequireLowercase = true,
-        //        RequireUppercase = true,
-        //    };
-
-        //    // Configure user lockout defaults
-        //    manager.UserLockoutEnabledByDefault = true;
-        //    manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-        //    manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-
-        //    // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-        //    // You can write your own provider and plug it in here.
-        //    manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
-        //    {
-        //        MessageFormat = "Your security code is {0}"
-        //    });
-        //    manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
-        //    {
-        //        Subject = "Security Code",
-        //        BodyFormat = "Your security code is {0}"
-        //    });
-        //    manager.EmailService = new EmailService();
-        //    manager.SmsService = new SmsService();
-        //    var dataProtectionProvider = options.DataProtectionProvider;
-        //    if (dataProtectionProvider != null)
-        //    {
-        //        manager.UserTokenProvider = 
-        //            new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-        //    }
-        //    return manager;
-        //}
-    //}
 
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>

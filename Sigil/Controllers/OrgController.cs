@@ -49,7 +49,8 @@ namespace Sigil.Controllers
 
         }
 
-        public ActionResult OrgList() {
+        public ActionResult OrgList()
+        {
             // Get the org
             var allOrgs = orgService.GetAllOrgs();//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
@@ -57,15 +58,16 @@ namespace Sigil.Controllers
             var userId = User.Identity.GetUserId();
             UserViewModel userVM = new UserViewModel().emptyUser();
 
-            if ( userId != null ) {
-                userVM = userService.GetUserViewModel( userId );
+            if (userId != null)
+            {
+                userVM = userService.GetUserViewModel(userId);
             }
 
             OrgListViewModel orgListVM = new OrgListViewModel();
             orgListVM.UserVM = userVM;
             orgListVM.orgs = allOrgs;
-            
-            return View( orgListVM );
+
+            return View(orgListVM);
         }
 
         [HttpGet]
@@ -86,7 +88,7 @@ namespace Sigil.Controllers
 
             if (userId != null)
             {
-                userVM = userService.GetUserViewModel( userId );
+                userVM = userService.GetUserViewModel(userId);
             }
             //ViewBag.userVotes = userVotes;
 
@@ -117,24 +119,26 @@ namespace Sigil.Controllers
 
         [HttpPost]
         [ActionName("OrgPage")]
-        public ActionResult OrgPage_Post( string orgURL, int? page ) {
+        public ActionResult OrgPage_Post(string orgURL, int? page)
+        {
             // Get the org
-            Org thisOrg = orgService.GetOrg( orgURL );//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
-            string issueTitle = Request.Form[ "title" ];
+            string issueTitle = Request.Form["title"];
             string issuetext = Request.Form["text"];
             // If the org doesn't exist, redirect to 404
-            if ( thisOrg == null ) {
-                return RedirectToRoute( "404" );
+            if (thisOrg == null)
+            {
+                return RedirectToRoute("404");
             }
 
             Product prod = productService.GetProduct(Convert.ToInt32(Request.Form["product-select"]));
-            
+
             AddIssueVM addIssueVM = new AddIssueVM() { org = thisOrg, product = prod, title = issueTitle, text = issuetext };
-          
-            TempData[ "vm" ] = addIssueVM;
+
+            TempData["vm"] = addIssueVM;
             //return View( "AddIssue", "Issue", addIssueVM );
-            return RedirectToAction( "AddIssue_Post", "Issue");
+            return RedirectToAction("AddIssue_Post", "Issue");
         }
 
 
@@ -162,46 +166,50 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public ActionResult OrgResponses( string orgURL, int? page ) {
+        public ActionResult OrgResponses(string orgURL, int? page)
+        {
             // Get the org
-            Org thisOrg = orgService.GetOrg( orgURL );//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
 
             // If the org doesn't exist, redirect to 404
-            if ( thisOrg == null ) {
-                return RedirectToRoute( "404" );
+            if (thisOrg == null)
+            {
+                return RedirectToRoute("404");
             }
 
             // Get the user and their subscriptions
             var userId = User.Identity.GetUserId();
             UserViewModel userVM = new UserViewModel().emptyUser();
 
-            if ( userId != null ) {
-                userVM = userService.GetUserViewModel( userId );
+            if (userId != null)
+            {
+                userVM = userService.GetUserViewModel(userId);
             }
             //ViewBag.userVotes = userVotes;
 
             // MODEL: Put the org and the list of issues into a tuple as our page model
             int num_results_per_page = 20;
-            int pageNumber = ( page ?? 1 );
+            int pageNumber = (page ?? 1);
 
             OrgResponsesViewModel orgResVM = new OrgResponsesViewModel();
             orgResVM.UserVM = userVM;
             orgResVM.thisOrg = thisOrg;
 
-            var OrgRespondedIssues = issueService.GetAllOrgIssues( thisOrg.Id ).Where(i => i.responded || i.OfficialResponses.Count > 0).Select( i => new IssuePanelPartialVM() {
+            var OrgRespondedIssues = issueService.GetAllOrgIssues(thisOrg.Id).Where(i => i.responded || i.OfficialResponses.Count > 0).Select(i => new IssuePanelPartialVM()
+            {
                 issue = i,
                 InPanel = true,
-                UserVoted = userVM.UserVotes.Check_Vote( i.Id )
-            } ).ToList();
+                UserVoted = userVM.UserVotes.Check_Vote(i.Id)
+            }).ToList();
 
-            orgResVM.orgRespondedIssues = OrgRespondedIssues.ToPagedList( pageNumber, num_results_per_page );
+            orgResVM.orgRespondedIssues = OrgRespondedIssues.ToPagedList(pageNumber, num_results_per_page);
             //Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>> orgAndIssues = new Tuple<Org, UserViewModel, PagedList.IPagedList<Sigil.Models.Issue>>(thisOrg, userView, OrgIssues.ToPagedList(pageNumber, num_results_per_page));
 
             // This may not actually be necessary.
             //ViewBag.userSub = dc.Subscriptions.SingleOrDefault(s => s.UserId == userId && s.OrgId == thisOrg.Id);
 
             // Pass our org and issues to the view as the model
-            return View( orgResVM );
+            return View(orgResVM);
         }
 
         /* 
@@ -211,7 +219,7 @@ namespace Sigil.Controllers
             Data page for an Org, showing views/votes this week/month, responsiveness, and top issues  
         ==================== 
         */
-        [Authorize (Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
+        [Authorize(Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
         public JsonResult DefaultData(string orgURL)
         {
             Org thisOrg = orgService.GetOrg(orgURL);
@@ -234,7 +242,7 @@ namespace Sigil.Controllers
 
             List<Tuple<long, int>> view_data = new List<Tuple<long, int>>();
 
-            switch(dataType)
+            switch (dataType)
             {
                 case "Views":
                     {
@@ -268,7 +276,7 @@ namespace Sigil.Controllers
 
             return Json(view_data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
         }
-        [Authorize (Roles ="SigilAdmin, OrgSuperAdmin, OrgAdmin")]
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult OrgData(string orgURL)
         {
             // Get the org
@@ -309,3 +317,4 @@ namespace Sigil.Controllers
         }
 
     }
+}

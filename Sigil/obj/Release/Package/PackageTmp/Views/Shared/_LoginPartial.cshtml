@@ -41,7 +41,12 @@
         });
     </script>
 
-    if ( User.IsInRole( "OrgSuperAdmin" ) || User.IsInRole( "OrgAdmin" ) || User.IsInRole( "SigilAdmin" ) ) {
+    if (User.IsInRole("OrgSuperAdmin") || User.IsInRole("OrgAdmin") || User.IsInRole("SigilAdmin"))
+    {
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/@Model.orgURL">Org Page</a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/@Model.orgURL/admin/">Org Admin Panel</a></li>
         </ul>
