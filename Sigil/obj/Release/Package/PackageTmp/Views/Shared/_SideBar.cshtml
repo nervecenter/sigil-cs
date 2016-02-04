@@ -5,12 +5,8 @@
 @model SideBarVM
 
 @{ 
-<<<<<<< HEAD
-    IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
-=======
     //IEnumerable<SubscriptionViewModel> userSubs = Model.Subscriptions;
     IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;
->>>>>>> origin/Refactor
     var ad = new Random().Next() % 2;
 }
 

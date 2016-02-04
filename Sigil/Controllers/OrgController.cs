@@ -223,7 +223,7 @@ namespace Sigil.Controllers
             return Json(View_Data.Select(d => new { viewDate = d.Item1, viewCount = d.Item2 }), JsonRequestBehavior.AllowGet);
         }
 
-
+        [Authorize(Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
         public JsonResult CustomData(string orgURL, string dataType, string start, string stop)
         {
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
@@ -309,4 +309,3 @@ namespace Sigil.Controllers
         }
 
     }
-}

@@ -527,13 +527,10 @@
     <Content Include="Content\Legal\Sigil Acceptable Use.pdf" />
     <Content Include="Content\Legal\Sigil Privacy Policy.pdf" />
     <Content Include="Content\Legal\Sigil Terms of Use.pdf" />
-<<<<<<< HEAD
     <Content Include="App_Data\FilteredWords.csv" />
-=======
     <Content Include="Images\TMP\Nerve_21_" />
     <Content Include="Images\TMP\Sigil_20_" />
     <Content Include="Images\TMP\Sigil_26_" />
->>>>>>> origin/Refactor
     <None Include="Properties\PublishProfiles\beta.sigil.tech - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />

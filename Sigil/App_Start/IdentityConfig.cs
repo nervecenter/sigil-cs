@@ -13,6 +13,8 @@ using Microsoft.Owin.Security;
 using Sigil.Models;
 using Microsoft.Owin.Security.DataProtection;
 using Sigil;
+using System.Net.Mail;
+using System.Net;
 
 namespace Sigil
 {
@@ -26,9 +28,22 @@ namespace Sigil
 
     public class EmailService : IIdentityMessageService
     {
+
+        public static MailAddress fromAddress = new MailAddress("contact@sigil.tech", "Sigil");
+
+        private static NetworkCredential Credentials = new NetworkCredential { UserName = "contact@sigil.tech", Password = "Sigiltech1027!" };
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
+            string path = HostingEnvironment.MapPath(@"~/App_Data/");
+
+            string email = EmailAddressLinkFormat(emailAddress);
+
+            var fileText = System.IO.File.ReadAllText(path + @"\EmailTemplate.html");
+            StringDictionary fields = new StringDictionary();
+            fields.Add("EMAIL", email);
+
+           
             return Task.FromResult(0);
         }
     }
