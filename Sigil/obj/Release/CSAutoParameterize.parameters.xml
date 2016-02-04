@@ -3,7 +3,4 @@
   <parameter name="SigilDB-Web.config Connection String" description="SigilDB Connection String used in web.config by the application to access the database." defaultValue="Data Source=(localdb)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\SigilDB.mdf;Integrated Security=True" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="C:\\Sigil\\Sigil\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='SigilDB']/@connectionString" />
   </parameter>
-  <parameter name="SigilDB_DatabasePublish-Web.config Connection String" description="SigilDB_DatabasePublish Connection String used in web.config by the application to access the database." defaultValue="SigilDB_DatabasePublish.ConnetionString" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Sigil\\Sigil\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='SigilDB_DatabasePublish']/@connectionString" />
-  </parameter>
 </parameters>

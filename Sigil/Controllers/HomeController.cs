@@ -44,7 +44,7 @@ namespace Sigil.Controllers {
 
 
                 //get all the users issues based on their subscriptions
-                var userIssues = issueService.GetAllUserIssues(userID, subscriptionService.GetUserSubscriptions(userID));
+                var userIssues = issueService.GetAllUserIssues(userID, subscriptionService.GetUserSubscriptions(userID)).Where(i => i.User.DisplayName != "Deleted");
 
                 //NEED TO SORT JUST GET THE SORTED ISSUES FROM THE ISSUE SERVICE!!!!!!!!
 

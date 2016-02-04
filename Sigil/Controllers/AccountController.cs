@@ -173,7 +173,7 @@ namespace Sigil.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -309,7 +309,10 @@ namespace Sigil.Controllers
                 _userManager.AddToRole(user.Id, "OrgSuperAdmin");
                 userService.UpdateUser(user);
 
-                await UserManager.SendEmailAsync(user.Id, "Password for Admin Account", tempPassword);
+                string emailSubject = "Thank you " + verifiedOrg.AdminContactName + ", " + verifiedOrg.orgName + "has been approved!";
+                string emailBody = "Thank you for your interest in Sigil. Please login using " + verifiedOrg.AdminEmail + "and this provided password " + tempPassword + " . We advise changing your password to something more personal so that its easier to remember.";
+
+                await UserManager.SendEmailAsync(user.Id, emailSubject, emailBody);
 
             }
             else

@@ -80,7 +80,7 @@
 </head>
 <body class="page">
     <div class="wrap">
-        @Html.Partial( "_Header" )
+        @Html.Partial("_Header")
 
         <div class="container splash-container mb-30">
             <div class="container hero-container">
@@ -162,8 +162,8 @@
                             </div>
                             With repeats eliminated, we give you the tools to give a visible public answer once, directly to everyone who needs it. Voice your position and win the trust of your customers simply by being responsive.
                         </div>
-                    </div>   
-                                     
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -231,9 +231,11 @@
         </div>
     </div>
     <br class="clear" />
-    @Html.Partial( "_Footer" )
+    @Html.Partial("_Footer")
 
-    <script type="text/javascript" src="~/Scripts/Search.js"></script>
-    <script type="text/javascript" src="~/Scripts/notifications.js"></script>
+    @*@Scripts.Render("~/bundles/search")*@
+    @Scripts.Render("~/bundles/sigilScripts")
+    @*<script type="text/javascript" src="~/Scripts/notifications.js"></script>*@
 </body>
+
 </html>
