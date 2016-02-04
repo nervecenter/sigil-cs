@@ -72,12 +72,12 @@ namespace Sigil.ViewModels
                 html += "<img src=\"~/Content/Images/notvoted.png\" class=\"voteup\" onclick=\"voteup(this, " + Model.issue.Id + "\" onmouseover=\"votehover(this)\" onmouseout=\"voteunhover(this)\">";
             }*/
             html += "<br /><span id=\"count-" + Model.issue.Id + "\" class=\"voteamount\">" + Model.issue.votes + "</span></div><div class=\"media-body\"><h4 class=\"media-heading\"><a href = \"/" + Model.issue.Product.Org.orgURL + "/" + Model.issue.Product.ProductURL + "/" + Model.issue.Id + "\">" + Model.issue.title + "</a>";
-            html += "</h4><p class=\"pull-left\"><img class=\"issue-panel-icon\" src=\"" + Model.issue.Product.Image.icon_20 + "\"/><span><a href = \"" + Model.issue.Product.Org.orgURL + "\">" + Model.issue.Product.Org.orgName + "</a></span>";
+            html += "</h4><p class=\"pull-left\"><img class=\"issue-panel-icon\" src=\"" + Model.issue.Product.Org.Image.icon_20 + "\"/><span><a href = \"" + Model.issue.Product.Org.orgURL + "\">" + Model.issue.Product.Org.orgName + "</a></span>";
             if ( Model.issue.Product.ProductURL != "Default" ) {
-                html += "<span>: <a href = \"/" + @Model.issue.Product.Org.orgURL + "/" + Model.issue.Product.ProductURL + "\">" + Model.issue.Product.ProductName + "</a></span>";
+                html += "  <span class=\"label label-default\"><img class=\"issue-panel-icon\" src=\"" + Model.issue.Product.Image.icon_20 + "\" />" + Model.issue.Product.ProductName + "</span>";
             }
             if ( Model.issue.Product.TopicId != null ) {
-                html += "<span> in <a href = \"/t/@Model.issue.Product.Topic.topicURL\">" + Model.issue.Product.Topic.topicName + "</a></span>";
+                html += "<span>in <a href = \"/t/" + Model.issue.Product.Topic.topicURL + "\">" + Model.issue.Product.Topic.topicName + "</a></span>";
             }
             html += "</p><p class=\"pull-right\"><span>Posted by " + Model.issue.User.DisplayName + "</span></p></div></div></div>";
 
