@@ -316,5 +316,75 @@ namespace Sigil.Controllers
             return View(vm);
         }
 
+
+        [Authorize(Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
+        public JsonResult CustomTopIssues (string orgURL, string start, string stop)
+        {
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            DateTime startDate = DateTimeConversion.FromJSms(start);
+
+            DateTime stopDate = DateTimeConversion.FromJSms(stop);
+            var user = userService.GetUser(User.Identity.GetUserId());
+            var userVM = userService.GetUserViewModel(user.Id);
+            List<IssuePanelPartialJsonVM> vm = new List<IssuePanelPartialJsonVM>();
+
+            var issues = issueService.GetAllOrgIssues(thisOrg.Id).Where(i => i.editTime >= startDate && i.editTime < stopDate).OrderBy(o => o.votes).ThenBy(o => o.viewCount).Take(5);
+            string partialHtml = "";
+
+            foreach (var i in issues)
+                partialHtml += IssuePanelPartialJsonVM.IssuePanelPartialHTML(new IssuePanelPartialVM {issue = i, InPanel = true, UserVoted = userVM.UserVotes.Check_Vote(i.Id)});
+            
+
+
+            return Json( partialHtml, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [Authorize(Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
+        public JsonResult CustomUnderDogIssues(string orgURL, string start, string stop)
+        {
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            DateTime startDate = DateTimeConversion.FromJSms(start);
+
+            DateTime stopDate = DateTimeConversion.FromJSms(stop);
+            var user = userService.GetUser(User.Identity.GetUserId());
+            var userVM = userService.GetUserViewModel(user.Id);
+            List<IssuePanelPartialJsonVM> vm = new List<IssuePanelPartialJsonVM>();
+
+            var issues = issueService.GetAllOrgIssues(thisOrg.Id).Where(i => i.editTime >= startDate && i.editTime < stopDate).OrderBy(o => o.votes).ThenBy(o => o.viewCount).Take(5);
+            string partialHtml = "";
+
+            foreach (var i in issues)
+                partialHtml += IssuePanelPartialJsonVM.IssuePanelPartialHTML(new IssuePanelPartialVM { issue = i, InPanel = true, UserVoted = userVM.UserVotes.Check_Vote(i.Id) });
+
+
+
+            return Json(partialHtml, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize(Roles = "SigilAdmin, OrgAdmin, OrgSuperAdmin")]
+        public JsonResult CustomTopUnrespondedIssues(string orgURL, string start, string stop)
+        {
+            Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault<Org>(o => o.orgURL == orgURL);
+
+            DateTime startDate = DateTimeConversion.FromJSms(start);
+
+            DateTime stopDate = DateTimeConversion.FromJSms(stop);
+            var user = userService.GetUser(User.Identity.GetUserId());
+            var userVM = userService.GetUserViewModel(user.Id);
+            List<IssuePanelPartialJsonVM> vm = new List<IssuePanelPartialJsonVM>();
+            
+            var issues = issueService.GetAllOrgIssues(thisOrg.Id).Where(i => i.editTime >= startDate && i.editTime < stopDate && i.responded == false).OrderBy(o => o.votes).ThenBy(o => o.viewCount).Take(5);
+            string partialHtml = "";
+
+            foreach (var i in issues)
+                partialHtml += IssuePanelPartialJsonVM.IssuePanelPartialHTML(new IssuePanelPartialVM { issue = i, InPanel = true, UserVoted = userVM.UserVotes.Check_Vote(i.Id) });
+
+
+
+            return Json(partialHtml, JsonRequestBehavior.AllowGet);
+        }
     }
 }
