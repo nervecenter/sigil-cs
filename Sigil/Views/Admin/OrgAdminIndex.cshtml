@@ -65,36 +65,47 @@
 
 <div class="container settings-container">
     <div class="row">
-    </div>
-    <div class="panel">
-        <div class="panel-body">
-            <img class="img-rounded img-responsive img-relief" src="@Model.thisOrg.Image.banner" />
-            <h4>Recommended banner size: 1000 x 200</h4>
-            @using (Html.BeginForm("UploadOrgBanner", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
-            {
-                @Html.AntiForgeryToken();
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <span class="btn btn-default btn-file">
-                                Browse <input type="file" name="imgBanner" id="imgBanner">
-                            </span>
-                        </div>
-                        <input class="form-control image-input" readonly="" type="text">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default disabled form-control">Upload new banner</button>
-                </div>
-
-            }
+        <div class="col-lg-12">
+            <div class="btn-group btn-group-justified" style="margin-bottom:20px;">
+                <a class="btn btn-warning" href="/@Model.thisOrg.orgURL">@Model.thisOrg.orgName Main Feed</a>
+                <a class="btn btn-primary" href="/@Model.thisOrg.orgURL/data">@Model.thisOrg.orgName Data</a>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="container settings-container">
     <div class="row">
+        <div class="col-lg-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <img class="img-rounded img-responsive img-relief" src="@Model.thisOrg.Image.banner" />
+                    <h4>Recommended banner size: 1000 x 200</h4>
+                    @using ( Html.BeginForm( "UploadOrgBanner", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" } ) ) {
+                        @Html.AntiForgeryToken();
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse <input type="file" name="imgBanner" id="imgBanner">
+                                    </span>
+                                </div>
+                                <input class="form-control image-input" readonly="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default disabled form-control">Upload new banner</button>
+                        </div>
 
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container settings-container">
+    <div class="row">
         <div class="col-lg-6">
             <div class="panel" style="text-align:center;">
                 <div class="panel-body">

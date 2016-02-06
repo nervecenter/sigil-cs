@@ -41,6 +41,11 @@
     .container {
         max-width: 1000px;
     }
+
+    #top-issues-parent, #rising-issues-parent, #response-issues-parent {
+        width: 90%;
+        margin: 0 auto;
+    }
 </style>
 
 <div class="container">
@@ -71,7 +76,7 @@
                     </div>
                     <div>
                         <h4 id="data-header">Top issues for selected period</h4>
-                        <ol id="top-issues-parent">
+                        <div id="top-issues-parent">
                             @if (Model.TopIssuePeriod.Count() == 0)
                             {
                                 <span>No issues posted recently.</span>
@@ -81,22 +86,22 @@
                             {
                                 @Html.Partial("../Shared/_IssuePanelPartial", issueVM)
                             }
-                        </ol>
+                        </div>
+
+                        <h4 id="data-header">Top issues awaiting responses</h4>
+                        <div id="response-issues-parent">
+                            @foreach ( var issueVM in Model.TopWaitingResponse ) {
+                                @Html.Partial( "../Shared/_IssuePanelPartial", issueVM )
+                            }
+                        </div>
 
                         <h4 id="data-header">Top new and rising issues</h4>
-                        <ol id="new-issues-parent">
+                        <div id="rising-issues-parent">
                             @foreach (var issueVM in Model.TopNewRising)
                             {
                                 @Html.Partial("../Shared/_IssuePanelPartial", issueVM)
                             }
-                        </ol>
-                        <h4 id="data-header">Top issues awaiting responses</h4>
-                        <ol id="response-issues-parent">
-                            @foreach (var issueVM in Model.TopWaitingResponse)
-                            {
-                                @Html.Partial("../Shared/_IssuePanelPartial", issueVM)
-                            }
-                        </ol>
+                        </div>
                     </div>
                 </div>
             </div>

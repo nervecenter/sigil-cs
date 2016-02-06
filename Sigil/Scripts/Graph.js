@@ -93,7 +93,7 @@ function BindDataButton() {
             $button.unbind("click");
         } else {
             $button.removeClass("disabled");
-            $button.click(Custom_Org_Chart);
+            $button.click(Custom_Org_Data);
         }
     });
 }
@@ -105,11 +105,16 @@ function BindDatePickers() {
     var month = now.getMonth() + 1;
     var monthTwoDigit = (month > 9 ? "" + (month + 1) : "0" + month);
 
+    var weekago = new Date();
+    weekago.setDate(now.getDate() - 7);
+    var weekagomonth = weekago.getMonth() + 1;
+    var weekagomonthTwoDigit = (weekagomonth > 9 ? "" + (weekagomonth + 1) : "0" + weekagomonth);
+
     $("#dpstart").datepicker({
         onRender: function (date) {
             return date.valueOf() > now.valueOf() ? 'disabled' : '';
         }
-    }).val(monthTwoDigit + "/" + now.getDate() + "/" + now.getFullYear());
+    }).val(weekagomonthTwoDigit + "/" + weekago.getDate() + "/" + weekago.getFullYear());
     $("#dpend").datepicker({
         onRender: function (date) {
             return date.valueOf() > now.valueOf() ? 'disabled' : '';
@@ -117,20 +122,19 @@ function BindDatePickers() {
     }).val(monthTwoDigit + "/" + now.getDate() + "/" + now.getFullYear());
 }
 
-function Custom_Org_Chart() {
-    var dataOption = document.getElementById('selected-data').value;
+function Custom_Org_Data() {
     var adate = $("#dpstart").val();
     var start_date_str = $("#dpstart").val();
-    var start_date_ms = jsDateToCSharp(start_date_str);
     var stop_date_str = $("#dpend").val();
-    var stop_date_ms = jsDateToCSharp(stop_date_str);
     var date_dif_days = (stop_date_ms - start_date_ms) / 86400000;
 
     var orgURL = get_org_url();
-    var URL = "/custom_graph/" + orgURL + "/" + dataOption + "/" + start_date_ms + "/" + stop_date_ms;
-    $.ajax({
-        url: URL,
-        success: function (org_data) {
+    var dataOption = document.getElementById('selected-data').value;
+    var start_date_ms = jsDateToCSharp(start_date_str);
+    var stop_date_ms = jsDateToCSharp(stop_date_str);
+
+    $.get("/custom_graph/" + orgURL + "/" + dataOption + "/" + start_date_ms + "/" + stop_date_ms,
+        function (org_data) {
             var chart_data = new google.visualization.DataTable();
             chart_data.addColumn({ type: 'date', id: "Date" });
             chart_data.addColumn({ type: 'number', id: "Count" });
@@ -151,15 +155,36 @@ function Custom_Org_Chart() {
             
             default_chart.draw(chart_data, default_options);
         }
-    });
+    );
 
-    var issueURL = "/custom_data/"+orgURL+"/"+start_date_ms+"/"+stop_date_ms;
+    // GET TOP 10 ISSUES FOR PERIOD
+    $.get("/customtopissues/" + orgURL + "/" + start_date_ms + "/" + stop_date_ms,
+        function (top_issues) {
+            $("#top-issues-parent").html("").html(top_issues);
+        }
+    );
+
+    // GET TOP 10 UNRESPONDED ISSUES FOR PERIOD
+    $.get("/customunrespondedissues/" + orgURL + "/" + start_date_ms + "/" + stop_date_ms,
+        function (unresponded_issues) {
+            $("#response-issues-parent").html("").html(unresponded_issues);
+        }
+    );
+
+    // GET TOP 10 RISING ISSUES FOR PERIOD
+    $.get("/customunderdogissues/" + orgURL + "/" + start_date_ms + "/" + stop_date_ms,
+        function (rising_issues) {
+            $("#rising-issues-parent").html("").html(rising_issues);
+        }
+    );
+
+    /*var issueURL = "/custom_data/"+orgURL+"/"+start_date_ms+"/"+stop_date_ms;
     $.ajax({
         url: issueURL,
         success: function (issue_data) {
 
         }
-    })
+    })*/
 }
 
 function Custom_Issue_Chart() {

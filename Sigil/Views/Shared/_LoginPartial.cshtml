@@ -43,7 +43,7 @@
 
     if ( User.IsInRole( "OrgSuperAdmin" ) || User.IsInRole( "OrgAdmin" ) || User.IsInRole( "SigilAdmin" ) ) {
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/@Model.orgURL/admin/">Org Admin Panel</a></li>
+            <li><a href="/@Model.orgURL/admin/">@Model.orgName Settings</a></li>
         </ul>
     }
 

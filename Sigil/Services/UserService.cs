@@ -242,8 +242,10 @@ namespace Sigil.Services
             
             if(userVM.User.OrgId != 0)
             {
+                var userOrg = orgsRepository.GetById( userVM.User.OrgId );
                 userVM.isOrgAdmin = true;
-                userVM.orgURL = orgsRepository.GetById(userVM.User.OrgId).orgURL;
+                userVM.orgURL = userOrg.orgURL;
+                userVM.orgName = userOrg.orgName;
             }
 
             return userVM;

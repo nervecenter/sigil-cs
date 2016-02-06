@@ -334,6 +334,24 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Custom Top Org Issues",
+                url: "customtopissues/{orgURL}/{start}/{stop}/",
+                defaults: new { controller = "Org", action = "CustomTopIssues" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Underdog Issues",
+                url: "customunderdogissues/{orgURL}/{start}/{stop}/",
+                defaults: new { controller = "Org", action = "CustomUnderDogIssues" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Unresponded Issues",
+                url: "customunrespondedissues/{orgURL}/{start}/{stop}/",
+                defaults: new { controller = "Org", action = "CustomTopUnrespondedIssues" }
+            );
+
+            routes.MapRoute(
                 name: "Custom Issue Data",
                 url: "custom_graph/{orgURL}/{issueId}/{dataType}/{start}/{stop}/",
                 defaults: new { controller = "Issue", Action = "CustomData" }
