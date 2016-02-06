@@ -37,8 +37,27 @@ namespace Sigil {
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/sigilScripts").Include(
+                        "~/Scripts/Graph.js",
+                        "~/Scripts/inputlisteners.js",
+                        "~/Scripts/notifications.js",
+                        "~/Scripts/subscriptions.js",
+                        "~/Scripts/voting.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/search").Include(
+                        "~/Scripts/search.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/orgissueform").Include(
+                        "~/Scripts/issueformorgpage.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/voting").Include("~/Scripts/voting.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/PagedList.css",
+                      "~/Content/datepicker.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

@@ -173,7 +173,7 @@ namespace Sigil.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -277,33 +277,12 @@ namespace Sigil.Controllers
             orgService.CreateOrg(newOrg);
             orgService.SaveOrg();
 
-            var user = new ApplicationUser { UserName = verifiedOrg.AdminEmail, Email = verifiedOrg.AdminEmail, DisplayName = verifiedOrg.DisplayName };
-            string tempPassword = Generate_Temp_Password();
-            var result = await UserManager.CreateAsync(user, tempPassword);
-            if (result.Succeeded)
-            {
-                Create_User_Extras(user.Id);
-                user = userService.GetUser(user.Id);
-                user.OrgId = newOrg.Id;
-                _userManager.AddToRole(user.Id, "OrgSuperAdmin");
-                userService.UpdateUser(user);
-            }
-            else
-            {
-                //if this happens please let me(Dominic) know!!!!!!!
-                errorService.CreateError(user, "CreateAsync did not succeeded. Need to recreate admin user for org." + result.Errors.Select(e => e + " "), ErrorLevel.Critical);
-            }
-            //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
-
-
-
-            //need to save and commit org first before assigning image beause we need entity to fill in the org id for us
             newOrg.Image = imageService.AssignDefaultImage(newOrg.Id, ImageTypeOwner.Org);
 
             var orgProduct = new Product();
             orgProduct.ProductName = newOrg.orgName;
             orgProduct.ProductURL = "Default";
-            
+
             orgProduct.OrgId = newOrg.Id;
             orgProduct.Org = newOrg;
 
@@ -318,6 +297,35 @@ namespace Sigil.Controllers
 
             countDataService.CreateOrgCountData(newOrg.Id);
             countDataService.SaveOrgCountData();
+
+            var user = new ApplicationUser { UserName = verifiedOrg.AdminEmail, Email = verifiedOrg.AdminEmail, DisplayName = verifiedOrg.DisplayName };
+            string tempPassword = Generate_Temp_Password();
+            var result = await UserManager.CreateAsync(user, tempPassword);
+            if (result.Succeeded)
+            {
+                Create_User_Extras(user.Id);
+                user = userService.GetUser(user.Id);
+                user.OrgId = newOrg.Id;
+                _userManager.AddToRole(user.Id, "OrgSuperAdmin");
+                userService.UpdateUser(user);
+
+                string emailSubject = "Thank you " + verifiedOrg.AdminContactName + ", " + verifiedOrg.orgName + "has been approved!";
+                string emailBody = "Thank you for your interest in Sigil. Please login using " + verifiedOrg.AdminEmail + "and this provided password " + tempPassword + " . We advise changing your password to something more personal so that its easier to remember.";
+
+                await UserManager.SendEmailAsync(user.Id, emailSubject, emailBody);
+
+            }
+            else
+            {
+                //if this happens please let me(Dominic) know!!!!!!!
+                errorService.CreateError(user, "CreateAsync did not succeeded. Need to recreate admin user for org." + result.Errors.Select(e => e + " "), ErrorLevel.Critical);
+            }
+            //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
+
+
+
+            //need to save and commit org first before assigning image beause we need entity to fill in the org id for us
+
             
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
             // Send an email with this link
@@ -646,8 +654,8 @@ namespace Sigil.Controllers
 
         private string Generate_Temp_Password()
         {
-            return "s323232";
-            //return Membership.GeneratePassword(8, 2);
+            //return "s323232";
+            return Membership.GeneratePassword(7, 0) + "0";
         }
 
     }

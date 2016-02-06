@@ -43,16 +43,27 @@ namespace Sigil.Migrations
                 }
             }
 
-            if(!(context.Orgs.Any(o => o.orgName == "Sigil")))
-            {
-                var sigilOrg = new Org();
-                sigilOrg.orgName = "Sigil";
-                sigilOrg.orgURL = "sigil";
-                sigilOrg.viewCount = 0;
-                sigilOrg.lastView = DateTime.UtcNow;
-                context.Orgs.AddOrUpdate(sigilOrg);
-                context.SaveChanges();
-            }
+            //if(!(context.Orgs.Any(o => o.orgName == "Sigil")))
+            //{
+            //    var sigilOrg = new Org();
+            //    sigilOrg.orgName = "Sigil";
+            //    sigilOrg.orgURL = "sigil";
+            //    sigilOrg.viewCount = 0;
+            //    sigilOrg.lastView = DateTime.UtcNow;
+            //    context.Orgs.AddOrUpdate(sigilOrg);
+            //    context.SaveChanges();
+            //}
+
+            //if(!(context.Products.Any(p => p.ProductName == "Sigil")))
+            //{
+            //    var sigilProduct = new Product();
+
+            //    sigilProduct.OrgId = context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
+            //    sigilProduct.ProductName = "Sigil";
+            //    sigilProduct.ProductURL = "Default";
+            //    context.Products.AddOrUpdate(sigilProduct);
+            //    context.SaveChanges();
+            //}
 
             if (!(context.Users.Any(u => u.UserName == "dominic@sigil.tech")))
             {
@@ -63,7 +74,7 @@ namespace Sigil.Migrations
                 var userToInsert = new ApplicationUser { UserName = "dominic@sigil.tech", Email = "dominic@sigil.tech", DisplayName = "Dominic" };
                 userManager.Create(userToInsert, "s323232");
                 var user = context.Users.Where(u => u.UserName == "dominic@sigil.tech").FirstOrDefault();
-                user.OrgId = context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
+                user.OrgId = 0;//context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
                 Image userImg = new Image();
                 userImg.imgType = (int)ImageTypeOwner.User;
                 userImg.OwnerId = user.Id;
@@ -76,7 +87,7 @@ namespace Sigil.Migrations
                 userManager.AddToRole(user.Id, "SigilAdmin");
             }
 
-            if (!(context.Users.Any(u => u.UserName == "cjcollazo@sigil.tech" ) ))
+            if (!(context.Users.Any(u => u.UserName == "cjcollazo@sigil.tech")))
             {
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
@@ -84,7 +95,7 @@ namespace Sigil.Migrations
                 userManager.Create(userToInsert, "s323232");
 
                 var user = context.Users.Where(u => u.UserName == "cjcollazo@sigil.tech").FirstOrDefault();
-                user.OrgId = context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
+                user.OrgId = 0;//context.Orgs.Where(o => o.orgName == "Sigil").FirstOrDefault().Id;
                 Image userImg = new Image();
                 userImg.imgType = (int)ImageTypeOwner.User;
                 userImg.OwnerId = user.Id;
@@ -102,7 +113,7 @@ namespace Sigil.Migrations
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 var userToInsert = new ApplicationUser { UserName = "deleted@sigil.tech", Email = "deleted@sigil.tech", DisplayName = "Deleted" };
-                userManager.Create(userToInsert, "s323232");
+                userManager.Create(userToInsert, "Sigiltech!");
 
                 var user = context.Users.Where(u => u.UserName == "deleted@sigil.tech").FirstOrDefault();
 

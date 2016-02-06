@@ -137,6 +137,7 @@ namespace Sigil.Controllers
             return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = orgURL });
         }
 
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult ChangeProductURL(string orgURL, string productURL)
         {
             var product = productService.GetProduct(productURL);
@@ -182,7 +183,7 @@ namespace Sigil.Controllers
             }
 
             return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = thisOrg.orgURL });
-        }   
+        }
 
 
         //[Authorize(Roles = "SigilAdmin OrgSuperAdmin")]
@@ -200,7 +201,7 @@ namespace Sigil.Controllers
         //{
 
         //}
-
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadOrgBanner(string orgURL)
         {
             var org = orgService.GetOrg(orgURL);
@@ -208,7 +209,7 @@ namespace Sigil.Controllers
 
             return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = org.orgURL });
         }
-
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadOrgIcon100(string orgURL)
         {
             var org = orgService.GetOrg(orgURL);
@@ -216,7 +217,7 @@ namespace Sigil.Controllers
 
             return RedirectToAction("OrgAdmin", "Admin", routeValues: new { orgURL = org.orgURL });
         }
-
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadOrgIcon20(string orgURL)
         {
             var org = orgService.GetOrg(orgURL);
@@ -240,27 +241,30 @@ namespace Sigil.Controllers
             return View(vm);
         }
 
-
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadProductBanner(string orgURL, string productURL)
         {
-            //var org = orgService.GetOrg(orgURL);
-            var product = productService.GetProduct(productURL);
+            var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL, org.Id);
             imageService.ProductBannerImageUpload(product, Request.Files[0]);
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
         }
-
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadProductIcon100(string orgURL, string productURL)
         {
-            var product = productService.GetProduct(productURL);
+            var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL, org.Id);
             imageService.ProductIcon100ImageUpload(product, Request.Files[0]);
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
         }
 
+        [Authorize(Roles = "SigilAdmin, OrgSuperAdmin, OrgAdmin")]
         public ActionResult UploadProductIcon20(string orgURL, string productURL)
         {
-            var product = productService.GetProduct(productURL);
+            var org = orgService.GetOrg(orgURL);
+            var product = productService.GetProduct(productURL,org.Id);
             imageService.ProductIcon20ImageUpload(product, Request.Files[0]);
 
             return RedirectToAction("ProductAdminIndex", "Admin", routeValues: new { orgURL = orgURL, productURL = productURL });
@@ -446,14 +450,14 @@ namespace Sigil.Controllers
         //}
 
         //======================================== Org Apps Admin ==========================================//
-
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult OrgApplicants()
         {
             var newOrgs = orgService.GetAllOrgApplicants();//dc.OrgApps.Select(o => o).ToList();
 
             return View(newOrgs);
         }
-
+        [Authorize(Roles = "SigilAdmin")]
         public ActionResult ErrorLog()
         {
             var errors = errorService.GetAllErrors();//dc.Errors.Select(e => e).ToList();

@@ -4,10 +4,7 @@
     <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Sigil\\Sigil\\obj\\Release\\Package\\PackageTmp$" />
     <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Sigil\\Sigil\\obj\\Release\\Package\\PackageTmp$" />
   </parameter>
-  <parameter name="Add write permission to App_Data Folder" description="Add write permission to App_Data folder" value="beta.sigil.tech/App_Data" tags="Hidden">
-    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Sigil\\Sigil\\obj\\Release\\Package\\PackageTmp\\App_Data$" />
-  </parameter>
-  <parameter name="SigilDB-Web.config Connection String" description="" value="Data Source=198.71.227.2;Initial Catalog=sigilEntites_;Persist Security Info=True;User ID=sigil;Password=Sigiltech1027!" tags="">
+  <parameter name="SigilDB-Web.config Connection String" description="" value="Data Source=198.71.227.2;Initial Catalog=SigilDB;Persist Security Info=True;User ID=sigil;Password=Sigiltech1027!" tags="">
     <parameterEntry kind="XmlFile" scope="C:\\Sigil\\Sigil\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='SigilDB']/@connectionString" />
   </parameter>
 </parameters>

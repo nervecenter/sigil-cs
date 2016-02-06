@@ -528,6 +528,7 @@
     <Content Include="Content\Legal\Sigil Acceptable Use.pdf" />
     <Content Include="Content\Legal\Sigil Privacy Policy.pdf" />
     <Content Include="Content\Legal\Sigil Terms of Use.pdf" />
+    <Content Include="App_Data\FilteredWords.csv" />
     <Content Include="Images\TMP\Nerve_21_" />
     <Content Include="Images\TMP\Sigil_20_" />
     <Content Include="Images\TMP\Sigil_26_" />
