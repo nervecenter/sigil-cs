@@ -35,8 +35,22 @@
 
         @Html.PagedListPager(Model.UserIssues, page => Url.Action("Index","Home", new {page}))
     } else {
-        <br />
-        <h4>There's nothing here. :(<br /><br />Search for a company, person, or topic to subscribe to!</h4>
+        <div class="panel panel-default">
+            <style>
+                .media > .media-left > .media-object > img {
+                    width: 60px;
+                }
+            </style>
+            <div class="panel-body">
+                <h3>Welcome, @Model.UserVM.User.DisplayName! This is your <b>feed</b>.</h3>
+                <br />
+                <p style="font-size:18px;">The latest feedback from your subscriptions will appear here.</p>
+                <br />
+                <p style="font-size:18px;">Want to find companies to subscribe to? Use the <b>search bar</b> up top, or just <b><a href="/companies">browse all companies on Sigil</a></b>.</p>
+            </div>
+        </div>
+        @*<br />
+        <h4>There's nothing here. :(<br /><br />Search for a company, person, or topic to subscribe to!</h4>*@
     }
 </div>
 @{Html.RenderAction("_SideBar", "Shared");}

@@ -27,7 +27,7 @@ namespace Sigil.Controllers
         private readonly IImageService imageService;
         private readonly ISubscriptionService subscriptionService;
         private readonly IProductService productService;
-
+        private readonly IErrorService errorService;
         /* 
         ==================== 
         OrgPage
@@ -36,7 +36,7 @@ namespace Sigil.Controllers
         ==================== 
         */
 
-        public OrgController(IOrgService orgS, ICountService countS, IIssueService issueS, ICommentService commS, IUserService userS, IImageService imgS, ISubscriptionService subS, IProductService prodS)
+        public OrgController(IOrgService orgS, ICountService countS, IIssueService issueS, ICommentService commS, IUserService userS, IImageService imgS, ISubscriptionService subS, IProductService prodS, IErrorService errS)
         {
             orgService = orgS;
             countDataService = countS;
@@ -46,6 +46,7 @@ namespace Sigil.Controllers
             imageService = imgS;
             subscriptionService = subS;
             productService = prodS;
+            errorService = errS;
 
         }
 
@@ -79,6 +80,8 @@ namespace Sigil.Controllers
             // If the org doesn't exist, redirect to 404
             if (thisOrg == null)
             {
+                errorService.CreateError(thisOrg, "OrgPage GET error " + orgURL, ErrorLevel.Critical);
+                
                 return RedirectToRoute("404");
             }
 
@@ -119,7 +122,7 @@ namespace Sigil.Controllers
 
         [HttpPost]
         [ActionName("OrgPage")]
-        public ActionResult OrgPage_Post(string orgURL, int? page)
+        public ActionResult OrgPage_Post(string orgURL)
         {
             // Get the org
             Org thisOrg = orgService.GetOrg(orgURL);//dc.Orgs.FirstOrDefault(o => o.orgURL == orgURL);
@@ -129,6 +132,7 @@ namespace Sigil.Controllers
             // If the org doesn't exist, redirect to 404
             if (thisOrg == null)
             {
+                errorService.CreateError(thisOrg, "OrgPage POST error " + orgURL, ErrorLevel.Critical);
                 return RedirectToRoute("404");
             }
 
