@@ -15,17 +15,21 @@
 
     <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
 
-    <script src="~/Scripts/jquery-1.11.3.js"></script>
+    @*<script src="~/Scripts/jquery-1.11.3.js"></script>
     <script src="~/Scripts/jquery-ui-1.9.2.custom.min.js"></script>
     <link href="~/Content/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
 
-    @Styles.Render("~/Content/bootstrap-flatly.css")
-    @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
-    @Styles.Render("~/Content/Site.css")
 
-    @*
-        
-    *@
+
+    @Styles.Render("~/Content/bootstrap-flatly.css")
+    @Styles.Render( "~/Content/bootstrap-theme.css" )*@
+    @Styles.Render("~/Content/css")
+    <script sre="https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/flatly/bootstrap.min.css" />
 
     <style type="text/css">
         .media-heading {
@@ -133,7 +137,7 @@
         </div>
     </div>
     @Html.Partial( "_Footer" )
-    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/bootstrap.js"></script>*@
     @*<script type="text/javascript" src="~/Scripts/typeahead.js"></script>*@
     @*<script type="text/javascript" src="~/Scripts/voting.js"></script>
     <script type="text/javascript" src="~/Scripts/subscriptions.js"></script>

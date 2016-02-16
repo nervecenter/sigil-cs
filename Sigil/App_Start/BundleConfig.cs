@@ -55,7 +55,8 @@ namespace Sigil {
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css",
                       "~/Content/PagedList.css",
-                      "~/Content/datepicker.css"));
+                      "~/Content/datepicker.css",
+                      "~/Content/bootstrap-select.css"));
 
             BundleTable.EnableOptimizations = true;
         }
