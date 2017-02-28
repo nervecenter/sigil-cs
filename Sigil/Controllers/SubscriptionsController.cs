@@ -6,24 +6,40 @@ using System.Web.Mvc;
 using Sigil.Models;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
+using Sigil.Services;
 
 namespace Sigil.Controllers
 {
     public class SubscriptionsController : Controller
     {
-        private SigilDBDataContext dc;
-        public SubscriptionsController()
+
+        private readonly IOrgService orgService;
+        private readonly IIssueService issueService;
+        private readonly ISubscriptionService subscriptionService;
+        private readonly IErrorService errorService;
+        private readonly IProductService productService;
+        private readonly ITopicService topicService;
+        private readonly ICountService countDataService;
+
+        public SubscriptionsController(IOrgService orgS, IIssueService issS, ISubscriptionService subS, IErrorService errS, ICountService countS, IProductService prodS, ITopicService topS)
         {
-            dc = new SigilDBDataContext();
+            orgService = orgS;
+            issueService = issS;
+            subscriptionService = subS;
+            errorService = errS;
+            countDataService = countS;
+            productService = prodS;
+            topicService = topS;
         }
+
         // GET: Subscriptions
         [Authorize]
         public ActionResult Index()
         {
-            var userid = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
 
-            var orgs = dc.Orgs.ToList();
-            var subs = dc.Subscriptions.Where(s => s.UserId == userid).ToList();
+            var orgs = orgService.GetAllOrgs().ToList();//dc.Orgs.ToList();
+            var subs = subscriptionService.GetUserSubscriptions(userId).ToList();//dc.Subscriptions.Where(s => s.UserId == userid).ToList();
 
             Tuple<List<Org>, List<Subscription>> orgs_and_usersubs = new Tuple<List<Org>, List<Subscription>>(orgs, subs);
             return View(orgs_and_usersubs);
@@ -33,59 +49,132 @@ namespace Sigil.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult AddSubscription(string orgURL)
+        public ActionResult AddSubscription(string URL, string type)
         {
             var userid = User.Identity.GetUserId();
-            var orgid = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
             Subscription new_sub = new Subscription();
-            new_sub.OrgId = orgid.Id;
             new_sub.UserId = userid;
-            new_sub.CatId = 0;
-            new_sub.TopicId = 0;
-
-            /*var subCs = dc.SubCounts.Single(s => s.OrgId == orgid.Id);
-            var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
-            subData.Update();
-            subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);*/
             
-            try
+            if(type == "topic")
             {
-                dc.Subscriptions.InsertOnSubmit(new_sub);
-                dc.SubmitChanges();
+                //then its a topic....
+                var topic = topicService.GetTopic(URL);
+                new_sub.TopicId = topic.Id;
+
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
             }
-            catch (Exception e)
+            else if(type == "product")
             {
-                ErrorHandler.Log_Error(new_sub, e, dc);
-                //Console.WriteLine("Could not write new sub \"%s\" to database:\n%s", new_sub, e.Message);
+                //then its a product
+                var product = productService.GetProduct(URL, true); // products are the only ones who subscribe by name instead of url
+
+                //if (product.ProductURL == "Default")
+                //{
+                //    new_sub.OrgId = product.OrgId;
+                //}
+                //else
+                //{
+                    new_sub.ProductId = product.Id;
+                //}
+                countDataService.UpdateOrgSubscriptionCount(product.OrgId);
+                countDataService.SaveOrgDataChanges();
+
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
+
             }
+            else if(type == "all")
+            {
+                var org = orgService.GetOrg(URL);
+                var orgProducts = productService.GetProductsByOrg(org.Id).Except(subscriptionService.GetUserSubscriptions(userid).Select(s => s.Product));
+                foreach (Product p in orgProducts)
+                {
+                    Subscription sub = new Subscription();
+                    sub.UserId = userid;
+                    sub.ProductId = p.Id;
+
+                    subscriptionService.CreateSubscription(sub);
+                }
+
+                new_sub.OrgId = org.Id;
+                subscriptionService.CreateSubscription(new_sub);
+                subscriptionService.SaveSubscription();
+
+                countDataService.UpdateOrgSubscriptionCount(org.Id);
+                countDataService.SaveOrgDataChanges();
+            }
+
+            //try
+            //{
+            //    subscriptionService.CreateSubscription(new_sub);
+            //    subscriptionService.SaveSubscription();
+                
+            //}
+            //catch (Exception e)
+            //{
+            //    errorService.CreateError(new_sub, e);
+            //}
             return new EmptyResult();
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult DeleteSubscription(string orgURL)
+        public ActionResult DeleteSubscription(string URL, string type)
         {
-            var userid = User.Identity.GetUserId();
-            var org = dc.Orgs.SingleOrDefault<Org>(o => o.orgURL == orgURL);
-            var sub = dc.Subscriptions.SingleOrDefault<Subscription>(s => s.OrgId == org.Id && s.UserId == userid);
-
-            /*var subCs = dc.SubCounts.Single(s => s.OrgId == org.Id);
-            var subData = CountXML<SubCountCol>.XMLtoDATA(subCs.count);
-            subData.Remove_Sub();
-            subCs.count = CountXML<SubCountCol>.DATAtoXML(subData);*/
-
-            try {
-
-                dc.Subscriptions.DeleteOnSubmit(sub);
-                dc.SubmitChanges();
-            }
-            catch (Exception e)
+            var userId = User.Identity.GetUserId();
+            Subscription sub = default(Subscription);
+            if (type == "topic")
             {
-                ErrorHandler.Log_Error(sub, e, dc);
-                //Console.WriteLine("Could not delete sub \"%s\" to database:\n%s", sub, e.Message);
+                var topic = topicService.GetTopic(URL);
+                sub = subscriptionService.GetUserTopicSubscription(userId, topic.Id);
+                subscriptionService.RemoveSubscription(sub);
+            }
+            else if(type == "product")
+            {
+                var product = productService.GetProduct(URL, true); // products are the only ones who subscribe by name instead of url
+                //if (product.ProductURL == "Default")
+                //{
+                //    sub = subscriptionService.GetUserOrgSubscription(userId, product.OrgId);
+                //}
+                //else
+                //{
+                    sub = subscriptionService.GetUserProductSubscription(userId, product.Id);
+                //}
+
+                countDataService.UpdateOrgSubscriptionCount(product.OrgId, false);
+                countDataService.SaveOrgDataChanges();
+
+                subscriptionService.RemoveSubscription(sub);
+                //countDataService.SaveOrgDataChanges();
+
+            }
+            else if(type == "all")
+            {
+                var org = orgService.GetOrg(URL);
+                var orgProducts = productService.GetProductsByOrg(org.Id);
+
+                var subs = orgProducts.Select(p => subscriptionService.GetUserProductSubscription(userId, p.Id));
+                foreach (Subscription s in subs)
+                {
+                    if(s != null)
+                        subscriptionService.RemoveSubscription(s);
+                }
+                sub = subscriptionService.GetUserOrgSubscription(userId, org.Id);
+                subscriptionService.RemoveSubscription(sub);
+                countDataService.UpdateOrgSubscriptionCount(org.Id, false);
+                countDataService.SaveOrgDataChanges();
             }
 
-
+            //try
+            //{
+            //    subscriptionService.RemoveSubscription(sub);
+            //    countDataService.SaveOrgDataChanges();
+            //}
+            //catch (Exception e)
+            //{
+            //    errorService.CreateError(sub, e);
+            //}
             return new EmptyResult();
         }
 
@@ -94,6 +183,5 @@ namespace Sigil.Controllers
         {
             return View();
         }
-
     }
 }

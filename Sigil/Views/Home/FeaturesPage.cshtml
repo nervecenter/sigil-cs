@@ -1,0 +1,241 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Sigil - Features";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="~/Content/Images/favicon.png" />
+
+    @*<script type="text/javascript">
+            $(function () {
+                $('#searchBox').autocomplete({
+                    source: '@Url.Action("SearchDB","Search")'
+                });
+            });
+        </script>*@
+
+    <script src="~/Scripts/jquery-1.11.3.js"></script>
+    @*<script src="~/Scripts/typeahead.js"></script>*@
+    @*Scripts.Render("~/bundles/jqueryui")*@
+    @*<script type="text/javascript" src="~/Scripts/bootstrap.js"></script>*@
+    @*Styles.Render( "~/Content/jquery-ui-1.10.0.custom.min.css" )*@
+    @Styles.Render( "~/Content/bootstrap-flatly.css" )
+    @*@Styles.Render( "~/Content/bootstrap-theme.css" )*@
+    @Styles.Render( "~/Content/Site.css" )
+    @Styles.Render( "~/Content/PagedList.css" )
+    @Styles.Render( "~/Content/datepicker.css" )
+    @Styles.Render( "~/Content/bootstrap-select.css" )
+
+    <title>@ViewBag.Title</title>
+
+    <style>
+        .mb-30 {
+            margin-bottom: 30px;
+        }
+
+        .splash-container {
+            width: 100%;
+            height: 100vh;
+            background-image: url(../../Content/Images/book.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            box-shadow: 0px -2px 15px 0px #000;
+        }
+
+        .hero-container {
+            max-width: 400px;
+        }
+
+        .video-container {
+            max-width: 1000px;
+        }
+
+        .why-container {
+            max-width: 1000px;
+        }
+
+        .white-text-centered {
+            color: white;
+            text-align: center;
+        }
+
+        .media-body {
+            font-size: 18px;
+            color: #3f3f3f;
+        }
+
+        .media-heading {
+            font-size: 25px;
+            color:#2C3E50;
+        }
+    </style>
+
+</head>
+<body class="page">
+    <div class="wrap">
+        @Html.Partial("_Header")
+
+        <div class="container splash-container mb-30">
+            <div class="container hero-container">
+                <div class="row" style="margin-top:35vh;">
+                    <div class="col-lg-12 white-text-centered">
+                        <img class="img-responsive" src="~/Content/Images/logo-600.png" style="width:100%;" />
+                        <h4 style="font-size:20px;">Take your public relations to the next level.</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="container sections-container">
+                <div class="row">
+                    <div class="col-lg-12 white-text-centered">
+                        <h4 class="small-links">
+                            <a href="#video">video</a>
+                            |
+                            <a href="#why-sigil">why sigil</a>
+                            |
+                            <a href="#join">join up for the beta</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="video" class="container video-container mb-30">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe id="ytplayer" class="embed-responsive-item" src="https://youtube.com/embed/1gKRUvzb_NU" allowfullscreen="1"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="why-sigil" class="container why-container mb-30">
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-lg-12" style="text-align:center;">
+                    <h1>Making PR simple starts with your customers.</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                We gather companies into one place.
+                            </div>
+                            Feedback used to be scattershot: Social media, email, forums. Now, we've brought companies together under one roof, so you're just a click away for any of your customers.
+                        </div>
+                    </div>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                Classify feedback with tags.
+                            </div>
+                            Organizing feedback on Sigil is simple with tags. Tailor them by situation or product. Running a beta? Make a tag. New product released? Make a tag. A department wants to hear their users? Make a tag.
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                We eliminate repeats.
+                            </div>
+                            Voting allows users to support each other's posts. As the user types their feedback, they search other posts. If their thought has already been posted, they'll be led straight to it. Redundancy? Gone.
+                        </div>
+                    </div>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                One can expect an answer.
+                            </div>
+                            With repeats eliminated, we give you the tools to give a visible public answer once, directly to everyone who needs it. Voice your position and win the trust of your customers simply by being responsive.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="why-sigil" class="container why-container mb-30">
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-lg-12" style="text-align:center;">
+                    <h1>Then, we make it easy for you.</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                All of the data you expect.
+                            </div>
+                            Insights into engagement help you determine what people actually think about an issue, and make an informed decision on the direction of your product.
+                        </div>
+                    </div>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                We eliminate bias and abuse.
+                            </div>
+                            Vocal minorities don't represent all of your customers. Posts only rise if others agree, so those with no value don't. Repeats simply get pushed down the heap. And our elegant petition system lets us help you keep the conversation civil.
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                Easily respond to everyone, once.
+                            </div>
+                            Your answers are front and center, your positions clear and present in perpetuity. Why continue answering the same question over and over? Spend that energy on new things.
+                        </div>
+                    </div>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading">
+                                Build a brand following and make your product better.
+                            </div>
+                            Being able to converse with and respond to your customers, even if it's to say no, establishes an enduring connection. Trusting customers with your reasoning helps them trust you with their loyalty.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="join" class="container why-container mb-30">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3">
+                    <div class="btn-group btn-group-lg btn-group-justified">
+                        <a class="btn btn-lg btn-info" href="/orgregister">Sign your company up for the Sigil Beta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br class="clear" />
+    @Html.Partial("_Footer")
+
+    @*@Scripts.Render("~/bundles/search")*@
+    @Scripts.Render("~/bundles/sigilScripts")
+    @*<script type="text/javascript" src="~/Scripts/notifications.js"></script>*@
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+﻿@using Sigil.ViewModels
+@model ProductAdminIndexViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sigil - Change " + Model.thisProduct.ProductName + " URL";
+}
+
+<style>
+
+    table {
+        width: 100%;
+    }
+
+    td {
+        width: 50%;
+    }
+</style>
+
+<div class="container maxw-700">
+    <h2>Settings for tag: @Model.thisProduct.ProductName</h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="/@Model.thisOrg.orgURL/admin/">< Back to admin panel</a>
+                    @if (Model.thisProduct.ProductURL != "Default")
+                    {
+                        <table>
+                            <tr>
+                                <td><h4>Current product handle:</h4></td>
+                                <td><h4>@Model.thisProduct.ProductURL</h4></td>
+                            </tr>
+                            <tr>
+                                <td><h4>Example:</h4></td>
+                                <td><h4><a href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL">http://www.sigil.tech/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL</a></h4></td>
+                            </tr>
+                        </table>
+
+                        <br />
+                        <h5>Handles may only be lowercase letters and numbers</h5>
+                        <span style="color:red">@ViewBag.Message</span>
+                        using (Html.BeginForm("ChangeProductURL", "Admin", new { orgURL = Model.thisOrg.orgURL, productURL = Model.thisProduct.ProductURL }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken();
+                            <div class="form-group">
+                                <input type="text" name="newURL" id="newURL" class="form-control" placeholder="New URL" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit new URL</button>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+                    <img class="img-rounded img-responsive img-relief" src="@Model.thisProduct.Image.icon_20" />
+                    <h4>Recommended small icon size: 20 x 20</h4>
+                    @using (Html.BeginForm("UploadProductIcon20", "Admin", new { orgURL = Model.thisOrg.orgURL }, FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <span class="btn btn-default btn-file">
+                                        Browse <input type="file" name="img20" id="img20" />
+                                    </span>
+                                </div>
+                                <input class="form-control image-input" readonly="" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default disabled form-control">Upload new tag icon</button>
+                        </div>
+
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

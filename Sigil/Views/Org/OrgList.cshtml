@@ -1,0 +1,38 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@using PagedList;
+@using PagedList.Mvc;
+@model OrgListViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var allOrgs = Model.orgs;
+    ViewBag.Title = "Sigil - List of companies";
+
+    UserVoteCol userVotes = Model.UserVM.UserVotes;//ViewBag.userVotes;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;//Sigil.Controllers.AccountController.userSubs( User );
+}
+
+<div id="main-col" class="col-md-9 col-lg-9">
+    <h2>List of all companies</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @foreach ( var org in allOrgs ) {
+                <div class="media">
+                    <div class="media-left">
+                        <img class="media-object" src="@org.Image.icon_100" />
+                    </div>
+                    <div class="media-body">
+                        <h3><a href="/@org.orgURL">@org.orgName</a></h3>
+                    </div>
+                </div>
+                <hr />
+            }
+        </div>
+    </div>
+</div>
+@{Html.RenderAction("_SideBar", "Shared");}
+
+@Scripts.Render("~/bundles/orgissueform")

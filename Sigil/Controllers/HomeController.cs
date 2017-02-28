@@ -5,53 +5,58 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using Sigil.Models;
+using Sigil.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-
-
+using PagedList;
+using Sigil.Services;
 
 namespace Sigil.Controllers {
 
     public class HomeController : Controller {
-
-        private SigilDBDataContext dc;
-
+        
         //Comparison Object for sorting
         private static Comparison<Issue> Rank = new Comparison<Issue>(Issue_Compare);
 
-        public HomeController()
+        private readonly ISubscriptionService subscriptionService;
+        private readonly IUserService userService;
+        private readonly IIssueService issueService;
+        private readonly INotificationService notificationService;
+
+        public HomeController(ISubscriptionService subS, IUserService userS, IIssueService issS, INotificationService noteS)
         {
-            dc = new SigilDBDataContext();
+            subscriptionService = subS;
+            userService = userS;
+            issueService = issS;
+            notificationService = noteS;
         }
 
-        
-        public ActionResult Index() {
+        public ActionResult Index(int? page) {
             var userID = User.Identity.GetUserId();
 
             if (userID != null)
             {
-                //Get the users subscriptions
-                IQueryable<Subscription> userSubs = dc.Subscriptions.Where(s => s.UserId == userID);
+
+                UserViewModel uservm = userService.GetUserViewModel(userID);
+
+                Home_IndexViewModel vm = new Home_IndexViewModel();
+                vm.UserVM = uservm;
+
 
                 //get all the users issues based on their subscriptions
-                var userIssues = Get_User_Issues(userID, userSubs).ToList();
+                var userIssues = issueService.GetAllUserIssues(userID, subscriptionService.GetUserSubscriptions(userID)).Where(i => i.User.DisplayName != "Deleted");
 
-                //sort the users issues by issue rank
-                userIssues.Sort(Rank);
+                //NEED TO SORT JUST GET THE SORTED ISSUES FROM THE ISSUE SERVICE!!!!!!!!
 
-                //gather all the votes the user made 
-                var user = dc.AspNetUsers.Single(u => u.Id == userID);
-
-                //this needs to be created in the user registration !!!!!!
-                if (user.votes == null)
-                    user.votes = CountXML<UserVoteCol>.DATAtoXML(new UserVoteCol());
-
-                dc.SubmitChanges();
-                var userVotes = CountXML<UserVoteCol>.XMLtoDATA(user.votes);
-
-                Tuple<List<Issue>, UserVoteCol> issuesANDvotes = new Tuple<List<Issue>, UserVoteCol>(userIssues, userVotes);
-
-                return View(issuesANDvotes);
+                //sort the users issues by issue rank 
+                userIssues.OrderBy(i => Rank);
+                List<IssuePanelPartialVM> userIssuesVM = userIssues.Select(i => new IssuePanelPartialVM() { issue = i, UserVoted = uservm.UserVotes.Check_Vote(i.Id), InPanel = true }).ToList();
+                int num_results_per_page = 20;
+                int pageNumber = (page ?? 1);
+                vm.UserIssues = userIssuesVM.ToPagedList(pageNumber, num_results_per_page);
+                
+                //Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol> issuesANDvotes = new Tuple<PagedList.IPagedList<Sigil.Models.Issue>, UserVoteCol>(, userVotes);
+                return View(vm);
             }
             else 
             {
@@ -62,15 +67,47 @@ namespace Sigil.Controllers {
 
         public ActionResult LandingPage()
         {
-            var trending_topics = Get_Trending_Issues_With_Topics();
+            Home_LandingPageViewModel vm = new Home_LandingPageViewModel();
+            var TrendingIssues = Get_Trending_Issues_With_Topics().ToList();
 
-            return View("LandingPage", trending_topics);
+            for (int i = 0; i < TrendingIssues.Count(); ++i)
+            {
+                if (i % 3 == 0)
+                    vm.LeftColumn.Add(TrendingIssues[i]);
+                else if (i % 3 == 1)
+                    vm.MiddleColumn.Add(TrendingIssues[i]);
+                else
+                    vm.RightColumn.Add(TrendingIssues[i]);
+            }
+
+            return View("LandingPage", vm);
         }
 
+        public ActionResult FeaturesPage() {
+
+            return View( "FeaturesPage" );
+        }
 
         public ActionResult Legal()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            UserViewModel userVM = default(UserViewModel);
+            if (userId != null)
+            {
+                userVM = userService.GetUserViewModel(userId);
+            }
+            
+            return View(userVM);
+        }
+
+        public FileResult Terms() {
+            return File( "/Content/Legal/Sigil Terms of Use.pdf", "application/pdf");
+        }
+        public FileResult AcceptableUse() {
+            return File( "/Content/Legal/Sigil Acceptable Use.pdf", "application/pdf" );
+        }
+        public FileResult Privacy() {
+            return File( "/Content/Legal/Sigil Privacy Policy.pdf", "application/pdf" );
         }
 
         public ActionResult About()
@@ -96,24 +133,23 @@ namespace Sigil.Controllers {
         /// <param name="userID">Users AspNetUser.Id</param>
         /// <param name="userSubs">Query of all subscriptions assocaited with the user.</param>
         /// <returns></returns>
-        private IQueryable<Issue> Get_User_Issues(string userID, IQueryable<Subscription> userSubs)
-        {
-            return dc.Issues.Where(i => userSubs.Any(s => s.OrgId == i.OrgId || (s.TopicId != 0 && s.TopicId == i.TopicId) || i.UserId == userID || (s.CatId != 0 && s.CatId == i.CatId)));
-        }
+        //private IQueryable<Issue> Get_User_Issues(string userID, IQueryable<Subscription> userSubs)
+        //{
+        //    return dc.Issues.Where(i => userSubs.Any(s => s.OrgId == i.OrgId || (s.TopicId != 0 && s.TopicId == i.TopicId) || i.UserId == userID || (s.CatId != 0 && s.CatId == i.CatId)));
+        //}
 
 
         /// <summary>
         /// Gets the Top 3 trending issues site wide. FOR THE LANDING PAGE ONLY
         /// </summary>
         /// <returns></returns>
-        private List<IGrouping<Org,Issue>> Get_Trending_Issues_With_Topics()
+        private IEnumerable<IGrouping<Org, IssuePanelPartialVM>> Get_Trending_Issues_With_Topics()
         {
-            var pretrending = (from iss in dc.Issues
-                              select iss).ToList();
+            var pretrending = issueService.GetAllIssues().Where(i => i.User.DisplayName != "Deleted").ToList();
 
             pretrending.Sort(Rank);
 
-            var trending = pretrending.GroupBy(i => i.Org).ToList();
+            var trending = pretrending.Select(i => new IssuePanelPartialVM(){ issue = i, InPanel = false, UserVoted = false }).GroupBy(i => i.issue.Product.Org);
 
             return trending;
         }

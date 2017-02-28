@@ -9,6 +9,7 @@ namespace Sigil {
     public class RouteConfig {
         public static void RegisterRoutes(RouteCollection routes) {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute( "{resource}.txt" );
 
 
             //========================== Home Controller ==================================================================
@@ -26,6 +27,18 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+                name: "Features",
+                url: "features/",
+                defaults: new { controller = "Home", action = "FeaturesPage" }
+            );
+
+            routes.MapRoute(
+                name: "404",
+                url: "404/",
+                defaults: new { controller = "Shared", action = "_404" }
+            );
+
+            routes.MapRoute(
                 name: "About",
                 url: "about/",
                 defaults: new { controller = "Home", action = "About" }
@@ -38,26 +51,46 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-    name: "User Icon Upload",
-    url: "user_icon_upload/",
-    defaults: new { controller = "ImageUploader", action = "User_Icon_Upload", }
-);
-
-            //========================= Sigil Admin Stuff =================================================
-
-            routes.MapRoute(
-                name: "Org Applications",
-                url: "sadmin/orgapps",
-                defaults: new { controller = "Admin", action = "OrgApplicants" }
+                name: "Terms of Use",
+                url: "terms/",
+                defaults: new { controller = "Home", action = "Terms" }
             );
 
             routes.MapRoute(
-                name: "Error Log",
-                url: "sadmin/errors",
-                defaults: new { controller = "Admin", action = "ErrorLog" }
+                name: "Acceptable Use",
+                url: "acceptableuse/",
+                defaults: new { controller = "Home", action = "AcceptableUse" }
             );
 
-            //========================= Account Controller ==================================================================
+            routes.MapRoute(
+                name: "Privacy Policy",
+                url: "privacy/",
+                defaults: new { controller = "Home", action = "Privacy" }
+            );
+
+            routes.MapRoute(
+                name: "User Icon Upload",
+                url: "user_icon_upload/",
+                defaults: new { controller = "Manage", action = "User_Icon_Upload", }
+            );
+
+            routes.MapRoute(
+                name: "Check Notifications",
+                url: "check_notes/",
+                defaults: new { controller = "Notification", action = "Get_Notifications", }
+            );
+
+            routes.MapRoute(
+                name: "Number Notifications",
+                url: "num_notes/",
+                defaults: new { controller = "Notification", action = "Get_Number_Notifications", }
+            );
+
+            routes.MapRoute(
+                name: "Add Issue",
+                url: "addissue/",
+                defaults: new { controller = "Issue", action = "AddIssue_Post" }
+            );
 
             routes.MapRoute(
                 name:"Login",
@@ -84,10 +117,23 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+               name: "Subscriptions",
+               url: "subscriptions/",
+               defaults: new { controller = "Subscriptions", action = "Index" }
+           );
+
+            routes.MapRoute(
                 name: "Manage",
                 url: "manage/",
                 defaults: new { controller = "Manage", action = "Index" }
-                );
+            );
+
+            routes.MapRoute(
+                name: "Change Password",
+                url: "manage/changepassword/",
+                defaults: new { controller = "Manage", action = "ChangePassword" }
+            );
+
             //========================= Search Controller ==================================================================
             routes.MapRoute(
                 name: "Search for Header Dropdown",
@@ -96,16 +142,53 @@ namespace Sigil {
             );
 
             routes.MapRoute(
+               name: "Search Issues by Org",
+               url: "searchissuesbyorg/",
+               defaults: new { controller = "Search", action = "SearchIssuesByOrg" }
+            );
+
+            /*routes.MapRoute(
+               name: "Search Issues by Product",
+               url: "searchissuesbyproduct/",
+               defaults: new { controller = "Search", action = "SearchIssuesByProduct" }
+            );*/
+
+            routes.MapRoute(
+                name: "Admin Index",
+                url: "admin/",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "Sigil Admin Index",
+                url: "sadmin/",
+                defaults: new { controller = "Admin", action = "SigilAdminIndex" }
+            );
+
+            routes.MapRoute(
+                name: "User DisplayName Search",
+                url: "search/AdminUserSearch",
+                defaults: new { controller = "Search", action = "SearchByUserDisplayName" }
+            );
+
+            /*routes.MapRoute(
+                name: "Admin Product Search",
+                url: "search/AdminProductSearch/",
+                defaults: new { controller = "Search", action = "AdminProductSearch" }
+            );*/
+
+
+            routes.MapRoute(
                 name: "Search Orgs",
                 url: "search/Orgs/",
                 defaults: new { controller = "Search", action = "SearchOrgs" }
             );
 
-            routes.MapRoute(
-                name: "Search Orgs and Categories",
+            /*routes.MapRoute(
+                name: "Search Orgs and Products",
                 url: "search/Orgs_Cats/",
                 defaults: new { controller = "Search", action = "SearchOrgs_Cats" }
-            );
+            );*/
 
             routes.MapRoute(
                 name: "Search Page",
@@ -113,39 +196,167 @@ namespace Sigil {
                 defaults: new { controller = "Search", action = "Index" }
             );
 
-            //========================= Subscription Controller ==================================================================
             routes.MapRoute(
-               name: "Subscriptions",
-               url: "subscriptions/",
-               defaults: new { controller = "Subscriptions", action = "Index" }
+                 name: "Org Applications",
+                 url: "sadmin/orgapps",
+                 defaults: new { controller = "Admin", action = "OrgApplicants" }
+             );
+
+
+
+            routes.MapRoute(
+                name: "Error Log",
+                url: "sadmin/errors",
+                defaults: new { controller = "Admin", action = "ErrorLog" }
             );
+
+            routes.MapRoute(
+                name: "Topic Admin Area",
+                url: "sadmin/topicAdmin",
+                defaults: new { controller = "Admin", action = "TopicAdmin" }
+            );
+
+            routes.MapRoute(
+                name: "Create Topic",
+                url: "sadmin/topicAdmin/createTopic",
+                defaults: new { controller = "Admin", action = "CreateTopic" }
+            );
+
+            /*routes.MapRoute(
+                name: "Assign Product To Topic",
+                url: "sadmin/topicAdmin/AssignProduct",
+                defaults: new { controller = "Admin", action = "AssignProductToTopic" }
+            );*/
+
+            routes.MapRoute(
+               name: "Admin View Roles",
+               url: "sadmin/roles/",
+               defaults: new { controller = "Admin", action = "RolesIndex" }
+           );
+
+            routes.MapRoute(
+                name: "Create Role",
+                url: "sadmin/roles/create/",
+                defaults: new { controller = "Admin", action = "CreateRole" }
+            );
+
+            //routes.MapRoute(
+            //    name: "Role Manager",
+            //    url: "sadmin/roles/manage/",
+            //    defaults: new { controller = "Admin", action = "ManageUserRoles" }
+            //);
+
+            routes.MapRoute(
+                name: "Topic Page",
+                url: "t/{topicURL}/",
+                defaults: new { controller = "Topic", action = "TopicPage" }
+            );
+
+
+
             routes.MapRoute(
                 name: "Subscribe",
-                url: "subscribe/{orgURL}/",
+                url: "subscribe/{URL}/{type}/",
                 defaults: new { controller = "Subscriptions", action = "AddSubscription" }
             );
 
             routes.MapRoute(
                 name: "UnSubscribe",
-                url: "unsubscribe/{orgURL}/",
+                url: "unsubscribe/{URL}/{type}",
                 defaults: new { controller = "Subscriptions", action = "DeleteSubscription" }
             );
 
-
             routes.MapRoute(
-                name: "Create Issue",
-                url: "create_issue/",
-                defaults: new { controller = "Issue", action = "CreateIssue" }
+                name: "Org App Approve",
+                url: "sadmin/orgapps/{norgID}",
+                defaults: new { controller = "Account", action = "OrgConfirmed" }
             );
 
             routes.MapRoute(
-                name: "Add Issue",
-                url: "add_issue/",
-                defaults: new { controller = "Issue", action = "AddIssue" }
+                name: "Issue Delete",
+                url: "delete/issue/{issueId}",
+                defaults: new { controller = "Issue", action = "Delete_Issue" }
+            );
+
+            routes.MapRoute(
+                name: "Comment Delete",
+                url: "delete/comment/{commentId}",
+                defaults: new { controller = "Issue", action = "Delete_Issue_Comment" }
+            );
+
+            routes.MapRoute(
+                name: "Org List",
+                url: "companies/",
+                defaults: new { controller = "Org", action = "OrgList" }
+            );
+
+            routes.MapRoute(
+                name: "Default Org Data",
+                url: "default_graph/{orgURL}/",
+                defaults: new { controller = "Org", action = "DefaultData" }
+            );
+
+            routes.MapRoute(
+                name: "Delete Notification",
+                url: "delete_notification/{noteId}/",
+                defaults: new { controller = "Notification", action = "Delete_Notification" }
+            );
+
+            routes.MapRoute(
+                name: "Issue VoteUp",
+                url: "voteup/{IssueId}/",
+                defaults: new { controller = "Issue", action = "VoteUp" }
+            );
+
+            routes.MapRoute(
+                name: "Issue UnVoteUp",
+                url: "unvoteup/{IssueId}/",
+                defaults: new { controller = "Issue", action = "UnVoteUp" }
+            );
+
+            routes.MapRoute(
+                name: "Comment VoteUp",
+                url: "voteup/{IssueId}/{CommentId}",
+                defaults: new { controller = "Issue", action = "VoteUpComment" }
+            );
+
+            routes.MapRoute(
+                name: "Comment UnVoteUp",
+                url: "unvoteup/{IssueId}/{CommentId}/",
+                defaults: new { controller = "Issue", action = "UnVoteUpComment" }
             );
 
 
-            //========================= Org Controller ==================================================================
+            routes.MapRoute(
+                name: "Custom Org Data",
+                url: "custom_graph/{orgURL}/{dataType}/{start}/{stop}/",
+                defaults: new { controller = "Org", Action = "CustomData" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Top Org Issues",
+                url: "customtopissues/{orgURL}/{start}/{stop}/",
+                defaults: new { controller = "Org", action = "CustomTopIssues" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Underdog Issues",
+                url: "customunderdogissues/{orgURL}/{start}/{stop}/",
+                defaults: new { controller = "Org", action = "CustomUnderDogIssues" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Unresponded Issues",
+                url: "customunrespondedissues/{orgURL}/{start}/{stop}/",
+                defaults: new { controller = "Org", action = "CustomTopUnrespondedIssues" }
+            );
+
+            routes.MapRoute(
+                name: "Custom Issue Data",
+                url: "custom_graph/{orgURL}/{issueId}/{dataType}/{start}/{stop}/",
+                defaults: new { controller = "Issue", Action = "CustomData" }
+            );
+
             routes.MapRoute(
                 name: "OrgData",
                 url: "{orgURL}/data/",
@@ -153,42 +364,115 @@ namespace Sigil {
             );
 
             routes.MapRoute(
-              name: "Org",
+                name: "OrgResponses",
+                url: "{orgURL}/responses/",
+                defaults: new { controller = "Org", action = "OrgResponses" }
+            );
+
+            routes.MapRoute(
+                name: "OrgAdmin",
+                url: "{orgURL}/admin/",
+                defaults: new { controller = "Admin", action = "OrgAdmin" }
+            );
+
+            routes.MapRoute(
+                name: "Org Issue Delete",
+                url: "{orgURL}/issuedelete/{issueId}/",
+                defaults: new { controller = "Org", action = "DeleteIssue" }
+            );
+
+            routes.MapRoute(
+                name: "OrgCreateNewProduct",
+                url: "{orgURL}/admin/newproduct/",
+                defaults: new { controller = "Admin", action = "AddOrgProduct" }
+            );
+
+            routes.MapRoute(
+                name: "Org 100 Icon Upload",
+                url: "{orgURL}/admin/100IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadOrgIcon100" }
+            );
+
+            routes.MapRoute(
+                name: "Org 20 Icon Upload",
+                url: "{orgURL}/admin/20IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadOrgIcon20" }
+            );
+
+            routes.MapRoute(
+                name: "Org Banner Upload",
+                url: "{orgURL}/admin/bannerUpload/",
+                defaults: new { controller = "Admin", action = "UploadOrgBanner" }
+            );
+
+            routes.MapRoute(
+                name: "Org URL Change",
+                url: "{orgURL}/admin/OrgURLChange/",
+                defaults: new { controller = "Admin", action = "OrgURLChange" }
+            );
+
+            routes.MapRoute(
+                name: "Org Admin Product Delete",
+                url: "{orgURL}/admin/delete/{productId}/",
+                defaults: new { controller = "Admin", action = "DeleteOrgProduct" }
+            );
+
+            routes.MapRoute(
+              name: "Org Page",
               url: "{orgURL}/",
               defaults: new { controller = "Org", action = "OrgPage" }
             );
 
-            //routes.MapRoute(
-            //    name: "Org Category Page",
-            //    url: "{orgURL}/{catURL}/",
-            //    defaults: new { controller = "Org", action = "CatPage" }
-            //);
 
-            //========================= Issue Controller ==================================================================
+            /*routes.MapRoute(
+                name: "Product Page",
+                url: "{orgURL}/{productURL}/",
+                defaults: new { controller = "Product", action = "ProductPage" }
+            );*/
+
             routes.MapRoute(
-                name: "VoteUp",
-                url: "voteup/{IssueId}/",
-                defaults: new { controller = "Issue", action = "VoteUp" }
+                name: "Product Admin Index Page",
+                url: "{orgURL}/{productURL}/admin/",
+                defaults: new { controller = "Admin", action = "ProductAdminIndex" }
+            );
+
+            /*routes.MapRoute(
+                name: "Product URL Change",
+                url: "{orgURL}/{productURL}/admin/URLChange/",
+                defaults: new { controller = "Admin", action = "ChangeProductURL" }
+            );*/
+
+            routes.MapRoute(
+                name: "Product 100 Icon Upload",
+                url: "{orgURL}/{productURL}/admin/100IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadProductIcon100" }
             );
 
             routes.MapRoute(
-                name: "UnVoteUp",
-                url: "unvoteup/{IssueId}/",
-                defaults: new { controller = "Issue", action = "UnVoteUp" }
+                name: "Product 20 Icon Upload",
+                url: "{orgURL}/{productURL}/admin/20IconUpload/",
+                defaults: new { controller = "Admin", action = "UploadProductIcon20" }
             );
 
+            /*routes.MapRoute(
+                name: "Product Banner Upload",
+                url: "{orgURL}/{productURL}/admin/bannerUpload/",
+                defaults: new { controller = "Admin", action = "UploadProductBanner" }
+            );*/
+
+            routes.MapRoute(
+                name: "Product Issue Delete",
+                url: "{orgURL}/{productURL}/issueDelete/{issueId}/",
+                defaults: new { controller = "Product", action = "DeleteIssue" }
+            );
 
             routes.MapRoute(
                 name: "Issue",
-                url: "{orgURL}/{IssueId}/",
+                url: "{orgURL}/{productURL}/{IssueId}/",
                 defaults: new { controller = "Issue", action = "IssuePage" }
             );
 
-            routes.MapRoute(
-                name: "IssueData",
-                url: "{orgURL}/{IssueId}/data/",
-                defaults: new { controller = "Issue", action = "IssueData" }
-            );
+       
 
             //========================= Default Controller ==================================================================
 

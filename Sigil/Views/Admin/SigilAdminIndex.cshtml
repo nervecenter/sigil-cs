@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model Sigil.ViewModels.SigilAdminIndexViewModel
+
+@Html.ActionLink("Roles","RolesIndex", "Admin")
+|
+@Html.ActionLink("Topics", "TopicAdmin", "Admin")
+|
+@Html.ActionLink("Org Applications","OrgApplicants", "Admin" )
+|
+@Html.ActionLink("Error Log", "ErrorLog", "Admin")
+
+@foreach (var org in Model.AllOrgsWithProduct)
+{
+    <div class="panel-body">
+        <div class="media">
+            <div class="media-body">
+                <h4 class="media-heading">
+                    <a href="/@org.Item1.orgURL/admin/">@org.Item1.orgName</a>
+                </h4>
+                <p class="pull-left">
+                    <img class="issue-panel-icon" src="@(org.Item1.Image.icon_20)" />
+                </p>
+                <p class="pull-left">
+                    <span>Number of Child Products:  @org.Item2</span>
+                </p>
+            </div>
+        </div>
+    </div>
+}

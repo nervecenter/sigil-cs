@@ -1,0 +1,50 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@using PagedList;
+@using PagedList.Mvc;
+@model OrgResponsesViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Org thisOrg = Model.thisOrg;
+    ViewBag.Title = "Sigil - " + thisOrg.orgName + " Responses";
+
+    UserVoteCol userVotes = Model.UserVM.UserVotes;//ViewBag.userVotes;
+    IEnumerable<SubscriptionViewModel> userSubs = Model.UserVM.UserSubscriptions;//Sigil.Controllers.AccountController.userSubs( User );
+}
+
+<div id="main-col" class="col-md-9 col-lg-9">
+    <img class="img-rounded img-responsive org-banner-small" src="@(thisOrg.Image.banner)">
+    <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
+        <a class="btn btn-warning" href="/@thisOrg.orgURL">Main feed</a>
+        <a class="btn btn-default active">Responses</a>
+        @*<a class="btn btn-success" href="/@thisOrg.orgURL/data">Data</a>*@
+        @if (!Request.IsAuthenticated) {
+            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @thisOrg.orgName</a>
+        } else if (userSubs.Any<SubscriptionViewModel>(s => s.subObjectId == thisOrg.Id && s.subName == thisOrg.orgName)) {
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@thisOrg.orgURL', 'all')">Unsubscribe from @thisOrg.orgName</a>
+        } else {
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@thisOrg.orgURL', 'all')">Subscribe to @thisOrg.orgName</a>
+        }
+    </div>
+    
+    <div id="issues">
+        @if ( Model.orgRespondedIssues.Count < 1 ) {
+            <h4>@thisOrg.orgName hasn't responded to any issues yet. They'll get to it soon!</h4>
+        } else {
+            foreach ( IssuePanelPartialVM issueVM in Model.orgRespondedIssues ) {
+                @Html.Partial( "../Shared/_IssuePanelPartial", issueVM )
+                @*<a href="/@Model.thisOrg.orgURL/issueDelete/@issueVM.issue.Id/"> Delete Issue</a>*@
+            }
+        }
+    </div>
+
+    @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
+
+    @Html.PagedListPager(Model.orgRespondedIssues, page => Url.Action("OrgPage", "Org", new { page }))
+</div>
+@{Html.RenderAction("_SideBar", "Shared");}
+
+@Scripts.Render("~/bundles/orgissueform")

@@ -10,24 +10,41 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Sigil.Models;
+using Sigil.Services;
+using Sigil.ViewModels;
 
 namespace Sigil.Controllers
 {
-    [Authorize]
+
+    //[Authorize]
     public class AccountController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-        private SigilDBDataContext dc;
-        public AccountController()
-        {
-            dc = new SigilDBDataContext();
-        }
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly IAuthenticationManager _authManager;
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        private readonly IOrgService orgService;
+        private readonly ICountService countDataService;
+        private readonly IErrorService errorService;
+        private readonly IUserService userService;
+        private readonly IImageService imageService;
+        private readonly IProductService productService;
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,IAuthenticationManager authManager ,IOrgService orgS, ICountService countS, IErrorService errS, IUserService userS, IImageService imgS, IProductService prodS )
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            //UserManager = userManager;
+            //SignInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _authManager = authManager;
+
+
+            orgService = orgS;
+            countDataService = countS;
+            errorService = errS;
+            userService = userS;
+            imageService = imgS;
+            productService = prodS;
         }
 
         public ApplicationSignInManager SignInManager
@@ -36,10 +53,10 @@ namespace Sigil.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
-            }
+            //private set 
+            //{ 
+            //    _signInManager = value; 
+            //}
         }
 
         public ApplicationUserManager UserManager
@@ -48,9 +65,17 @@ namespace Sigil.Controllers
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
-            private set
+            //private set
+            //{
+            //    _userManager = value;
+            //}
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
             {
-                _userManager = value;
+                return _authManager;
             }
         }
 
@@ -148,22 +173,25 @@ namespace Sigil.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, DisplayName = model.DisplayName};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    
+                    Create_User_Extras(user.Id);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -174,12 +202,34 @@ namespace Sigil.Controllers
             return View(model);
         }
 
+       
+
+        /// <summary>
+        /// Function that handles all setting up all the users extra database entries for the site.
+        /// </summary>
+        private void Create_User_Extras(string userID)
+        {
+
+            _userManager.AddToRole(userID, "BasicUser");
+
+            Image img = imageService.AssignDefaultImage(userID);
+            userService.AssignUserImage(userID, img);
+
+            userService.CreateUserVote(userID);
+            userService.SaveUserVotes();
+        }
+
         [AllowAnonymous]
         public ActionResult OrgRegister()
         {
             return View();
         }
 
+        /// <summary>
+        /// Org Registration function used to add new Org to OrgApp database table for Sigil to review
+        /// </summary>
+        /// <param name="model">OrgRegistration model</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -187,83 +237,96 @@ namespace Sigil.Controllers
         {
             OrgApp newOrg = new OrgApp();
             newOrg.orgName = model.orgName;
-            newOrg.orgUrl = model.orgURL;
-            newOrg.username = model.UserName;
+            newOrg.orgURL = model.orgURL;
+            newOrg.DisplayName = model.DisplayName;
             newOrg.website = model.orgWebsite;
-            newOrg.contact = model.orgContact;
+            newOrg.ContactNumber = model.orgContact;
             newOrg.comment = model.orgComment;
-            newOrg.email = model.Email;
-            newOrg.AdminName = model.orgAdminName;
+            newOrg.AdminEmail = model.Email;
+            newOrg.AdminContactName = model.orgAdminName;
             try
             {
-                dc.OrgApps.InsertOnSubmit(newOrg);
-                dc.SubmitChanges();
+                orgService.CreateOrgApp(newOrg);
+                orgService.SaveOrgApp();
+                //dc.OrgApps.InsertOnSubmit(newOrg);
+                //dc.SubmitChanges();
             }
             catch(Exception e)
             {
-                ErrorHandler.Log_Error(newOrg, e, dc);
+                errorService.CreateError(newOrg, e, ErrorLevel.Critical);
+                
+                //ErrorHandler.Log_Error(newOrg, e, dc);
             }
 
-            return View("LandingPage");
+            return RedirectToAction("LandingPage", "Home", new { area = "" });
         }
 
         //need to protect this so that sigil is the only role allowed to call
         public async Task<ActionResult> OrgConfirmed(int norgID)
         {
-            OrgApp verifiedOrg = dc.OrgApps.Single(o => o.Id == norgID);
-
-
-
-            var user = new ApplicationUser { UserName = verifiedOrg.username, Email = verifiedOrg.email };
-            string tempPassword = Generate_Temp_Password();
-            var result = await UserManager.CreateAsync(user, tempPassword);
-
-            //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
-
-
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            OrgApp verifiedOrg = orgService.ApproveOrgApp(norgID);//dc.OrgApps.Single(o => o.Id == norgID);
+            verifiedOrg.OrgApproved = true;
+            orgService.UpdateOrgApp(verifiedOrg);
 
             var newOrg = new Org();
             newOrg.orgName = verifiedOrg.orgName;
-            newOrg.orgURL = verifiedOrg.orgUrl;
-            newOrg.UserID = CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id));
+            newOrg.orgURL = verifiedOrg.orgURL;
+            //newOrg.UserID = ""; //CountXML<UserIDCol>.DATAtoXML(new UserIDCol(user.Id)).ToString();
             newOrg.lastView = DateTime.UtcNow;
-            try
+            newOrg.Website = verifiedOrg.website;
+            orgService.CreateOrg(newOrg);
+            orgService.SaveOrg();
+
+            newOrg.Image = imageService.AssignDefaultImage(newOrg.Id, ImageTypeOwner.Org);
+
+            var orgProduct = new Product();
+            orgProduct.ProductName = newOrg.orgName;
+            orgProduct.ProductURL = "Default";
+
+            orgProduct.OrgId = newOrg.Id;
+            orgProduct.Org = newOrg;
+
+            productService.CreateProduct(orgProduct);
+            productService.SaveProduct();
+
+            orgProduct.Image = imageService.AssignDefaultImage(orgProduct.Id, ImageTypeOwner.Product);
+            orgProduct.ImageId = orgProduct.Image.Id;
+            newOrg.Products.Add(orgProduct);
+
+            orgService.UpdateOrg(newOrg);
+
+            countDataService.CreateOrgCountData(newOrg.Id);
+            countDataService.SaveOrgCountData();
+
+            var user = new ApplicationUser { UserName = verifiedOrg.AdminEmail, Email = verifiedOrg.AdminEmail, DisplayName = verifiedOrg.DisplayName };
+            string tempPassword = Generate_Temp_Password();
+            var result = await UserManager.CreateAsync(user, tempPassword);
+            if (result.Succeeded)
             {
-                dc.Orgs.InsertOnSubmit(newOrg);
-                dc.SubmitChanges();
+                Create_User_Extras(user.Id);
+                user = userService.GetUser(user.Id);
+                user.OrgId = newOrg.Id;
+                _userManager.AddToRole(user.Id, "OrgSuperAdmin");
+                userService.UpdateUser(user);
+
+                string emailSubject = "Thank you " + verifiedOrg.AdminContactName + ", " + verifiedOrg.orgName + "has been approved!";
+                string emailBody = "Thank you for your interest in Sigil. Please login using " + verifiedOrg.AdminEmail + "and this provided password " + tempPassword + " . We advise changing your password to something more personal so that its easier to remember.";
+
+                await UserManager.SendEmailAsync(user.Id, emailSubject, emailBody);
+
             }
-            catch(Exception e)
+            else
             {
-                ErrorHandler.Log_Error(newOrg, e, dc);
-                //need to kick back to a new screen to have them try again
+                //if this happens please let me(Dominic) know!!!!!!!
+                errorService.CreateError(user, "CreateAsync did not succeeded. Need to recreate admin user for org." + result.Errors.Select(e => e + " "), ErrorLevel.Critical);
             }
-
-            //Setup Org data collection db entries
-            int orgID = dc.Orgs.Single(o => o.orgName == newOrg.orgName).Id;
-            SubCount newSubs = new SubCount();
-            newSubs.OrgId = orgID;
-            newSubs.count = CountXML<SubCountCol>.DATAtoXML(new SubCountCol());
-
-            ViewCount newVCount = new ViewCount();
-            newVCount.OrgId = orgID;
-            newVCount.IssueId = 0;
-            newVCount.count = CountXML<ViewCountCol>.DATAtoXML(new ViewCountCol());
-
-            try {
-                dc.SubCounts.InsertOnSubmit(newSubs);
-                dc.ViewCounts.InsertOnSubmit(newVCount);
-                dc.SubmitChanges();
-            }
-            catch(Exception e)
-            {
-                ErrorHandler.Log_Error(newSubs, e, dc);
-                ErrorHandler.Log_Error(newVCount, e, dc);
-
-                //need to figure out what to do this error and the before one
-            }
+            //var org_check = dc.Orgs.SingleOrDefault(o => o.orgURL == verifiedOrg.orgUrl);
 
 
+
+            //need to save and commit org first before assigning image beause we need entity to fill in the org id for us
+
+            
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
             // Send an email with this link
             // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -506,37 +569,40 @@ namespace Sigil.Controllers
             return View();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        if (_userManager != null)
+        //        {
+        //            _userManager.Dispose();
+        //            _userManager = null;
+        //        }
 
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
+        //        if (_signInManager != null)
+        //        {
+        //            _signInManager.Dispose();
+        //            _signInManager = null;
+        //        }
+        //    }
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
+
+
+        
 
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+        //private IAuthenticationManager AuthenticationManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().Authentication;
+        //    }
+        //}
 
         private void AddErrors(IdentityResult result)
         {
@@ -585,39 +651,12 @@ namespace Sigil.Controllers
         }
         #endregion
 
-        public static AspNetUser GetLoggedInUser( System.Security.Principal.IPrincipal user ) {
-            string id = user.Identity.GetUserId();
-
-            if ( id == null ) {
-                return default( AspNetUser );
-            } else {
-                using ( SigilDBDataContext dc = new SigilDBDataContext() ) {
-                    return dc.AspNetUsers.Single<AspNetUser>( u => u.Id ==  id );
-                }
-            }
-        }
-
-        public static System.Collections.Generic.List<Subscription> userSubs( AspNetUser user ) {
-            System.Collections.Generic.List<Subscription> subs;
-            SigilDBDataContext dc = new SigilDBDataContext();
-            subs = ( from Subs in dc.Subscriptions
-                     where Subs.UserId == user.Id
-                     select Subs ).ToList();
-            return subs;
-        }
-
-        public static System.Collections.Generic.List<Subscription> userSubs( System.Security.Principal.IPrincipal user ) {
-            System.Collections.Generic.List<Subscription> subs;
-            SigilDBDataContext dc = new SigilDBDataContext();
-            subs = ( from Subs in dc.Subscriptions
-                     where Subs.UserId == user.Identity.GetUserId()
-                     select Subs ).ToList();
-            return subs;
-        }
 
         private string Generate_Temp_Password()
         {
-            return Membership.GeneratePassword(8, 2);
+            //return "s323232";
+            return Membership.GeneratePassword(7, 0) + "0";
         }
+
     }
 }

@@ -1,0 +1,59 @@
+﻿@using Sigil.Models
+@using Sigil.ViewModels
+@using Microsoft.AspNet.Identity
+@using PagedList;
+@using PagedList.Mvc;
+@model ProductPageViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Title = "Sigil - " + Model.thisOrg.orgName + " - " + Model.thisProduct.ProductName;
+}
+
+<div class="col-md-9 col-lg-9">
+    <img class="img-rounded img-responsive org-banner-small" src="@(Model.thisProduct.Image.banner)">
+    <div class="btn-group btn-group-sm btn-group-justified" style="margin-bottom:20px;">
+        <a class="btn btn-default active">Main feed</a>
+        <a class="btn btn-info" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/responses">Responses</a>
+        @*<a class="btn btn-success" href="/@Model.thisOrg.orgURL/@Model.thisProduct.ProductURL/data">Data</a>*@
+        @if (!Request.IsAuthenticated) {
+            <a class="btn btn-primary subscribe" onclick="redirectToLogin()">Subscribe to @Model.thisProduct.ProductName</a>
+        } else if (Model.UserVM.UserSubscriptions.Any<SubscriptionViewModel>(s => (s.subObjectId == Model.thisProduct.Id && s.subName == Model.thisOrg.orgName +"-"+Model.thisProduct.ProductName))) {
+            <a class="btn btn-danger unsubscribe" onclick="unsubscribe(this, '@Model.thisProduct.ProductName', 'product')">Unsubscribe from @Model.thisProduct.ProductName</a>
+        } else {
+            <a class="btn btn-primary subscribe" onclick="subscribe(this, '@Model.thisProduct.ProductName', 'product')">Subscribe to @((Model.thisProduct.ProductURL == "Default") ?  "General Feed" : @Model.thisProduct.ProductName)</a>
+        }
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <form method="post" id="issue-search-post-form">
+                <div class="form-group">
+                    <textarea id="issues-by-product-search" class="form-control panel-input-box" type="text" name="title" value="@Request.Form["title"]" placeholder="Search for feedback or submit your own" data-productid="@Model.thisProduct.Id"></textarea>
+                </div>
+                <select id="product-select" name="product-select">
+                    <option selected value="@Model.thisProduct.Id">Main</option>
+                </select>
+                <div id="new-feedback-button" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</div>
+                @*
+            <div class="form-group">
+                <textarea id="issues-by-org-search" class="form-control" type="text" name="text" value="" placeholder="Talk about your feedback in-depth" style="height:100px;min-height:100px;max-width:100%;min-width:100%;"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom:0px;">
+                <button type="submit" class="btn btn-primary pull-right" style="padding:4px 9px;">Submit this as new feedback</button>
+            </div>*@
+            </form>
+        </div>
+    </div>
+    <div id="issues">
+        @foreach ( IssuePanelPartialVM issue in Model.productIssues ) {
+            @Html.Partial( "../Shared/_IssuePanelPartial", issue )
+        }
+    </div>
+    @*Page @issueList.PageCount < issueList.PageNumber ? 0 : issueList.PageNumber of @issueList.PageCount*@
+
+    @Html.PagedListPager(Model.productIssues, page => Url.Action("ProductPage", "Product", new { page }))
+</div>
+@{Html.RenderAction("_SideBar", "Shared");}
+
+<script type="text/javascript" src="~/Scripts/issueformproductpage.js"></script>

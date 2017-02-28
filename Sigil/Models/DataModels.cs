@@ -9,17 +9,43 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Data.SqlTypes;
 using System.Xml.Linq;
+
+
 namespace Sigil.Models
 {
-    public struct IssuePanelOptions
+    public class ViewCount
     {
-
-        public bool inPanel;
-        public bool showOrg;
-        public bool showCat;
-        public bool showTopic;
-        public bool userVoted;
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public string count { get; set; }
     }
+
+    public class CommentCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public string count { get; set; }
+    }
+
+    public class SubCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public string count { get; set; }
+    }
+
+    public class VoteCount
+    {
+        public int Id { get; set; }
+        public int OrgId { get; set; }
+        public int IssueId { get; set; }
+        public string count { get; set; }
+    }
+
+    #region Helper Data Structures
 
     public static class CountXML<T>
     {
@@ -58,26 +84,25 @@ namespace Sigil.Models
 
     //================================= ViewCounts helper data structures =========================================================================//
 
-    
-    public class ViewCountCol : ICollection
+    public abstract class CountCol : ICollection
     {
-        private List<ViewCountDay> vcArray = new List<ViewCountDay>();
+        protected List<CountDay> cArray = new List<CountDay>();
 
-        public ViewCountCol() {}
+        public CountCol() { }
 
-        public ViewCountDay this[int index]
+        public CountDay this[int index]
         {
-            get { return (ViewCountDay)vcArray[index]; }
+            get { return (CountDay)cArray[index]; }
         }
 
         public void CopyTo(Array a, int index)
         {
-            vcArray.CopyTo((ViewCountDay[])a, index);
+            cArray.CopyTo((CountDay[])a, index);
         }
 
         public int Count
         {
-            get { return vcArray.Count; }
+            get { return cArray.Count; }
         }
 
         public object SyncRoot
@@ -92,37 +117,69 @@ namespace Sigil.Models
 
         public IEnumerator GetEnumerator()
         {
-            return vcArray.GetEnumerator();
+            return cArray.GetEnumerator();
         }
 
-        public void Add(ViewCountDay newVCW)
+        public void Add(CountDay newVCW)
         {
-            vcArray.Add(newVCW);
+            cArray.Add(newVCW);
         }
+
+        public abstract int Get_Value(DateTime day);
+
+        public bool isCurrent()
+        {
+            if (cArray[cArray.Count - 1].date.Date == DateTime.UtcNow.Date)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    
+    public class CountDay
+    {
+        public int count;
+        public DateTime date;
+        public CountDay() { }
+        public CountDay(DateTime d, int c)
+        {
+            count = c;
+            date = d;
+        }
+
+        public void updateCount()
+        {
+            count++;
+        }
+    }
+
+    public class ViewCountCol : CountCol    
+    {
+        //public override List<ViewCountDay> vcArray = new List<ViewCountDay>();
+
+        public ViewCountCol() {}
 
         /// <summary>
         /// Use to update the view count for an issue. When called checks to see if the last entry(the last time it was viewed) is the current day. If it is then it updates the view count for that day. If it is a new day it creates a new ViewCountDay and appends to the end of the collection.
         /// </summary>
         public void Update()
         {
-            if (vcArray.Count > 0 && isCurrent())
-                vcArray[vcArray.Count - 1].updateCount();
+            if (cArray.Count > 0 && isCurrent())
+                cArray[cArray.Count - 1].updateCount();
             else
-                vcArray.Add(new ViewCountDay(DateTime.Today, 1));
+                cArray.Add(new CountDay(DateTime.Today, 1));
             
         }
 
-        public bool isCurrent()
+        /// <summary>
+        /// Returns the number of new views from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new views.</param>
+        /// <returns>The number of new views of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
-            if (vcArray[vcArray.Count - 1].date.Date == DateTime.UtcNow.Date)
-                return true;
-            else
-                return false;
-        }
-
-        public int Get_Views(DateTime day)
-        {
-            foreach (ViewCountDay v in vcArray)
+            foreach (CountDay v in cArray)
             {
                 if (v.date.Date == day.Date)
                     return v.count;
@@ -131,106 +188,49 @@ namespace Sigil.Models
         }
     }
 
-    /// <summary>
-    /// Class model Viewccount data for issues and orgs.
-    /// </summary>
-    public class ViewCountDay
-    {
-        public int count;
-        public DateTime date;
-        public ViewCountDay() { }
-        public ViewCountDay(DateTime d, int c)
-        {
-            count = c;
-            date = d;
-        }
-
-        public void updateCount()
-        {
-            count++;
-        }
-        
-    }
-
+ 
 
     //================================= VoteCounts helper data structures =========================================================================//
 
 
-    public class VoteCountCol : ICollection
+    public class VoteCountCol : CountCol
     {
-        private List<VoteCountDay> vcArray = new List<VoteCountDay>();
+
 
         public VoteCountCol() {  }
 
-        public VoteCountDay this[int index]
-        {
-            get { return (VoteCountDay)vcArray[index]; }
-        }
-
-        public void CopyTo(Array a, int index)
-        {
-            vcArray.CopyTo((VoteCountDay[])a, index);
-        }
-
-        public int Count
-        {
-            get { return vcArray.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return vcArray.GetEnumerator();
-        }
-
-        public void Add(VoteCountDay newVCW)
-        {
-            vcArray.Add(newVCW);
-        }
-
         /// <summary>
-        /// Used to increment the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new VoteCountDay and appends to the end of the collection.
+        /// Used to increment the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new CountDay and appends to the end of the collection.
         /// </summary>
         public void Update()
         {
-            if (vcArray.Count > 0 && isCurrent())
-                vcArray[vcArray.Count - 1].updateCount();
+            if (cArray.Count > 0 && isCurrent())
+                cArray[cArray.Count - 1].updateCount();
             else
-                vcArray.Add(new VoteCountDay(DateTime.Today, 1));
+                cArray.Add(new CountDay(DateTime.Today, 1));
 
         }
 
         /// <summary>
-        /// Used to decrement the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new VoteCountDay and appends to the end of the collection.
+        /// Used to decrement the vote count for an issue. When called checks to see if the last entry(the last time it was voted for) is the current day. If it is then it updates the vote count for that day. If it is a new day it creates a new CountDay and appends to the end of the collection.
         /// </summary>
         public void Remove_Vote()
         {
-            if (vcArray.Count > 0 && isCurrent())
-                vcArray[vcArray.Count - 1].count--;
+            if (cArray.Count > 0 && isCurrent())
+                cArray[cArray.Count - 1].count--;
             else
-                vcArray.Add(new VoteCountDay(DateTime.Today, -1));
+                cArray.Add(new CountDay(DateTime.Today, -1));
         }
 
-        public bool isCurrent()
-        {
-            if (vcArray[vcArray.Count - 1].date.Date == DateTime.UtcNow.Date)
-                return true;
-            else
-                return false;
-        }
 
-        public int Get_Votes(DateTime day)
+        /// <summary>
+        /// Returns the number of new votes from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new votes.</param>
+        /// <returns>The number of new votes of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
-            foreach(VoteCountDay v in vcArray)
+            foreach(CountDay v in cArray)
             {
                 if (v.date.Date == day.Date)
                     return v.count;
@@ -240,81 +240,22 @@ namespace Sigil.Models
     
     }
 
-    /// <summary>
-    /// Class model Voteccount data for issues and orgs.
-    /// </summary>
-    public class VoteCountDay
-    {
-        public int count;
-        public DateTime date;
-        public VoteCountDay() { }
-        public VoteCountDay(DateTime d, int c)
-        {
-            count = c;
-            date = d;
-        }
-
-        public void updateCount()
-        {
-            count++;
-        }
-
-    }
-
 
     //================================= SubCounts helper data structures =========================================================================//
 
 
-    public class SubCountCol : ICollection
+    public class SubCountCol : CountCol
     {
-        private List<SubCountDay> scArray = new List<SubCountDay>();
-
-        public SubCountCol() { }
-
-        public SubCountDay this[int index]
-        {
-            get { return (SubCountDay)scArray[index]; }
-        }
-
-        public void CopyTo(Array a, int index)
-        {
-            scArray.CopyTo((SubCountDay[])a, index);
-        }
-
-        public int Count
-        {
-            get { return scArray.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return scArray.GetEnumerator();
-        }
-
-        public void Add(SubCountDay newVCW)
-        {
-            scArray.Add(newVCW);
-        }
 
         /// <summary>
         /// Used to increment the Sub count for an issue. When called checks to see if the last entry(the last time a user added the sub) is the current day. If it is then it updates the sub count for that day. If it is a new day it creates a new SubCountDay and appends to the end of the collection.
         /// </summary>
         public void Update()
         {
-            if (scArray.Count > 0 && isCurrent())
-                scArray[scArray.Count - 1].updateCount();
+            if (cArray.Count > 0 && isCurrent())
+                cArray[cArray.Count - 1].updateCount();
             else
-                scArray.Add(new SubCountDay(DateTime.Today, 1));
+                cArray.Add(new CountDay(DateTime.Today, 1));
 
         }
 
@@ -323,23 +264,21 @@ namespace Sigil.Models
         /// </summary>
         public void Remove_Sub()
         {
-            if (scArray.Count > 0 && isCurrent())
-                scArray[scArray.Count - 1].count--;
+            if (cArray.Count > 0 && isCurrent())
+                cArray[cArray.Count - 1].count--;
             else
-                scArray.Add(new SubCountDay(DateTime.Today, -1));
+                cArray.Add(new CountDay(DateTime.Today, -1));
         }
 
-        public bool isCurrent()
-        {
-            if (scArray[scArray.Count - 1].date.Date == DateTime.UtcNow.Date)
-                return true;
-            else
-                return false;
-        }
 
-        public int Get_Subs(DateTime day)
+        /// <summary>
+        /// Returns the number of new subscriptions from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new subscriptions.</param>
+        /// <returns>The number of new subscritions of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
-            foreach (SubCountDay s in scArray)
+            foreach (CountDay s in cArray)
             {
                 if (s.date.Date == day.Date)
                     return s.count;
@@ -349,94 +288,34 @@ namespace Sigil.Models
 
     }
 
-    /// <summary>
-    /// Class model Voteccount data for issues and orgs.
-    /// </summary>
-    public class SubCountDay
-    {
-        public int count;
-        public DateTime date;
-        public SubCountDay() { }
-        public SubCountDay(DateTime d, int c)
-        {
-            count = c;
-            date = d;
-        }
-
-        public void updateCount()
-        {
-            count++;
-        }
-
-    }
-
     //================================= CommentCounts helper data structures =========================================================================//
 
 
-    public class CommentCountCol : ICollection
+    public class CommentCountCol : CountCol
     {
-        private List<CommentCountDay> ccArray = new List<CommentCountDay>();
-
         public CommentCountCol() { }
-
-        public CommentCountDay this[int index]
-        {
-            get { return (CommentCountDay)ccArray[index]; }
-        }
-
-        public void CopyTo(Array a, int index)
-        {
-            ccArray.CopyTo((CommentCountDay[])a, index);
-        }
-
-        public int Count
-        {
-            get { return ccArray.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return ccArray.GetEnumerator();
-        }
-
-        public void Add(CommentCountDay newVCW)
-        {
-            ccArray.Add(newVCW);
-        }
 
         /// <summary>
         /// Use to update the view count for an issue. When called checks to see if the last entry(the last time it was viewed) is the current day. If it is then it updates the view count for that day. If it is a new day it creates a new CommentCountDay and appends to the end of the collection.
         /// </summary>
         public void Update()
         {
-            if (ccArray.Count > 0 && isCurrent())
-                ccArray[ccArray.Count - 1].updateCount();
+            if (cArray.Count > 0 && isCurrent())
+                cArray[cArray.Count - 1].updateCount();
             else
-                ccArray.Add(new CommentCountDay(DateTime.Today, 1));
+                cArray.Add(new CountDay(DateTime.Today, 1));
 
         }
 
-        public bool isCurrent()
+     
+        /// <summary>
+        /// Returns the number of new comments from the passed in day.
+        /// </summary>
+        /// <param name="day">The day that is being checked for number of new comments.</param>
+        /// <returns>The number of new comments of the passed in day.</returns>
+        public override int Get_Value(DateTime day)
         {
-            if (ccArray[ccArray.Count - 1].date.Date == DateTime.UtcNow.Date)
-                return true;
-            else
-                return false;
-        }
-
-        public int Get_Comments(DateTime day)
-        {
-            foreach (CommentCountDay c in ccArray)
+            foreach (CountDay c in cArray)
             {
                 if (c.date.Date == day.Date)
                     return c.count;
@@ -445,27 +324,7 @@ namespace Sigil.Models
         }
     }
 
-    /// <summary>
-    /// Class model Viewccount data for issues and orgs.
-    /// </summary>
-    public class CommentCountDay
-    {
-        public int count;
-        public DateTime date;
-        public CommentCountDay() { }
-        public CommentCountDay(DateTime d, int c)
-        {
-            count = c;
-            date = d;
-        }
-
-        public void updateCount()
-        {
-            count++;
-        }
-
-    }
-
+   
 
 
     //================================= UserVotes helper data structures =========================================================================//
@@ -525,22 +384,40 @@ namespace Sigil.Models
         /// </summary>
         /// <param name="issueID">Id of the issue that is being voted on.</param>
         /// <param name="orgID">ID of the Org the issues is associated with.</param>
-        public void Add_Vote(int issueID, int orgID)
+        public void Add_Vote(int issueID)
         {
-            uvArray.Add(new UserVote(issueID, orgID));
+            uvArray.Add(new UserVote(issueID));
         }
-        
+
+        public void Add_Vote(int issueID, int commentId)
+        {
+            uvArray.Add(new UserVote(issueID, commentId));
+        }
+
         /// <summary>
         /// Deletes a vote of the user.
         /// </summary>
         /// <param name="issueID">Id f the issue the votes is being deleted from</param>
         /// <param name="orgID">Id of the org the issue is associated with</param>
         /// <returns>True if found and deleted, False if not found in list.</returns>
-        public bool Delete_Vote(int issueID, int orgID)
+        public bool Delete_Vote(int issueID)
         {
             foreach(UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID)
+                if (uv.IssueID == issueID && uv.CommentId == 0)
+                {
+                    uvArray.Remove(uv);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Delete_Vote(int issueID, int commentID)
+        {
+            foreach (UserVote uv in uvArray)
+            {
+                if (uv.IssueID == issueID  && uv.CommentId == commentID)
                 {
                     uvArray.Remove(uv);
                     return true;
@@ -558,11 +435,23 @@ namespace Sigil.Models
             return uvArray;
         }
 
-        public bool Check_Vote(int issueID, int orgID)
+        public bool Check_Vote(int issueID)
         {
             foreach (UserVote uv in uvArray)
             {
-                if (uv.IssueID == issueID && uv.OrgID == orgID)
+                if (uv.IssueID == issueID && uv.CommentId == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Check_Vote(int issueID, int commentId)
+        {
+            foreach (UserVote uv in uvArray)
+            {
+                if (uv.IssueID == issueID && uv.CommentId == commentId)
                 {
                     return true;
                 }
@@ -578,14 +467,20 @@ namespace Sigil.Models
     public class UserVote
     {
         public int IssueID;
-        public int OrgID;
+        public int CommentId;
 
         public UserVote() { }
-        public UserVote(int issueID, int orgID)
+        public UserVote(int issueID)
         {
             IssueID = issueID;
-            OrgID = orgID;
+            CommentId = 0;
         }
+        public UserVote(int issueId,  int commentId)
+        {
+            IssueID = issueId;
+            CommentId = commentId;
+        }
+
     }
 
 
@@ -680,6 +575,7 @@ namespace Sigil.Models
 
     }
 
+    #endregion
 
     //============================= HighChart Helper Datastructure ===============================================================================//
 
